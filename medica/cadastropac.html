@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DigitalVac</title>
+  <link rel="icon" href="../img/logo.png" type="image/png" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet" />
+  <style>
+    .form-container {
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      max-width: 600px;
+      margin: auto;
+    }
+
+    .img-select {
+      opacity: 25%;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">
+    <div class="container-fluid">
+      <img src="../img/logo_vetor.png" alt="Logo DigitalVac" width="55" height="55">
+      <a class="navbar-brand fs-4 fw-bold px-3">DigitalVac</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
+        aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+        <div class="navbar-nav">
+          <a class="nav-link active fs-6 fw-bold" href="telainicio.php">
+            <i class="bi bi-house-fill" style="font-size: 20px;"></i> Início
+          </a>
+          <a class="nav-link active fs-6 fw-bold" href="cadastroaplic.html">
+            <i class="bi bi-clipboard2-heart-fill" style="font-size: 20px;"></i> Aplicação de Vacinas
+          </a>
+          <a class="nav-link disabled fs-6 fw-bold" aria-disabled="true" href="cadastropac.html">
+            <i class="bi bi-person-plus-fill" style="font-size: 20px;"></i> Cadastrar Pacientes
+          </a>
+          <a class="nav-link active fs-6 fw-bold" href="listavac.php">
+            <i class="bi bi-list" style="font-size: 20px;"></i> Lista de Vacinas
+          </a>
+          <a class="nav-link active fs-6 fw-bold" href="pesquisa_paciente.php">
+            <i class="bi bi-person-lines-fill" style="font-size: 20px;"></i> Pesquisar Pacientes
+          </a>
+          <a class="nav-link active fs-6 fw-bold" href="cadastroatestado.html">
+            <i class="bi bi-clipboard2-plus-fill" style="font-size: 20px;"></i> Cadastrar Atestado
+          </a>
+        </div>
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <a class="btn btn-danger fw-bold" href="../outros/sair.php">
+              <i class="bi bi-box-arrow-right" style="font-size: 20px;"></i> Sair
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Formulário -->
+  <div class="container d-flex align-items-center justify-content-center vh-100">
+    <div class="form-container">
+      <h2 class="text-primary fw-bold text-center">Cadastro de Paciente</h2>
+      <form id="cadastroPacienteForm" action="../Recebedados/recebedadospaciente.php" method="POST">
+        <input type="hidden" name="origem" value="medica">
+        <div class="row g-2">
+          <div class="col-md-6">
+            <label for="nome" class="form-label fw-bold">Nome</label>
+            <input type="text" id="nome" name="nome" class="form-control" placeholder="Nome completo" required
+              pattern="^[A-Za-zÀ-ÿ\- ]+$" title="O nome deve conter apenas letras, espaços e hifens">
+          </div>
+          <div class="col-md-6">
+            <label for="cpf" class="form-label fw-bold">CPF</label>
+            <input type="text" id="cpf" name="cpf" class="form-control" placeholder="CPF" required>
+          </div>
+        </div>
+        <div class="row g-2 mt-2">
+          <div class="col-md-6">
+            <label for="email" class="form-label fw-bold">E-mail</label>
+            <input type="email" id="email" name="email" class="form-control" placeholder="E-mail" required>
+          </div>
+          <div class="col-md-6">
+            <label for="telefone" class="form-label fw-bold">Telefone</label>
+            <input type="text" id="telefone" name="telefone" class="form-control" placeholder="Telefone" required>
+          </div>
+        </div>
+        <div class="row g-2 mt-2">
+          <div class="col-md-6">
+            <label for="data-nascimento" class="form-label fw-bold">Data de Nascimento</label>
+            <input type="date" id="data-nascimento" name="data_nascimento" class="form-control" required>
+          </div>
+          <div class="col-md-6">
+            <label for="genero" class="form-label fw-bold">Gênero</label>
+            <select id="genero" name="genero" class="form-select" required>
+              <option selected disabled value="">Selecione o Gênero</option>
+              <option value="M">Masculino</option>
+              <option value="F">Feminino</option>
+              <option value="O">Outro</option>
+            </select>
+          </div>
+        </div>
+        <div class="row g-2 mt-2">
+          <div class="col-md-6">
+            <label for="peso" class="form-label fw-bold">Peso (kg)</label>
+            <input type="number" id="peso" name="peso" class="form-control" placeholder="Peso" required min="1">
+          </div>
+          <div class="col-md-6">
+            <label for="tipo-sanguineo" class="form-label fw-bold">Tipo Sanguíneo</label>
+            <select id="tipo-sanguineo" name="tipo_sanguineo" class="form-select" required>
+              <option selected disabled value="">Tipo Sanguíneo</option>
+              <option value="O+">O+</option>
+              <option value="O-">O-</option>
+              <option value="A+">A+</option>
+              <option value="A-">A-</option>
+              <option value="B+">B+</option>
+              <option value="B-">B-</option>
+              <option value="AB+">AB+</option>
+              <option value="AB-">AB-</option>
+            </select>
+          </div>
+        </div>
+        <div class="row g-2 mt-2">
+          <div class="col-md-6">
+            <label for="alergia" class="form-label fw-bold">Alergias</label>
+            <textarea id="alergia" name="alergia" class="form-control" placeholder="Alergias"></textarea>
+          </div>
+          <div class="col-md-6">
+            <label for="doencas" class="form-label fw-bold">Doenças</label>
+            <textarea id="doencas" name="doencas" class="form-control" placeholder="Doenças"></textarea>
+          </div>
+        </div>
+        <div class="row g-2 mt-2">
+          <div class="col-md-12">
+            <label for="medicamentos" class="form-label fw-bold">Medicamentos</label>
+            <textarea id="medicamentos" name="medicamentos" class="form-control" placeholder="Medicamentos"></textarea>
+          </div>
+        </div>
+        <div class="row g-2 mt-2">
+          <div class="col-md-6">
+            <label for="cep" class="form-label fw-bold">CEP</label>
+            <input type="text" id="cep" name="cep" class="form-control" placeholder="CEP" required>
+          </div>
+          <div class="col-md-6">
+            <label for="numero_casa" class="form-label fw-bold">Número da Casa</label>
+            <input type="text" maxlength="10" id="numero_casa" name="numero_casa" class="form-control"
+              placeholder="Número da casa" required>
+          </div>
+        </div>
+        <div class="row g-3 mt-2 text-center">
+          <button type="submit" class="btn btn-primary fw-bold">Cadastrar</button>
+        </div>
+        <div class="row g-3 mt-2 text-center">
+          <a href="cadastroatestado.html" class="btn btn-outline-primary fw-bold mt-2">
+            <i class="bi bi-clipboard2-plus-fill"></i> Cadastrar Atestado
+          </a>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/cleave.js"></script>
+  <script>
+    // Aplica a máscara ao campo CPF
+    const cpfField = new Cleave('#cpf', {
+      delimiters: ['.', '.', '-'],
+      blocks: [3, 3, 3, 2],
+      numericOnly: true
+    });
+
+    // Máscara para telefone
+    const telefoneField = new Cleave('#telefone', {
+      delimiters: ['(', ') ', '-'],
+      blocks: [0, 2, 5, 4],
+      numericOnly: true
+    });
+
+    // Máscara para CEP
+    const cepField = new Cleave('#cep', {
+      delimiters: ['-'],
+      blocks: [5, 3],
+      numericOnly: true
+    });
+
+    // Validação do CPF
+    function validarCPF(cpf) {
+      cpf = cpf.replace(/\D/g, ''); // Remove caracteres não numéricos
+      if (cpf.length !== 11 || /^(\d)\1+$/.test(cpf)) return false;
+
+      let soma = 0, resto;
+      for (let i = 1; i <= 9; i++) soma += parseInt(cpf.substring(i - 1, i)) * (11 - i);
+      resto = (soma * 10) % 11;
+      if (resto === 10 || resto === 11) resto = 0;
+      if (resto !== parseInt(cpf.substring(9, 10))) return false;
+
+      soma = 0;
+      for (let i = 1; i <= 10; i++) soma += parseInt(cpf.substring(i - 1, i)) * (12 - i);
+      resto = (soma * 10) % 11;
+      if (resto === 10 || resto === 11) resto = 0;
+      return resto === parseInt(cpf.substring(10, 11));
+    }
+
+    // Validação do telefone
+    function validarTelefone(telefone) {
+      telefone = telefone.replace(/\D/g, ''); // Remove caracteres não numéricos
+      return telefone.length === 10 || telefone.length === 11; // Aceita 10 ou 11 dígitos
+    }
+
+    // Validação do CEP
+    function validarCEP(cep) {
+      cep = cep.replace(/\D/g, ''); // Remove caracteres não numéricos
+      return cep.length === 8; // Verifica se o CEP tem exatamente 8 dígitos
+    }
+
+    // Remove a máscara antes de enviar o formulário
+    document.getElementById("cadastroPacienteForm").addEventListener("submit", function (event) {
+      const cpfValue = document.getElementById("cpf").value.replace(/\D/g, ""); // Remove tudo que não for número
+
+      if (!validarCPF(cpfValue)) {
+        alert("CPF inválido!");
+        event.preventDefault();
+        cpfField.setRawValue(cpfValue); // Reaplica a máscara ao campo
+        return;
+      }
+
+      const telefoneFieldElement = document.getElementById("telefone");
+      const telefoneValue = telefoneFieldElement.value.replace(/\D/g, ""); // Remove tudo que não for número
+
+      if (!validarTelefone(telefoneValue)) {
+        alert("Telefone inválido!");
+        event.preventDefault();
+        telefoneField.setRawValue(telefoneValue); // Reaplica a máscara ao campo
+        return;
+      }
+
+      const cepValue = document.getElementById("cep").value.replace(/\D/g, ""); // Remove tudo que não for número
+
+      if (!validarCEP(cepValue)) {
+        alert("CEP inválido!");
+        event.preventDefault();
+        cepField.setRawValue(cepValue); // Reaplica a máscara ao campo
+        return;
+      }
+
+      event.preventDefault(); // Impede o envio padrão do formulário
+
+      const formData = new FormData(this);
+
+      fetch(this.action, {
+        method: "POST",
+        body: formData,
+      })
+        .then((response) => response.text())
+        .then((data) => {
+          console.log(data); // Exibe a resposta do servidor no console (opcional)
+          alert("Cadastro realizado com sucesso!"); // Exibe uma mensagem de sucesso
+          location.reload(); // Recarrega a página
+        })
+        .catch((error) => {
+          console.error("Erro ao cadastrar:", error);
+          alert("Ocorreu um erro ao cadastrar. Tente novamente.");
+        });
+    });
+  </script>
+</body>
+
+</html>

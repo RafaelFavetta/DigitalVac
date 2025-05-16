@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DigitalVac</title>
+  <link rel="icon" href="../img/logo.png" type="image/png" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet" />
+  <style>
+    .form-container {
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      max-width: 500px;
+      margin: auto;
+    }
+  </style>
+</head>
+
+<body>
+  <nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">
+    <div class="container-fluid">
+      <img src="../img/logo_vetor.png" alt="Logo DigitalVac" width="55" height="55" />
+      <a class="navbar-brand fs-4 fw-bold px-3">DigitalVac</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
+        aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+        <div class="navbar-nav">
+          <a class="nav-link disabled fs-6 fw-bold" aria-disabled="true" href="cadastroaplic.html">
+            <i class="bi bi-clipboard2-heart-fill" style="font-size: 20px"></i>
+            Aplicação de Vacinas
+          </a>
+          <a class="nav-link active fs-6 fw-bold" href="cadastropac.html">
+            <i class="bi bi-person-plus-fill" style="font-size: 20px"></i>
+            Cadastrar Pacientes
+          </a>
+          <a class="nav-link active fs-6 fw-bold" href="cadastrovac.html">
+            <i class="bi bi-capsule" style="font-size: 20px"></i> Cadastrar
+            Vacinas
+          </a>
+          <a class="nav-link active fs-6 fw-bold" href="cadastroenf.php">
+            <i class="bi bi-person-badge" style="font-size: 20px"></i>
+            Cadastrar Enfermeiro
+          </a>
+          <a class="nav-link active fs-6 fw-bold" href="cadastroposto.html">
+            <i class="bi bi-building-fill-add" style="font-size: 20px"></i>
+            Cadastrar Posto
+          </a>
+        </div>
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <a class="btn btn-danger fw-bold" href="../outros/sair.php">
+              <i class="bi bi-box-arrow-right" style="font-size: 20px;"></i> Sair
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container d-flex align-items-center justify-content-center vh-100">
+    <div class="form-container">
+      <h2 class="text-primary fw-bold text-center">Cadastro de Aplicação</h2>
+      <form id="cadastroAplicacaoForm" action="../Recebedados/recebedadosaplic.php" method="POST">
+        <div class="row g-2">
+          <div class="col-md-6">
+            <label for="nome-vacina" class="form-label fw-bold">Nome da Vacina</label>
+            <input type="text" class="form-control" name="nome_vacina" id="nome-vacina" placeholder="Nome da vacina"
+              required />
+          </div>
+          <div class="col-md-6">
+            <label for="dose" class="form-label fw-bold">Dose</label>
+            <input type="number" class="form-control" name="dose_aplicad" id="dose" placeholder="Quantidade de doses"
+              min="1" required />
+          </div>
+        </div>
+        <div class="row g-2 mt-2">
+          <div class="col-md-6">
+            <label for="data-aplica" class="form-label fw-bold">Data Aplicação</label>
+            <input type="date" class="form-control" name="data_aplica" id="data-aplica" required />
+          </div>
+          <div class="col-md-12">
+            <label for="cpf-paciente" class="form-label fw-bold">CPF do Paciente</label>
+            <input type="text" class="form-control" name="cpf_paciente" id="cpf-paciente"
+              placeholder="Digite o CPF do paciente" required />
+          </div>
+        </div>
+        <div class="row g-2 mt-2">
+          <div class="col-md-6">
+            <label for="nome-posto" class="form-label fw-bold">Posto</label>
+            <input type="text" class="form-control" name="nome_posto" id="nome-posto" placeholder="Nome do posto"
+              required />
+          </div>
+          <div class="col-md-6">
+            <label for="coren-crm" class="form-label fw-bold">COREN/CRM</label>
+            <input type="text" class="form-control" name="coren_crm" id="coren-crm" placeholder="COREN/CRM-UF 000000"
+              required />
+          </div>
+        </div>
+        <input type="hidden" name="origem" value="admin">
+        <div class="row g-3 mt-2 text-center">
+          <button type="submit" class="btn btn-primary fw-bold">
+            Cadastrar
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/cleave.js"></script>
+  <script>
+    // Máscara para CPF
+    new Cleave('#cpf-paciente', {
+      delimiters: ['.', '.', '-'],
+      blocks: [3, 3, 3, 2],
+      numericOnly: true
+    });
+
+    document.getElementById("cadastroAplicacaoForm").addEventListener("submit", function (event) {
+      const cpfInput = document.getElementById("cpf-paciente");
+      cpfInput.value = cpfInput.value.replace(/\D/g, ""); // Remove formatação antes de enviar
+
+      const cpf = cpfInput.value;
+
+      if (!validarCPF(cpf)) {
+        alert("CPF inválido!");
+        event.preventDefault();
+        return;
+      }
+    });
+
+    function validarCPF(cpf) {
+      cpf = cpf.replace(/\D/g, ""); // Remove formatação
+      if (cpf.length !== 11 || /^(\d)\1+$/.test(cpf)) return false;
+
+      let soma = 0, resto;
+      for (let i = 1; i <= 9; i++) soma += parseInt(cpf.substring(i - 1, i)) * (11 - i);
+      resto = (soma * 10) % 11;
+      if (resto === 10 || resto === 11) resto = 0;
+      if (resto !== parseInt(cpf.substring(9, 10))) return false;
+
+      soma = 0;
+      for (let i = 1; i <= 10; i++) soma += parseInt(cpf.substring(i - 1, i)) * (12 - i);
+      resto = (soma * 10) % 11;
+      if (resto === 10 || resto === 11) resto = 0;
+      return resto === parseInt(cpf.substring(10, 11));
+    }
+  </script>
+</body>
+
+</html>

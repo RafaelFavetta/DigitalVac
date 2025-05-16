@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DigitalVac</title>
+  <link rel="icon" href="../img/logo.png" type="image/png" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet" />
+  <style>
+    body {
+      background-color: #f8f9fa;
+    }
+
+    .form-container {
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      max-width: 700px;
+      margin: auto;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">
+    <div class="container-fluid">
+      <img src="../img/logo_vetor.png" alt="Logo DigitalVac" width="55" height="55" />
+      <a class="navbar-brand fs-4 fw-bold px-3">DigitalVac</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
+        aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+        <div class="navbar-nav">
+          <a class="nav-link active fs-6 fw-bold" href="cadastroaplic.html">
+            <i class="bi bi-clipboard2-heart-fill" style="font-size: 20px"></i>
+            Aplicação de Vacinas
+          </a>
+          <a class="nav-link active fs-6 fw-bold" href="cadastropac.html">
+            <i class="bi bi-person-plus-fill" style="font-size: 20px"></i>
+            Cadastrar Pacientes
+          </a>
+          <a class="nav-link disabled fs-6 fw-bold" aria-disabled="true" href="cadastrovac.html">
+            <i class="bi bi-capsule" style="font-size: 20px"></i> Cadastrar
+            Vacinas
+          </a>
+          <a class="nav-link active fs-6 fw-bold" href="cadastroenf.php">
+            <i class="bi bi-person-badge" style="font-size: 20px"></i>
+            Cadastrar Enfermeiro
+          </a>
+          <a class="nav-link active fs-6 fw-bold" href="cadastroposto.html">
+            <i class="bi bi-building-fill-add" style="font-size: 20px"></i>
+            Cadastrar Posto
+          </a>
+        </div>
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <a class="btn btn-danger fw-bold" href="../outros/sair.php">
+              <i class="bi bi-box-arrow-right" style="font-size: 20px;"></i> Sair
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Formulário -->
+  <div class="container py-4">
+    <div class="form-container">
+      <h2 class="text-primary fw-bold text-center">Cadastro de Vacinas</h2>
+      <form id="cadastroVacinaForm" action="../Recebedados/recebedadosdavacina.php" method="POST">
+        <input type="hidden" name="origem" value="admin">
+        <div class="row g-2">
+          <div class="col-md-6">
+            <label for="lote" class="form-label fw-bold">Lote</label>
+            <input type="text" id="lote" name="lote" class="form-control" placeholder="Lote" required />
+          </div>
+          <div class="col-md-6">
+            <label for="nome" class="form-label fw-bold">Nome da vacina</label>
+            <input type="text" id="nome" name="nome" class="form-control" placeholder="Nome da vacina" required />
+          </div>
+        </div>
+
+        <div class="row g-2 mt-2">
+          <div class="col-md-6">
+            <label for="fabricante" class="form-label fw-bold">Fabricante</label>
+            <input type="text" id="fabricante" name="fabricante" class="form-control" placeholder="Fabricante"
+              required />
+          </div>
+          <div class="col-md-6">
+            <label for="doses" class="form-label fw-bold">Número de doses recomendadas</label>
+            <input type="number" id="doses" name="doses" class="form-control" placeholder="Número de doses" required />
+          </div>
+        </div>
+
+        <div class="row g-2 mt-2">
+          <div class="col-md-6">
+            <label for="via" class="form-label fw-bold">Via de administração</label>
+            <input type="text" id="via" name="via" class="form-control" placeholder="Via de administração" required />
+          </div>
+          <div class="col-md-6">
+            <label for="intervalo" class="form-label fw-bold">Intervalo de doses</label>
+            <input type="text" id="intervalo" name="intervalo" class="form-control" placeholder="Intervalo de doses"
+              required />
+          </div>
+        </div>
+
+        <div class="row g-2 mt-2">
+          <div class="col-md-6">
+            <label for="idade-min" class="form-label fw-bold">Idade de aplicação</label>
+            <input type="number" id="idade-min" name="idade_min" class="form-control" placeholder="Idade mínima" required>
+          </div>
+          <div class="col-md-6">
+            <label for="estoque" class="form-label fw-bold">Estoque</label>
+            <input type="number" id="estoque" name="estoque" class="form-control" placeholder="Quantidade em estoque"
+              required />
+          </div>
+        </div>
+
+        <div class="row g-3 mt-3 text-center">
+          <div class="col-12">
+            <button type="submit" class="btn btn-primary fw-bold">
+              Cadastrar
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    document
+      .getElementById("cadastroVacinaForm")
+      .addEventListener("submit", function (event) {
+        event.preventDefault(); // Impede o envio padrão do formulário
+
+        const formData = new FormData(this);
+
+        fetch("../Recebedados/recebedadosdavacina.php", {
+          method: "POST",
+          body: formData,
+        })
+          .then((response) => response.text())
+          .then((data) => {
+            console.log(data);
+            alert("Cadastro realizado com sucesso!");
+            location.reload(); // Recarrega a página após o sucesso
+          })
+          .catch((error) => {
+            console.error("Erro ao cadastrar:", error);
+            alert("Ocorreu um erro ao cadastrar. Tente novamente.");
+          });
+      });
+  </script>
+</body>
+
+</html>
