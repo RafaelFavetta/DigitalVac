@@ -146,9 +146,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['cpf'])) {
     <div class="container mt-4">
         <h2 class="text-center text-primary fw-bold">Pesquisar Pacientes</h2>
         <div class="text-end mb-3">
-            <a href="cadastroatestado.html" class="btn btn-outline-primary fw-bold">
-                <i class="bi bi-clipboard2-plus-fill"></i> Cadastrar Atestado
-            </a>
+            <!-- Removido o botão "Cadastrar Atestado" daqui -->
         </div>
         <div class="container-fluid col-md-6 mt-4">
             <form class="d-flex" role="search" method="get" action="pesquisa_paciente.php">

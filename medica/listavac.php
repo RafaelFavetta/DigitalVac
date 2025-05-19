@@ -106,9 +106,7 @@ if (!$result) {
     <div class="container mt-4">
         <h2 class="text-center text-primary fw-bold">Lista de Vacinas</h2>
         <div class="text-end mb-3">
-            <a href="cadastroatestado.html" class="btn btn-outline-primary fw-bold">
-                <i class="bi bi-clipboard2-plus-fill"></i> Cadastrar Atestado
-            </a>
+            <!-- Removido o botão "Cadastrar Atestado" daqui -->
         </div>
         <table class="table table-bordered">
             <thead class="table-primary">

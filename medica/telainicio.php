@@ -182,7 +182,7 @@ if (!isset($_SESSION['id_medico'])) {
                 </a>
                 <a href="cadastroatestado.html"
                     class="btn btn-primary btn-lg d-flex flex-column align-items-center p-4 fw-bold shadow-sm card-btn">
-                    <i class="bi bi-clipboard2-plus-fill" style="font-size: 50px;"></i>
+                    <i class="bi bi-file-earmark-medical" style="font-size: 50px;"></i>
                     Cadastrar Atestado
                 </a>
             </div>
