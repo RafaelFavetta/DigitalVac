@@ -21,63 +21,167 @@ if (!isset($_SESSION['id_medico'])) {
     <link rel="icon" href="../img/logo.png" type="image/png">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .navbar {
+            position: relative;
+            min-height: 80px;
+        }
+
+        .navbar-logo-center {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 80px;
+            z-index: 2;
+        }
+
+        .navbar-hr-left,
+        .navbar-hr-right {
+            border-top: 2px solid #fff;
+            opacity: 0.5;
+            margin: 0 105px;
+            height: 0;
+        }
+
+        .navbar-hr-left {
+            flex: 1 1 0%;
+            margin-right: 24px;
+        }
+
+        .navbar-hr-right {
+            flex: 1 1 0%;
+            margin-left: 24px;
+        }
+
+        .navbar-content-center {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            position: relative;
+        }
+
+        @media (max-width: 991.98px) {
+            .navbar-content-center {
+                flex-direction: column;
+            }
+
+            .navbar-hr-left,
+            .navbar-hr-right {
+                display: none;
+            }
+        }
+
+        /* Cards grid centralizado e agrupado */
+        .cards-outer {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 70vh;
+        }
+
+        .cards-container {
+            background: #fff;
+            border-radius: 18px;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.07);
+            padding: 40px 32px 32px 32px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .row-cards {
+            display: flex;
+            justify-content: center;
+            gap: 32px;
+            margin-bottom: 32px;
+        }
+
+        .row-cards:last-child {
+            margin-bottom: 0;
+        }
+
+        .card-btn {
+            min-width: 220px;
+            max-width: 260px;
+            width: 100%;
+            margin: 0;
+        }
+
+        @media (max-width: 991.98px) {
+            .cards-container {
+                padding: 24px 8px;
+            }
+
+            .row-cards {
+                flex-direction: column;
+                gap: 20px;
+                align-items: center;
+            }
+
+            .card-btn {
+                min-width: 0;
+                max-width: 100%;
+            }
+        }
+
+        .navbar-nav.ms-auto.position-absolute.end-0.me-3 {
+            top: 50% !important;
+            transform: translateY(-50%);
+            right: 24px;
+            left: auto;
+            bottom: auto;
+        }
+    </style>
 </head>
 
 <body>
     <nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">
         <div class="container-fluid">
-            <div class="d-flex align-items-center w-100 justify-content-between">
-                <div class="d-flex align-items-center">
-                    <img src="../img/logo_vetor.png" alt="Logo DigitalVac" width="40" height="40">
-                    <a class="navbar-brand fs-4 fw-bold ms-2 text-white">DigitalVac</a>
+            <div class="navbar-content-center">
+                <div class="d-none d-md-flex navbar-hr-left"></div>
+                <div class="navbar-logo-center">
+                    <img src="../img/logo_vetor.png" alt="Logo DigitalVac" width="50" height="50">
                 </div>
-                <div class="mx-auto text-white fw-bold" style="font-size: 1.2rem;">
-                    Bem-vindo ao DigitalVac
-                </div>
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a class="btn btn-danger fw-bold" href="../outros/sair.php">
-                            <i class="bi bi-box-arrow-right" style="font-size: 20px;"></i> Sair
-                        </a>
-                    </li>
-                </ul>
+                <div class="d-none d-md-flex navbar-hr-right"></div>
             </div>
+            <ul class="navbar-nav ms-auto position-absolute end-0 me-3" style="z-index:2; top:16px;">
+                <li class="nav-item">
+                    <a class="btn btn-danger fw-bold" href="../outros/sair.php">
+                        <i class="bi bi-box-arrow-right" style="font-size: 20px;"></i> Sair
+                    </a>
+                </li>
+            </ul>
         </div>
     </nav>
 
-    <div class="container d-flex flex-column align-items-center justify-content-center vh-100">
-        <div class="row row-cols-1 row-cols-md-2 g-4 w-100" style="max-width: 700px;">
-            <div class="col d-flex justify-content-center">
+    <div class="cards-outer">
+        <div class="cards-container">
+            <div class="row-cards">
                 <a href="cadastroaplic.html"
-                    class="btn btn-primary btn-lg d-flex flex-column align-items-center p-4 fw-bold shadow-sm w-100">
+                    class="btn btn-primary btn-lg d-flex flex-column align-items-center p-4 fw-bold shadow-sm card-btn">
                     <i class="bi bi-clipboard2-heart-fill" style="font-size: 50px;"></i>
                     Aplicação de Vacinas
                 </a>
-            </div>
-            <div class="col d-flex justify-content-center">
                 <a href="cadastropac.html"
-                    class="btn btn-primary btn-lg d-flex flex-column align-items-center p-4 fw-bold shadow-sm w-100">
+                    class="btn btn-primary btn-lg d-flex flex-column align-items-center p-4 fw-bold shadow-sm card-btn">
                     <i class="bi bi-person-plus" style="font-size: 50px;"></i>
                     Cadastrar Pacientes
                 </a>
-            </div>
-            <div class="col d-flex justify-content-center">
                 <a href="listavac.php"
-                    class="btn btn-primary btn-lg d-flex flex-column align-items-center p-4 fw-bold shadow-sm w-100">
+                    class="btn btn-primary btn-lg d-flex flex-column align-items-center p-4 fw-bold shadow-sm card-btn">
                     <i class="bi bi-list" style="font-size: 50px;"></i>
                     Lista de Vacinas
                 </a>
             </div>
-            <div class="col d-flex justify-content-center">
+            <div class="row-cards">
                 <a href="pesquisa_paciente.php"
-                    class="btn btn-primary btn-lg d-flex flex-column align-items-center p-4 fw-bold shadow-sm w-100">
+                    class="btn btn-primary btn-lg d-flex flex-column align-items-center p-4 fw-bold shadow-sm card-btn">
                     <i class="bi bi-person-lines-fill" style="font-size: 50px;"></i>
                     Pesquisar Pacientes
                 </a>
-            </div>
-            <div class="col d-flex justify-content-center">
                 <a href="cadastroatestado.html"
-                    class="btn btn-primary btn-lg d-flex flex-column align-items-center p-4 fw-bold shadow-sm w-100">
+                    class="btn btn-primary btn-lg d-flex flex-column align-items-center p-4 fw-bold shadow-sm card-btn">
                     <i class="bi bi-clipboard2-plus-fill" style="font-size: 50px;"></i>
                     Cadastrar Atestado
                 </a>
