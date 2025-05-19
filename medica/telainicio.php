@@ -79,10 +79,12 @@ if (!isset($_SESSION['id_medico'])) {
             align-items: center;
             justify-content: center;
             min-height: 70vh;
+            margin-top: 90px;
+            background: #fdfdfd;
         }
 
         .cards-container {
-            background: #fff;
+            background: #fdfdfd;
             border-radius: 18px;
             box-shadow: 0 4px 24px rgba(0, 0, 0, 0.07);
             padding: 40px 32px 32px 32px;
@@ -135,7 +137,44 @@ if (!isset($_SESSION['id_medico'])) {
     </style>
 </head>
 
-<body>
+<body style="background: #fdfdfd;">
+    <!-- Decoração temática de saúde/vacinação -->
+    <div style="position:fixed;top:0;left:0;width:100vw;height:100vh;pointer-events:none;z-index:0;">
+        <!-- Faixa azul clara superior -->
+        <div style="position:absolute;top:48px;left:0;width:100vw;height:32px;
+            background:linear-gradient(90deg,#0d6efd 80%,rgba(13,110,253,0.2));
+            opacity:0.92;"></div>
+        <!-- Ícone seringa canto superior esquerdo -->
+        <i class="bi bi-syringe" style="position:absolute;top:86px;left:24px;font-size:48px;color:#0d6efd;opacity:0.38;"></i>
+        <!-- Ícone escudo canto superior direito -->
+        <i class="bi bi-shield-plus" style="position:absolute;top:86px;right:32px;font-size:54px;color:#0d6efd;opacity:0.38;"></i>
+        <!-- Ícone coração centro-esquerda topo -->
+        <i class="bi bi-heart-pulse" style="position:absolute;top:118px;left:90px;font-size:44px;color:#0d6efd;opacity:0.22;"></i>
+        <!-- Ícone vacina centro-direita topo -->
+        <i class="bi bi-capsule" style="position:absolute;top:118px;right:90px;font-size:44px;color:#0d6efd;opacity:0.22;"></i>
+        <!-- Linha azul suave diagonal topo esquerda -->
+        <div style="position:absolute;top:138px;left:-40px;width:260px;height:5px;
+            background:linear-gradient(90deg,rgba(13,110,253,0.25),#0d6efd 80%,rgba(13,110,253,0.1));
+            opacity:0.32;transform:rotate(-8deg);border-radius:3px;"></div>
+        <!-- Linha azul suave diagonal topo direita -->
+        <div style="position:absolute;top:168px;right:-40px;width:260px;height:5px;
+            background:linear-gradient(270deg,rgba(13,110,253,0.25),#0d6efd 80%,rgba(13,110,253,0.1));
+            opacity:0.32;transform:rotate(8deg);border-radius:3px;"></div>
+        <!-- Ícone escudo canto inferior direito -->
+        <i class="bi bi-shield-plus" style="position:absolute;bottom:38px;right:32px;font-size:54px;color:#0d6efd;opacity:0.38;"></i>
+        <!-- Ícone coração centro-esquerda -->
+        <i class="bi bi-heart-pulse" style="position:absolute;top:55%;left:18px;font-size:44px;color:#0d6efd;opacity:0.28;"></i>
+        <!-- Ícone vacina centro-direita -->
+        <i class="bi bi-capsule" style="position:absolute;top:70%;right:18px;font-size:44px;color:#0d6efd;opacity:0.28;"></i>
+        <!-- Linha azul suave diagonal meio esquerda -->
+        <div style="position:absolute;top:60%;left:-60px;width:320px;height:5px;
+            background:linear-gradient(90deg,rgba(13,110,253,0.25),#0d6efd 80%,rgba(13,110,253,0.1));
+            opacity:0.32;transform:rotate(-8deg);border-radius:3px;"></div>
+        <!-- Linha azul suave diagonal meio direita -->
+        <div style="position:absolute;top:75%;right:-60px;width:320px;height:5px;
+            background:linear-gradient(270deg,rgba(13,110,253,0.25),#0d6efd 80%,rgba(13,110,253,0.1));
+            opacity:0.32;transform:rotate(8deg);border-radius:3px;"></div>
+    </div>
     <nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">
         <div class="container-fluid">
             <div class="navbar-content-center">
