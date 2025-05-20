@@ -6,29 +6,85 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DigitalVac</title>
     <link rel="icon" href="../img/logo.png" type="image/png">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <style>
+        .navbar {
+            position: relative;
+        }
+
+        .navbar-logo-center {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 55px;
+            z-index: 2;
+        }
+
+        .navbar-hr-left,
+        .navbar-hr-right {
+            border-top: 2px solid #fff;
+            opacity: 0.5;
+            margin: 0 105px;
+            height: 0;
+        }
+
+        .navbar-hr-left {
+            flex: 1 1 0%;
+            margin-right: 24px;
+        }
+
+        .navbar-hr-right {
+            flex: 1 1 0%;
+            margin-left: 24px;
+        }
+
+        .navbar-content-center {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            position: relative;
+        }
+
+        @media (max-width: 991.98px) {
+            .navbar-content-center {
+                flex-direction: column;
+            }
+
+            .navbar-hr-left,
+            .navbar-hr-right {
+                display: none;
+            }
+        }
+
+        .navbar-nav.ms-auto.position-absolute.end-0.me-3 {
+            top: 50% !important;
+            transform: translateY(-50%);
+            right: 24px;
+            left: auto;
+            bottom: auto;
+        }
+    </style>
 </head>
 
 <body>
     <nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">
         <div class="container-fluid">
-            <div class="d-flex align-items-center">
-                <img src="../img/logo_vetor.png" alt="Logo DigitalVac" width="55" height="55">
-                <a class="navbar-brand fs-4 fw-bold ms-2">DigitalVac</a>
+            <div class="navbar-content-center">
+                <div class="d-none d-md-flex navbar-hr-left"></div>
+                <div class="navbar-logo-center">
+                    <img src="../img/logo_vetor.png" alt="Logo DigitalVac" width="50" height="50">
+                </div>
+                <div class="d-none d-md-flex navbar-hr-right"></div>
             </div>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
-                aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a class="btn btn-danger fw-bold" href="../outros/sair.php">
-                            <i class="bi bi-box-arrow-right" style="font-size: 20px;"></i> Sair</a>
-                    </li>
-                </ul>
-            </div>
+            <ul class="navbar-nav ms-auto position-absolute end-0 me-3" style="z-index:2; top:16px;">
+                <li class="nav-item">
+                    <a class="btn btn-danger fw-bold" href="../outros/sair.php">
+                        <i class="bi bi-box-arrow-right" style="font-size: 20px;"></i> Sair
+                    </a>
+                </li>
+            </ul>
         </div>
     </nav>
 
