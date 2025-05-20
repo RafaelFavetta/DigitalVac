@@ -80,7 +80,7 @@ if (!$result) {
                         <i class="bi bi-clipboard2-heart-fill" style="font-size: 20px;"></i> Aplicação de Vacinas
                     </a>
                     <a class="nav-link active fs-6 fw-bold" href="cadastropac.html">
-                        <i class="bi bi-person-plus" style="font-size: 20px;"></i> Cadastrar Pacientes
+                        <i class="bi bi-person-plus-fill" style="font-size: 20px;"></i> Cadastrar Pacientes
                     </a>
                     <a class="nav-link disabled fs-6 fw-bold" aria-disabled="true" href="listavac.php">
                         <i class="bi bi-list" style="font-size: 20px;"></i> Lista de Vacinas

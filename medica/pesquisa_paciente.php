@@ -120,7 +120,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['cpf'])) {
                         <i class="bi bi-clipboard2-heart-fill" style="font-size: 20px;"></i> Aplicação de Vacinas
                     </a>
                     <a class="nav-link active fs-6 fw-bold" href="cadastropac.html">
-                        <i class="bi bi-person-plus" style="font-size: 20px;"></i> Cadastrar Pacientes
+                        <i class="bi bi-person-plus-fill" style="font-size: 20px;"></i> Cadastrar Pacientes
                     </a>
                     <a class="nav-link active fs-6 fw-bold" href="listavac.php">
                         <i class="bi bi-list" style="font-size: 20px;"></i> Lista de Vacinas
