@@ -67,6 +67,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         exit;
     }
 
+    // Verifica se todos os campos obrigatórios estão presentes
+    if (!$id_usuario || !$id_posto || !$id_medico || !$id_vaci || !$data_aplica || !$dose_aplicad) {
+        echo json_encode(['success' => false, 'message' => 'Dados obrigatórios faltando.']);
+        exit;
+    }
+
     // Insere na tabela aplicacao
     $stmt = $conn->prepare("INSERT INTO aplicacao (id_usuario, id_posto, id_medico, id_vaci, data_aplica, dose_aplicad) VALUES (?, ?, ?, ?, ?, ?)");
     $stmt->bind_param("iiiisi", $id_usuario, $id_posto, $id_medico, $id_vaci, $data_aplica, $dose_aplicad);

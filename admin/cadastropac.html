@@ -99,9 +99,9 @@
             <label for="genero" class="form-label fw-bold">Gênero</label>
             <select id="genero" name="genero" class="form-select" required>
               <option selected disabled value="">Gênero</option>
-              <option value="masculino">Masculino</option>
-              <option value="feminino">Feminino</option>
-              <option value="outro">Outro</option>
+              <option value="M">Masculino</option>
+              <option value="F">Feminino</option>
+              <option value="O">Outro</option>
             </select>
           </div>
         </div>
@@ -150,6 +150,16 @@
             <label for="numero_casa" class="form-label fw-bold">Número da Casa</label>
             <input type="text" maxlength="10" id="numero_casa" name="numero_casa" class="form-control"
               placeholder="Número da casa" required>
+          </div>
+        </div>
+        <!-- Novo campo de endereço preenchido automaticamente -->
+        <div class="row g-2 mt-2">
+          <div class="col-md-12">
+            <label for="endereco" class="form-label fw-bold">Endereço</label>
+            <input type="text" id="endereco" name="endereco" class="form-control" placeholder="Endereço será preenchido automaticamente"
+              readonly>
+            <!-- Campo oculto para cidade -->
+            <input type="hidden" id="cidade" name="cidade">
           </div>
         </div>
         <div class="row g-3 mt-2 text-center">
@@ -222,6 +232,33 @@
           console.error("Erro ao cadastrar:", error);
           alert("Ocorreu um erro ao cadastrar. Tente novamente.");
         });
+    });
+
+    // Consulta ViaCEP ao sair do campo CEP
+    document.getElementById('cep').addEventListener('blur', function () {
+      const cep = this.value.replace(/\D/g, '');
+      if (cep.length === 8) {
+        fetch(`https://viacep.com.br/ws/${cep}/json/`)
+          .then(response => response.json())
+          .then(data => {
+            if (!data.erro) {
+              document.getElementById('endereco').value =
+                `${data.logradouro || ''}, ${data.bairro || ''}, ${data.localidade || ''} - ${data.uf || ''}`;
+              // Preenche o campo oculto cidade
+              document.getElementById('cidade').value = data.localidade || '';
+            } else {
+              document.getElementById('endereco').value = 'CEP não encontrado';
+              document.getElementById('cidade').value = '';
+            }
+          })
+          .catch(() => {
+            document.getElementById('endereco').value = 'Erro ao buscar endereço';
+            document.getElementById('cidade').value = '';
+          });
+      } else {
+        document.getElementById('endereco').value = '';
+        document.getElementById('cidade').value = '';
+      }
     });
 
     function validarCPF(cpf) {

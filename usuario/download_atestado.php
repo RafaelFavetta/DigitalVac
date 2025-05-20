@@ -17,12 +17,14 @@ if (!isset($_GET['id'])) {
 
 $id_atestado = intval($_GET['id']);
 
-// Consulta para buscar os dados do atestado
+// Consulta para buscar os dados do atestado e cidade do paciente
 $sql = "SELECT u.nome_usuario AS nome_paciente, 
                m.nome_medico AS medico_responsavel, 
                a.data_inicio AS data_emissao, 
                a.justificativa AS justificativa, 
-               CONCAT(DATE_FORMAT(a.data_inicio, '%d/%m/%Y'), ' a ', DATE_FORMAT(a.data_fim, '%d/%m/%Y')) AS periodo_afastamento
+               CONCAT(DATE_FORMAT(a.data_inicio, '%d/%m/%Y'), ' a ', DATE_FORMAT(a.data_fim, '%d/%m/%Y')) AS periodo_afastamento,
+               u.cep_usuario,
+               u.cidade
         FROM atestado a
         INNER JOIN usuario u ON a.id_paci = u.id_usuario
         INNER JOIN medico m ON a.id_medico = m.id_medico
@@ -43,6 +45,28 @@ if ($result->num_rows === 0) {
 
 $atestado = $result->fetch_assoc();
 
+// Usa a cidade cadastrada, se existir
+$cidade = $atestado['cidade'];
+if (!$cidade) {
+    // Fallback: buscar pelo CEP (caso não tenha sido salvo)
+    function buscarCidadePorCEP($cep) {
+        $cep = preg_replace('/[^0-9]/', '', $cep);
+        if (strlen($cep) !== 8) return null;
+        $url = "https://viacep.com.br/ws/{$cep}/json/";
+        $response = @file_get_contents($url);
+        if ($response === false) return null;
+        $dados = json_decode($response, true);
+        if (isset($dados['localidade'])) {
+            return $dados['localidade'];
+        }
+        return null;
+    }
+    $cidade = buscarCidadePorCEP($atestado['cep_usuario']);
+}
+if (!$cidade) {
+    $cidade = "Porto Alegre";
+}
+
 // Cria o PDF usando a biblioteca FPDF
 $pdf = new FPDF();
 $pdf->AddPage();
@@ -58,7 +82,7 @@ $pdf->Ln(10);
 
 // Título
 $pdf->SetFont('Arial', 'B', 18);
-$pdf->Cell(0, 10, 'Atestado', 0, 1, 'C');
+$pdf->Cell(0, 10, utf8_decode('Atestado'), 0, 1, 'C');
 $pdf->Ln(5);
 
 // Corpo do texto
@@ -78,19 +102,16 @@ $pdf->MultiCell(
 // Local e data
 $pdf->Ln(10);
 $data_formatada = date('d/m/Y', strtotime($atestado['data_emissao']));
-$pdf->Cell(0, 10, utf8_decode("Porto Alegre, $data_formatada"), 0, 1, 'L');
+$pdf->Cell(0, 10, utf8_decode("$cidade, $data_formatada"), 0, 1, 'L');
 
 // Espaço para assinaturas
 $pdf->Ln(20);
-$pdf->Cell(90, 10, '__________________________', 0, 0, 'C');
+$pdf->Cell(90, 10, utf8_decode('__________________________'), 0, 0, 'C');
 $pdf->Cell(10, 10, '', 0, 0);
-$pdf->Cell(90, 10, '__________________________', 0, 1, 'C');
-$pdf->Cell(90, 5, 'Assinatura do paciente', 0, 0, 'C');
+$pdf->Cell(90, 10, utf8_decode('__________________________'), 0, 1, 'C');
+$pdf->Cell(90, 5, utf8_decode('Assinatura do paciente'), 0, 0, 'C');
 $pdf->Cell(10, 5, '', 0, 0);
-$pdf->Cell(90, 5, 'Assinatura do médico', 0, 1, 'C');
-
-// Rodapé
-
+$pdf->Cell(90, 5, utf8_decode('Assinatura do médico'), 0, 1, 'C');
 
 // Saída do PDF para download
 $pdf->Output('D', 'atestado_' . $id_atestado . '.pdf');

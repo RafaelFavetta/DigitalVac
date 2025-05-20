@@ -112,7 +112,9 @@ CREATE TABLE `posto` (
   `id_posto` int(11) NOT NULL,
   `nome_posto` varchar(100) NOT NULL,
   `cep_posto` int(8) NOT NULL,
-  `n_posto` int(10) NOT NULL
+  `n_posto` int(10) NOT NULL,
+  `endereco` varchar(255) DEFAULT NULL,
+  `cidade` varchar(100) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
@@ -155,7 +157,9 @@ CREATE TABLE `usuario` (
   `ale_usuario` varchar(255) NOT NULL,
   `cep_usuario` varchar(8) NOT NULL,
   `nc_usuario` int(10) NOT NULL,
-  `senha` varchar(100) NOT NULL
+  `senha` varchar(100) NOT NULL,
+  `endereco` varchar(255) DEFAULT NULL,
+  `cidade` varchar(100) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --

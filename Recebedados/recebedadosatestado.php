@@ -38,7 +38,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     // Buscar o ID do paciente pelo nome na tabela `usuario`
-    $query_paciente = "SELECT id_usuario FROM usuario WHERE nome_usuario = ?";
+    $nome_paciente = trim($nome_paciente);
+    $query_paciente = "SELECT id_usuario FROM usuario WHERE TRIM(LOWER(nome_usuario)) = TRIM(LOWER(?))";
     $stmt_paciente = $conn->prepare($query_paciente);
     $stmt_paciente->bind_param("s", $nome_paciente);
     $stmt_paciente->execute();
@@ -53,7 +54,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     // Buscar o ID do médico pelo nome na tabela `medico`
-    $query_medico = "SELECT id_medico FROM medico WHERE nome_medico = ?";
+    $nome_medico = trim($nome_medico);
+    $query_medico = "SELECT id_medico FROM medico WHERE TRIM(LOWER(nome_medico)) = TRIM(LOWER(?))";
     $stmt_medico = $conn->prepare($query_medico);
     $stmt_medico->bind_param("s", $nome_medico);
     $stmt_medico->execute();

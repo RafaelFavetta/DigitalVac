@@ -155,6 +155,15 @@
               placeholder="Número da casa" required>
           </div>
         </div>
+        <!-- Novo campo de endereço preenchido automaticamente -->
+        <div class="row g-2 mt-2">
+          <div class="col-md-12">
+            <label for="endereco" class="form-label fw-bold">Endereço</label>
+            <input type="text" id="endereco" name="endereco" class="form-control" placeholder="Endereço será preenchido automaticamente" readonly>
+            <!-- Campo oculto para cidade -->
+            <input type="hidden" id="cidade" name="cidade">
+          </div>
+        </div>
         <div class="row g-3 mt-2 text-center">
           <button type="submit" class="btn btn-primary fw-bold">Cadastrar</button>
         </div>
@@ -215,6 +224,33 @@
       cep = cep.replace(/\D/g, ''); // Remove caracteres não numéricos
       return cep.length === 8; // Verifica se o CEP tem exatamente 8 dígitos
     }
+
+    // Consulta ViaCEP ao sair do campo CEP
+    document.getElementById('cep').addEventListener('blur', function () {
+      const cep = this.value.replace(/\D/g, '');
+      if (cep.length === 8) {
+        fetch(`https://viacep.com.br/ws/${cep}/json/`)
+          .then(response => response.json())
+          .then(data => {
+            if (!data.erro) {
+              document.getElementById('endereco').value =
+                `${data.logradouro || ''}, ${data.bairro || ''}, ${data.localidade || ''} - ${data.uf || ''}`;
+              // Preenche o campo oculto cidade
+              document.getElementById('cidade').value = data.localidade || '';
+            } else {
+              document.getElementById('endereco').value = 'CEP não encontrado';
+              document.getElementById('cidade').value = '';
+            }
+          })
+          .catch(() => {
+            document.getElementById('endereco').value = 'Erro ao buscar endereço';
+            document.getElementById('cidade').value = '';
+          });
+      } else {
+        document.getElementById('endereco').value = '';
+        document.getElementById('cidade').value = '';
+      }
+    });
 
     // Remove a máscara antes de enviar o formulário
     document.getElementById("cadastroPacienteForm").addEventListener("submit", function (event) {
