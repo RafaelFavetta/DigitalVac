@@ -152,7 +152,8 @@
     document.getElementById("cadastroVacinaForm").addEventListener("submit", function (event) {
       event.preventDefault(); // Impede o envio padrão do formulário
 
-      const formData = new FormData(this);
+      const form = this;
+      const formData = new FormData(form);
 
       fetch("../Recebedados/recebedadosdavacina.php", {
         method: "POST",
@@ -160,9 +161,10 @@
       })
         .then(response => response.text())
         .then(data => {
-          console.log(data);
-          alert("Cadastro realizado com sucesso!");
-          location.reload(); // Recarrega a página após o sucesso
+          alert(data.trim());
+          if (data.trim().toLowerCase().includes("sucesso")) {
+            form.reset(); // Limpa o formulário após sucesso
+          }
         })
         .catch(error => {
           console.error("Erro ao cadastrar:", error);

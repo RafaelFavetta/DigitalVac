@@ -15,7 +15,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $origem = isset($_POST['origem']) ? htmlspecialchars($_POST['origem']) : 'admin';
 
     if (empty($nome_vacina) || empty($fabricante) || empty($lote) || empty($idade_aplica) || empty($via) || empty($doses) || empty($intervalo) || empty($estoque)) {
-        die("Por favor, preencha todos os campos obrigatórios.");
+        // Retorna erro em formato texto simples
+        http_response_code(400);
+        echo "Por favor, preencha todos os campos obrigatórios.";
+        exit;
     }
 
     $sql = "INSERT INTO vacina (nome_vaci, lote_vaci, fabri_vaci, idade_aplica, via_adimicao, n_dose, intervalo_dose, estoque) 
@@ -24,9 +27,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $stmt->bind_param("sssisiis", $nome_vacina, $lote, $fabricante, $idade_aplica, $via, $doses, $intervalo, $estoque);
 
     if ($stmt->execute()) {
-        echo "<script>alert('Cadastro de vacina realizado com sucesso!'); window.location.href = '../$origem/telainicio.php';</script>";
+        // Retorna apenas mensagem de sucesso (sem redirecionamento)
+        echo "Cadastro de vacina realizado com sucesso!";
     } else {
-        die("Erro ao cadastrar vacina: " . $stmt->error);
+        http_response_code(500);
+        echo "Erro ao cadastrar vacina: " . $stmt->error;
     }
 }
 ?>

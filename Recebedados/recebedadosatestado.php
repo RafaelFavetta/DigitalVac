@@ -1,7 +1,8 @@
-<!-- filepath: c:\xampp\htdocs\site 6.0\Recebedados\recebedadosatestado.php -->
 <?php
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
+
+header('Content-Type: application/json');
 
 include(__DIR__ . '/../outros/db_connect.php'); // Incluindo o arquivo de conexão com o banco de dados
 
@@ -16,19 +17,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // Validações de campos obrigatórios
     if (empty($nome_paciente)) {
-        die("Erro: O campo 'Nome do Paciente' é obrigatório.");
+        echo json_encode(['success' => false, 'message' => "Erro: O campo 'Nome do Paciente' é obrigatório."]);
+        exit;
     }
     if (empty($nome_medico)) {
-        die("Erro: O campo 'Nome do Médico' é obrigatório.");
+        echo json_encode(['success' => false, 'message' => "Erro: O campo 'Nome do Médico' é obrigatório."]);
+        exit;
     }
     if (empty($data_inicio)) {
-        die("Erro: O campo 'Data de Início' é obrigatório.");
+        echo json_encode(['success' => false, 'message' => "Erro: O campo 'Data de Início' é obrigatório."]);
+        exit;
     }
     if (empty($data_fim)) {
-        die("Erro: O campo 'Data de Término' é obrigatório.");
+        echo json_encode(['success' => false, 'message' => "Erro: O campo 'Data de Término' é obrigatório."]);
+        exit;
     }
     if (empty($justificativa)) {
-        die("Erro: O campo 'Justificativa' é obrigatório.");
+        echo json_encode(['success' => false, 'message' => "Erro: O campo 'Justificativa' é obrigatório."]);
+        exit;
     }
 
     // Buscar o ID do paciente pelo nome na tabela `usuario`
@@ -42,7 +48,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $row_paciente = $result_paciente->fetch_assoc();
         $id_paci = $row_paciente['id_usuario'];
     } else {
-        die("Erro: Paciente não encontrado.");
+        echo json_encode(['success' => false, 'message' => "Erro: Paciente não encontrado."]);
+        exit;
     }
 
     // Buscar o ID do médico pelo nome na tabela `medico`
@@ -56,7 +63,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $row_medico = $result_medico->fetch_assoc();
         $id_medico = $row_medico['id_medico'];
     } else {
-        die("Erro: Médico não encontrado.");
+        echo json_encode(['success' => false, 'message' => "Erro: Médico não encontrado."]);
+        exit;
     }
 
     // Preparando a consulta SQL para inserir os dados no banco de dados
@@ -67,18 +75,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // Executando a consulta
     if ($stmt->execute()) {
-        echo "<script>
-                alert('Cadastro de atestado realizado com sucesso!');
-                window.location.href = '../$origem/telainicio.php';
-              </script>";
+        echo json_encode(['success' => true, 'message' => 'Cadastro de atestado realizado com sucesso!']);
+        exit; // <-- Adicionado para garantir que nada mais seja enviado
     } else {
-        echo "<script>
-                alert('Erro ao cadastrar atestado: " . $stmt->error . "');
-                window.location.href = '../cadastroatestado.html';
-              </script>";
+        echo json_encode(['success' => false, 'message' => 'Erro ao cadastrar atestado: ' . $stmt->error]);
+        exit;
     }
 
     $stmt->close();
     $conn->close();
+    exit;
 }
 ?>
