@@ -8,10 +8,26 @@ if (!isset($_SESSION['id_medico'])) {
     exit();
 }
 
-// Consulta SQL corrigida para buscar os atributos corretos da tabela `vacina`
-$sql = "SELECT id_vaci, nome_vaci, fabri_vaci, lote_vaci, idade_aplica, via_adimicao, n_dose, intervalo_dose, estoque 
-        FROM vacina";
-$result = $conn->query($sql);
+// Campo de pesquisa por nome da vacina
+$nome_vacina = '';
+if (isset($_GET['nome_vacina'])) {
+    $nome_vacina = trim($_GET['nome_vacina']);
+}
+
+// Monta a consulta SQL com filtro por nome da vacina, se fornecido
+if (!empty($nome_vacina)) {
+    $sql = "SELECT id_vaci, nome_vaci, fabri_vaci, lote_vaci, idade_aplica, via_adimicao, n_dose, intervalo_dose, estoque 
+            FROM vacina WHERE nome_vaci LIKE ?";
+    $stmt = $conn->prepare($sql);
+    $like_param = '%' . $nome_vacina . '%';
+    $stmt->bind_param('s', $like_param);
+    $stmt->execute();
+    $result = $stmt->get_result();
+} else {
+    $sql = "SELECT id_vaci, nome_vaci, fabri_vaci, lote_vaci, idade_aplica, via_adimicao, n_dose, intervalo_dose, estoque 
+            FROM vacina";
+    $result = $conn->query($sql);
+}
 
 if (!$result) {
     die("Erro ao buscar vacinas: " . $conn->error);
@@ -44,19 +60,9 @@ if (!$result) {
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
 
-        /* Estilo para linhas alternadas */
-        .table tbody tr:nth-child(even) {
-            background-color: #f2f2f2; /* Cor cinza claro para linhas pares */
-        }
-
-        .table tbody tr:nth-child(odd) {
-            background-color: #ffffff; /* Cor branca para linhas ímpares */
-        }
-
-        /* Destaque para o bloco dos títulos */
         .table thead th {
-            background-color: #0d6efd; /* Azul do site */
-            color: white; /* Texto branco */
+            background-color: #0d6efd !important;
+            color: white !important;
             font-weight: bold;
         }
     </style>
@@ -105,11 +111,19 @@ if (!$result) {
 
     <div class="container mt-4">
         <h2 class="text-center text-primary fw-bold">Lista de Vacinas</h2>
-        <div class="text-end mb-3">
-            <!-- Removido o botão "Cadastrar Atestado" daqui -->
+        <!-- Campo de pesquisa por nome da vacina com layout customizado -->
+        <div class="container-fluid col-md-6 mt-4">
+            <form class="d-flex" role="search" method="get" action="listavac.php">
+                <input class="form-control me-2 border border-primary fw-bold" type="text" name="nome_vacina"
+                    placeholder="Digite o nome da vacina"
+                    value="<?php echo htmlspecialchars($nome_vacina); ?>">
+                <button class="btn btn-outline-success fw-bold me-2" type="submit" style="width:220px;">Pesquisar</button>
+                <a href="listavac.php" class="btn btn-outline-danger fw-bold" style="width:220px;">Limpar Filtros</a>
+            </form>
         </div>
+        <br>
         <table class="table table-bordered">
-            <thead class="table-primary">
+            <thead>
                 <tr>
                     <th>ID</th>
                     <th>Nome</th>
@@ -123,19 +137,24 @@ if (!$result) {
                 </tr>
             </thead>
             <tbody>
-                <?php while ($row = $result->fetch_assoc()): ?>
-                    <tr>
-                        <td><?php echo htmlspecialchars($row['id_vaci']); ?></td>
-                        <td><?php echo htmlspecialchars($row['nome_vaci']); ?></td>
-                        <td><?php echo htmlspecialchars($row['fabri_vaci']); ?></td>
-                        <td><?php echo htmlspecialchars($row['lote_vaci']); ?></td>
-                        <td><?php echo htmlspecialchars($row['idade_aplica']); ?></td>
-                        <td><?php echo htmlspecialchars($row['via_adimicao']); ?></td>
-                        <td><?php echo htmlspecialchars($row['n_dose']); ?></td>
-                        <td><?php echo htmlspecialchars($row['intervalo_dose']); ?></td>
-                        <td><?php echo htmlspecialchars($row['estoque']); ?></td>
-                    </tr>
-                <?php endwhile; ?>
+                <?php
+                $rowIndex = 0;
+                while ($row = $result->fetch_assoc()):
+                    // Primeira linha branca, segunda cinza, terceira branca, etc.
+                    $rowClass = ($rowIndex % 2 === 0) ? 'bg-white' : 'table-secondary';
+                ?>
+                <tr class="<?php echo $rowClass; ?>">
+                    <td><?php echo htmlspecialchars($row['id_vaci']); ?></td>
+                    <td><?php echo htmlspecialchars($row['nome_vaci']); ?></td>
+                    <td><?php echo htmlspecialchars($row['fabri_vaci']); ?></td>
+                    <td><?php echo htmlspecialchars($row['lote_vaci']); ?></td>
+                    <td><?php echo htmlspecialchars($row['idade_aplica']); ?></td>
+                    <td><?php echo htmlspecialchars($row['via_adimicao']); ?></td>
+                    <td><?php echo htmlspecialchars($row['n_dose']); ?></td>
+                    <td><?php echo htmlspecialchars($row['intervalo_dose']); ?></td>
+                    <td><?php echo htmlspecialchars($row['estoque']); ?></td>
+                </tr>
+                <?php $rowIndex++; endwhile; ?>
             </tbody>
         </table>
     </div>
