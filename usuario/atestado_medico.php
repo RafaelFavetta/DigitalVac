@@ -140,9 +140,11 @@ $result = $stmt->get_result();
                         <!-- Ícone de status no canto superior direito -->
                         <span class="position-absolute top-0 end-0 p-2">
                             <?php if ($is_expired): ?>
-                                <i class="bi bi-x-circle-fill text-danger" title="Atestado vencido" style="font-size: 1.7rem;"></i>
+                                <!-- Ícone relógio vermelho (Bootstrap) -->
+                                <i class="bi bi-alarm-fill text-danger" title="Atestado vencido" style="font-size: 2rem;"></i>
                             <?php else: ?>
-                                <i class="bi bi-check-circle-fill text-success" title="Atestado válido" style="font-size: 1.7rem;"></i>
+                                <!-- Ícone relógio verde (Bootstrap) -->
+                                <i class="bi bi-alarm-fill text-success" title="Atestado válido" style="font-size: 2rem;"></i>
                             <?php endif; ?>
                         </span>
                         <p><strong>Nome do Paciente:</strong> <?php echo htmlspecialchars($row['nome_paciente']); ?></p>
