@@ -119,9 +119,9 @@ $result = $stmt->get_result();
     </nav>
 
     <!-- Conteúdo Principal -->
-    <div class="container mt-4">
+    <div class="container mt-4" style="margin-bottom: 40px;">
         <h2 class="text-center text-primary fw-bold">Atestados Médicos</h2>
-        <div class="row row-cols-1 row-cols-md-2 g-2">
+        <div class="row row-cols-1 row-cols-md-3 g-2" style="margin-top:32px; max-width:1200px; margin-left:auto; margin-right:auto;">
         <?php if ($result->num_rows > 0): ?>
             <?php
             $today = date('Y-m-d');
@@ -135,8 +135,8 @@ $result = $stmt->get_result();
                 $data_fim = $res_fim->fetch_assoc()['data_fim'];
                 $is_expired = ($data_fim < $today);
             ?>
-                <div class="col mb-2">
-                    <div class="card position-relative">
+                <div class="col mb-2 d-flex align-items-stretch">
+                    <div class="card position-relative w-100">
                         <!-- Ícone de status no canto superior direito -->
                         <span class="position-absolute top-0 end-0 p-2">
                             <?php if ($is_expired): ?>
