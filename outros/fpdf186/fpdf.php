@@ -1747,7 +1747,7 @@ protected function _tounicodecmap($uv)
 	$s .= ">> def\n";
 	$s .= "/CMapName /Adobe-Identity-UCS def\n";
 	$s .= "/CMapType 2 def\n";
-	$s .= "1 begincodespacerange\n";
+	"1 begincodespacerange\n";
 	$s .= "<00> <FF>\n";
 	$s .= "endcodespacerange\n";
 	if($nbr>0)

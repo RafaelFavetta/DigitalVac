@@ -41,6 +41,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $nome_paciente = trim($nome_paciente);
     $query_paciente = "SELECT id_usuario FROM usuario WHERE TRIM(LOWER(nome_usuario)) = TRIM(LOWER(?))";
     $stmt_paciente = $conn->prepare($query_paciente);
+    if (!$stmt_paciente) {
+        echo json_encode(['success' => false, 'message' => "Erro interno ao preparar consulta de paciente."]);
+        exit;
+    }
     $stmt_paciente->bind_param("s", $nome_paciente);
     $stmt_paciente->execute();
     $result_paciente = $stmt_paciente->get_result();
@@ -57,6 +61,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $nome_medico = trim($nome_medico);
     $query_medico = "SELECT id_medico FROM medico WHERE TRIM(LOWER(nome_medico)) = TRIM(LOWER(?))";
     $stmt_medico = $conn->prepare($query_medico);
+    if (!$stmt_medico) {
+        echo json_encode(['success' => false, 'message' => "Erro interno ao preparar consulta de médico."]);
+        exit;
+    }
     $stmt_medico->bind_param("s", $nome_medico);
     $stmt_medico->execute();
     $result_medico = $stmt_medico->get_result();
@@ -73,12 +81,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $sql = "INSERT INTO atestado (id_paci, id_medico, data_inicio, data_fim, justificativa) 
             VALUES (?, ?, ?, ?, ?)";
     $stmt = $conn->prepare($sql);
+    if (!$stmt) {
+        echo json_encode(['success' => false, 'message' => 'Erro ao preparar cadastro de atestado: ' . $conn->error]);
+        exit;
+    }
     $stmt->bind_param("iisss", $id_paci, $id_medico, $data_inicio, $data_fim, $justificativa);
 
     // Executando a consulta
     if ($stmt->execute()) {
         echo json_encode(['success' => true, 'message' => 'Cadastro de atestado realizado com sucesso!']);
-        exit; // <-- Adicionado para garantir que nada mais seja enviado
+        exit;
     } else {
         echo json_encode(['success' => false, 'message' => 'Erro ao cadastrar atestado: ' . $stmt->error]);
         exit;

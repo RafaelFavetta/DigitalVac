@@ -45,10 +45,10 @@ if ($result->num_rows === 0) {
 
 $atestado = $result->fetch_assoc();
 
-// Usa a cidade cadastrada, se existir
-$cidade = $atestado['cidade'];
+// Usa a cidade cadastrada, se existir e não for vazia
+$cidade = trim($atestado['cidade']);
 if (!$cidade) {
-    // Fallback: buscar pelo CEP (caso não tenha sido salvo)
+    // Fallback: buscar pelo CEP (caso não tenha sido salvo ou esteja em branco)
     function buscarCidadePorCEP($cep) {
         $cep = preg_replace('/[^0-9]/', '', $cep);
         if (strlen($cep) !== 8) return null;
@@ -56,7 +56,7 @@ if (!$cidade) {
         $response = @file_get_contents($url);
         if ($response === false) return null;
         $dados = json_decode($response, true);
-        if (isset($dados['localidade'])) {
+        if (isset($dados['localidade']) && !empty($dados['localidade'])) {
             return $dados['localidade'];
         }
         return null;
@@ -77,12 +77,12 @@ $pdf->Image('../img/logo.png', 10, 6, 30);
 
 // Cabeçalho
 $pdf->SetFont('Arial', 'B', 16);
-$pdf->Cell(0, 10, utf8_decode($atestado['medico_responsavel']), 0, 1, 'R');
+$pdf->Cell(0, 10, mb_convert_encoding($atestado['medico_responsavel'], 'ISO-8859-1', 'UTF-8'), 0, 1, 'R');
 $pdf->Ln(10);
 
 // Título
 $pdf->SetFont('Arial', 'B', 18);
-$pdf->Cell(0, 10, utf8_decode('Atestado'), 0, 1, 'C');
+$pdf->Cell(0, 10, mb_convert_encoding('Atestado', 'ISO-8859-1', 'UTF-8'), 0, 1, 'C');
 $pdf->Ln(5);
 
 // Corpo do texto
@@ -90,28 +90,30 @@ $pdf->SetFont('Arial', '', 12);
 $pdf->MultiCell(
     0,
     10,
-    utf8_decode(
+    mb_convert_encoding(
         "Atesto para os devidos fins que " . $atestado['nome_paciente'] .
         ", residente e domiciliado(a), esteve sob tratamento médico neste consultório, no período de " .
         $atestado['periodo_afastamento'] .
-        ", necessitando o(a) mesmo(a) de afastamento por motivo de " .
-        $atestado['justificativa'] . "."
+        ", necessitando o(a) mesmo(a) de afastamento por motivo de: " .
+        $atestado['justificativa'] . ".",
+        'ISO-8859-1',
+        'UTF-8'
     )
 );
 
 // Local e data
 $pdf->Ln(10);
 $data_formatada = date('d/m/Y', strtotime($atestado['data_emissao']));
-$pdf->Cell(0, 10, utf8_decode("$cidade, $data_formatada"), 0, 1, 'L');
+$pdf->Cell(0, 10, mb_convert_encoding("$cidade, $data_formatada", 'ISO-8859-1', 'UTF-8'), 0, 1, 'L');
 
 // Espaço para assinaturas
 $pdf->Ln(20);
-$pdf->Cell(90, 10, utf8_decode('__________________________'), 0, 0, 'C');
+$pdf->Cell(90, 10, mb_convert_encoding('__________________________', 'ISO-8859-1', 'UTF-8'), 0, 0, 'C');
 $pdf->Cell(10, 10, '', 0, 0);
-$pdf->Cell(90, 10, utf8_decode('__________________________'), 0, 1, 'C');
-$pdf->Cell(90, 5, utf8_decode('Assinatura do paciente'), 0, 0, 'C');
+$pdf->Cell(90, 10, mb_convert_encoding('__________________________', 'ISO-8859-1', 'UTF-8'), 0, 1, 'C');
+$pdf->Cell(90, 5, mb_convert_encoding('Assinatura do paciente', 'ISO-8859-1', 'UTF-8'), 0, 0, 'C');
 $pdf->Cell(10, 5, '', 0, 0);
-$pdf->Cell(90, 5, utf8_decode('Assinatura do médico'), 0, 1, 'C');
+$pdf->Cell(90, 5, mb_convert_encoding('Assinatura do médico', 'ISO-8859-1', 'UTF-8'), 0, 1, 'C');
 
 // Saída do PDF para download
 $pdf->Output('D', 'atestado_' . $id_atestado . '.pdf');
