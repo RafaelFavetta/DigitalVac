@@ -20,7 +20,8 @@ $sql = "SELECT
         FROM atestado a
         JOIN usuario u ON a.id_paci = u.id_usuario
         JOIN medico m ON a.id_medico = m.id_medico
-        WHERE a.id_paci = ?";
+        WHERE a.id_paci = ?
+        ORDER BY a.data_inicio DESC";
 
 $stmt = $conn->prepare($sql);
 
@@ -52,6 +53,24 @@ $result = $stmt->get_result();
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
             border-radius: 10px;
             margin-bottom: 20px;
+            padding: 16px 20px !important;
+        }
+
+        @media (min-width: 576px) {
+            .card {
+                max-width: 500px;
+                margin-left: auto;
+                margin-right: auto;
+            }
+        }
+
+        .card p {
+            margin-bottom: 6px;
+        }
+
+        .card .btn {
+            padding: 4px 16px;
+            font-size: 1rem;
         }
     </style>
 </head>
@@ -93,7 +112,7 @@ $result = $stmt->get_result();
                             <a class="btn btn-danger fw-bold" href="../outros/sair.php">
                                 <i class="bi bi-box-arrow-right" style="font-size: 20px;"></i> Sair</a>
                         </li>
-                    </ul>
+                    </ul>   
                 </div>
             </div>
         </div>
@@ -102,27 +121,46 @@ $result = $stmt->get_result();
     <!-- Conteúdo Principal -->
     <div class="container mt-4">
         <h2 class="text-center text-primary fw-bold">Atestados Médicos</h2>
-
+        <div class="row row-cols-1 row-cols-md-2 g-2">
         <?php if ($result->num_rows > 0): ?>
-            <?php while ($row = $result->fetch_assoc()): ?>
-                <div class="card p-4">
-                    <p><strong>Nome do Paciente:</strong> <?php echo htmlspecialchars($row['nome_paciente']); ?></p>
-                    <p><strong>Médico Responsável:</strong> <?php echo htmlspecialchars($row['medico_responsavel']); ?></p>
-                    <p><strong>Data de Emissão:</strong>
-                        <?php echo htmlspecialchars(date('d/m/Y', strtotime($row['data_emissao']))); ?></p>
-                    <p><strong>Justificativa:</strong> <?php echo htmlspecialchars($row['justificativa']); ?></p>
-                    <p><strong>Período de Afastamento:</strong> <?php echo htmlspecialchars($row['periodo_afastamento']); ?>
-                        dias</p>
-                    <div class="text-center mt-4">
-                        <a href="download_atestado.php?id=<?php echo $row['id_atestado']; ?>" class="btn btn-primary">Baixar o
-                            atestado</a>
+            <?php
+            $today = date('Y-m-d');
+            while ($row = $result->fetch_assoc()):
+                // Buscar data_fim para saber se está vencido
+                $sql_fim = "SELECT data_fim FROM atestado WHERE id_atestado = ?";
+                $stmt_fim = $conn->prepare($sql_fim);
+                $stmt_fim->bind_param("i", $row['id_atestado']);
+                $stmt_fim->execute();
+                $res_fim = $stmt_fim->get_result();
+                $data_fim = $res_fim->fetch_assoc()['data_fim'];
+                $is_expired = ($data_fim < $today);
+            ?>
+                <div class="col mb-2">
+                    <div class="card position-relative">
+                        <!-- Ícone de status no canto superior direito -->
+                        <span class="position-absolute top-0 end-0 p-2">
+                            <?php if ($is_expired): ?>
+                                <i class="bi bi-x-circle-fill text-danger" title="Atestado vencido" style="font-size: 1.7rem;"></i>
+                            <?php else: ?>
+                                <i class="bi bi-check-circle-fill text-success" title="Atestado válido" style="font-size: 1.7rem;"></i>
+                            <?php endif; ?>
+                        </span>
+                        <p><strong>Nome do Paciente:</strong> <?php echo htmlspecialchars($row['nome_paciente']); ?></p>
+                        <p><strong>Médico Responsável:</strong> <?php echo htmlspecialchars($row['medico_responsavel']); ?></p>
+                        <p><strong>Data de Emissão:</strong>
+                            <?php echo htmlspecialchars(date('d/m/Y', strtotime($row['data_emissao']))); ?></p>
+                        <p><strong>Justificativa:</strong> <?php echo htmlspecialchars($row['justificativa']); ?></p>
+                        <p><strong>Período de Afastamento:</strong> <?php echo htmlspecialchars($row['periodo_afastamento']); ?> dia(s)</p>
+                        <div class="text-center mt-3">
+                            <a href="download_atestado.php?id=<?php echo $row['id_atestado']; ?>" class="btn btn-primary">Baixar o atestado</a>
+                        </div>
                     </div>
                 </div>
             <?php endwhile; ?>
         <?php else: ?>
             <p class="alert alert-warning text-center">Nenhum atestado encontrado.</p>
         <?php endif; ?>
-
+        </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
