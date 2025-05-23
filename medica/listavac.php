@@ -111,17 +111,17 @@ if (!$result) {
 
     <div class="container mt-4">
         <h2 class="text-center text-primary fw-bold">Lista de Vacinas</h2>
-        <!-- Campo de pesquisa por nome da vacina com layout customizado -->
         <div class="container-fluid col-md-6 mt-4">
-            <form class="d-flex" role="search" method="get" action="listavac.php">
+            <form class="d-flex" role="search" method="get" action="listavac.php" id="form-pesquisa-vacina">
                 <input class="form-control me-2 border border-primary fw-bold" type="text" name="nome_vacina"
                     placeholder="Digite o nome da vacina"
-                    value="<?php echo htmlspecialchars($nome_vacina); ?>">
+                    value="<?php echo htmlspecialchars($nome_vacina); ?>" id="input-nome-vacina" autocomplete="off">
                 <button class="btn btn-outline-success fw-bold me-2" type="submit" style="width:220px;">Pesquisar</button>
                 <a href="listavac.php" class="btn btn-outline-danger fw-bold" style="width:220px;">Limpar Filtros</a>
             </form>
         </div>
         <br>
+        <div id="tabela-vacinas">
         <table class="table table-bordered">
             <thead>
                 <tr>
@@ -140,7 +140,6 @@ if (!$result) {
                 <?php
                 $rowIndex = 0;
                 while ($row = $result->fetch_assoc()):
-                    // Primeira linha branca, depois alterna entre cinza e branco
                     if ($rowIndex === 0) {
                         $rowClass = 'bg-white';
                     } else {
@@ -161,9 +160,26 @@ if (!$result) {
                 <?php $rowIndex++; endwhile; ?>
             </tbody>
         </table>
+        </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+    // Pesquisa automática AJAX
+    document.getElementById('input-nome-vacina').addEventListener('input', function () {
+        const nome = this.value;
+        const tabela = document.getElementById('tabela-vacinas');
+        const params = new URLSearchParams({ nome_vacina: nome });
+        fetch('listavac.php?' + params.toString(), { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
+            .then(res => res.text())
+            .then(html => {
+                // Extrai apenas a tabela da resposta
+                const temp = document.createElement('div');
+                temp.innerHTML = html;
+                const novaTabela = temp.querySelector('#tabela-vacinas');
+                if (novaTabela) tabela.innerHTML = novaTabela.innerHTML;
+            });
+    });
+    </script>
 </body>
-
 </html>

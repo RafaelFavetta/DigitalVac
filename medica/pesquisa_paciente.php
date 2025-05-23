@@ -154,14 +154,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['cpf'])) {
             <!-- Removido o botão "Cadastrar Atestado" daqui -->
         </div>
         <div class="container-fluid col-md-6 mt-4">
-            <form class="d-flex" role="search" method="get" action="pesquisa_paciente.php">
+            <form class="d-flex" role="search" method="get" action="pesquisa_paciente.php" id="form-pesquisa-cpf">
                 <input class="form-control me-2 border border-primary fw-bold" type="text" name="cpf" id="cpf"
-                    placeholder="Digite o CPF" aria-label="CPF" value="<?php echo isset($cpf) ? htmlspecialchars($cpf) : ''; ?>">
+                    placeholder="Digite o CPF" aria-label="CPF" value="<?php echo isset($cpf) ? htmlspecialchars($cpf) : ''; ?>" autocomplete="off">
                 <button class="btn btn-outline-success fw-bold me-2" type="submit">Pesquisar</button>
                 <a href="pesquisa_paciente.php" class="btn btn-outline-danger fw-bold">Limpar Filtros</a>
             </form>
         </div>
         <br>
+        <div id="tabela-pacientes">
         <?php if (!empty($pacientes)): ?>
             <table class="table table-bordered text-center">
                 <thead>
@@ -180,7 +181,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['cpf'])) {
                     <?php
                     $rowIndex = 0;
                     foreach ($pacientes as $paciente):
-                        // Primeira linha branca, depois alterna entre cinza e branco
                         if ($rowIndex === 0) {
                             $rowClass = 'bg-white';
                         } else {
@@ -203,15 +203,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['cpf'])) {
         <?php elseif ($erro): ?>
             <p class="alert alert-warning text-center"><?php echo htmlspecialchars($erro); ?></p>
         <?php endif; ?>
+        </div>
     </div>
 
     <script>
         $(document).ready(function () {
-            $('#cpf').mask('000.000.000-00'); // Aplica a máscara de CPF
+            $('#cpf').mask('000.000.000-00');
+            // Pesquisa automática AJAX
+            $('#cpf').on('input', function () {
+                var cpf = $(this).val();
+                $.ajax({
+                    url: 'pesquisa_paciente.php',
+                    type: 'GET',
+                    data: { cpf: cpf },
+                    headers: { 'X-Requested-With': 'XMLHttpRequest' },
+                    success: function (data) {
+                        var html = $('<div>').html(data);
+                        var novaTabela = html.find('#tabela-pacientes');
+                        if (novaTabela.length) {
+                            $('#tabela-pacientes').html(novaTabela.html());
+                        }
+                    }
+                });
+            });
         });
     </script>
 </body>
-
 </html>
 
 <?php

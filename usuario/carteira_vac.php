@@ -111,14 +111,14 @@ $result = $stmt->get_result();
     <div class="container mt-4">
         <h2 class="text-center text-primary fw-bold">Aplicações de Vacina</h2>
         <div class="w-50 mx-auto">
-            <form class="d-flex" role="search">
+            <form class="d-flex" role="search" id="form-pesquisa-vacina">
                 <input class="form-control me-2 border border-primary" type="search" placeholder="Pesquisar"
                     aria-label="Pesquisar" id="pesquisa-vacina" autocomplete="off">
                 <button class="btn btn-outline-success" type="submit">Pesquisar</button>
             </form>
         </div>
         <br>
-
+        <div id="tabela-carteira-vac">
         <?php if ($result->num_rows > 0): ?>
             <div class="table-responsive">
                 <table class="table table-bordered text-center">
@@ -135,7 +135,6 @@ $result = $stmt->get_result();
                         <?php
                         $rowIndex = 0;
                         while ($row = $result->fetch_assoc()):
-                            // Primeira linha branca, depois alterna entre cinza e branco
                             if ($rowIndex === 0) {
                                 $rowClass = 'bg-white';
                             } else {
@@ -156,6 +155,7 @@ $result = $stmt->get_result();
         <?php else: ?>
             <p class="alert alert-warning text-center">Nenhuma aplicação registrada.</p>
         <?php endif; ?>
+        </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
@@ -164,6 +164,20 @@ $result = $stmt->get_result();
         window.onpopstate = function () {
             history.pushState(null, "", location.href);
         };
+
+        // Pesquisa automática AJAX
+        document.getElementById('pesquisa-vacina').addEventListener('input', function () {
+            const termo = this.value;
+            const tabela = document.getElementById('tabela-carteira-vac');
+            fetch('carteira_vac.php?pesquisa=' + encodeURIComponent(termo), { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
+                .then(res => res.text())
+                .then(html => {
+                    const temp = document.createElement('div');
+                    temp.innerHTML = html;
+                    const novaTabela = temp.querySelector('#tabela-carteira-vac');
+                    if (novaTabela) tabela.innerHTML = novaTabela.innerHTML;
+                });
+        });
     </script>
 
 </body>
