@@ -26,43 +26,54 @@
             border-color: #ced4da !important;
         }
 
+        /* AUTOCOMPLETE PADRÃO */
         .autocomplete-suggestions {
             position: absolute;
             z-index: 1000;
             width: 100%;
             background: #fff;
-            border: 1px solid #0d6efd;
+            border: 1px solid #d1d5db;
             border-radius: 0 0 0.5rem 0.5rem;
-            max-height: 200px;
+            max-height: 220px;
             overflow-y: auto;
-            box-shadow: none !important;
-            border-color: #ced4da !important;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            margin-top: -2px;
+            display: none;
         }
 
         .autocomplete-suggestion {
-            padding: 0.5rem 1rem;
+            padding: 0.75rem 1rem;
             cursor: pointer;
-            color: #0d6efd;
+            font-size: 1rem;
+            color: #212529;
             background: #fff;
+            border-bottom: 1px solid #f1f1f1;
+            transition: background 0.15s;
         }
 
-        .autocomplete-suggestion:hover,
-        .autocomplete-suggestion.active {
+        .autocomplete-suggestion:last-child {
+            border-bottom: none;
+        }
+
+        .autocomplete-suggestion.active,
+        .autocomplete-suggestion:hover {
             background: #e7f1ff;
-            color: #084298;
+            color: #0d6efd;
+        }
+
+        .autocomplete-suggestion:focus {
+            outline: none;
+            background: #e7f1ff;
+            color: #0d6efd;
         }
 
         .position-relative {
             position: relative !important;
         }
 
-        .autocomplete-suggestion:focus,
-        .autocomplete-suggestion.active {
-            /* Remove barra azul ao focar/autocomplete */
-            background: #e7f1ff;
-            color: #084298;
-            box-shadow: none !important;
-            border-color: #ced4da !important;
+        /* Negrito para parte digitada */
+        .autocomplete-bold {
+            font-weight: bold;
         }
     </style>
 </head>
@@ -232,7 +243,7 @@
             cpfInput.value = cpfInput.value.replace(/\D/g, "");
         });
 
-        // Função genérica para autocomplete
+        // AUTOCOMPLETE PADRÃO
         function setupAutocomplete(inputId, endpoint) {
             const input = document.getElementById(inputId);
             const container = document.getElementById('autocomplete-' + inputId);
@@ -240,8 +251,30 @@
             let suggestions = [];
             let selectedIndex = -1;
 
+            // Fuzzy highlight: destaca cada caractere digitado, mesmo se não for substring direta
+            function highlightMatch(text, query) {
+                if (!query) return text;
+                let t = text;
+                let q = query.replace(/\s+/g, '').toLowerCase();
+                let tArr = t.split('');
+                let qArr = q.split('');
+                let res = '';
+                let j = 0;
+                for (let i = 0; i < tArr.length; i++) {
+                    if (j < qArr.length && tArr[i].toLowerCase() === qArr[j]) {
+                        res += '<span class="autocomplete-bold">' + tArr[i] + '</span>';
+                        j++;
+                    } else {
+                        res += tArr[i];
+                    }
+                }
+                return res;
+            }
+
             function fetchSuggestions(query = '') {
-                fetch(endpoint + '?q=' + encodeURIComponent(query))
+                // Envia o termo normal e também um termo "fuzzy" (ex: c%a%r%l%o%s%)
+                let fuzzy = query.replace(/\s+/g, '').split('').join('%');
+                fetch(endpoint + '?q=' + encodeURIComponent(query) + '&fuzzy=' + encodeURIComponent(fuzzy))
                     .then(res => res.json())
                     .then(data => {
                         suggestions = data;
@@ -258,7 +291,7 @@
                 suggestions.forEach((item, idx) => {
                     const div = document.createElement('div');
                     div.className = 'autocomplete-suggestion' + (idx === selectedIndex ? ' active' : '');
-                    div.textContent = item;
+                    div.innerHTML = highlightMatch(item, input.value);
                     div.onclick = () => {
                         input.value = item;
                         container.innerHTML = '';
@@ -276,7 +309,7 @@
 
             input.addEventListener('focus', function () {
                 selectedIndex = -1;
-                fetchSuggestions('');
+                fetchSuggestions(this.value);
             });
 
             input.addEventListener('keydown', function (e) {

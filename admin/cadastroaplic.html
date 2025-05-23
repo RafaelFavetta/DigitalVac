@@ -26,43 +26,54 @@
       border-color: #ced4da !important;
     }
 
+    /* AUTOCOMPLETE PADRÃO */
     .autocomplete-suggestions {
       position: absolute;
       z-index: 1000;
       width: 100%;
       background: #fff;
-      border: 1px solid #0d6efd;
+      border: 1px solid #d1d5db;
       border-radius: 0 0 0.5rem 0.5rem;
-      max-height: 200px;
+      max-height: 220px;
       overflow-y: auto;
-      box-shadow: none !important;
-      border-color: #ced4da !important;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      margin-top: -2px;
+      display: none;
     }
 
     .autocomplete-suggestion {
-      padding: 0.5rem 1rem;
+      padding: 0.75rem 1rem;
       cursor: pointer;
-      color: #0d6efd;
+      font-size: 1rem;
+      color: #212529;
       background: #fff;
+      border-bottom: 1px solid #f1f1f1;
+      transition: background 0.15s;
     }
 
-    .autocomplete-suggestion:hover,
-    .autocomplete-suggestion.active {
-      background: #e7f1ff;
-      color: #084298;
+    .autocomplete-suggestion:last-child {
+      border-bottom: none;
     }
 
-    .autocomplete-suggestion:focus,
-    .autocomplete-suggestion.active {
-      /* Remove barra azul ao focar/autocomplete */
+    .autocomplete-suggestion.active,
+    .autocomplete-suggestion:hover {
       background: #e7f1ff;
-      color: #084298;
-      box-shadow: none !important;
-      border-color: #ced4da !important;
+      color: #0d6efd;
+    }
+
+    .autocomplete-suggestion:focus {
+      outline: none;
+      background: #e7f1ff;
+      color: #0d6efd;
     }
 
     .position-relative {
       position: relative !important;
+    }
+
+    /* Negrito para parte digitada */
+    .autocomplete-bold {
+      font-weight: bold;
     }
   </style>
 </head>
@@ -203,6 +214,7 @@
       return resto === parseInt(cpf.substring(10, 11));
     }
 
+    // AUTOCOMPLETE PADRÃO
     function setupAutocomplete(inputId, endpoint) {
       const input = document.getElementById(inputId);
       const container = document.getElementById('autocomplete-' + inputId);
@@ -210,10 +222,20 @@
       let suggestions = [];
       let selectedIndex = -1;
 
+      function highlightMatch(text, query) {
+        if (!query) return text;
+        const idx = text.toLowerCase().indexOf(query.toLowerCase());
+        if (idx === -1) return text;
+        const before = text.substring(0, idx);
+        const match = text.substring(idx, idx + query.length);
+        const after = text.substring(idx + query.length);
+        return before + '<span class="autocomplete-bold">' + match + '</span>' + after;
+      }
+
       function fetchSuggestions(query = '') {
         fetch(endpoint + '?q=' + encodeURIComponent(query))
           .then(res => res.json())
-          .then((data) => {
+          .then(data => {
             suggestions = data;
             renderSuggestions();
           });
@@ -228,7 +250,7 @@
         suggestions.forEach((item, idx) => {
           const div = document.createElement('div');
           div.className = 'autocomplete-suggestion' + (idx === selectedIndex ? ' active' : '');
-          div.textContent = item;
+          div.innerHTML = highlightMatch(item, input.value);
           div.onclick = () => {
             input.value = item;
             container.innerHTML = '';
@@ -246,7 +268,7 @@
 
       input.addEventListener('focus', function () {
         selectedIndex = -1;
-        fetchSuggestions('');
+        fetchSuggestions(this.value);
       });
 
       input.addEventListener('keydown', function (e) {

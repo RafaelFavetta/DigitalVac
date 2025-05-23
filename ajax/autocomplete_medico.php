@@ -1,13 +1,31 @@
 <?php
 include('../outros/db_connect.php');
 $q = isset($_GET['q']) ? $_GET['q'] : '';
-$stmt = $conn->prepare("SELECT coren_crm FROM medico WHERE coren_crm LIKE CONCAT('%', ?, '%') LIMIT 10");
-$stmt->bind_param("s", $q);
-$stmt->execute();
-$result = $stmt->get_result();
-$suggestions = [];
-while ($row = $result->fetch_assoc()) {
-    $suggestions[] = $row['coren_crm'];
+
+// Remove tudo que não é letra ou número
+function normalize($str) {
+    return strtolower(preg_replace('/[^a-zA-Z0-9]/', '', $str));
 }
+
+$search = normalize($q);
+
+$suggestions = [];
+if ($search !== '') {
+    $sql = "SELECT coren_crm FROM medico";
+    $result = $conn->query($sql);
+    $found = [];
+    while ($row = $result->fetch_assoc()) {
+        $coren = normalize($row['coren_crm']);
+        if (
+            strpos($coren, $search) !== false ||
+            preg_match('/' . implode('.*', str_split($search)) . '/i', $coren)
+        ) {
+            $found[$row['coren_crm']] = true;
+        }
+    }
+    $suggestions = array_keys($found);
+    $suggestions = array_slice($suggestions, 0, 10);
+}
+
 echo json_encode($suggestions);
 ?>
