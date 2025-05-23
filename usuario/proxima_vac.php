@@ -137,7 +137,15 @@ if ($user_data) {
 
     <div class="container mt-4">
         <h2 class="text-center text-primary fw-bold">Vacinas a serem aplicadas</h2>
-        <div class="table-responsive">
+        <div class="w-50 mx-auto">
+            <form class="d-flex position-relative" role="search" id="form-pesquisa-proxima-vacina">
+                <input class="form-control me-2 border border-primary" type="search" placeholder="Pesquisar vacina"
+                    aria-label="Pesquisar" id="pesquisa-proxima-vacina" autocomplete="off">
+                <button type="button" id="limpar-pesquisa-proxima-vacina" class="btn position-absolute end-0 top-50 translate-middle-y me-2" style="z-index:2; background:transparent; border:none; color:#888; font-size:1.3rem; right:0.5rem; display:none;" tabindex="-1">&times;</button>
+            </form>
+        </div>
+        <br>
+        <div class="table-responsive" id="tabela-proxima-vacina">
             <table class="table table-bordered text-center">
                 <thead>
                     <tr>
@@ -179,5 +187,34 @@ if ($user_data) {
     </div>
 </body>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    // Pesquisa automática AJAX para vacinas a serem aplicadas
+    document.getElementById('pesquisa-proxima-vacina').addEventListener('input', function () {
+        const termo = this.value;
+        fetch('proxima_vac.php?pesquisa=' + encodeURIComponent(termo), { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
+            .then(res => res.text())
+            .then(html => {
+                const temp = document.createElement('div');
+                temp.innerHTML = html;
+                const novaTabela = temp.querySelector('#tabela-proxima-vacina');
+                if (novaTabela) document.getElementById('tabela-proxima-vacina').innerHTML = novaTabela.innerHTML;
+            });
+        document.getElementById('limpar-pesquisa-proxima-vacina').style.display = termo ? 'block' : 'none';
+    });
 
+    // Botão X para limpar pesquisa
+    document.getElementById('limpar-pesquisa-proxima-vacina').addEventListener('click', function () {
+        const input = document.getElementById('pesquisa-proxima-vacina');
+        input.value = '';
+        input.dispatchEvent(new Event('input'));
+        this.style.display = 'none';
+        input.focus();
+    });
+
+    // Exibe o botão X se já houver texto ao carregar
+    window.addEventListener('DOMContentLoaded', function () {
+        const input = document.getElementById('pesquisa-proxima-vacina');
+        document.getElementById('limpar-pesquisa-proxima-vacina').style.display = input.value ? 'block' : 'none';
+    });
+</script>
 </html>

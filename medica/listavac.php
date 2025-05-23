@@ -112,12 +112,13 @@ if (!$result) {
     <div class="container mt-4">
         <h2 class="text-center text-primary fw-bold">Lista de Vacinas</h2>
         <div class="container-fluid col-md-6 mt-4">
-            <form class="d-flex" role="search" method="get" action="listavac.php" id="form-pesquisa-vacina">
+            <form class="d-flex position-relative" role="search" id="form-pesquisa-vacina">
                 <input class="form-control me-2 border border-primary fw-bold" type="text" name="nome_vacina"
                     placeholder="Digite o nome da vacina"
                     value="<?php echo htmlspecialchars($nome_vacina); ?>" id="input-nome-vacina" autocomplete="off">
-                <button class="btn btn-outline-success fw-bold me-2" type="submit" style="width:220px;">Pesquisar</button>
-                <a href="listavac.php" class="btn btn-outline-danger fw-bold" style="width:220px;">Limpar Filtros</a>
+                <button type="button" id="limpar-pesquisa-vacina" class="btn position-absolute end-0 top-50 translate-middle-y me-2"
+                    style="z-index:2; background:transparent; border:none; color:#888; font-size:1.3rem; right:0.5rem; display:none;"
+                    tabindex="-1">&times;</button>
             </form>
         </div>
         <br>
@@ -179,6 +180,22 @@ if (!$result) {
                 const novaTabela = temp.querySelector('#tabela-vacinas');
                 if (novaTabela) tabela.innerHTML = novaTabela.innerHTML;
             });
+        document.getElementById('limpar-pesquisa-vacina').style.display = nome ? 'block' : 'none';
+    });
+
+    // Botão X para limpar pesquisa
+    document.getElementById('limpar-pesquisa-vacina').addEventListener('click', function () {
+        const input = document.getElementById('input-nome-vacina');
+        input.value = '';
+        input.dispatchEvent(new Event('input'));
+        this.style.display = 'none';
+        input.focus();
+    });
+
+    // Exibe o botão X se já houver texto ao carregar
+    window.addEventListener('DOMContentLoaded', function () {
+        const input = document.getElementById('input-nome-vacina');
+        document.getElementById('limpar-pesquisa-vacina').style.display = input.value ? 'block' : 'none';
     });
     </script>
 </body>

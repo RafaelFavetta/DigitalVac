@@ -111,10 +111,10 @@ $result = $stmt->get_result();
     <div class="container mt-4">
         <h2 class="text-center text-primary fw-bold">Aplicações de Vacina</h2>
         <div class="w-50 mx-auto">
-            <form class="d-flex" role="search" id="form-pesquisa-vacina">
+            <form class="d-flex position-relative" role="search" id="form-pesquisa-vacina">
                 <input class="form-control me-2 border border-primary" type="search" placeholder="Pesquisar"
                     aria-label="Pesquisar" id="pesquisa-vacina" autocomplete="off">
-                <button class="btn btn-outline-success" type="submit">Pesquisar</button>
+                <button type="button" id="limpar-pesquisa-vacina" class="btn position-absolute end-0 top-50 translate-middle-y me-2" style="z-index:2; background:transparent; border:none; color:#888; font-size:1.3rem; right:0.5rem; display:none;" tabindex="-1">&times;</button>
             </form>
         </div>
         <br>
@@ -177,9 +177,24 @@ $result = $stmt->get_result();
                     const novaTabela = temp.querySelector('#tabela-carteira-vac');
                     if (novaTabela) tabela.innerHTML = novaTabela.innerHTML;
                 });
+            document.getElementById('limpar-pesquisa-vacina').style.display = termo ? 'block' : 'none';
+        });
+
+        // Botão X para limpar pesquisa
+        document.getElementById('limpar-pesquisa-vacina').addEventListener('click', function () {
+            const input = document.getElementById('pesquisa-vacina');
+            input.value = '';
+            input.dispatchEvent(new Event('input'));
+            this.style.display = 'none';
+            input.focus();
+        });
+
+        // Exibe o botão X se já houver texto ao carregar
+        window.addEventListener('DOMContentLoaded', function () {
+            const input = document.getElementById('pesquisa-vacina');
+            document.getElementById('limpar-pesquisa-vacina').style.display = input.value ? 'block' : 'none';
         });
     </script>
-
 </body>
 
 </html>
