@@ -25,6 +25,28 @@
             box-shadow: none !important;
             border-color: #ced4da !important;
         }
+
+        .autocomplete-suggestions {
+            border: 1px solid #ced4da;
+            background: white;
+            position: absolute;
+            z-index: 1000;
+            width: calc(100% - 2px);
+            max-height: 200px;
+            overflow-y: auto;
+            display: none;
+        }
+
+        .autocomplete-suggestion {
+            padding: 10px;
+            cursor: pointer;
+        }
+
+        .autocomplete-suggestion:hover,
+        .autocomplete-suggestion.active {
+            background: #007bff;
+            color: white;
+        }
     </style>
 </head>
 
@@ -79,11 +101,15 @@
                 <div class="row g-3">
                     <div class="col-md-6">
                         <label for="nome_paciente" class="form-label fw-bold">Nome do Paciente</label>
-                        <input type="text" id="nome_paciente" name="nome_paciente" class="form-control" required>
+                        <input type="text" id="nome_paciente" name="nome_paciente" class="form-control" required
+                            autocomplete="off">
+                        <div id="autocomplete-nome_paciente" class="autocomplete-suggestions"></div>
                     </div>
                     <div class="col-md-6">
                         <label for="nome_medico" class="form-label fw-bold">Nome do Médico</label>
-                        <input type="text" id="nome_medico" name="nome_medico" class="form-control" required>
+                        <input type="text" id="nome_medico" name="nome_medico" class="form-control" required
+                            autocomplete="off">
+                        <div id="autocomplete-nome_medico" class="autocomplete-suggestions"></div>
                     </div>
                 </div>
                 <div class="row g-3 mt-2">
@@ -141,6 +167,88 @@
                     alert("Ocorreu um erro ao cadastrar. Verifique os dados e tente novamente.");
                 });
         });
+
+        // Função genérica para autocomplete
+        function setupAutocomplete(inputId, endpoint) {
+            const input = document.getElementById(inputId);
+            const container = document.getElementById('autocomplete-' + inputId);
+            input.parentElement.classList.add('position-relative');
+            let suggestions = [];
+            let selectedIndex = -1;
+
+            function fetchSuggestions(query = '') {
+                fetch(endpoint + '?q=' + encodeURIComponent(query))
+                    .then(res => res.json())
+                    .then(data => {
+                        suggestions = data;
+                        renderSuggestions();
+                    });
+            }
+
+            function renderSuggestions() {
+                container.innerHTML = '';
+                if (suggestions.length === 0) {
+                    container.style.display = 'none';
+                    return;
+                }
+                suggestions.forEach((item, idx) => {
+                    const div = document.createElement('div');
+                    div.className = 'autocomplete-suggestion' + (idx === selectedIndex ? ' active' : '');
+                    div.textContent = item;
+                    div.onclick = () => {
+                        input.value = item;
+                        container.innerHTML = '';
+                        container.style.display = 'none';
+                    };
+                    container.appendChild(div);
+                });
+                container.style.display = 'block';
+            }
+
+            input.addEventListener('input', function () {
+                selectedIndex = -1;
+                fetchSuggestions(this.value);
+            });
+
+            input.addEventListener('focus', function () {
+                selectedIndex = -1;
+                fetchSuggestions('');
+            });
+
+            input.addEventListener('keydown', function (e) {
+                if (container.style.display !== 'block') return;
+                if (e.key === 'ArrowDown') {
+                    selectedIndex = (selectedIndex + 1) % suggestions.length;
+                    renderSuggestions();
+                    e.preventDefault();
+                } else if (e.key === 'ArrowUp') {
+                    selectedIndex = (selectedIndex - 1 + suggestions.length) % suggestions.length;
+                    renderSuggestions();
+                    e.preventDefault();
+                } else if (e.key === 'Enter') {
+                    if (selectedIndex >= 0 && suggestions[selectedIndex]) {
+                        input.value = suggestions[selectedIndex];
+                        container.innerHTML = '';
+                        container.style.display = 'none';
+                        e.preventDefault();
+                    }
+                } else if (e.key === 'Escape') {
+                    container.innerHTML = '';
+                    container.style.display = 'none';
+                }
+            });
+
+            document.addEventListener('click', function (e) {
+                if (!container.contains(e.target) && e.target !== input) {
+                    container.innerHTML = '';
+                    container.style.display = 'none';
+                }
+            });
+        }
+
+        // Autocomplete para nome do paciente e nome do médico
+        setupAutocomplete('nome_paciente', '../ajax/autocomplete_nomepaciente.php');
+        setupAutocomplete('nome_medico', '../ajax/autocomplete_nomemedico.php');
     </script>
 </body>
 
