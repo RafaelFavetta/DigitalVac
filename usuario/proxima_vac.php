@@ -76,6 +76,9 @@ if ($user_data) {
             border-radius: 10px;
             overflow: hidden;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            min-width: 700px;
+            width: 100%;
+            /* Adicionado para aumentar a largura */
         }
 
         .table thead th {
@@ -90,6 +93,28 @@ if ($user_data) {
 
         .table tbody tr:nth-child(odd) {
             background-color: #ffffff;
+        }
+
+        /* Remove o X nativo do input type search no Chrome/Edge */
+        input[type="search"]::-webkit-search-decoration,
+        input[type="search"]::-webkit-search-cancel-button,
+        input[type="search"]::-webkit-search-results-button,
+        input[type="search"]::-webkit-search-results-decoration {
+            display: none;
+        }
+
+        /* Remove o X nativo do input type search no Firefox */
+        input[type="search"]::-ms-clear {
+            display: none;
+            width: 0;
+            height: 0;
+        }
+
+        /* Remove o X nativo do input type search no IE */
+        input[type="search"]::-ms-reveal {
+            display: none;
+            width: 0;
+            height: 0;
         }
     </style>
 </head>
@@ -137,48 +162,49 @@ if ($user_data) {
 
     <div class="container mt-4">
         <h2 class="text-center text-primary fw-bold">Vacinas a serem aplicadas</h2>
-        <div class="w-50 mx-auto">
-            <form class="d-flex position-relative" role="search" id="form-pesquisa-proxima-vacina">
-                <input class="form-control me-2 border border-primary" type="search" placeholder="Pesquisar vacina"
+        <div class="w-100 d-flex justify-content-center">
+            <form class="d-flex position-relative" role="search" id="form-pesquisa-proxima-vacina" style="max-width:600px; width:100%;">
+                <input class="form-control me-2 border border-primary" type="search" placeholder="Nome da vacina"
                     aria-label="Pesquisar" id="pesquisa-proxima-vacina" autocomplete="off">
-                <button type="button" id="limpar-pesquisa-proxima-vacina" class="btn position-absolute end-0 top-50 translate-middle-y me-2" style="z-index:2; background:transparent; border:none; color:#888; font-size:1.3rem; right:0.5rem; display:none;" tabindex="-1">&times;</button>
             </form>
         </div>
         <br>
-        <div class="table-responsive" id="tabela-proxima-vacina">
-            <table class="table table-bordered text-center">
-                <thead>
-                    <tr>
-                        <th>Vacina</th>
-                        <th>Idade Recomendada</th>
-                        <th>Doses</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php if (!empty($vacinas_nao_tomadas)): ?>
-                        <?php
-                        $rowIndex = 0;
-                        foreach ($vacinas_nao_tomadas as $vacina):
-                            // Primeira linha branca, depois alterna entre cinza e branco
-                            if ($rowIndex === 0) {
-                                $rowClass = 'bg-white';
-                            } else {
-                                $rowClass = ($rowIndex % 2 === 1) ? 'table-secondary' : 'bg-white';
-                            }
-                        ?>
-                            <tr class="<?php echo $rowClass; ?>">
-                                <td><?= htmlspecialchars($vacina['nome_vaci']) ?></td>
-                                <td><?= $vacina['idade_aplica'] ?> anos</td>
-                                <td><?= $vacina['n_dose'] ?></td>
-                            </tr>
-                        <?php $rowIndex++; endforeach; ?>
-                    <?php else: ?>
+        <div class="table-responsive d-flex justify-content-center" id="tabela-proxima-vacina">
+            <div style="min-width: 700px; width: 90%;">
+                <table class="table table-bordered text-center w-100 mx-auto">
+                    <thead>
                         <tr>
-                            <td colspan="3">Nenhuma vacina pendente.</td>
+                            <th>Vacina</th>
+                            <th>Idade Recomendada</th>
+                            <th>Doses</th>
                         </tr>
-                    <?php endif; ?>
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        <?php if (!empty($vacinas_nao_tomadas)): ?>
+                            <?php
+                            $rowIndex = 0;
+                            foreach ($vacinas_nao_tomadas as $vacina):
+                                // Primeira linha branca, depois alterna entre cinza e branco
+                                if ($rowIndex === 0) {
+                                    $rowClass = 'bg-white';
+                                } else {
+                                    $rowClass = ($rowIndex % 2 === 1) ? 'table-secondary' : 'bg-white';
+                                }
+                            ?>
+                                <tr class="<?php echo $rowClass; ?>">
+                                    <td><?= htmlspecialchars($vacina['nome_vaci']) ?></td>
+                                    <td><?= $vacina['idade_aplica'] ?> anos</td>
+                                    <td><?= $vacina['n_dose'] ?></td>
+                                </tr>
+                            <?php $rowIndex++; endforeach; ?>
+                        <?php else: ?>
+                            <tr>
+                                <td colspan="3">Nenhuma vacina pendente.</td>
+                            </tr>
+                        <?php endif; ?>
+                    </tbody>
+                </table>
+            </div>
         </div>
         <p class="text-center mt-4">
             <a href="https://www.gov.br/saude/pt-br/vacinacao/calendario" target="_blank" class="link">Acesse a lista de
@@ -199,22 +225,9 @@ if ($user_data) {
                 const novaTabela = temp.querySelector('#tabela-proxima-vacina');
                 if (novaTabela) document.getElementById('tabela-proxima-vacina').innerHTML = novaTabela.innerHTML;
             });
-        document.getElementById('limpar-pesquisa-proxima-vacina').style.display = termo ? 'block' : 'none';
+        // Removido btnLimpar.style.display
     });
 
-    // Botão X para limpar pesquisa
-    document.getElementById('limpar-pesquisa-proxima-vacina').addEventListener('click', function () {
-        const input = document.getElementById('pesquisa-proxima-vacina');
-        input.value = '';
-        input.dispatchEvent(new Event('input'));
-        this.style.display = 'none';
-        input.focus();
-    });
-
-    // Exibe o botão X se já houver texto ao carregar
-    window.addEventListener('DOMContentLoaded', function () {
-        const input = document.getElementById('pesquisa-proxima-vacina');
-        document.getElementById('limpar-pesquisa-proxima-vacina').style.display = input.value ? 'block' : 'none';
-    });
+    // Removido botão customizado "X" e eventos relacionados
 </script>
 </html>

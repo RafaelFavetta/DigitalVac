@@ -14,7 +14,7 @@
     <div class="container d-flex justify-content-center align-items-center vh-100">
         <div class="card p-4 shadow-sm text-center" style="width: 400px;">
             <img src="img/logo.png" alt="Logo" class="mx-auto d-block mb-4" style="width: 100px;">
-            <h2 class="mb-4 text-primary fw-bold">Bem-vindo ao Sistema</h2>
+            <h2 class="mb-4 text-center text-primary fw-bold">Bem-vindo ao Sistema</h2>
             <p class="mb-4 text-secondary ">Escolha como deseja acessar:</p>
             <div class="d-grid gap-3">
                 <a href="usuario/login.php" class="btn btn-primary">Entrar como Usuário</a>

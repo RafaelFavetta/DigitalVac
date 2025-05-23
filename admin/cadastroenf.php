@@ -75,8 +75,8 @@
     </nav>
 
     <div class="container d-flex align-items-center justify-content-center vh-100">
-        <div class="form-container">
-            <h2 class="text-primary fw-bold text-center">Cadastro de Médico</h2>
+        <div class="form-container mx-auto">
+            <h2 class="text-center text-primary fw-bold">Cadastro de Médico</h2>
             <form action="../Recebedados/recebedadosenfermeiro.php" method="POST">
                 <div class="row g-2">
                     <div class="col-md-6">

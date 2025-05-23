@@ -155,15 +155,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['cpf'])) {
         </div>
         <div class="container-fluid col-md-6 mt-4">
             <form class="d-flex position-relative" role="search" method="get" action="pesquisa_paciente.php" id="form-pesquisa-cpf">
-                <input class="form-control me-2 border border-primary fw-bold" type="text" name="cpf" id="cpf"
+                <input class="form-control me-2 border border-primary fw-bold" type="search" name="cpf" id="cpf"
                     placeholder="Digite o CPF" aria-label="CPF" value="<?php echo isset($cpf) ? htmlspecialchars($cpf) : ''; ?>" autocomplete="off">
-                <button type="button" id="limpar-pesquisa-cpf" class="btn position-absolute end-0 top-50 translate-middle-y me-2" style="z-index:2; background:transparent; border:none; color:#888; font-size:1.3rem; right:0.5rem; display:none;" tabindex="-1">&times;</button>
+                <!-- Removido botão customizado "X" -->
             </form>
         </div>
         <br>
-        <div id="tabela-pacientes">
+        <div id="tabela-pacientes" class="d-flex justify-content-center">
         <?php if (!empty($pacientes)): ?>
-            <table class="table table-bordered text-center">
+            <table class="table table-bordered text-center mx-auto">
                 <thead>
                     <tr>
                         <th>Nome</th>
@@ -224,19 +224,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['cpf'])) {
                         }
                     }
                 });
-                $('#limpar-pesquisa-cpf').toggle(!!cpf);
+                // Removido btnLimpar.toggle
             });
 
-            // Botão X para limpar pesquisa
-            $('#limpar-pesquisa-cpf').on('click', function () {
-                $('#cpf').val('').trigger('input').focus();
-                $(this).hide();
-            });
-
-            // Exibe o botão X se já houver texto ao carregar
-            if ($('#cpf').val()) {
-                $('#limpar-pesquisa-cpf').show();
-            }
+            // Removido botão customizado "X" e eventos relacionados
         });
     </script>
 </body>

@@ -113,54 +113,51 @@ if (!$result) {
         <h2 class="text-center text-primary fw-bold">Lista de Vacinas</h2>
         <div class="container-fluid col-md-6 mt-4">
             <form class="d-flex position-relative" role="search" id="form-pesquisa-vacina">
-                <input class="form-control me-2 border border-primary fw-bold" type="text" name="nome_vacina"
+                <input class="form-control me-2 border border-primary fw-bold" type="search" name="nome_vacina"
                     placeholder="Digite o nome da vacina"
                     value="<?php echo htmlspecialchars($nome_vacina); ?>" id="input-nome-vacina" autocomplete="off">
-                <button type="button" id="limpar-pesquisa-vacina" class="btn position-absolute end-0 top-50 translate-middle-y me-2"
-                    style="z-index:2; background:transparent; border:none; color:#888; font-size:1.3rem; right:0.5rem; display:none;"
-                    tabindex="-1">&times;</button>
             </form>
         </div>
         <br>
-        <div id="tabela-vacinas">
-        <table class="table table-bordered">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Nome</th>
-                    <th>Fabricante</th>
-                    <th>Lote</th>
-                    <th>Idade Aplicação</th>
-                    <th>Via de Administração</th>
-                    <th>Número de Doses</th>
-                    <th>Intervalo entre Doses</th>
-                    <th>Estoque</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php
-                $rowIndex = 0;
-                while ($row = $result->fetch_assoc()):
-                    if ($rowIndex === 0) {
-                        $rowClass = 'bg-white';
-                    } else {
-                        $rowClass = ($rowIndex % 2 === 1) ? 'table-secondary' : 'bg-white';
-                    }
-                ?>
-                <tr class="<?php echo $rowClass; ?>">
-                    <td><?php echo htmlspecialchars($row['id_vaci']); ?></td>
-                    <td><?php echo htmlspecialchars($row['nome_vaci']); ?></td>
-                    <td><?php echo htmlspecialchars($row['fabri_vaci']); ?></td>
-                    <td><?php echo htmlspecialchars($row['lote_vaci']); ?></td>
-                    <td><?php echo htmlspecialchars($row['idade_aplica']); ?></td>
-                    <td><?php echo htmlspecialchars($row['via_adimicao']); ?></td>
-                    <td><?php echo htmlspecialchars($row['n_dose']); ?></td>
-                    <td><?php echo htmlspecialchars($row['intervalo_dose']); ?></td>
-                    <td><?php echo htmlspecialchars($row['estoque']); ?></td>
-                </tr>
-                <?php $rowIndex++; endwhile; ?>
-            </tbody>
-        </table>
+        <div id="tabela-vacinas" class="d-flex justify-content-center">
+            <table class="table table-bordered text-center mx-auto">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nome</th>
+                        <th>Fabricante</th>
+                        <th>Lote</th>
+                        <th>Idade Aplicação</th>
+                        <th>Via de Administração</th>
+                        <th>Número de Doses</th>
+                        <th>Intervalo entre Doses</th>
+                        <th>Estoque</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php
+                    $rowIndex = 0;
+                    while ($row = $result->fetch_assoc()):
+                        if ($rowIndex === 0) {
+                            $rowClass = 'bg-white';
+                        } else {
+                            $rowClass = ($rowIndex % 2 === 1) ? 'table-secondary' : 'bg-white';
+                        }
+                    ?>
+                    <tr class="<?php echo $rowClass; ?>">
+                        <td><?php echo htmlspecialchars($row['id_vaci']); ?></td>
+                        <td><?php echo htmlspecialchars($row['nome_vaci']); ?></td>
+                        <td><?php echo htmlspecialchars($row['fabri_vaci']); ?></td>
+                        <td><?php echo htmlspecialchars($row['lote_vaci']); ?></td>
+                        <td><?php echo htmlspecialchars($row['idade_aplica']); ?></td>
+                        <td><?php echo htmlspecialchars($row['via_adimicao']); ?></td>
+                        <td><?php echo htmlspecialchars($row['n_dose']); ?></td>
+                        <td><?php echo htmlspecialchars($row['intervalo_dose']); ?></td>
+                        <td><?php echo htmlspecialchars($row['estoque']); ?></td>
+                    </tr>
+                    <?php $rowIndex++; endwhile; ?>
+                </tbody>
+            </table>
         </div>
     </div>
 
@@ -174,28 +171,11 @@ if (!$result) {
         fetch('listavac.php?' + params.toString(), { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
             .then(res => res.text())
             .then(html => {
-                // Extrai apenas a tabela da resposta
                 const temp = document.createElement('div');
                 temp.innerHTML = html;
                 const novaTabela = temp.querySelector('#tabela-vacinas');
                 if (novaTabela) tabela.innerHTML = novaTabela.innerHTML;
             });
-        document.getElementById('limpar-pesquisa-vacina').style.display = nome ? 'block' : 'none';
-    });
-
-    // Botão X para limpar pesquisa
-    document.getElementById('limpar-pesquisa-vacina').addEventListener('click', function () {
-        const input = document.getElementById('input-nome-vacina');
-        input.value = '';
-        input.dispatchEvent(new Event('input'));
-        this.style.display = 'none';
-        input.focus();
-    });
-
-    // Exibe o botão X se já houver texto ao carregar
-    window.addEventListener('DOMContentLoaded', function () {
-        const input = document.getElementById('input-nome-vacina');
-        document.getElementById('limpar-pesquisa-vacina').style.display = input.value ? 'block' : 'none';
     });
     </script>
 </body>

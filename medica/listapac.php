@@ -130,45 +130,47 @@ if (isset($_GET['delete_id'])) {
 
     <div class="container mt-4">
         <h2 class="text-center text-primary fw-bold">Lista de Pacientes</h2>
-        <table class="table table-bordered text-center">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Nome</th>
-                    <th>CPF</th>
-                    <th>E-mail</th>
-                    <th>Telefone</th>
-                    <th>Gênero</th>
-                    <th>Data de Nascimento</th>
-                    <th>Peso</th>
-                    <th>Tipo Sanguíneo</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php
-                $rowIndex = 0;
-                while ($row = $result->fetch_assoc()):
-                    // Primeira linha branca, depois alterna entre cinza e branco
-                    if ($rowIndex === 0) {
-                        $rowClass = 'bg-white';
-                    } else {
-                        $rowClass = ($rowIndex % 2 === 1) ? 'table-secondary' : 'bg-white';
-                    }
-                ?>
-                    <tr class="<?php echo $rowClass; ?>">
-                        <td><?php echo htmlspecialchars($row['id_paci']); ?></td>
-                        <td><?php echo htmlspecialchars($row['primeiro_nome_paci'] . ' ' . $row['sobrenome_paci']); ?></td>
-                        <td><?php echo htmlspecialchars($row['cpf_paci']); ?></td>
-                        <td><?php echo htmlspecialchars($row['email_paci']); ?></td>
-                        <td><?php echo htmlspecialchars($row['telefone_paci']); ?></td>
-                        <td><?php echo htmlspecialchars($row['genero_paci']); ?></td>
-                        <td><?php echo htmlspecialchars($row['data_nasci_paci']); ?></td>
-                        <td><?php echo htmlspecialchars($row['peso_paci']); ?></td>
-                        <td><?php echo htmlspecialchars($row['tipo_sangue_paci']); ?></td>
+        <div class="d-flex justify-content-center">
+            <table class="table table-bordered text-center mx-auto">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nome</th>
+                        <th>CPF</th>
+                        <th>E-mail</th>
+                        <th>Telefone</th>
+                        <th>Gênero</th>
+                        <th>Data de Nascimento</th>
+                        <th>Peso</th>
+                        <th>Tipo Sanguíneo</th>
                     </tr>
-                <?php $rowIndex++; endwhile; ?>
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    <?php
+                    $rowIndex = 0;
+                    while ($row = $result->fetch_assoc()):
+                        // Primeira linha branca, depois alterna entre cinza e branco
+                        if ($rowIndex === 0) {
+                            $rowClass = 'bg-white';
+                        } else {
+                            $rowClass = ($rowIndex % 2 === 1) ? 'table-secondary' : 'bg-white';
+                        }
+                    ?>
+                        <tr class="<?php echo $rowClass; ?>">
+                            <td><?php echo htmlspecialchars($row['id_paci']); ?></td>
+                            <td><?php echo htmlspecialchars($row['primeiro_nome_paci'] . ' ' . $row['sobrenome_paci']); ?></td>
+                            <td><?php echo htmlspecialchars($row['cpf_paci']); ?></td>
+                            <td><?php echo htmlspecialchars($row['email_paci']); ?></td>
+                            <td><?php echo htmlspecialchars($row['telefone_paci']); ?></td>
+                            <td><?php echo htmlspecialchars($row['genero_paci']); ?></td>
+                            <td><?php echo htmlspecialchars($row['data_nasci_paci']); ?></td>
+                            <td><?php echo htmlspecialchars($row['peso_paci']); ?></td>
+                            <td><?php echo htmlspecialchars($row['tipo_sangue_paci']); ?></td>
+                        </tr>
+                    <?php $rowIndex++; endwhile; ?>
+                </tbody>
+            </table>
+        </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

@@ -5,13 +5,22 @@ $id = $_SESSION['id_usuario'];
 
 include('../outros/db_connect.php');
 
-// Atualização do SELECT para refletir as tabelas e colunas do banco de dados
+// Pesquisa automatizada
+$pesquisa = '';
+if (isset($_GET['pesquisa'])) {
+    $pesquisa = trim($_GET['pesquisa']);
+}
+
+// Consulta com filtro se houver pesquisa
 $sql = "SELECT v.nome_vaci, a.dose_aplicad AS dose_vaci, a.data_aplica, p.nome_posto, m.nome_medico
         FROM aplicacao a
         JOIN vacina v ON a.id_vaci = v.id_vaci
         JOIN medico m ON a.id_medico = m.id_medico
         JOIN posto p ON a.id_posto = p.id_posto
         WHERE a.id_usuario = ?";
+if ($pesquisa !== '') {
+    $sql .= " AND v.nome_vaci LIKE ?";
+}
 
 $stmt = $conn->prepare($sql);
 
@@ -19,11 +28,71 @@ if ($stmt === false) {
     die("Erro ao preparar a consulta: " . $conn->error);
 }
 
-$stmt->bind_param("i", $id);
+if ($pesquisa !== '') {
+    $like = '%' . $pesquisa . '%';
+    $stmt->bind_param("is", $id, $like);
+} else {
+    $stmt->bind_param("i", $id);
+}
 $stmt->execute();
 $result = $stmt->get_result();
-?>
 
+// Função para renderizar apenas a tabela (para AJAX)
+function renderTabelaCarteiraVac($result)
+{
+    ob_start();
+    ?>
+    <div class="table-responsive">
+        <table class="table table-bordered text-center">
+            <thead>
+                <tr>
+                    <th>Nome da Vacina</th>
+                    <th>Dose</th>
+                    <th>Data de Aplicação</th>
+                    <th>Posto</th>
+                    <th>Médico</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php
+                $rowIndex = 0;
+                while ($row = $result->fetch_assoc()):
+                    if ($rowIndex === 0) {
+                        $rowClass = 'bg-white';
+                    } else {
+                        $rowClass = ($rowIndex % 2 === 1) ? 'table-secondary' : 'bg-white';
+                    }
+                ?>
+                    <tr class="<?php echo $rowClass; ?>">
+                        <td><?php echo htmlspecialchars($row['nome_vaci']); ?></td>
+                        <td><?php echo htmlspecialchars($row['dose_vaci']); ?></td>
+                        <td><?php echo htmlspecialchars(date('d/m/Y', strtotime($row['data_aplica']))); ?></td>
+                        <td><?php echo htmlspecialchars($row['nome_posto']); ?></td>
+                        <td><?php echo htmlspecialchars($row['nome_medico']); ?></td>
+                    </tr>
+                <?php $rowIndex++; endwhile; ?>
+                <?php if ($rowIndex === 0): ?>
+                    <tr><td colspan="5">Nenhuma aplicação registrada.</td></tr>
+                <?php endif; ?>
+            </tbody>
+        </table>
+    </div>
+    <?php
+    return ob_get_clean();
+}
+
+// Se for AJAX, retorna só a tabela
+if (
+    isset($_SERVER['HTTP_X_REQUESTED_WITH']) &&
+    strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest'
+) {
+    echo '<div id="tabela-carteira-vac">';
+    echo renderTabelaCarteiraVac($result);
+    echo '</div>';
+    $conn->close();
+    exit;
+}
+?>
 <!DOCTYPE html>
 <html lang="pt-BR">
 
@@ -44,6 +113,9 @@ $result = $stmt->get_result();
             border-radius: 10px;
             overflow: hidden;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            min-width: 800px;
+            width: 100%;
+            /* Adicionado para aumentar a largura */
         }
 
         .table thead th {
@@ -110,51 +182,17 @@ $result = $stmt->get_result();
 
     <div class="container mt-4">
         <h2 class="text-center text-primary fw-bold">Aplicações de Vacina</h2>
-        <div class="w-50 mx-auto">
-            <form class="d-flex position-relative" role="search" id="form-pesquisa-vacina">
-                <input class="form-control me-2 border border-primary" type="search" placeholder="Pesquisar"
+        <div class="w-100 d-flex justify-content-center">
+            <form class="d-flex position-relative" role="search" id="form-pesquisa-vacina" style="max-width:600px; width:100%;">
+                <input class="form-control me-2 border border-primary" type="search" placeholder="Nome da vacina"
                     aria-label="Pesquisar" id="pesquisa-vacina" autocomplete="off">
-                <button type="button" id="limpar-pesquisa-vacina" class="btn position-absolute end-0 top-50 translate-middle-y me-2" style="z-index:2; background:transparent; border:none; color:#888; font-size:1.3rem; right:0.5rem; display:none;" tabindex="-1">&times;</button>
             </form>
         </div>
         <br>
-        <div id="tabela-carteira-vac">
-        <?php if ($result->num_rows > 0): ?>
-            <div class="table-responsive">
-                <table class="table table-bordered text-center">
-                    <thead>
-                        <tr>
-                            <th>Nome da Vacina</th>
-                            <th>Dose</th>
-                            <th>Data de Aplicação</th>
-                            <th>Posto</th>
-                            <th>Médico</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php
-                        $rowIndex = 0;
-                        while ($row = $result->fetch_assoc()):
-                            if ($rowIndex === 0) {
-                                $rowClass = 'bg-white';
-                            } else {
-                                $rowClass = ($rowIndex % 2 === 1) ? 'table-secondary' : 'bg-white';
-                            }
-                        ?>
-                            <tr class="<?php echo $rowClass; ?>">
-                                <td><?php echo htmlspecialchars($row['nome_vaci']); ?></td>
-                                <td><?php echo htmlspecialchars($row['dose_vaci']); ?></td>
-                                <td><?php echo htmlspecialchars(date('d/m/Y', strtotime($row['data_aplica']))); ?></td>
-                                <td><?php echo htmlspecialchars($row['nome_posto']); ?></td>
-                                <td><?php echo htmlspecialchars($row['nome_medico']); ?></td>
-                            </tr>
-                        <?php $rowIndex++; endwhile; ?>
-                    </tbody>
-                </table>
+        <div id="tabela-carteira-vac" class="d-flex justify-content-center">
+            <div style="min-width: 800px; width: 90%;">
+                <?php echo renderTabelaCarteiraVac($result); ?>
             </div>
-        <?php else: ?>
-            <p class="alert alert-warning text-center">Nenhuma aplicação registrada.</p>
-        <?php endif; ?>
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
@@ -165,10 +203,12 @@ $result = $stmt->get_result();
             history.pushState(null, "", location.href);
         };
 
-        // Pesquisa automática AJAX
-        document.getElementById('pesquisa-vacina').addEventListener('input', function () {
-            const termo = this.value;
-            const tabela = document.getElementById('tabela-carteira-vac');
+        // Pesquisa automática AJAX igual às tabelas da pasta medica
+        const inputVacina = document.getElementById('pesquisa-vacina');
+        const tabela = document.getElementById('tabela-carteira-vac');
+
+        function atualizarTabelaCarteiraVac() {
+            const termo = inputVacina.value;
             fetch('carteira_vac.php?pesquisa=' + encodeURIComponent(termo), { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
                 .then(res => res.text())
                 .then(html => {
@@ -177,22 +217,13 @@ $result = $stmt->get_result();
                     const novaTabela = temp.querySelector('#tabela-carteira-vac');
                     if (novaTabela) tabela.innerHTML = novaTabela.innerHTML;
                 });
-            document.getElementById('limpar-pesquisa-vacina').style.display = termo ? 'block' : 'none';
-        });
+        }
 
-        // Botão X para limpar pesquisa
-        document.getElementById('limpar-pesquisa-vacina').addEventListener('click', function () {
-            const input = document.getElementById('pesquisa-vacina');
-            input.value = '';
-            input.dispatchEvent(new Event('input'));
-            this.style.display = 'none';
-            input.focus();
-        });
+        inputVacina.addEventListener('input', atualizarTabelaCarteiraVac);
 
-        // Exibe o botão X se já houver texto ao carregar
-        window.addEventListener('DOMContentLoaded', function () {
-            const input = document.getElementById('pesquisa-vacina');
-            document.getElementById('limpar-pesquisa-vacina').style.display = input.value ? 'block' : 'none';
+        // Mostra todas as vacinas ao focar se o campo estiver vazio
+        inputVacina.addEventListener('focus', function () {
+            if (!this.value) atualizarTabelaCarteiraVac();
         });
     </script>
 </body>

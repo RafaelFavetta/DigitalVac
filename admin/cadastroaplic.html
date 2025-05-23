@@ -122,13 +122,13 @@
   </nav>
 
   <div class="container d-flex align-items-center justify-content-center vh-100">
-    <div class="form-container">
-      <h2 class="text-primary fw-bold text-center">Cadastro de Aplicação</h2>
+    <div class="form-container mx-auto">
+      <h2 class="text-center text-primary fw-bold">Cadastro de Aplicação</h2>
       <form id="cadastroAplicacaoForm" action="../Recebedados/recebedadosaplic.php" method="POST">
         <div class="row g-2">
           <div class="col-md-6">
             <label for="nome-vacina" class="form-label fw-bold">Nome da Vacina</label>
-            <input type="text" class="form-control" name="nome_vacina" id="nome-vacina" placeholder="Digite o nome da vacina"
+            <input type="search" class="form-control" name="nome_vacina" id="nome-vacina" placeholder="Digite o nome da vacina"
               autocomplete="off" required />
             <div id="autocomplete-nome-vacina" class="autocomplete-suggestions"></div>
           </div>
@@ -145,7 +145,7 @@
           </div>
           <div class="col-md-12">
             <label for="cpf-paciente" class="form-label fw-bold">CPF do Paciente</label>
-            <input type="text" class="form-control" name="cpf_paciente" id="cpf-paciente" placeholder="Digite o CPF do paciente"
+            <input type="search" class="form-control" name="cpf_paciente" id="cpf-paciente" placeholder="Digite o CPF do paciente"
               autocomplete="off" required />
             <div id="autocomplete-cpf-paciente" class="autocomplete-suggestions"></div>
           </div>
@@ -153,13 +153,13 @@
         <div class="row g-2 mt-2">
           <div class="col-md-6">
             <label for="nome-posto" class="form-label fw-bold">Posto</label>
-            <input type="text" class="form-control" name="nome_posto" id="nome-posto" placeholder="Digite o nome do posto"
+            <input type="search" class="form-control" name="nome_posto" id="nome-posto" placeholder="Digite o nome do posto"
               autocomplete="off" required />
             <div id="autocomplete-nome-posto" class="autocomplete-suggestions"></div>
           </div>
           <div class="col-md-6">
             <label for="coren-crm" class="form-label fw-bold">COREN/CRM</label>
-            <input type="text" class="form-control" name="coren_crm" id="coren-crm" placeholder="Digite o COREN/CRM"
+            <input type="search" class="form-control" name="coren_crm" id="coren-crm" placeholder="Digite o COREN/CRM"
               autocomplete="off" required />
             <div id="autocomplete-coren-crm" class="autocomplete-suggestions"></div>
           </div>
