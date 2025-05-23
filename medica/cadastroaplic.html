@@ -17,6 +17,53 @@
             max-width: 500px;
             margin: auto;
         }
+
+        /* Remover linha azul dos inputs ao focar */
+        .form-control:focus,
+        .form-select:focus,
+        textarea:focus {
+            box-shadow: none !important;
+            border-color: #ced4da !important;
+        }
+
+        .autocomplete-suggestions {
+            position: absolute;
+            z-index: 1000;
+            width: 100%;
+            background: #fff;
+            border: 1px solid #0d6efd;
+            border-radius: 0 0 0.5rem 0.5rem;
+            max-height: 200px;
+            overflow-y: auto;
+            box-shadow: none !important;
+            border-color: #ced4da !important;
+        }
+
+        .autocomplete-suggestion {
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            color: #0d6efd;
+            background: #fff;
+        }
+
+        .autocomplete-suggestion:hover,
+        .autocomplete-suggestion.active {
+            background: #e7f1ff;
+            color: #084298;
+        }
+
+        .position-relative {
+            position: relative !important;
+        }
+
+        .autocomplete-suggestion:focus,
+        .autocomplete-suggestion.active {
+            /* Remove barra azul ao focar/autocomplete */
+            background: #e7f1ff;
+            color: #084298;
+            box-shadow: none !important;
+            border-color: #ced4da !important;
+        }
     </style>
 </head>
 
@@ -68,8 +115,9 @@
                 <div class="row g-2">
                     <div class="col-md-6">
                         <label for="nome-vacina" class="form-label fw-bold">Nome da Vacina</label>
-                        <input type="text" class="form-control" name="nome_vacina" id="nome-vacina"
-                            placeholder="Nome da vacina" required>
+                        <input type="text" class="form-control" name="nome_vacina" id="nome-vacina" autocomplete="off"
+                            required>
+                        <div id="autocomplete-nome-vacina" class="autocomplete-suggestions"></div>
                     </div>
                     <div class="col-md-6">
                         <label for="dose" class="form-label fw-bold">Dose</label>
@@ -84,20 +132,23 @@
                     </div>
                     <div class="col-md-12">
                         <label for="cpf-paciente" class="form-label fw-bold">CPF do Paciente</label>
-                        <input type="text" class="form-control" name="cpf_paciente" id="cpf-paciente"
-                            placeholder="Digite o CPF do paciente" required>
+                        <input type="text" class="form-control" name="cpf_paciente" id="cpf-paciente" autocomplete="off"
+                            required>
+                        <div id="autocomplete-cpf-paciente" class="autocomplete-suggestions"></div>
                     </div>
                 </div>
                 <div class="row g-2 mt-2">
                     <div class="col-md-6">
                         <label for="nome-posto" class="form-label fw-bold">Posto</label>
-                        <input type="text" class="form-control" name="nome_posto" id="nome-posto"
-                            placeholder="Nome do posto" required>
+                        <input type="text" class="form-control" name="nome_posto" id="nome-posto" autocomplete="off"
+                            required>
+                        <div id="autocomplete-nome-posto" class="autocomplete-suggestions"></div>
                     </div>
                     <div class="col-md-6">
                         <label for="coren-crm" class="form-label fw-bold">COREN/CRM</label>
-                        <input type="text" class="form-control" name="coren_crm" id="coren-crm"
-                            placeholder="COREN/CRM-UF 000000" required>
+                        <input type="text" class="form-control" name="coren_crm" id="coren-crm" autocomplete="off"
+                            required>
+                        <div id="autocomplete-coren-crm" class="autocomplete-suggestions"></div>
                     </div>
                 </div>
                 <input type="hidden" name="origem" value="medica">
@@ -180,6 +231,90 @@
             const cpfInput = document.getElementById("cpf-paciente");
             cpfInput.value = cpfInput.value.replace(/\D/g, "");
         });
+
+        // Função genérica para autocomplete
+        function setupAutocomplete(inputId, endpoint) {
+            const input = document.getElementById(inputId);
+            const container = document.getElementById('autocomplete-' + inputId);
+            input.parentElement.classList.add('position-relative');
+            let suggestions = [];
+            let selectedIndex = -1;
+
+            function fetchSuggestions(query = '') {
+                fetch(endpoint + '?q=' + encodeURIComponent(query))
+                    .then(res => res.json())
+                    .then(data => {
+                        suggestions = data;
+                        renderSuggestions();
+                    });
+            }
+
+            function renderSuggestions() {
+                container.innerHTML = '';
+                if (suggestions.length === 0) {
+                    container.style.display = 'none';
+                    return;
+                }
+                suggestions.forEach((item, idx) => {
+                    const div = document.createElement('div');
+                    div.className = 'autocomplete-suggestion' + (idx === selectedIndex ? ' active' : '');
+                    div.textContent = item;
+                    div.onclick = () => {
+                        input.value = item;
+                        container.innerHTML = '';
+                        container.style.display = 'none';
+                    };
+                    container.appendChild(div);
+                });
+                container.style.display = 'block';
+            }
+
+            input.addEventListener('input', function () {
+                selectedIndex = -1;
+                fetchSuggestions(this.value);
+            });
+
+            input.addEventListener('focus', function () {
+                selectedIndex = -1;
+                fetchSuggestions('');
+            });
+
+            input.addEventListener('keydown', function (e) {
+                if (container.style.display !== 'block') return;
+                if (e.key === 'ArrowDown') {
+                    selectedIndex = (selectedIndex + 1) % suggestions.length;
+                    renderSuggestions();
+                    e.preventDefault();
+                } else if (e.key === 'ArrowUp') {
+                    selectedIndex = (selectedIndex - 1 + suggestions.length) % suggestions.length;
+                    renderSuggestions();
+                    e.preventDefault();
+                } else if (e.key === 'Enter') {
+                    if (selectedIndex >= 0 && suggestions[selectedIndex]) {
+                        input.value = suggestions[selectedIndex];
+                        container.innerHTML = '';
+                        container.style.display = 'none';
+                        e.preventDefault();
+                    }
+                } else if (e.key === 'Escape') {
+                    container.innerHTML = '';
+                    container.style.display = 'none';
+                }
+            });
+
+            document.addEventListener('click', function (e) {
+                if (!container.contains(e.target) && e.target !== input) {
+                    container.innerHTML = '';
+                    container.style.display = 'none';
+                }
+            });
+        }
+
+        // Inicialize autocomplete para todos os campos necessários
+        setupAutocomplete('nome-vacina', '../ajax/autocomplete_vacina.php');
+        setupAutocomplete('cpf-paciente', '../ajax/autocomplete_paciente.php');
+        setupAutocomplete('nome-posto', '../ajax/autocomplete_posto.php');
+        setupAutocomplete('coren-crm', '../ajax/autocomplete_medico.php');
     </script>
 </body>
 

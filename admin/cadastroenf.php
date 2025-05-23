@@ -18,6 +18,14 @@
             margin: auto;
         }
 
+        /* Remover linha azul dos inputs ao focar */
+        .form-control:focus,
+        .form-select:focus,
+        textarea:focus {
+            box-shadow: none !important;
+            border-color: #ced4da !important;
+        }
+
         .form-group {
             margin-bottom: 15px;
         }
