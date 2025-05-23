@@ -130,13 +130,13 @@
                     <div class="col-md-6">
                         <label for="nome_paciente" class="form-label fw-bold">Nome do Paciente</label>
                         <input type="text" id="nome_paciente" name="nome_paciente" class="form-control" required
-                            autocomplete="off">
+                            autocomplete="off" placeholder="Digite o nome do paciente">
                         <div id="autocomplete-nome_paciente" class="autocomplete-suggestions"></div>
                     </div>
                     <div class="col-md-6">
                         <label for="nome_medico" class="form-label fw-bold">Nome do Médico</label>
                         <input type="text" id="nome_medico" name="nome_medico" class="form-control" required
-                            autocomplete="off">
+                            autocomplete="off" placeholder="Digite o nome do médico">
                         <div id="autocomplete-nome_medico" class="autocomplete-suggestions"></div>
                     </div>
                 </div>
@@ -218,7 +218,12 @@
                 fetch(endpoint + '?q=' + encodeURIComponent(query))
                     .then(res => res.json())
                     .then(data => {
-                        suggestions = data;
+                        // Ordena sugestões alfabeticamente ou numericamente
+                        if (data.length > 0 && !isNaN(data[0])) {
+                            suggestions = data.sort((a, b) => Number(a) - Number(b));
+                        } else {
+                            suggestions = data.sort((a, b) => a.localeCompare(b, 'pt-BR', { sensitivity: 'base' }));
+                        }
                         renderSuggestions();
                     });
             }
@@ -250,7 +255,7 @@
 
             input.addEventListener('focus', function () {
                 selectedIndex = -1;
-                fetchSuggestions(this.value);
+                fetchSuggestions(''); // Mostra todas as sugestões ordenadas ao focar
             });
 
             input.addEventListener('keydown', function (e) {

@@ -10,22 +10,22 @@ function normalize($str) {
 $search = normalize($q);
 
 $suggestions = [];
-if ($search !== '') {
-    $sql = "SELECT coren_crm FROM medico";
-    $result = $conn->query($sql);
-    $found = [];
-    while ($row = $result->fetch_assoc()) {
-        $coren = normalize($row['coren_crm']);
-        if (
-            strpos($coren, $search) !== false ||
-            preg_match('/' . implode('.*', str_split($search)) . '/i', $coren)
-        ) {
-            $found[$row['coren_crm']] = true;
-        }
+$sql = "SELECT coren_crm FROM medico";
+$result = $conn->query($sql);
+$found = [];
+while ($row = $result->fetch_assoc()) {
+    $coren = normalize($row['coren_crm']);
+    if ($search === '' ||
+        strpos($coren, $search) !== false ||
+        preg_match('/' . implode('.*', str_split($search)) . '/i', $coren)
+    ) {
+        $found[$row['coren_crm']] = true;
     }
-    $suggestions = array_keys($found);
-    $suggestions = array_slice($suggestions, 0, 10);
 }
+$suggestions = array_keys($found);
+// Ordena alfabeticamente
+sort($suggestions, SORT_LOCALE_STRING);
+$suggestions = array_slice($suggestions, 0, 10);
 
 echo json_encode($suggestions);
 ?>

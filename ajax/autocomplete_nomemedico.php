@@ -14,27 +14,24 @@ $search = normalize($q);
 $fuzzy_search = normalize($fuzzy);
 
 $suggestions = [];
-
-if ($search !== '') {
-    // Busca normalizada no banco
-    $sql = "SELECT nome_medico FROM medico";
-    $result = $conn->query($sql);
-    $found = [];
-    while ($row = $result->fetch_assoc()) {
-        $nome = $row['nome_medico'];
-        $nome_norm = normalize($nome);
-        // Busca exata, substring ou fuzzy (todas as letras na ordem)
-        if (
-            strpos($nome_norm, $search) !== false ||
-            similar_text($nome_norm, $search) / max(strlen($nome_norm), 1) > 0.7 ||
-            preg_match('/' . implode('.*', str_split($search)) . '/i', $nome_norm)
-        ) {
-            $found[$nome] = true;
-        }
+$sql = "SELECT nome_medico FROM medico";
+$result = $conn->query($sql);
+$found = [];
+while ($row = $result->fetch_assoc()) {
+    $nome = $row['nome_medico'];
+    $nome_norm = normalize($nome);
+    if ($search === '' ||
+        strpos($nome_norm, $search) !== false ||
+        similar_text($nome_norm, $search) / max(strlen($nome_norm), 1) > 0.7 ||
+        preg_match('/' . implode('.*', str_split($search)) . '/i', $nome_norm)
+    ) {
+        $found[$nome] = true;
     }
-    $suggestions = array_keys($found);
-    $suggestions = array_slice($suggestions, 0, 10);
 }
+$suggestions = array_keys($found);
+// Ordena alfabeticamente
+sort($suggestions, SORT_LOCALE_STRING);
+$suggestions = array_slice($suggestions, 0, 10);
 
 echo json_encode($suggestions);
 ?>

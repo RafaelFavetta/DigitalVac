@@ -127,7 +127,7 @@
                     <div class="col-md-6">
                         <label for="nome-vacina" class="form-label fw-bold">Nome da Vacina</label>
                         <input type="text" class="form-control" name="nome_vacina" id="nome-vacina" autocomplete="off"
-                            required>
+                            required placeholder="Digite o nome da vacina">
                         <div id="autocomplete-nome-vacina" class="autocomplete-suggestions"></div>
                     </div>
                     <div class="col-md-6">
@@ -144,7 +144,7 @@
                     <div class="col-md-12">
                         <label for="cpf-paciente" class="form-label fw-bold">CPF do Paciente</label>
                         <input type="text" class="form-control" name="cpf_paciente" id="cpf-paciente" autocomplete="off"
-                            required>
+                            required placeholder="Digite o CPF do paciente">
                         <div id="autocomplete-cpf-paciente" class="autocomplete-suggestions"></div>
                     </div>
                 </div>
@@ -152,13 +152,13 @@
                     <div class="col-md-6">
                         <label for="nome-posto" class="form-label fw-bold">Posto</label>
                         <input type="text" class="form-control" name="nome_posto" id="nome-posto" autocomplete="off"
-                            required>
+                            required placeholder="Digite o nome do posto">
                         <div id="autocomplete-nome-posto" class="autocomplete-suggestions"></div>
                     </div>
                     <div class="col-md-6">
                         <label for="coren-crm" class="form-label fw-bold">COREN/CRM</label>
                         <input type="text" class="form-control" name="coren_crm" id="coren-crm" autocomplete="off"
-                            required>
+                            required placeholder="Digite o COREN/CRM">
                         <div id="autocomplete-coren-crm" class="autocomplete-suggestions"></div>
                     </div>
                 </div>
@@ -251,33 +251,26 @@
             let suggestions = [];
             let selectedIndex = -1;
 
-            // Fuzzy highlight: destaca cada caractere digitado, mesmo se não for substring direta
             function highlightMatch(text, query) {
                 if (!query) return text;
-                let t = text;
-                let q = query.replace(/\s+/g, '').toLowerCase();
-                let tArr = t.split('');
-                let qArr = q.split('');
-                let res = '';
-                let j = 0;
-                for (let i = 0; i < tArr.length; i++) {
-                    if (j < qArr.length && tArr[i].toLowerCase() === qArr[j]) {
-                        res += '<span class="autocomplete-bold">' + tArr[i] + '</span>';
-                        j++;
-                    } else {
-                        res += tArr[i];
-                    }
-                }
-                return res;
+                const idx = text.toLowerCase().indexOf(query.toLowerCase());
+                if (idx === -1) return text;
+                const before = text.substring(0, idx);
+                const match = text.substring(idx, idx + query.length);
+                const after = text.substring(idx + query.length);
+                return before + '<span class="autocomplete-bold">' + match + '</span>' + after;
             }
 
             function fetchSuggestions(query = '') {
-                // Envia o termo normal e também um termo "fuzzy" (ex: c%a%r%l%o%s%)
-                let fuzzy = query.replace(/\s+/g, '').split('').join('%');
-                fetch(endpoint + '?q=' + encodeURIComponent(query) + '&fuzzy=' + encodeURIComponent(fuzzy))
+                fetch(endpoint + '?q=' + encodeURIComponent(query))
                     .then(res => res.json())
                     .then(data => {
-                        suggestions = data;
+                        // Ordena sugestões alfabeticamente ou numericamente
+                        if (data.length > 0 && !isNaN(data[0])) {
+                            suggestions = data.sort((a, b) => Number(a) - Number(b));
+                        } else {
+                            suggestions = data.sort((a, b) => a.localeCompare(b, 'pt-BR', { sensitivity: 'base' }));
+                        }
                         renderSuggestions();
                     });
             }
@@ -309,7 +302,7 @@
 
             input.addEventListener('focus', function () {
                 selectedIndex = -1;
-                fetchSuggestions(this.value);
+                fetchSuggestions(''); // Mostra todas as sugestões ordenadas ao focar
             });
 
             input.addEventListener('keydown', function (e) {

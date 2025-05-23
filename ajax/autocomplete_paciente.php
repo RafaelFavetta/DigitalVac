@@ -10,22 +10,22 @@ function normalize($str) {
 $search = normalize($q);
 
 $suggestions = [];
-if ($search !== '') {
-    $sql = "SELECT cpf FROM usuario";
-    $result = $conn->query($sql);
-    $found = [];
-    while ($row = $result->fetch_assoc()) {
-        $cpf = preg_replace('/\D/', '', $row['cpf']);
-        if (
-            strpos($cpf, $search) !== false ||
-            preg_match('/' . implode('.*', str_split($search)) . '/i', $cpf)
-        ) {
-            $found[$row['cpf']] = true;
-        }
+$sql = "SELECT cpf FROM usuario";
+$result = $conn->query($sql);
+$found = [];
+while ($row = $result->fetch_assoc()) {
+    $cpf = preg_replace('/\D/', '', $row['cpf']);
+    if ($search === '' ||
+        strpos($cpf, $search) !== false ||
+        preg_match('/' . implode('.*', str_split($search)) . '/i', $cpf)
+    ) {
+        $found[$row['cpf']] = true;
     }
-    $suggestions = array_keys($found);
-    $suggestions = array_slice($suggestions, 0, 10);
 }
+$suggestions = array_keys($found);
+// Ordena numericamente
+sort($suggestions, SORT_NUMERIC);
+$suggestions = array_slice($suggestions, 0, 10);
 
 echo json_encode($suggestions);
 ?>

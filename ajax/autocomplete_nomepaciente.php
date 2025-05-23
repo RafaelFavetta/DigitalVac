@@ -12,24 +12,24 @@ function normalize($str) {
 $search = normalize($q);
 
 $suggestions = [];
-if ($search !== '') {
-    $sql = "SELECT nome_usuario FROM usuario";
-    $result = $conn->query($sql);
-    $found = [];
-    while ($row = $result->fetch_assoc()) {
-        $nome = $row['nome_usuario'];
-        $nome_norm = normalize($nome);
-        if (
-            strpos($nome_norm, $search) !== false ||
-            similar_text($nome_norm, $search) / max(strlen($nome_norm), 1) > 0.7 ||
-            preg_match('/' . implode('.*', str_split($search)) . '/i', $nome_norm)
-        ) {
-            $found[$nome] = true;
-        }
+$sql = "SELECT nome_usuario FROM usuario";
+$result = $conn->query($sql);
+$found = [];
+while ($row = $result->fetch_assoc()) {
+    $nome = $row['nome_usuario'];
+    $nome_norm = normalize($nome);
+    if ($search === '' ||
+        strpos($nome_norm, $search) !== false ||
+        similar_text($nome_norm, $search) / max(strlen($nome_norm), 1) > 0.7 ||
+        preg_match('/' . implode('.*', str_split($search)) . '/i', $nome_norm)
+    ) {
+        $found[$nome] = true;
     }
-    $suggestions = array_keys($found);
-    $suggestions = array_slice($suggestions, 0, 10);
 }
+$suggestions = array_keys($found);
+// Ordena alfabeticamente
+sort($suggestions, SORT_LOCALE_STRING);
+$suggestions = array_slice($suggestions, 0, 10);
 
 echo json_encode($suggestions);
 ?>
