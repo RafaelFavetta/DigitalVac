@@ -74,20 +74,18 @@ if (isset($_GET['delete_id'])) {
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
 
-        /* Estilo para linhas alternadas */
+        .table thead th {
+            background-color: #0d6efd !important;
+            color: white !important;
+            font-weight: bold;
+        }
+
         .table tbody tr:nth-child(even) {
-            background-color: #f2f2f2; /* Cor cinza claro para linhas pares */
+            background-color: #f2f2f2;
         }
 
         .table tbody tr:nth-child(odd) {
-            background-color: #ffffff; /* Cor branca para linhas ímpares */
-        }
-
-        /* Destaque para o bloco dos títulos */
-        .table thead th {
-            background-color: #0d6efd; /* Azul do site */
-            color: white; /* Texto branco */
-            font-weight: bold;
+            background-color: #ffffff;
         }
     </style>
 </head>
@@ -132,8 +130,8 @@ if (isset($_GET['delete_id'])) {
 
     <div class="container mt-4">
         <h2 class="text-center text-primary fw-bold">Lista de Pacientes</h2>
-        <table class="table table-bordered">
-            <thead class="table-primary">
+        <table class="table table-bordered text-center">
+            <thead>
                 <tr>
                     <th>ID</th>
                     <th>Nome</th>
@@ -147,8 +145,17 @@ if (isset($_GET['delete_id'])) {
                 </tr>
             </thead>
             <tbody>
-                <?php while ($row = $result->fetch_assoc()): ?>
-                    <tr>
+                <?php
+                $rowIndex = 0;
+                while ($row = $result->fetch_assoc()):
+                    // Primeira linha branca, depois alterna entre cinza e branco
+                    if ($rowIndex === 0) {
+                        $rowClass = 'bg-white';
+                    } else {
+                        $rowClass = ($rowIndex % 2 === 1) ? 'table-secondary' : 'bg-white';
+                    }
+                ?>
+                    <tr class="<?php echo $rowClass; ?>">
                         <td><?php echo htmlspecialchars($row['id_paci']); ?></td>
                         <td><?php echo htmlspecialchars($row['primeiro_nome_paci'] . ' ' . $row['sobrenome_paci']); ?></td>
                         <td><?php echo htmlspecialchars($row['cpf_paci']); ?></td>
@@ -159,7 +166,7 @@ if (isset($_GET['delete_id'])) {
                         <td><?php echo htmlspecialchars($row['peso_paci']); ?></td>
                         <td><?php echo htmlspecialchars($row['tipo_sangue_paci']); ?></td>
                     </tr>
-                <?php endwhile; ?>
+                <?php $rowIndex++; endwhile; ?>
             </tbody>
         </table>
     </div>

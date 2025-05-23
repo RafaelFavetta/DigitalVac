@@ -63,13 +63,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['cpf'])) {
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
 
-        /* Estilo para linhas alternadas */
+        .table thead th {
+            background-color: #0d6efd !important;
+            color: white !important;
+            font-weight: bold;
+        }
+
         .table tbody tr:nth-child(even) {
-            background-color: #f2f2f2; /* Cor cinza claro para linhas pares */
+            background-color: #f2f2f2;
         }
 
         .table tbody tr:nth-child(odd) {
-            background-color: #ffffff; /* Cor branca para linhas ímpares */
+            background-color: #ffffff;
         }
 
         /* Remover estilo das colunas */
@@ -158,8 +163,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['cpf'])) {
         </div>
         <br>
         <?php if (!empty($pacientes)): ?>
-            <table class="table table-bordered">
-                <thead class="table-primary">
+            <table class="table table-bordered text-center">
+                <thead>
                     <tr>
                         <th>Nome</th>
                         <th>CPF</th>
@@ -172,18 +177,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['cpf'])) {
                     </tr>
                 </thead>
                 <tbody>
-                    <?php foreach ($pacientes as $paciente): ?>
-                        <tr>
+                    <?php
+                    $rowIndex = 0;
+                    foreach ($pacientes as $paciente):
+                        // Primeira linha branca, depois alterna entre cinza e branco
+                        if ($rowIndex === 0) {
+                            $rowClass = 'bg-white';
+                        } else {
+                            $rowClass = ($rowIndex % 2 === 1) ? 'table-secondary' : 'bg-white';
+                        }
+                    ?>
+                        <tr class="<?php echo $rowClass; ?>">
                             <td><?php echo htmlspecialchars($paciente['nome_usuario']); ?></td>
                             <td><?php echo htmlspecialchars($paciente['cpf']); ?></td>
-                            <td><?php echo htmlspecialchars(date('d/m/Y', strtotime($paciente['naci_usuario']))); ?></td> <!-- Formata a data -->
+                            <td><?php echo htmlspecialchars(date('d/m/Y', strtotime($paciente['naci_usuario']))); ?></td>
                             <td><?php echo htmlspecialchars($paciente['tel_usuario']); ?></td>
                             <td><?php echo htmlspecialchars($paciente['email_usuario']); ?></td>
                             <td><?php echo htmlspecialchars($paciente['tipo_sang_usuario']); ?></td>
                             <td><?php echo htmlspecialchars($paciente['peso_usuario']); ?></td>
                             <td><?php echo htmlspecialchars($paciente['genero_usuario']); ?></td>
                         </tr>
-                    <?php endforeach; ?>
+                    <?php $rowIndex++; endforeach; ?>
                 </tbody>
             </table>
         <?php elseif ($erro): ?>

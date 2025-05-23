@@ -140,8 +140,12 @@ if (!$result) {
                 <?php
                 $rowIndex = 0;
                 while ($row = $result->fetch_assoc()):
-                    // Primeira linha branca, segunda cinza, terceira branca, etc.
-                    $rowClass = ($rowIndex % 2 === 0) ? 'bg-white' : 'table-secondary';
+                    // Primeira linha branca, depois alterna entre cinza e branco
+                    if ($rowIndex === 0) {
+                        $rowClass = 'bg-white';
+                    } else {
+                        $rowClass = ($rowIndex % 2 === 1) ? 'table-secondary' : 'bg-white';
+                    }
                 ?>
                 <tr class="<?php echo $rowClass; ?>">
                     <td><?php echo htmlspecialchars($row['id_vaci']); ?></td>

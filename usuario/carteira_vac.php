@@ -39,6 +39,27 @@ $result = $stmt->get_result();
             max-width: 95%;
         }
 
+        .table {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .table thead th {
+            background-color: #0d6efd !important;
+            color: white !important;
+            font-weight: bold;
+        }
+
+        .table tbody tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        .table tbody tr:nth-child(odd) {
+            background-color: #ffffff;
+        }
+
         .img-select {
             opacity: 25%;
         }
@@ -92,7 +113,7 @@ $result = $stmt->get_result();
         <div class="w-50 mx-auto">
             <form class="d-flex" role="search">
                 <input class="form-control me-2 border border-primary" type="search" placeholder="Pesquisar"
-                    aria-label="Pesquisar">
+                    aria-label="Pesquisar" id="pesquisa-vacina" autocomplete="off">
                 <button class="btn btn-outline-success" type="submit">Pesquisar</button>
             </form>
         </div>
@@ -100,8 +121,8 @@ $result = $stmt->get_result();
 
         <?php if ($result->num_rows > 0): ?>
             <div class="table-responsive">
-                <table class="table table-striped-columns text-center">
-                    <thead class="table-primary">
+                <table class="table table-bordered text-center">
+                    <thead>
                         <tr>
                             <th>Nome da Vacina</th>
                             <th>Dose</th>
@@ -111,15 +132,24 @@ $result = $stmt->get_result();
                         </tr>
                     </thead>
                     <tbody>
-                        <?php while ($row = $result->fetch_assoc()): ?>
-                            <tr>
+                        <?php
+                        $rowIndex = 0;
+                        while ($row = $result->fetch_assoc()):
+                            // Primeira linha branca, depois alterna entre cinza e branco
+                            if ($rowIndex === 0) {
+                                $rowClass = 'bg-white';
+                            } else {
+                                $rowClass = ($rowIndex % 2 === 1) ? 'table-secondary' : 'bg-white';
+                            }
+                        ?>
+                            <tr class="<?php echo $rowClass; ?>">
                                 <td><?php echo htmlspecialchars($row['nome_vaci']); ?></td>
                                 <td><?php echo htmlspecialchars($row['dose_vaci']); ?></td>
                                 <td><?php echo htmlspecialchars(date('d/m/Y', strtotime($row['data_aplica']))); ?></td>
                                 <td><?php echo htmlspecialchars($row['nome_posto']); ?></td>
                                 <td><?php echo htmlspecialchars($row['nome_medico']); ?></td>
                             </tr>
-                        <?php endwhile; ?>
+                        <?php $rowIndex++; endwhile; ?>
                     </tbody>
                 </table>
             </div>
