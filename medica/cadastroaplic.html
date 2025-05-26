@@ -201,7 +201,7 @@
         }
 
         document.getElementById("cadastroAplicacaoForm").addEventListener("submit", function (event) {
-            event.preventDefault(); // Impede o comportamento padrão do formulário
+            event.preventDefault();
 
             const formData = new FormData(this);
 
@@ -209,24 +209,18 @@
                 method: "POST",
                 body: formData,
             })
-                .then((response) => {
-                    if (!response.ok) {
-                        throw new Error(`Erro HTTP: ${response.status}`);
-                    }
-                    return response.json();
-                })
+                .then((response) => response.json().catch(() => ({success: false, message: "Erro inesperado do servidor."})))
                 .then((data) => {
                     if (data.success) {
-                        showAlert('success', data.message);
+                        showAlert('success', data.message || "Cadastro realizado com sucesso!");
                         this.reset();
                     } else {
-                        showAlert('error', data.message);
-                        console.error("Erro do servidor:", data.message);
+                        showAlert('error', data.message || "Erro ao cadastrar.");
                     }
                 })
                 .catch((error) => {
-                    console.error("Erro ao enviar o formulário:", error);
-                    showAlert('error', "Ocorreu um erro ao cadastrar. Verifique os dados e tente novamente.");
+                    console.error("Erro ao cadastrar:", error);
+                    showAlert('error', "Ocorreu um erro ao cadastrar. Tente novamente.");
                 });
         });
 

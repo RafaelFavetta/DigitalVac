@@ -293,11 +293,12 @@
 
     // Remove a máscara antes de enviar o formulário
     document.getElementById("cadastroPacienteForm").addEventListener("submit", function (event) {
+      event.preventDefault();
+
       const cpfValue = document.getElementById("cpf").value.replace(/\D/g, ""); // Remove tudo que não for número
 
       if (!validarCPF(cpfValue)) {
         showAlert('error', "CPF inválido!");
-        event.preventDefault();
         cpfField.setRawValue(cpfValue); // Reaplica a máscara ao campo
         return;
       }
@@ -307,7 +308,6 @@
 
       if (!validarTelefone(telefoneValue)) {
         showAlert('error', "Telefone inválido!");
-        event.preventDefault();
         telefoneField.setRawValue(telefoneValue); // Reaplica a máscara ao campo
         return;
       }
@@ -316,12 +316,9 @@
 
       if (!validarCEP(cepValue)) {
         showAlert('error', "CEP inválido!");
-        event.preventDefault();
         cepField.setRawValue(cepValue); // Reaplica a máscara ao campo
         return;
       }
-
-      event.preventDefault(); // Impede o envio padrão do formulário
 
       const formData = new FormData(this);
 
@@ -329,13 +326,13 @@
         method: "POST",
         body: formData,
       })
-        .then((response) => response.text())
+        .then((response) => response.json().catch(() => ({success: false, message: "Erro inesperado do servidor."})))
         .then((data) => {
-          if (data.toLowerCase().includes("sucesso")) {
-            showAlert('success', "Cadastro realizado com sucesso!");
+          if (data.success) {
+            showAlert('success', data.message || "Cadastro realizado com sucesso!");
             this.reset();
           } else {
-            showAlert('error', data);
+            showAlert('error', data.message || "Erro ao cadastrar.");
           }
         })
         .catch((error) => {

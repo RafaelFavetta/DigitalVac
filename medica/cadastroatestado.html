@@ -205,11 +205,7 @@
                 method: "POST",
                 body: formData,
             })
-                .then((response) => {
-                    return response.json().catch(() => {
-                        throw new Error("Resposta inesperada do servidor.");
-                    });
-                })
+                .then((response) => response.json().catch(() => ({success: false, message: "Erro inesperado do servidor."})))
                 .then((data) => {
                     if (data.success) {
                         showAlert('success', data.message || "Cadastro realizado com sucesso!");

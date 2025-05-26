@@ -185,25 +185,24 @@
     }
 
     document.getElementById("cadastroVacinaForm").addEventListener("submit", function (event) {
-      event.preventDefault(); // Impede o envio padrão do formulário
+      event.preventDefault();
 
-      const form = this;
-      const formData = new FormData(form);
+      const formData = new FormData(this);
 
-      fetch("../Recebedados/recebedadosdavacina.php", {
+      fetch(this.action, {
         method: "POST",
-        body: formData
+        body: formData,
       })
-        .then(response => response.text())
-        .then(data => {
-          if (data.trim().toLowerCase().includes("sucesso")) {
-            showAlert('success', data.trim());
-            form.reset();
+        .then((response) => response.json().catch(() => ({success: false, message: "Erro inesperado do servidor."})))
+        .then((data) => {
+          if (data.success) {
+            showAlert('success', data.message || "Cadastro realizado com sucesso!");
+            this.reset();
           } else {
-            showAlert('error', data.trim());
+            showAlert('error', data.message || "Erro ao cadastrar.");
           }
         })
-        .catch(error => {
+        .catch((error) => {
           console.error("Erro ao cadastrar:", error);
           showAlert('error', "Ocorreu um erro ao cadastrar. Tente novamente.");
         });

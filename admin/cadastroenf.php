@@ -222,12 +222,7 @@
                 method: "POST",
                 body: formData
             })
-            .then(response => {
-                // Garante que sempre trata como JSON, mesmo se o backend retornar texto
-                return response.json().catch(() => {
-                    return { success: false, message: "Erro inesperado do servidor." };
-                });
-            })
+            .then(response => response.json().catch(() => ({success: false, message: "Erro inesperado do servidor."})))
             .then(data => {
                 if (data.success) {
                     showAlert('success', data.message);

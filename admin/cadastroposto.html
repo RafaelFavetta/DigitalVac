@@ -202,15 +202,15 @@
         method: "POST",
         body: formData,
       })
-        .then((response) => response.text())
+        .then((response) => response.json().catch(() => ({success: false, message: "Erro inesperado do servidor."})))
         .then((data) => {
-          if (data.toLowerCase().includes("sucesso")) {
-            showAlert('success', "Cadastro realizado com sucesso!");
+          if (data.success) {
+            showAlert('success', data.message || "Cadastro realizado com sucesso!");
             this.reset();
             document.getElementById('endereco').value = '';
             document.getElementById('cidade').value = '';
           } else {
-            showAlert('error', data);
+            showAlert('error', data.message || "Erro ao cadastrar.");
           }
         })
         .catch((error) => {
