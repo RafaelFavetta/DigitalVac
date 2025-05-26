@@ -123,13 +123,18 @@
 
   <div class="container d-flex align-items-center justify-content-center vh-100">
     <div class="form-container mx-auto">
+      <!-- ALERTAS PERSONALIZADOS -->
+      <div id="alert-switch" style="display:none;">
+        <div id="alert-success" class="alert alert-success text-center" style="display:none;"></div>
+        <div id="alert-error" class="alert alert-danger text-center" style="display:none;"></div>
+      </div>
       <h2 class="text-center text-primary fw-bold">Cadastro de Aplicação</h2>
       <form id="cadastroAplicacaoForm" action="../Recebedados/recebedadosaplic.php" method="POST">
         <div class="row g-2">
           <div class="col-md-6">
             <label for="nome-vacina" class="form-label fw-bold">Nome da Vacina</label>
-            <input type="search" class="form-control" name="nome_vacina" id="nome-vacina" placeholder="Digite o nome da vacina"
-              autocomplete="off" required />
+            <input type="search" class="form-control" name="nome_vacina" id="nome-vacina"
+              placeholder="Digite o nome da vacina" autocomplete="off" autocapitalize="off" spellcheck="false" required />
             <div id="autocomplete-nome-vacina" class="autocomplete-suggestions"></div>
           </div>
           <div class="col-md-6">
@@ -145,22 +150,22 @@
           </div>
           <div class="col-md-12">
             <label for="cpf-paciente" class="form-label fw-bold">CPF do Paciente</label>
-            <input type="search" class="form-control" name="cpf_paciente" id="cpf-paciente" placeholder="Digite o CPF do paciente"
-              autocomplete="off" required />
+            <input type="search" class="form-control" name="cpf_paciente" id="cpf-paciente"
+              placeholder="Digite o CPF do paciente" autocomplete="off" autocapitalize="off" spellcheck="false" required />
             <div id="autocomplete-cpf-paciente" class="autocomplete-suggestions"></div>
           </div>
         </div>
         <div class="row g-2 mt-2">
           <div class="col-md-6">
             <label for="nome-posto" class="form-label fw-bold">Posto</label>
-            <input type="search" class="form-control" name="nome_posto" id="nome-posto" placeholder="Digite o nome do posto"
-              autocomplete="off" required />
+            <input type="search" class="form-control" name="nome_posto" id="nome-posto"
+              placeholder="Digite o nome do posto" autocomplete="off" autocapitalize="off" spellcheck="false" required />
             <div id="autocomplete-nome-posto" class="autocomplete-suggestions"></div>
           </div>
           <div class="col-md-6">
             <label for="coren-crm" class="form-label fw-bold">COREN/CRM</label>
-            <input type="search" class="form-control" name="coren_crm" id="coren-crm" placeholder="Digite o COREN/CRM"
-              autocomplete="off" required />
+            <input type="search" class="form-control" name="coren_crm" id="coren-crm"
+              placeholder="Digite o COREN/CRM" autocomplete="off" autocapitalize="off" spellcheck="false" required />
             <div id="autocomplete-coren-crm" class="autocomplete-suggestions"></div>
           </div>
         </div>
@@ -184,17 +189,49 @@
       numericOnly: true
     });
 
-    document.getElementById("cadastroAplicacaoForm").addEventListener("submit", function (event) {
-      const cpfInput = document.getElementById("cpf-paciente");
-      cpfInput.value = cpfInput.value.replace(/\D/g, ""); // Remove formatação antes de enviar
-
-      const cpf = cpfInput.value;
-
-      if (!validarCPF(cpf)) {
-        alert("CPF inválido!");
-        event.preventDefault();
-        return;
+    // Função para mostrar alertas personalizados
+    function showAlert(type, message) {
+      document.getElementById('alert-switch').style.display = 'block';
+      document.getElementById('alert-success').style.display = type === 'success' ? 'block' : 'none';
+      document.getElementById('alert-error').style.display = type === 'error' ? 'block' : 'none';
+      if (type === 'success') {
+        document.getElementById('alert-success').textContent = message;
+      } else {
+        document.getElementById('alert-error').textContent = message;
       }
+      setTimeout(() => {
+        document.getElementById('alert-switch').style.display = 'none';
+      }, 4000);
+    }
+
+    document.getElementById("cadastroAplicacaoForm").addEventListener("submit", function (event) {
+      event.preventDefault();
+
+      const formData = new FormData(this);
+
+      fetch(this.action, {
+        method: "POST",
+        body: formData,
+      })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error(`Erro HTTP: ${response.status}`);
+          }
+          return response.json();
+        })
+        .then((data) => {
+          if (data.success) {
+            showAlert('success', data.message);
+            this.reset();
+          } else {
+            showAlert('error', data.message);
+            console.error("Erro do servidor:", data.message);
+          }
+        })
+        .catch((error) => {
+          console.error("Erro ao enviar o formulário:", error);
+          showAlert('error', "Ocorreu um erro ao cadastrar. Verifique os dados e tente novamente.");
+        });
     });
 
     function validarCPF(cpf) {

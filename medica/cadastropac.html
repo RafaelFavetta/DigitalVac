@@ -77,6 +77,11 @@
   <!-- Formulário -->
   <div class="container d-flex align-items-center justify-content-center vh-100">
     <div class="form-container mx-auto">
+      <!-- ALERTAS PERSONALIZADOS -->
+      <div id="alert-switch" style="display:none;">
+        <div id="alert-success" class="alert alert-success text-center" style="display:none;"></div>
+        <div id="alert-error" class="alert alert-danger text-center" style="display:none;"></div>
+      </div>
       <h2 class="text-center text-primary fw-bold">Cadastro de Paciente</h2>
       <form id="cadastroPacienteForm" action="../Recebedados/recebedadospaciente.php" method="POST">
         <input type="hidden" name="origem" value="medica">
@@ -260,6 +265,21 @@
       }
     });
 
+    // Função para mostrar alertas personalizados
+    function showAlert(type, message) {
+      document.getElementById('alert-switch').style.display = 'block';
+      document.getElementById('alert-success').style.display = type === 'success' ? 'block' : 'none';
+      document.getElementById('alert-error').style.display = type === 'error' ? 'block' : 'none';
+      if (type === 'success') {
+        document.getElementById('alert-success').textContent = message;
+      } else {
+        document.getElementById('alert-error').textContent = message;
+      }
+      setTimeout(() => {
+        document.getElementById('alert-switch').style.display = 'none';
+      }, 4000);
+    }
+
     // Remove a máscara antes de enviar o formulário
     document.getElementById("cadastroPacienteForm").addEventListener("submit", function (event) {
       const cpfValue = document.getElementById("cpf").value.replace(/\D/g, ""); // Remove tudo que não for número
@@ -300,13 +320,16 @@
       })
         .then((response) => response.text())
         .then((data) => {
-          console.log(data); // Exibe a resposta do servidor no console (opcional)
-          alert("Cadastro realizado com sucesso!"); // Exibe uma mensagem de sucesso
-          location.reload(); // Recarrega a página
+          if (data.toLowerCase().includes("sucesso")) {
+            showAlert('success', "Cadastro realizado com sucesso!");
+            this.reset();
+          } else {
+            showAlert('error', data);
+          }
         })
         .catch((error) => {
           console.error("Erro ao cadastrar:", error);
-          alert("Ocorreu um erro ao cadastrar. Tente novamente.");
+          showAlert('error', "Ocorreu um erro ao cadastrar. Tente novamente.");
         });
     });
   </script>

@@ -17,19 +17,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $nome_posto = $_POST['nome_posto'];
     $cep = $_POST['cep'];
     $numero_posto = $_POST['numero_posto'];
+    $endereco = $_POST['endereco'] ?? '';
+    $cidade = $_POST['cidade'] ?? '';
 
-    // Busca endereço e cidade pelo CEP usando ViaCEP
-    $cep_limpo = preg_replace('/[^0-9]/', '', $cep);
-    $endereco = '';
-    $cidade = '';
-    if (strlen($cep_limpo) === 8) {
-        $url = "https://viacep.com.br/ws/{$cep_limpo}/json/";
-        $response = @file_get_contents($url);
-        if ($response !== false) {
-            $dados = json_decode($response, true);
-            if (!isset($dados['erro'])) {
-                $endereco = ($dados['logradouro'] ?? '') . ', ' . ($dados['bairro'] ?? '') . ', ' . ($dados['localidade'] ?? '') . ' - ' . ($dados['uf'] ?? '');
-                $cidade = $dados['localidade'] ?? '';
+    // Se não veio endereço/cidade do POST, tenta buscar pelo CEP (fallback)
+    if (empty($endereco) || empty($cidade)) {
+        $cep_limpo = preg_replace('/[^0-9]/', '', $cep);
+        if (strlen($cep_limpo) === 8) {
+            $url = "https://viacep.com.br/ws/{$cep_limpo}/json/";
+            $response = @file_get_contents($url);
+            if ($response !== false) {
+                $dados = json_decode($response, true);
+                if (!isset($dados['erro'])) {
+                    $endereco = ($dados['logradouro'] ?? '') . ', ' . ($dados['bairro'] ?? '') . ', ' . ($dados['localidade'] ?? '') . ' - ' . ($dados['uf'] ?? '');
+                    $cidade = $dados['localidade'] ?? '';
+                }
             }
         }
     }
