@@ -1,6 +1,7 @@
 <?php
+header('Content-Type: application/json');
 include(__DIR__ . '/../outros/db_connect.php');
-include(__DIR__ . '/../Recebedados/validacoes.php');
+include_once(__DIR__ . '/../Recebedados/validacoes.php');
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Validações de campos obrigatórios
@@ -10,7 +11,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         empty($_POST['peso']) || empty($_POST['tipo_sanguineo']) || empty($_POST['cep']) ||
         empty($_POST['numero_casa'])
     ) {
-        echo "<script>alert('Preencha todos os campos obrigatórios.'); window.history.back();</script>";
+        echo json_encode(['success' => false, 'message' => "Preencha todos os campos obrigatórios."]);
         exit;
     }
 
@@ -33,27 +34,27 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // Validações
     if (!validarCPF($cpf)) {
-        echo "<script>alert('CPF inválido!'); window.history.back();</script>";
+        echo json_encode(['success' => false, 'message' => "CPF inválido!"]);
         exit;
     }
     if (!validarTelefone($telefone)) {
-        echo "<script>alert('Telefone inválido!'); window.history.back();</script>";
+        echo json_encode(['success' => false, 'message' => "Telefone inválido!"]);
         exit;
     }
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        echo "<script>alert('E-mail inválido!'); window.history.back();</script>";
+        echo json_encode(['success' => false, 'message' => "E-mail inválido!"]);
         exit;
     }
     if (!validarCEP($cep)) {
-        echo "<script>alert('CEP inválido!'); window.history.back();</script>";
+        echo json_encode(['success' => false, 'message' => "CEP inválido!"]);
         exit;
     }
     if ($peso <= 0) {
-        echo "<script>alert('Peso inválido!'); window.history.back();</script>";
+        echo json_encode(['success' => false, 'message' => "Peso inválido!"]);
         exit;
     }
     if (!in_array($genero, ['M', 'F', 'O'])) {
-        echo "<script>alert('Gênero inválido!'); window.history.back();</script>";
+        echo json_encode(['success' => false, 'message' => "Gênero inválido!"]);
         exit;
     }
 
@@ -63,7 +64,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $stmt->execute();
     $stmt->store_result();
     if ($stmt->num_rows > 0) {
-        echo "<script>alert('Este CPF já está cadastrado.'); window.history.back();</script>";
+        echo json_encode(['success' => false, 'message' => "Este CPF já está cadastrado."]);
         $stmt->close();
         exit;
     }
@@ -80,7 +81,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
     $stmt = $conn->prepare($sql);
     if (!$stmt) {
-        echo "<script>alert('Erro ao preparar consulta: " . $conn->error . "'); window.history.back();</script>";
+        echo json_encode(['success' => false, 'message' => "Erro ao preparar consulta: " . $conn->error]);
         exit;
     }
     $stmt->bind_param(
@@ -103,12 +104,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $cidade
     );
     if ($stmt->execute()) {
-        echo "<script>alert('Cadastro realizado com sucesso!'); window.location.href = '../$origem/telainicio.php';</script>";
+        echo json_encode(['success' => true, 'message' => "Cadastro realizado com sucesso!"]);
     } else {
-        echo "<script>alert('Erro ao cadastrar: " . $stmt->error . "'); window.history.back();</script>";
+        echo json_encode(['success' => false, 'message' => "Erro ao cadastrar: " . $stmt->error]);
     }
     $stmt->close();
     $conn->close();
     exit;
 }
+echo json_encode(['success' => false, 'message' => "Método inválido."]);
+exit;
 ?>

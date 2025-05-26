@@ -226,6 +226,7 @@ ALTER TABLE `atestado`
 --
 ALTER TABLE `medico`
   ADD PRIMARY KEY (`id_medico`),
+  ADD UNIQUE KEY `cpf` (`cpf`),
   ADD KEY `id_posto` (`id_posto`);
 
 --

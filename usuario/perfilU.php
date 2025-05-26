@@ -108,6 +108,19 @@ function buscarEnderecoPorCEP($cep)
 </head>
 
 <body>
+    <!-- Toast Bootstrap -->
+    <div aria-live="polite" aria-atomic="true" class="position-fixed top-0 start-50 translate-middle-x p-3"
+        style="z-index: 1080; top: 80px;">
+        <div id="toast-alert" class="toast align-items-center text-bg-primary border-0" role="alert"
+            aria-live="assertive" aria-atomic="true" style="min-width:350px; max-width:500px;">
+            <div class="d-flex">
+                <div class="toast-body" id="toast-alert-body"></div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
+                    aria-label="Close"></button>
+            </div>
+        </div>
+    </div>
+
     <nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">
         <div class="container-fluid">
             <div class="d-flex align-items-center">
@@ -194,6 +207,31 @@ function buscarEnderecoPorCEP($cep)
         };
     </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-</body>
+    <script>
+        // Toast Bootstrap
+        function showAlert(type, message) {
+            const toastEl = document.getElementById('toast-alert');
+            const toastBody = document.getElementById('toast-alert-body');
+            toastBody.textContent = message;
+            toastEl.classList.remove('text-bg-success', 'text-bg-danger', 'text-bg-primary');
+            if (type === 'success') {
+                toastEl.classList.add('text-bg-success');
+            } else if (type === 'error') {
+                toastEl.classList.add('text-bg-danger');
+            } else {
+                toastEl.classList.add('text-bg-primary');
+            }
+            const toast = new bootstrap.Toast(toastEl, { delay: 4000 });
+            toast.show();
+        }
 
+        // Exibe toast se houver mensagem na URL
+        (function() {
+            const params = new URLSearchParams(window.location.search);
+            const msg = params.get('toast');
+            const type = params.get('toastType') || 'primary';
+            if (msg) showAlert(type, msg);
+        })();
+    </script>
+</body>
 </html>

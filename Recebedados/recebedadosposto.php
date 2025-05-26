@@ -1,4 +1,6 @@
 <?php
+header('Content-Type: application/json');
+
 // Conexão com o banco de dados
 $servername = "localhost";
 $username = "root";
@@ -43,14 +45,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // Executa a consulta e verifica se foi bem-sucedida
     if ($stmt->execute()) {
-        echo "Posto cadastrado com sucesso!";
+        echo json_encode(['success' => true, 'message' => "Posto cadastrado com sucesso!"]);
     } else {
-        echo "Erro ao cadastrar o posto: " . $stmt->error;
+        echo json_encode(['success' => false, 'message' => "Erro ao cadastrar o posto: " . $stmt->error]);
     }
-
-    // Fecha a declaração e a conexão
     $stmt->close();
+    $conn->close();
+    exit;
 }
-
-$conn->close();
+echo json_encode(['success' => false, 'message' => "Método inválido."]);
+exit;
 ?>

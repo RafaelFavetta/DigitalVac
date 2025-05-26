@@ -298,6 +298,14 @@
       }
     });
 
+    // Exibe toast se houver mensagem na URL (para redirecionamentos)
+    (function () {
+      const params = new URLSearchParams(window.location.search);
+      const msg = params.get('toast');
+      const type = params.get('type') || 'primary';
+      if (msg) showAlert(type, msg);
+    })();
+
     function validarCPF(cpf) {
       // ...existing code from validacoes.php...
     }

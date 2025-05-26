@@ -1,4 +1,5 @@
 <?php
+header('Content-Type: application/json');
 include(__DIR__ . '/../outros/db_connect.php');
 
 $mensagem = '';
@@ -15,9 +16,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $origem = isset($_POST['origem']) ? htmlspecialchars($_POST['origem']) : 'admin';
 
     if (empty($nome_vacina) || empty($fabricante) || empty($lote) || empty($idade_aplica) || empty($via) || empty($doses) || empty($intervalo) || empty($estoque)) {
-        // Retorna erro em formato texto simples
         http_response_code(400);
-        echo "Por favor, preencha todos os campos obrigatórios.";
+        echo json_encode(['success' => false, 'message' => "Por favor, preencha todos os campos obrigatórios."]);
         exit;
     }
 
@@ -27,11 +27,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $stmt->bind_param("sssisiis", $nome_vacina, $lote, $fabricante, $idade_aplica, $via, $doses, $intervalo, $estoque);
 
     if ($stmt->execute()) {
-        // Retorna apenas mensagem de sucesso (sem redirecionamento)
-        echo "Cadastro de vacina realizado com sucesso!";
+        echo json_encode(['success' => true, 'message' => "Cadastro de vacina realizado com sucesso!"]);
     } else {
         http_response_code(500);
-        echo "Erro ao cadastrar vacina: " . $stmt->error;
+        echo json_encode(['success' => false, 'message' => "Erro ao cadastrar vacina: " . $stmt->error]);
     }
+    exit;
 }
+echo json_encode(['success' => false, 'message' => "Método inválido."]);
+exit;
 ?>

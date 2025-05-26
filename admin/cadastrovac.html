@@ -194,6 +194,14 @@
             showAlert('error', "Ocorreu um erro ao cadastrar. Tente novamente.");
           });
       });
+
+    // Exibe toast se houver mensagem na URL (para redirecionamentos)
+    (function () {
+      const params = new URLSearchParams(window.location.search);
+      const msg = params.get('toast');
+      const type = params.get('type') || 'primary';
+      if (msg) showAlert(type, msg);
+    })();
   </script>
 </body>
 

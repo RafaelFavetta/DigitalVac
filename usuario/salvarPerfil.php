@@ -35,11 +35,11 @@ $stmt->execute();
 
 // Verifique se a atualização foi bem-sucedida
 if ($stmt->affected_rows > 0) {
-    echo "<script>alert('Perfil atualizado com sucesso!');</script>";
-    echo "<script>window.location.href = 'perfilU.php';</script>";
+    header("Location: perfilU.php?toast=Perfil atualizado com sucesso!&toastType=success");
+    exit();
 } else {
-    echo "<script>alert('Nenhuma alteração foi feita ou ocorreu um erro.');</script>";
-    echo "<script>window.location.href = 'editarPefilU.php';</script>";
+    header("Location: editarPefilU.php?toast=Nenhuma alteração foi feita ou ocorreu um erro.&toastType=error");
+    exit();
 }
 
 // Feche a conexão

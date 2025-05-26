@@ -1,8 +1,7 @@
 <?php
+header('Content-Type: application/json');
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
-
-header('Content-Type: application/json');
 
 include(__DIR__ . '/../outros/db_connect.php');
 

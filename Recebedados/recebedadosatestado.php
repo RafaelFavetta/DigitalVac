@@ -1,8 +1,7 @@
 <?php
+header('Content-Type: application/json');
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
-
-header('Content-Type: application/json');
 
 include(__DIR__ . '/../outros/db_connect.php'); // Incluindo o arquivo de conexão com o banco de dados
 
@@ -100,4 +99,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $conn->close();
     exit;
 }
+echo json_encode(['success' => false, 'message' => "Método inválido."]);
+exit;
 ?>
