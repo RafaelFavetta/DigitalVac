@@ -43,7 +43,7 @@ function renderTabelaCarteiraVac($result)
     ob_start();
     ?>
     <div class="table-responsive">
-        <table class="table table-bordered text-center">
+        <table class="table table-bordered text-center mx-auto">
             <thead>
                 <tr>
                     <th>Nome da Vacina</th>
@@ -108,14 +108,15 @@ if (
             max-width: 95%;
         }
 
+        .table-responsive {
+            /* min-width: 700px; */ /* Removido para padrão Bootstrap */
+        }
+
         .table {
             background: white;
             border-radius: 10px;
             overflow: hidden;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            min-width: 800px;
-            width: 100%;
-            /* Adicionado para aumentar a largura */
         }
 
         .table thead th {
@@ -134,6 +135,17 @@ if (
 
         .img-select {
             opacity: 25%;
+        }
+
+        #tabela-carteira-vac {
+            width: 100%;
+        }
+
+        @media (max-width: 800px) {
+            /* Não altere min-width para manter o tamanho fixo */
+            .table {
+                font-size: 0.95rem;
+            }
         }
     </style>
 </head>
@@ -189,8 +201,8 @@ if (
             </form>
         </div>
         <br>
-        <div id="tabela-carteira-vac" class="d-flex justify-content-center">
-            <div style="min-width: 800px; width: 90%;">
+        <div id="tabela-carteira-vac">
+            <div style="width: 100%;">
                 <?php echo renderTabelaCarteiraVac($result); ?>
             </div>
         </div>

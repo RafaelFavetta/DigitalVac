@@ -76,9 +76,9 @@ if ($user_data) {
             border-radius: 10px;
             overflow: hidden;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            min-width: 700px;
             width: 100%;
-            /* Adicionado para aumentar a largura */
+            min-width: 700px;
+            /* Defina o min-width apenas aqui */
         }
 
         .table thead th {
@@ -115,6 +115,13 @@ if ($user_data) {
             display: none;
             width: 0;
             height: 0;
+        }
+
+        @media (max-width: 800px) {
+            .table {
+                min-width: 0;
+                font-size: 0.95rem;
+            }
         }
     </style>
 </head>
@@ -170,7 +177,7 @@ if ($user_data) {
         </div>
         <br>
         <div class="table-responsive d-flex justify-content-center" id="tabela-proxima-vacina">
-            <div style="min-width: 700px; width: 90%;">
+            <div style="width: 100%;">
                 <table class="table table-bordered text-center w-100 mx-auto">
                     <thead>
                         <tr>
