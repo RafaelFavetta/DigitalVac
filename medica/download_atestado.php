@@ -56,20 +56,15 @@ function buscarCidadePorCEP($cep) {
 }
 $cidade = buscarCidadePorCEP($atestado['cep_usuario']);
 if (!$cidade) {
-    $cidade = "Porto Alegre";
+    $cidade = "Cidade não encontrada";
 }
 
-// Função para converter para Windows-1252
-function utf8_to_win1252($str) {
-    return mb_convert_encoding($str, 'Windows-1252', 'UTF-8');
-}
-
-// Converta todos os campos dinâmicos para Windows-1252
-$nome_paciente = utf8_to_win1252($atestado['nome_paciente']);
-$medico_responsavel = utf8_to_win1252($atestado['medico_responsavel']);
-$justificativa = utf8_to_win1252($atestado['justificativa']);
-$periodo_afastamento = utf8_to_win1252($atestado['periodo_afastamento']);
-$cidade_pdf = utf8_to_win1252($cidade);
+// Não converte mais para Windows-1252, mantém UTF-8
+$nome_paciente = $atestado['nome_paciente'];
+$medico_responsavel = $atestado['medico_responsavel'];
+$justificativa = $atestado['justificativa'];
+$periodo_afastamento = $atestado['periodo_afastamento'];
+$cidade_pdf = $cidade;
 
 // Cria o PDF usando a biblioteca FPDF
 $pdf = new FPDF();
@@ -81,12 +76,12 @@ $pdf->Image('../img/logo.png', 10, 6, 30);
 
 // Cabeçalho
 $pdf->SetFont('Arial', 'B', 16);
-$pdf->Cell(0, 10, $medico_responsavel, 0, 1, 'R');
+$pdf->Cell(0, 10, utf8_decode($medico_responsavel), 0, 1, 'R');
 $pdf->Ln(10);
 
 // Título
 $pdf->SetFont('Arial', 'B', 18);
-$pdf->Cell(0, 10, utf8_to_win1252('Atestado'), 0, 1, 'C');
+$pdf->Cell(0, 10, utf8_decode('Atestado'), 0, 1, 'C');
 $pdf->Ln(5);
 
 // Corpo do texto
@@ -94,22 +89,19 @@ $pdf->SetFont('Arial', '', 12);
 $pdf->MultiCell(
     0,
     10,
-    utf8_to_win1252("Atesto para os devidos fins que $nome_paciente, residente e domiciliado(a), esteve sob tratamento médico neste consultório, no período de $periodo_afastamento, necessitando o(a) mesmo(a) de afastamento por motivo de: $justificativa.")
+    utf8_decode("Atesto para os devidos fins que $nome_paciente esteve sob tratamento médico neste consultório, no período de $periodo_afastamento, necessitando o(a) mesmo(a) de afastamento por motivo de: $justificativa.")
 );
 
 // Local e data
 $pdf->Ln(10);
 $data_formatada = date('d/m/Y', strtotime($atestado['data_emissao']));
-$pdf->Cell(0, 10, utf8_to_win1252("$cidade_pdf, $data_formatada"), 0, 1, 'L');
+$pdf->Cell(0, 10, utf8_decode("$cidade_pdf, $data_formatada"), 0, 1, 'L');
 
-// Espaço para assinaturas
-$pdf->Ln(20);
-$pdf->Cell(90, 10, utf8_to_win1252('__________________________'), 0, 0, 'C');
-$pdf->Cell(10, 10, '', 0, 0);
-$pdf->Cell(90, 10, utf8_to_win1252('__________________________'), 0, 1, 'C');
-$pdf->Cell(90, 5, utf8_to_win1252('Assinatura do paciente'), 0, 0, 'C');
-$pdf->Cell(10, 5, '', 0, 0);
-$pdf->Cell(90, 5, utf8_to_win1252('Assinatura do médico'), 0, 1, 'C');
+// Espaço para assinatura do médico centralizada
+$pdf->Ln(25);
+$pdf->Cell(0, 10, utf8_decode('__________________________'), 0, 1, 'C');
+$pdf->Cell(0, 7, utf8_decode($medico_responsavel), 0, 1, 'C');
+$pdf->Cell(0, 7, utf8_decode('Assinatura do médico'), 0, 1, 'C');
 
 // Saída do PDF para download
 $pdf->Output('D', 'atestado_' . $id_atestado . '.pdf');

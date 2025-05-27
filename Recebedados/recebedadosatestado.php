@@ -10,7 +10,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $nome_paciente = htmlspecialchars($_POST['nome_paciente']); // Nome do paciente
     $nome_medico = htmlspecialchars($_POST['nome_medico']); // Nome do médico
     $data_inicio = htmlspecialchars($_POST['data_inicio']); // Data de início do atestado
-    $data_fim = htmlspecialchars($_POST['data_termino']); // Data de término do atestado
+    $data_termino = htmlspecialchars($_POST['data_termino']); // Data de término do atestado
     $justificativa = htmlspecialchars($_POST['justificativa']); // Justificativa do atestado
     $origem = isset($_POST['origem']) ? htmlspecialchars($_POST['origem']) : 'medica';
 
@@ -27,7 +27,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         echo json_encode(['success' => false, 'message' => "Erro: O campo 'Data de Início' é obrigatório."]);
         exit;
     }
-    if (empty($data_fim)) {
+    if (empty($data_termino)) {
         echo json_encode(['success' => false, 'message' => "Erro: O campo 'Data de Término' é obrigatório."]);
         exit;
     }
@@ -84,7 +84,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         echo json_encode(['success' => false, 'message' => 'Erro ao preparar cadastro de atestado: ' . $conn->error]);
         exit;
     }
-    $stmt->bind_param("iisss", $id_paci, $id_medico, $data_inicio, $data_fim, $justificativa);
+    $stmt->bind_param("iisss", $id_paci, $id_medico, $data_inicio, $data_termino, $justificativa);
 
     // Executando a consulta
     if ($stmt->execute()) {
