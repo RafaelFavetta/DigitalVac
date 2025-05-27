@@ -88,7 +88,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // Executando a consulta
     if ($stmt->execute()) {
-        echo json_encode(['success' => true, 'message' => 'Cadastro de atestado realizado com sucesso!']);
+        $novo_id = $conn->insert_id;
+        // Redireciona para a tela inicial do médico com o ID do atestado na URL
+        echo json_encode(['success' => true, 'message' => 'Cadastro de atestado realizado com sucesso!', 'atestado_id' => $novo_id]);
         exit;
     } else {
         echo json_encode(['success' => false, 'message' => 'Erro ao cadastrar atestado: ' . $stmt->error]);

@@ -208,8 +208,13 @@
                 .then((response) => response.json().catch(() => ({success: false, message: "Erro inesperado do servidor."})))
                 .then((data) => {
                     if (data.success) {
-                        showAlert('success', data.message || "Cadastro realizado com sucesso!");
-                        this.reset();
+                        // Redireciona para a tela inicial do médico com o ID do atestado
+                        if (data.atestado_id) {
+                            window.location.href = "telainicio.php?atestado_id=" + encodeURIComponent(data.atestado_id);
+                        } else {
+                            showAlert('success', data.message || "Cadastro realizado com sucesso!");
+                            this.reset();
+                        }
                     } else {
                         showAlert('error', data.message || "Erro ao cadastrar atestado.");
                         console.error("Erro do servidor:", data.message);

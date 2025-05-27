@@ -137,7 +137,25 @@ if (!isset($_SESSION['id_medico'])) {
 </head>
 
 <body style="background: #fdfdfd;">
-        <nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">
+    <?php if (isset($_GET['atestado_id']) && is_numeric($_GET['atestado_id'])): ?>
+    <div id="atestado-toast" style="position: fixed; top: 24px; right: 24px; z-index: 2000; min-width: 320px; max-width: 400px;">
+        <div class="alert alert-success alert-dismissible fade show shadow" role="alert" style="display: flex; align-items: center;">
+            <div style="flex:1;">
+                <strong>Atestado cadastrado!</strong><br>
+                O atestado foi gerado com sucesso.
+            </div>
+            <div class="ms-3 d-flex flex-column gap-1">
+                <a href="download_atestado.php?id=<?php echo intval($_GET['atestado_id']); ?>" class="btn btn-primary btn-sm" target="_blank">
+                    Baixar atestado
+                </a>
+                <button type="button" class="btn btn-outline-secondary btn-sm mt-1" onclick="document.getElementById('atestado-toast').remove();">
+                    Fechar
+                </button>
+            </div>
+        </div>
+    </div>
+    <?php endif; ?>
+    <nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">
         <div class="container-fluid">
             <div class="navbar-content-center">
                 <div class="d-none d-md-flex navbar-hr-left"></div>

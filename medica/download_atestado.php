@@ -3,19 +3,18 @@ session_start();
 require_once '../outros/db_connect.php';
 require_once __DIR__ . '/../outros/fpdf186/fpdf.php';
 
-// Permitir apenas usuários autenticados
-if (!isset($_SESSION['id_usuario'])) {
+// Permitir apenas médicos autenticados
+if (!isset($_SESSION['id_medico'])) {
     die("Usuário não autenticado.");
 }
-$id_usuario = $_SESSION['id_usuario'];
 
-// Verifica se o ID do atestado foi passado via GET
+// Permitir baixar qualquer atestado (não filtra por id_medico)
 if (!isset($_GET['id'])) {
     die("Atestado não especificado.");
 }
 $id_atestado = intval($_GET['id']);
 
-// Consulta para buscar os dados do atestado e cidade do paciente (filtra por usuário)
+// Consulta para buscar os dados do atestado e cidade do paciente (sem filtro por médico)
 $sql = "SELECT u.nome_usuario AS nome_paciente, 
                m.nome_medico AS medico_responsavel, 
                a.data_inicio AS data_emissao, 
@@ -25,14 +24,14 @@ $sql = "SELECT u.nome_usuario AS nome_paciente,
         FROM atestado a
         INNER JOIN usuario u ON a.id_paci = u.id_usuario
         INNER JOIN medico m ON a.id_medico = m.id_medico
-        WHERE a.id_atestado = ? AND a.id_paci = ?";
+        WHERE a.id_atestado = ?";
 $stmt = $conn->prepare($sql);
 
 if ($stmt === false) {
     die("Erro ao preparar a consulta: " . $conn->error);
 }
 
-$stmt->bind_param("ii", $id_atestado, $id_usuario);
+$stmt->bind_param("i", $id_atestado);
 $stmt->execute();
 $result = $stmt->get_result();
 
