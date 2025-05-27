@@ -197,7 +197,7 @@ if (
         <div class="w-100 d-flex justify-content-center">
             <form class="d-flex position-relative" role="search" id="form-pesquisa-vacina" style="max-width:600px; width:100%;">
                 <input class="form-control me-2 border border-primary" type="search" placeholder="Nome da vacina"
-                    aria-label="Pesquisar" id="pesquisa-vacina" autocomplete="off">
+                    aria-label="Pesquisar" id="pesquisa-vacina" autocomplete="off" maxlength="50" pattern="[A-Za-zÀ-ÿ\s]+">
             </form>
         </div>
         <br>
@@ -214,6 +214,11 @@ if (
         window.onpopstate = function () {
             history.pushState(null, "", location.href);
         };
+
+        // Permite apenas letras e espaços no campo de pesquisa
+        document.getElementById('pesquisa-vacina').addEventListener('input', function() {
+            this.value = this.value.replace(/[^A-Za-zÀ-ÿ\s]/g, '').slice(0, 50);
+        });
 
         // Pesquisa automática AJAX igual às tabelas da pasta medica
         const inputVacina = document.getElementById('pesquisa-vacina');

@@ -106,26 +106,30 @@
                 <div class="row g-2 mt-2">
                     <div class="col-md-6">
                         <label for="telefone" class="form-label fw-bold">Telefone</label>
-                        <input type="tel" id="telefone" name="telefone" maxlength="11" minlength="11"
-                            class="form-control" placeholder="Telefone" required>
+                        <input type="text" id="telefone" name="telefone" class="form-control" placeholder="Telefone" required>
                     </div>
                     <div class="col-md-6">
-                        <label for="email" class="form-label fw-bold">Email</label>
-                        <input type="email" id="email" name="email" class="form-control" placeholder="Email" required>
+                        <label for="peso" class="form-label fw-bold">Peso (kg)</label>
+                        <input type="text" id="peso" name="peso" class="form-control" placeholder="Peso" 
+                            inputmode="decimal" pattern="^\d+([.,]\d{0,2})?$" maxlength="6" autocomplete="off" required>
                     </div>
                 </div>
                 <div class="row g-2 mt-2">
                     <div class="col-md-6">
+                        <label for="email" class="form-label fw-bold">Email</label>
+                        <input type="email" id="email" name="email" class="form-control" placeholder="Email" required>
+                    </div>
+                    <div class="col-md-6">
                         <label for="data_nascimento" class="form-label fw-bold">Data de Nascimento</label>
                         <input type="date" id="data_nascimento" name="data_nascimento" class="form-control" required>
                     </div>
+                </div>
+                <div class="row g-2 mt-2">
                     <div class="col-md-6">
                         <label for="coren_crm" class="form-label fw-bold">COREN/CRM</label>
                         <input type="text" id="coren_crm" name="coren_crm" maxlength="15" minlength="13"
                             class="form-control" placeholder="COREN/CRM-UF 000000" required>
                     </div>
-                </div>
-                <div class="row g-2 mt-2">
                     <div class="col-md-6">
                         <label for="tipo_medico" class="form-label fw-bold">Tipo de Médico</label>
                         <select id="tipo_medico" name="tipo_medico" class="form-select" required>
@@ -143,6 +147,8 @@
                             <option value="Psiquiatra">Psiquiatra</option>
                         </select>
                     </div>
+                </div>
+                <div class="row g-2 mt-2">
                     <div class="col-md-6">
                         <label for="id_posto_trabalho" class="form-label fw-bold">Posto de Trabalho</label>
                         <select id="id_posto_trabalho" name="posto_trabalho" class="form-select" required>
@@ -189,6 +195,12 @@
             numericOnly: true
         });
 
+        // Máscara para telefone (igual ao cadastropac.html)
+        new Cleave('#telefone', {
+            delimiters: ['(', ') ', '-'],
+            blocks: [0, 2, 5, 4],
+            numericOnly: true
+        });
         // Toast Bootstrap
         function showAlert(type, message) {
             const toastEl = document.getElementById('toast-alert');
@@ -234,6 +246,12 @@
             .catch(error => {
                 showAlert('error', "Ocorreu um erro ao cadastrar. Tente novamente.");
             });
+        });
+
+        // Bloquear letras no campo peso
+        document.getElementById('peso').addEventListener('input', function (e) {
+            // Permite apenas números, ponto e vírgula
+            this.value = this.value.replace(/[^0-9.,]/g, '');
         });
     </script>
 </body>

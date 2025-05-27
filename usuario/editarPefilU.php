@@ -61,7 +61,7 @@ $email = $user['email_usuario'];
                         <div class="mb-3">
                             <label for="telefone" class="form-label"><strong>Telefone:</strong></label>
                             <input type="text" class="form-control" id="telefone" name="telefone"
-                                value="<?php echo htmlspecialchars($telefone); ?>">
+                                value="<?php echo htmlspecialchars($telefone); ?>" maxlength="15" inputmode="tel" pattern="\(?\d{2}\)?\s?\d{4,5}-?\d{4}">
                         </div>
                         <div class="mb-3">
                             <label for="genero" class="form-label"><strong>Gênero:</strong></label>
@@ -77,7 +77,7 @@ $email = $user['email_usuario'];
                         <div class="mb-3">
                             <label for="email" class="form-label"><strong>E-mail:</strong></label>
                             <input type="email" class="form-control" id="email" name="email"
-                                value="<?php echo htmlspecialchars($email); ?>">
+                                value="<?php echo htmlspecialchars($email); ?>" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$">
                         </div>
                         <button type="submit" class="btn btn-primary fw-bold">Salvar Alterações</button>
                         <a href="perfilU.php" class="btn btn-danger fw-bold">Cancelar</a>
@@ -100,7 +100,15 @@ $email = $user['email_usuario'];
         </div>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/cleave.js"></script>
     <script>
+        // Máscara para telefone brasileiro (celular e fixo)
+        new Cleave('#telefone', {
+            phone: true,
+            phoneRegionCode: 'BR'
+        });
+
         // Toast Bootstrap
         function showAlert(type, message) {
             const toastEl = document.getElementById('toast-alert');
@@ -141,8 +149,6 @@ $email = $user['email_usuario'];
             });
         });
     </script>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>

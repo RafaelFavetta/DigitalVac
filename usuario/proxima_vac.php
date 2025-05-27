@@ -172,7 +172,7 @@ if ($user_data) {
         <div class="w-100 d-flex justify-content-center">
             <form class="d-flex position-relative" role="search" id="form-pesquisa-proxima-vacina" style="max-width:600px; width:100%;">
                 <input class="form-control me-2 border border-primary" type="search" placeholder="Nome da vacina"
-                    aria-label="Pesquisar" id="pesquisa-proxima-vacina" autocomplete="off">
+                    aria-label="Pesquisar" id="pesquisa-proxima-vacina" autocomplete="off" maxlength="50" pattern="[A-Za-zÀ-ÿ\s]+">
             </form>
         </div>
         <br>
@@ -223,6 +223,8 @@ if ($user_data) {
 <script>
     // Pesquisa automática AJAX para vacinas a serem aplicadas
     document.getElementById('pesquisa-proxima-vacina').addEventListener('input', function () {
+        // Permite apenas letras e espaços no campo de pesquisa
+        this.value = this.value.replace(/[^A-Za-zÀ-ÿ\s]/g, '').slice(0, 50);
         const termo = this.value;
         fetch('proxima_vac.php?pesquisa=' + encodeURIComponent(termo), { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
             .then(res => res.text())

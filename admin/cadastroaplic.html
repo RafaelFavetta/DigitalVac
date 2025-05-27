@@ -169,8 +169,8 @@
           </div>
           <div class="col-md-6">
             <label for="coren-crm" class="form-label fw-bold">COREN/CRM</label>
-            <input type="search" class="form-control" name="coren_crm" id="coren-crm"
-              placeholder="Digite o COREN/CRM" autocomplete="off" autocapitalize="off" spellcheck="false" required />
+            <input type="text" class="form-control" name="coren_crm" id="coren-crm"
+              placeholder="COREN/CRM-UF 000000" autocomplete="off" autocapitalize="off" spellcheck="false" required maxlength="15" minlength="13" />
             <div id="autocomplete-coren-crm" class="autocomplete-suggestions"></div>
           </div>
         </div>
@@ -192,6 +192,14 @@
       delimiters: ['.', '.', '-'],
       blocks: [3, 3, 3, 2],
       numericOnly: true
+    });
+
+    // Máscara para COREN/CRM
+    new Cleave('#coren-crm', {
+      delimiters: ['-', ' '],
+      blocks: [6, 2, 6],
+      uppercase: true,
+      numericOnly: false
     });
 
     // Toast Bootstrap

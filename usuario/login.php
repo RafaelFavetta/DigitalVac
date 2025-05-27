@@ -77,12 +77,12 @@ $conn->close();
             <form method="POST" action="">
                 <div class="mb-3">
                     <label for="cpf" class="form-label">CPF</label>
-                    <input type="text" name="cpf" id="cpf" class="form-control" placeholder="Digite seu CPF" required>
+                    <input type="text" name="cpf" id="cpf" class="form-control" placeholder="Digite seu CPF" required maxlength="14" inputmode="numeric" pattern="\d{3}\.\d{3}\.\d{3}-\d{2}">
                 </div>
                 <div class="mb-3">
                     <label for="senha" class="form-label">Senha</label>
                     <input type="password" name="senha" id="senha" class="form-control" placeholder="Digite sua senha"
-                        required>
+                        required minlength="6" maxlength="20" pattern=".{6,20}">
                 </div>
                 <button type="submit" class="btn btn-primary w-100">Entrar</button>
                 <div class="text-center mt-3">
@@ -105,6 +105,11 @@ $conn->close();
             delimiters: ['.', '.', '-'],
             blocks: [3, 3, 3, 2],
             numericOnly: true
+        });
+
+        // Máscara para senha: apenas impede colar espaços e limita tamanho
+        document.getElementById('senha').addEventListener('input', function() {
+            this.value = this.value.replace(/\s/g, '').slice(0, 20);
         });
 
         // Remove a máscara antes de enviar o formulário
