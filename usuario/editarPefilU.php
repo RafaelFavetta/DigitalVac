@@ -66,11 +66,9 @@ $email = $user['email_usuario'];
                         <div class="mb-3">
                             <label for="genero" class="form-label"><strong>Gênero:</strong></label>
                             <select class="form-select" id="genero" name="genero">
-                                <option value="masculino" <?php echo $genero == 'Masculino' ? 'selected' : ''; ?>>
-                                    Masculino</option>
-                                <option value="feminino" <?php echo $genero == 'Feminino' ? 'selected' : ''; ?>>Feminino
-                                </option>
-                                <option value="outro" <?php echo $genero == 'Outro' ? 'selected' : ''; ?>>Outro</option>
+                                <option value="M" <?php echo $genero == 'M' ? 'selected' : ''; ?>>Masculino</option>
+                                <option value="F" <?php echo $genero == 'F' ? 'selected' : ''; ?>>Feminino</option>
+                                <option value="O" <?php echo $genero == 'O' ? 'selected' : ''; ?>>Outro</option>
                             </select>
                         </div>
 

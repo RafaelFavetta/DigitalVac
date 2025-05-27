@@ -64,9 +64,9 @@ function formatarTelefone($telefone)
     return $telefone; // Retorna sem formatação se não for 10 ou 11 dígitos
 }
 
-if ($genero == 'm') {
+if ($genero == 'M') {
     $genero = 'Masculino';
-} elseif ($genero == 'f') {
+} elseif ($genero == 'F') {
     $genero = 'Feminino';
 } else {
     $genero = 'Outro';
