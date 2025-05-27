@@ -68,22 +68,30 @@ $justificativa = $atestado['justificativa'];
 $periodo_afastamento = $atestado['periodo_afastamento'];
 $cidade_pdf = $cidade;
 
+// Sempre usar "Dr.(a) Nome"
+$nome_medico_completo = 'Dr.(a) ' . $atestado['nome_medico'];
+
 // Cria o PDF usando a biblioteca FPDF
 $pdf = new FPDF();
 $pdf->AddPage();
 $pdf->SetAutoPageBreak(true, 20);
 
-// Adiciona logo
-$pdf->Image('../img/logo.png', 10, 6, 30);
+// Centraliza logo
+$pdf->Image('../img/logo.png', 90, 10, 30); // Centralizado para página A4 (210mm de largura)
+$pdf->Ln(30);
 
-// Cabeçalho
-$pdf->SetFont('Arial', 'B', 16);
-$pdf->Cell(0, 10, utf8_decode($coren_crm), 0, 1, 'R');
-$pdf->Ln(10);
+// Nome do médico (cursiva, centralizado)
+$pdf->SetFont('Times', 'I', 16);
+$pdf->Cell(0, 8, utf8_decode($nome_medico_completo), 0, 1, 'C');
+
+// COREN/CRM (centralizado, menor)
+$pdf->SetFont('Arial', '', 10);
+$pdf->Cell(0, 6, utf8_decode($coren_crm), 0, 1, 'C');
+$pdf->Ln(5);
 
 // Título
 $pdf->SetFont('Arial', 'B', 18);
-$pdf->Cell(0, 10, utf8_decode('Atestado'), 0, 1, 'C');
+$pdf->Cell(0, 12, utf8_decode('ATESTADO MÉDICO'), 0, 1, 'C');
 $pdf->Ln(5);
 
 // Corpo do texto

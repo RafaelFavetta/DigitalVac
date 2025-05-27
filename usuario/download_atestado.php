@@ -17,7 +17,7 @@ $id_atestado = intval($_GET['id']);
 
 // Consulta para buscar os dados do atestado e cidade do paciente (filtra por usuário)
 $sql = "SELECT u.nome_usuario AS nome_paciente, 
-               m.nome_medico AS medico_responsavel, 
+               m.nome_medico AS nome_medico, 
                m.coren_crm AS coren_crm, 
                a.data_inicio AS data_emissao, 
                a.justificativa AS justificativa, 
@@ -68,28 +68,36 @@ function utf8_to_win1252($str) {
 
 // Converta todos os campos dinâmicos para Windows-1252
 $nome_paciente = utf8_to_win1252($atestado['nome_paciente']);
-$medico_responsavel = utf8_to_win1252($atestado['nome_medico']); // mudou para nome_medico
+$medico_responsavel = utf8_to_win1252($atestado['nome_medico']);
 $coren_crm = utf8_to_win1252($atestado['coren_crm']);
 $justificativa = utf8_to_win1252($atestado['justificativa']);
 $periodo_afastamento = utf8_to_win1252($atestado['periodo_afastamento']);
 $cidade_pdf = utf8_to_win1252($cidade);
+
+// Sempre usar "Dr.(a) Nome"
+$nome_medico_completo = utf8_to_win1252('Dr.(a) ' . $atestado['nome_medico']);
 
 // Cria o PDF usando a biblioteca FPDF
 $pdf = new FPDF();
 $pdf->AddPage();
 $pdf->SetAutoPageBreak(true, 20);
 
-// Adiciona logo
-$pdf->Image('../img/logo.png', 10, 6, 30);
+// Centraliza logo
+$pdf->Image('../img/logo.png', 90, 10, 30); // Centralizado para página A4 (210mm de largura)
+$pdf->Ln(30);
 
-// Cabeçalho
-$pdf->SetFont('Arial', 'B', 16);
-$pdf->Cell(0, 10, $coren_crm, 0, 1, 'R');
-$pdf->Ln(10);
+// Nome do médico (cursiva, centralizado)
+$pdf->SetFont('Times', 'I', 16);
+$pdf->Cell(0, 8, $nome_medico_completo, 0, 1, 'C');
+
+// COREN/CRM (centralizado, menor)
+$pdf->SetFont('Arial', '', 10);
+$pdf->Cell(0, 6, $coren_crm, 0, 1, 'C');
+$pdf->Ln(5);
 
 // Título
 $pdf->SetFont('Arial', 'B', 18);
-$pdf->Cell(0, 10, utf8_to_win1252('Atestado'), 0, 1, 'C');
+$pdf->Cell(0, 12, utf8_to_win1252('ATESTADO MÉDICO'), 0, 1, 'C');
 $pdf->Ln(5);
 
 // Corpo do texto
