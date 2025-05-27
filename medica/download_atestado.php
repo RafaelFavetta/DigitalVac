@@ -16,7 +16,8 @@ $id_atestado = intval($_GET['id']);
 
 // Consulta para buscar os dados do atestado e cidade do paciente (sem filtro por médico)
 $sql = "SELECT u.nome_usuario AS nome_paciente, 
-               m.nome_medico AS medico_responsavel, 
+               m.nome_medico AS nome_medico, 
+               m.coren_crm AS coren_crm, 
                a.data_inicio AS data_emissao, 
                a.justificativa AS justificativa, 
                CONCAT(DATE_FORMAT(a.data_inicio, '%d/%m/%Y'), ' a ', DATE_FORMAT(a.data_fim, '%d/%m/%Y')) AS periodo_afastamento,
@@ -61,7 +62,8 @@ if (!$cidade) {
 
 // Não converte mais para Windows-1252, mantém UTF-8
 $nome_paciente = $atestado['nome_paciente'];
-$medico_responsavel = $atestado['medico_responsavel'];
+$medico_responsavel = $atestado['nome_medico'];
+$coren_crm = $atestado['coren_crm'];
 $justificativa = $atestado['justificativa'];
 $periodo_afastamento = $atestado['periodo_afastamento'];
 $cidade_pdf = $cidade;
@@ -76,7 +78,7 @@ $pdf->Image('../img/logo.png', 10, 6, 30);
 
 // Cabeçalho
 $pdf->SetFont('Arial', 'B', 16);
-$pdf->Cell(0, 10, utf8_decode($medico_responsavel), 0, 1, 'R');
+$pdf->Cell(0, 10, utf8_decode($coren_crm), 0, 1, 'R');
 $pdf->Ln(10);
 
 // Título
