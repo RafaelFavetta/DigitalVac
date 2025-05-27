@@ -1,48 +1,45 @@
 <?php
+header('Content-Type: application/json');
 include("../outros/db_connect.php");
-include("../Recebedados/validacoes.php"); // Include validation functions
+include("../Recebedados/validacoes.php");
 session_start();
 
-// Verifique se o usuário está autenticado
 if (!isset($_SESSION['id_usuario'])) {
-    header("Location: ../index.php");
+    echo json_encode(['success' => false, 'message' => 'Sessão expirada. Faça login novamente.']);
     exit();
 }
 
-// Obtenha os dados do formulário
 $email = isset($_POST['email']) ? trim($_POST['email']) : '';
 $telefone = isset($_POST['telefone']) ? trim($_POST['telefone']) : '';
 $genero = isset($_POST['genero']) ? trim($_POST['genero']) : '';
 
-// Valide os dados
 if (empty($email) || empty($telefone) || empty($genero)) {
-    echo "<script>alert('Todos os campos são obrigatórios.');</script>";
-    echo "<script>window.location.href = 'editarPefilU.php';</script>";
+    echo json_encode(['success' => false, 'message' => 'Todos os campos são obrigatórios.']);
     exit();
 }
-
 if (!validarTelefone($telefone)) {
-    echo "<script>alert('Telefone inválido.');</script>";
-    echo "<script>window.location.href = 'editarPefilU.php';</script>";
+    echo json_encode(['success' => false, 'message' => 'Telefone inválido.']);
+    exit();
+}
+if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+    echo json_encode(['success' => false, 'message' => 'E-mail inválido.']);
     exit();
 }
 
 // Atualize os dados no banco de dados
-$sql = "UPDATE usuario SET email_usuario = ?, tel_usuario = ?, genero_usuario = ? WHERE id_usuario = ?";
-$stmt = $conn->prepare($sql);
-$stmt->bind_param("sssi", $email, $telefone, $genero, $_SESSION['id_usuario']);
-$stmt->execute();
-
-// Verifique se a atualização foi bem-sucedida
-if ($stmt->affected_rows > 0) {
-    header("Location: perfilU.php?toast=Perfil atualizado com sucesso!&toastType=success");
-    exit();
-} else {
-    header("Location: editarPefilU.php?toast=Nenhuma alteração foi feita ou ocorreu um erro.&toastType=error");
+$userId = $_SESSION['id_usuario'];
+$stmt = $conn->prepare("UPDATE usuario SET tel_usuario = ?, genero_usuario = ?, email_usuario = ? WHERE id_usuario = ?");
+if (!$stmt) {
+    echo json_encode(['success' => false, 'message' => 'Erro ao preparar consulta: ' . $conn->error]);
     exit();
 }
-
-// Feche a conexão
+$stmt->bind_param("sssi", $telefone, $genero, $email, $userId);
+if ($stmt->execute()) {
+    echo json_encode(['success' => true, 'message' => 'Perfil atualizado com sucesso!']);
+} else {
+    echo json_encode(['success' => false, 'message' => 'Erro ao atualizar perfil: ' . $stmt->error]);
+}
 $stmt->close();
 $conn->close();
+exit();
 ?>

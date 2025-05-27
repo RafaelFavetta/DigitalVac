@@ -1,4 +1,3 @@
-<!-- filepath: c:\xampp\htdocs\DigitalVac 1.2\usuario\editarPerfilU.php -->
 <?php
 session_start();
 require_once '../outros/db_connect.php';
@@ -57,7 +56,7 @@ $email = $user['email_usuario'];
             <div class="col-md-8">
                 <div class="card shadow-lg p-4">
                     <h3 class="text-primary fw-bold">Editar Perfil</h3>
-                    <form action="salvarPerfil.php" method="POST">
+                    <form id="editarPerfilForm" action="salvarPerfil.php" method="POST">
 
                         <div class="mb-3">
                             <label for="telefone" class="form-label"><strong>Telefone:</strong></label>
@@ -102,16 +101,6 @@ $email = $user['email_usuario'];
     </div>
 
     <script>
-        document.querySelector('form').addEventListener('submit', function (e) {
-            const telefone = document.getElementById('telefone').value;
-            const telefoneRegex = /^[0-9]{11}$/;
-
-            if (!telefoneRegex.test(telefone)) {
-                alert('Telefone inválido. Certifique-se de que contém 11 dígitos.');
-                e.preventDefault();
-            }
-        });
-
         // Toast Bootstrap
         function showAlert(type, message) {
             const toastEl = document.getElementById('toast-alert');
@@ -129,13 +118,28 @@ $email = $user['email_usuario'];
             toast.show();
         }
 
-        // Exibe toast se houver mensagem na URL
-        (function () {
-            const params = new URLSearchParams(window.location.search);
-            const msg = params.get('toast');
-            const type = params.get('toastType') || 'primary';
-            if (msg) showAlert(type, msg);
-        })();
+        document.getElementById("editarPerfilForm").addEventListener("submit", function (event) {
+            event.preventDefault();
+            const form = this;
+            const formData = new FormData(form);
+
+            fetch(form.action, {
+                method: "POST",
+                body: formData,
+            })
+            .then((response) => response.json().catch(() => ({success: false, message: "Erro inesperado do servidor."})))
+            .then((data) => {
+                if (data.success) {
+                    showAlert('success', data.message || "Alterações salvas com sucesso!");
+                    setTimeout(() => { window.location.href = "perfilU.php"; }, 1500);
+                } else {
+                    showAlert('error', data.message || "Erro ao salvar alterações.");
+                }
+            })
+            .catch((error) => {
+                showAlert('error', "Ocorreu um erro ao salvar. Tente novamente.");
+            });
+        });
     </script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
