@@ -74,23 +74,23 @@ $pdf = new FPDF();
 $pdf->AddPage();
 $pdf->SetAutoPageBreak(true, 20);
 
-// TOPO: Logo prefeitura à esquerda, logo DigitalVac à direita
-$pdf->Image('../img/logo-prefeitura.png', 10, 10, 35); // Prefeitura à esquerda
-$pdf->Image('../img/logo.png', 165, 10, 35); // DigitalVac à direita
+// Logo prefeitura maior à esquerda (dobrado para 70mm)
+$pdf->Image('../img/logo-prefeitura.png', 10, 10, 70); // 70mm de largura
 
-// Espaço após logos
-$pdf->Ln(28);
+// Logo DigitalVac à direita
+$pdf->Image('../img/logo.png', 150, 10, 35); // 35mm à direita
 
-// Nome do médico (cursiva, centralizado)
-$pdf->SetFont('Times', 'I', 16);
-$pdf->Cell(0, 8, utf8_decode($nome_medico_completo), 0, 1, 'C');
-
-// COREN/CRM (centralizado, menor)
+// Centraliza nome do médico e COREN/CRM em relação à logo DigitalVac
+$pdf->SetXY(150, 48); // Abaixo da logo DigitalVac
+$pdf->SetFont('Times', 'I', 14);
+$pdf->Cell(35, 7, utf8_decode($nome_medico_completo), 0, 2, 'C');
 $pdf->SetFont('Arial', '', 10);
-$pdf->Cell(0, 6, utf8_decode($coren_crm), 0, 1, 'C');
-$pdf->Ln(5);
+$pdf->Cell(35, 6, utf8_decode($coren_crm), 0, 2, 'C');
 
-// Título
+// Abaixa o restante do documento para centralizar melhor
+$pdf->SetY(75);
+
+// Título centralizado
 $pdf->SetFont('Arial', 'B', 18);
 $pdf->Cell(0, 12, utf8_decode('ATESTADO MÉDICO'), 0, 1, 'C');
 $pdf->Ln(5);
@@ -101,8 +101,7 @@ $data_inicio_formatada = date('d/m/Y', strtotime($atestado['data_emissao']));
 $pdf->MultiCell(
     0,
     10,
-    utf8_decode("Atesto para os devidos fins que $nome_paciente esteve sob tratamento médico em meu consultório às ____:____ do dia $data_inicio_formatada. Recomendo o seu afastamento imediato por motivo de: $justificativa.")
-
+    utf8_decode("Atesto para os devidos fins que $nome_paciente esteve sob tratamento médico em meu consultório às ____:____ do dia $data_inicio_formatada. Recomendo o afastamento imediato do paciente por motivo de: $justificativa.")
 );
 $pdf->Ln(2);
 $pdf->MultiCell(
@@ -116,8 +115,14 @@ $pdf->Ln(10);
 $data_formatada = date('d/m/Y', strtotime($atestado['data_emissao']));
 $pdf->Cell(0, 10, utf8_decode("$cidade_pdf, $data_formatada"), 0, 1, 'L');
 
-// Espaço para assinatura do médico centralizada
-$pdf->Ln(25);
+// Frase de validade legal antes da assinatura (mais para o meio da folha)
+$pdf->Ln(35);
+$pdf->SetFont('Arial', 'I', 11);
+$pdf->MultiCell(0, 8, utf8_decode('Este documento é válido para fins de comprovação junto ao empregador ou órgão competente.'), 0, 'C');
+
+// Espaço para assinatura do médico centralizada (mais abaixo)
+$pdf->Ln(30);
+$pdf->SetFont('Arial', '', 12);
 $pdf->Cell(0, 10, utf8_decode('__________________________'), 0, 1, 'C');
 $pdf->Cell(0, 7, utf8_decode($nome_medico_completo), 0, 1, 'C');
 $pdf->Cell(0, 7, utf8_decode('Assinatura do médico'), 0, 1, 'C');
