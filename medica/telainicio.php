@@ -145,7 +145,7 @@ if (!isset($_SESSION['id_medico'])) {
                 O atestado foi gerado com sucesso.
             </div>
             <div class="ms-3 d-flex flex-column gap-1">
-                <a href="download_atestado.php?id=<?php echo intval($_GET['atestado_id']); ?>" class="btn btn-primary btn-sm" target="_blank">
+                <a href="download_atestado.php?id=<?php echo intval($_GET['atestado_id']); ?>" class="btn btn-primary btn-sm">
                     Baixar atestado
                 </a>
                 <button type="button" class="btn btn-outline-secondary btn-sm mt-1" onclick="document.getElementById('atestado-toast').remove();">
