@@ -61,21 +61,14 @@ if (!$cidade) {
     $cidade = "Porto Alegre";
 }
 
-// Função para converter para Windows-1252
-function utf8_to_win1252($str) {
-    return mb_convert_encoding($str, 'Windows-1252', 'UTF-8');
-}
-
-// Converta todos os campos dinâmicos para Windows-1252
-$nome_paciente = utf8_to_win1252($atestado['nome_paciente']);
-$medico_responsavel = utf8_to_win1252($atestado['nome_medico']);
-$coren_crm = utf8_to_win1252($atestado['coren_crm']);
-$justificativa = utf8_to_win1252($atestado['justificativa']);
-$periodo_afastamento = utf8_to_win1252($atestado['periodo_afastamento']);
-$cidade_pdf = utf8_to_win1252($cidade);
-
-// Sempre usar "Dr.(a) Nome"
-$nome_medico_completo = utf8_to_win1252('Dr.(a) ' . $atestado['nome_medico']);
+// Dados para o PDF (mantém UTF-8, igual ao download da médica)
+$nome_paciente = $atestado['nome_paciente'];
+$medico_responsavel = $atestado['nome_medico'];
+$coren_crm = $atestado['coren_crm'];
+$justificativa = $atestado['justificativa'];
+$periodo_afastamento = $atestado['periodo_afastamento'];
+$cidade_pdf = $cidade;
+$nome_medico_completo = 'Dr.(a) ' . $atestado['nome_medico'];
 
 // Cria o PDF usando a biblioteca FPDF
 $pdf = new FPDF();
@@ -91,16 +84,16 @@ $pdf->Ln(28);
 
 // Nome do médico (cursiva, centralizado)
 $pdf->SetFont('Times', 'I', 16);
-$pdf->Cell(0, 8, $nome_medico_completo, 0, 1, 'C');
+$pdf->Cell(0, 8, utf8_decode($nome_medico_completo), 0, 1, 'C');
 
 // COREN/CRM (centralizado, menor)
 $pdf->SetFont('Arial', '', 10);
-$pdf->Cell(0, 6, $coren_crm, 0, 1, 'C');
+$pdf->Cell(0, 6, utf8_decode($coren_crm), 0, 1, 'C');
 $pdf->Ln(5);
 
 // Título
 $pdf->SetFont('Arial', 'B', 18);
-$pdf->Cell(0, 12, utf8_to_win1252('ATESTADO MÉDICO'), 0, 1, 'C');
+$pdf->Cell(0, 12, utf8_decode('ATESTADO MÉDICO'), 0, 1, 'C');
 $pdf->Ln(5);
 
 // Corpo do texto
@@ -109,25 +102,25 @@ $data_inicio_formatada = date('d/m/Y', strtotime($atestado['data_emissao']));
 $pdf->MultiCell(
     0,
     10,
-    utf8_to_win1252("Atesto para os devidos fins que $nome_paciente esteve sob tratamento médico em meu consultório às ____:____ do dia $data_inicio_formatada, necessitando o(a) mesmo(a) de afastamento por motivo de: $justificativa.")
+    utf8_decode("Atesto para os devidos fins que $nome_paciente esteve sob tratamento médico em meu consultório às ____:____ do dia $data_inicio_formatada, necessitando o(a) mesmo(a) de afastamento por motivo de: $justificativa.")
 );
 $pdf->Ln(2);
 $pdf->MultiCell(
     0,
     10,
-    utf8_to_win1252("Período de afastamento: $periodo_afastamento.")
+    utf8_decode("Período de afastamento: $periodo_afastamento.")
 );
 
 // Local e data
 $pdf->Ln(10);
 $data_formatada = date('d/m/Y', strtotime($atestado['data_emissao']));
-$pdf->Cell(0, 10, utf8_to_win1252("$cidade_pdf, $data_formatada"), 0, 1, 'L');
+$pdf->Cell(0, 10, utf8_decode("$cidade_pdf, $data_formatada"), 0, 1, 'L');
 
 // Espaço para assinatura do médico centralizada
 $pdf->Ln(25);
-$pdf->Cell(0, 10, utf8_to_win1252('__________________________'), 0, 1, 'C');
-$pdf->Cell(0, 7, $medico_responsavel, 0, 1, 'C');
-$pdf->Cell(0, 7, utf8_to_win1252('Assinatura do médico'), 0, 1, 'C');
+$pdf->Cell(0, 10, utf8_decode('__________________________'), 0, 1, 'C');
+$pdf->Cell(0, 7, utf8_decode($medico_responsavel), 0, 1, 'C');
+$pdf->Cell(0, 7, utf8_decode('Assinatura do médico'), 0, 1, 'C');
 
 // Saída do PDF para download
 $pdf->Output('D', 'atestado_' . $id_atestado . '.pdf');
