@@ -76,9 +76,12 @@ $pdf = new FPDF();
 $pdf->AddPage();
 $pdf->SetAutoPageBreak(true, 20);
 
-// Centraliza logo
-$pdf->Image('../img/logo.png', 90, 10, 30); // Centralizado para página A4 (210mm de largura)
-$pdf->Ln(30);
+// TOPO: Logo prefeitura à esquerda, logo DigitalVac à direita
+$pdf->Image('../img/logo-prefeitura.png', 10, 10, 35); // Prefeitura à esquerda
+$pdf->Image('../img/logo.png', 165, 10, 35); // DigitalVac à direita
+
+// Espaço após logos
+$pdf->Ln(28);
 
 // Nome do médico (cursiva, centralizado)
 $pdf->SetFont('Times', 'I', 16);
@@ -96,10 +99,17 @@ $pdf->Ln(5);
 
 // Corpo do texto
 $pdf->SetFont('Arial', '', 12);
+$data_inicio_formatada = date('d/m/Y', strtotime($atestado['data_emissao']));
 $pdf->MultiCell(
     0,
     10,
-    utf8_decode("Atesto para os devidos fins que $nome_paciente esteve sob tratamento médico neste consultório, no período de $periodo_afastamento, necessitando o(a) mesmo(a) de afastamento por motivo de: $justificativa.")
+    utf8_decode("Atesto para os devidos fins que $nome_paciente esteve sob tratamento médico em meu consultório no dia $data_inicio_formatada, necessitando o(a) mesmo(a) de afastamento por motivo de: $justificativa.")
+);
+$pdf->Ln(2);
+$pdf->MultiCell(
+    0,
+    10,
+    utf8_decode("Período de afastamento: $periodo_afastamento.")
 );
 
 // Local e data
