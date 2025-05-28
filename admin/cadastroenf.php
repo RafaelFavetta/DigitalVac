@@ -74,7 +74,7 @@
         </div>
     </nav>
 
-    <div class="container d-flex align-items-center justify-content-center vh-100">
+    <div class="container d-flex align-items-center justify-content-center">
         <div class="form-container mx-auto">
             <!-- Toast Bootstrap -->
             <div aria-live="polite" aria-atomic="true" class="position-fixed top-0 start-50 translate-middle-x p-3"
