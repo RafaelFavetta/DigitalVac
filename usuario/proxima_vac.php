@@ -13,6 +13,7 @@ $stmt_user->execute();
 $result_user = $stmt_user->get_result();
 $user_data = $result_user->fetch_assoc();
 
+$vacinas_nao_tomadas = [];
 if ($user_data) {
     $data_nascimento = $user_data['naci_usuario'];
     $idade = date_diff(date_create($data_nascimento), date_create('today'))->y;
@@ -49,10 +50,53 @@ if ($user_data) {
         $vacinas_aplicadas[] = $row['id_vaci'];
     }
 
-    // Filtrar vacinas que o usuário ainda não tomou
-    $vacinas_nao_tomadas = array_filter($vacinas_disponiveis, function ($vacina) use ($vacinas_aplicadas) {
-        return !in_array($vacina['id_vaci'], $vacinas_aplicadas);
+    // Filtro por pesquisa (AJAX)
+    $pesquisa = '';
+    if (
+        isset($_SERVER['HTTP_X_REQUESTED_WITH']) &&
+        strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest' &&
+        isset($_GET['pesquisa'])
+    ) {
+        $pesquisa = trim($_GET['pesquisa']);
+    }
+
+    // Filtrar vacinas que o usuário ainda não tomou e, se pesquisa, filtrar pelo nome
+    $vacinas_nao_tomadas = array_filter($vacinas_disponiveis, function ($vacina) use ($vacinas_aplicadas, $pesquisa) {
+        $nao_tomou = !in_array($vacina['id_vaci'], $vacinas_aplicadas);
+        if ($pesquisa !== '') {
+            return $nao_tomou && (stripos($vacina['nome_vaci'], $pesquisa) !== false);
+        }
+        return $nao_tomou;
     });
+}
+
+// Se for AJAX, retorna só o <tbody>
+if (
+    isset($_SERVER['HTTP_X_REQUESTED_WITH']) &&
+    strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest'
+) {
+    ?>
+    <tbody>
+        <?php if (!empty($vacinas_nao_tomadas)): ?>
+            <?php
+            $rowIndex = 0;
+            foreach ($vacinas_nao_tomadas as $vacina):
+                $rowClass = ($rowIndex === 0) ? 'bg-white' : (($rowIndex % 2 === 1) ? 'table-secondary' : 'bg-white');
+            ?>
+                <tr class="<?php echo $rowClass; ?>">
+                    <td><?= htmlspecialchars($vacina['nome_vaci']) ?></td>
+                    <td><?= $vacina['idade_aplica'] ?> anos</td>
+                    <td><?= $vacina['n_dose'] ?></td>
+                </tr>
+            <?php $rowIndex++; endforeach; ?>
+        <?php else: ?>
+            <tr>
+                <td colspan="3">Nenhuma vacina pendente.</td>
+            </tr>
+        <?php endif; ?>
+    </tbody>
+    <?php
+    exit;
 }
 ?>
 
@@ -229,14 +273,12 @@ if ($user_data) {
         fetch('proxima_vac.php?pesquisa=' + encodeURIComponent(termo), { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
             .then(res => res.text())
             .then(html => {
-                const temp = document.createElement('div');
-                temp.innerHTML = html;
-                const novaTabela = temp.querySelector('#tabela-proxima-vacina');
-                if (novaTabela) document.getElementById('tabela-proxima-vacina').innerHTML = novaTabela.innerHTML;
+                // Atualiza apenas o <tbody>
+                const tbody = document.querySelector('#tabela-proxima-vacina tbody');
+                if (tbody) {
+                    tbody.outerHTML = html;
+                }
             });
-        // Removido btnLimpar.style.display
     });
-
-    // Removido botão customizado "X" e eventos relacionados
 </script>
 </html>
