@@ -67,9 +67,7 @@ $coren_crm = $atestado['coren_crm'];
 $justificativa = $atestado['justificativa'];
 $periodo_afastamento = $atestado['periodo_afastamento'];
 $cidade_pdf = $cidade;
-
-// Sempre usar "Dr.(a) Nome"
-$nome_medico_completo = 'Dr.(a) ' . $atestado['nome_medico'];
+$nome_medico_completo = 'Dr. ' . $atestado['nome_medico'];
 
 // Cria o PDF usando a biblioteca FPDF
 $pdf = new FPDF();
@@ -103,13 +101,14 @@ $data_inicio_formatada = date('d/m/Y', strtotime($atestado['data_emissao']));
 $pdf->MultiCell(
     0,
     10,
-    utf8_decode("Atesto para os devidos fins que $nome_paciente esteve sob tratamento médico em meu consultório às ____:____ do dia $data_inicio_formatada, necessitando o(a) mesmo(a) de afastamento por motivo de: $justificativa.")
+    utf8_decode("Atesto para os devidos fins que $nome_paciente esteve sob tratamento médico em meu consultório às ____:____ do dia $data_inicio_formatada. Recomendo o seu afastamento imediato por motivo de: $justificativa.")
+
 );
 $pdf->Ln(2);
 $pdf->MultiCell(
     0,
     10,
-    utf8_decode("Período de afastamento: $periodo_afastamento.")
+    utf8_decode("Período de afastamento necessário: $periodo_afastamento.")
 );
 
 // Local e data
@@ -120,7 +119,7 @@ $pdf->Cell(0, 10, utf8_decode("$cidade_pdf, $data_formatada"), 0, 1, 'L');
 // Espaço para assinatura do médico centralizada
 $pdf->Ln(25);
 $pdf->Cell(0, 10, utf8_decode('__________________________'), 0, 1, 'C');
-$pdf->Cell(0, 7, utf8_decode($medico_responsavel), 0, 1, 'C');
+$pdf->Cell(0, 7, utf8_decode($nome_medico_completo), 0, 1, 'C');
 $pdf->Cell(0, 7, utf8_decode('Assinatura do médico'), 0, 1, 'C');
 
 // Saída do PDF para download
