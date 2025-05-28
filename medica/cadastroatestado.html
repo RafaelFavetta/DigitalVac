@@ -189,12 +189,13 @@
 
             // Adiciona botão de download se houver atestadoId
             if (type === 'success' && atestadoId) {
-                const btn = document.createElement('a');
-                btn.href = '../medica/download_atestado.php?id=' + encodeURIComponent(atestadoId);
+                // Botão para baixar o atestado sem abrir nova guia
+                const btn = document.createElement('button');
+                btn.type = 'button';
                 btn.className = 'btn btn-success mt-2 fw-bold';
                 btn.textContent = 'Baixar Atestado';
-                btn.target = '_blank';
                 btn.onclick = function() {
+                    window.location = '../medica/download_atestado.php?id=' + encodeURIComponent(atestadoId);
                     setTimeout(() => {
                         // Fecha o toast após o clique no botão
                         const toast = bootstrap.Toast.getOrCreateInstance(toastEl);
