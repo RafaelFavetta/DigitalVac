@@ -12,7 +12,7 @@ if (isset($_GET['pesquisa'])) {
 }
 
 // Consulta com filtro se houver pesquisa
-$sql = "SELECT v.nome_vaci, a.dose_aplicad AS dose_vaci, a.data_aplica, p.nome_posto, m.nome_medico
+$sql = "SELECT v.nome_vaci, a.dose_aplicad AS dose_vaci, a.data_aplica, p.nome_posto, m.nome_medico, v.intervalo_dose
         FROM aplicacao a
         JOIN vacina v ON a.id_vaci = v.id_vaci
         JOIN medico m ON a.id_medico = m.id_medico
@@ -51,6 +51,7 @@ function renderTabelaCarteiraVac($result)
                     <th>Data de Aplicação</th>
                     <th>Posto</th>
                     <th>Médico</th>
+                    <th>Intervalo entre Doses (meses)</th>
                 </tr>
             </thead>
             <tbody>
@@ -69,10 +70,11 @@ function renderTabelaCarteiraVac($result)
                         <td><?php echo htmlspecialchars(date('d/m/Y', strtotime($row['data_aplica']))); ?></td>
                         <td><?php echo htmlspecialchars($row['nome_posto']); ?></td>
                         <td><?php echo htmlspecialchars($row['nome_medico']); ?></td>
+                        <td><?php echo htmlspecialchars($row['intervalo_dose']); ?></td>
                     </tr>
                 <?php $rowIndex++; endwhile; ?>
                 <?php if ($rowIndex === 0): ?>
-                    <tr><td colspan="5">Nenhuma aplicação registrada.</td></tr>
+                    <tr><td colspan="6">Nenhuma aplicação registrada.</td></tr>
                 <?php endif; ?>
             </tbody>
         </table>

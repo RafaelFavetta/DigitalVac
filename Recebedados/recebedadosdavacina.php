@@ -8,10 +8,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $nome_vacina = $_POST["nome"];
     $fabricante = $_POST["fabricante"];
     $lote = $_POST["lote"];
-    $idade_aplica = $_POST["idade_min"];
+    $idade_aplica = $_POST["idade_aplica"];
     $via = $_POST["via"];
     $doses = $_POST["doses"];
-    $intervalo = $_POST['intervalo'];
+    $intervalo = isset($_POST['intervalo']) ? preg_replace('/\D/', '', $_POST['intervalo']) : '';
     $estoque = $_POST['estoque'];
     $origem = isset($_POST['origem']) ? htmlspecialchars($_POST['origem']) : 'admin';
 

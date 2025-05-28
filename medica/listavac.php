@@ -130,7 +130,7 @@ if (!$result) {
                         <th>Idade Aplicação</th>
                         <th>Via de Administração</th>
                         <th>Número de Doses</th>
-                        <th>Intervalo entre Doses</th>
+                        <th>Intervalo entre Doses (meses)</th>
                         <th>Estoque</th>
                     </tr>
                 </thead>

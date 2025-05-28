@@ -86,6 +86,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     exit;
 }
 
+// Se for usar intervalo em alguma lógica, trate como inteiro (meses)
+
 echo json_encode(['success' => false, 'message' => 'Método inválido.']);
 exit;
 ?>
