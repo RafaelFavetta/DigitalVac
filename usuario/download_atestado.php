@@ -109,7 +109,7 @@ $data_inicio_formatada = date('d/m/Y', strtotime($atestado['data_emissao']));
 $pdf->MultiCell(
     0,
     10,
-    utf8_to_win1252("Atesto para os devidos fins que $nome_paciente esteve sob tratamento médico em meu consultório no dia $data_inicio_formatada, necessitando o(a) mesmo(a) de afastamento por motivo de: $justificativa.")
+    utf8_to_win1252("Atesto para os devidos fins que $nome_paciente esteve sob tratamento médico em meu consultório às ____:____ do dia $data_inicio_formatada, necessitando o(a) mesmo(a) de afastamento por motivo de: $justificativa.")
 );
 $pdf->Ln(2);
 $pdf->MultiCell(
