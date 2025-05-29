@@ -94,7 +94,6 @@ if (isset($_GET['delete_id'])) {
     <nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">
         <div class="container-fluid">
             <img src="../img/logo_vetor.png" alt="Logo DigitalVac" width="55" height="55">
-            <a class="navbar-brand fs-4 fw-bold px-3">DigitalVac</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
                 aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -119,8 +118,8 @@ if (isset($_GET['delete_id'])) {
                 </div>
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="btn btn-danger fw-bold" href="../outros/sair.php">
-                            <i class="bi bi-box-arrow-right" style="font-size: 20px;"></i> Sair
+                        <a class="btn btn-danger fw-bold px-2 py-1" style="font-size: 15px; min-width: 70px;" href="../outros/sair.php">
+                            <i class="bi bi-box-arrow-right" style="font-size: 18px;"></i> Sair
                         </a>
                     </li>
                 </ul>

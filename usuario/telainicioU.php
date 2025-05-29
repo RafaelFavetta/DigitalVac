@@ -66,6 +66,12 @@
             bottom: auto;
         }
 
+        .navbar-brand {
+            font-size: 1.5rem !important;
+            font-weight: bold !important;
+            margin-left: 0.5rem !important;
+        }
+
         /* Cards grid centralizado e agrupado (padrão medica/telainicio.php) */
         .cards-outer {
             display: flex;
@@ -102,6 +108,25 @@
             min-width: 220px;
             max-width: 260px;
             width: 100%;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 160px;
+            padding: 0;
+        }
+
+        .card-btn i {
+            font-size: 50px;
+            margin-bottom: 10px;
+        }
+
+        .card-btn span {
+            display: block;
+            font-size: 1.1rem;
+            font-weight: bold;
+            text-align: center;
             margin: 0;
         }
 
@@ -141,8 +166,8 @@
             </div>
             <ul class="navbar-nav ms-auto position-absolute end-0 me-3" style="z-index:2; top:16px;">
                 <li class="nav-item">
-                    <a class="btn btn-danger fw-bold" href="../outros/sair.php">
-                        <i class="bi bi-box-arrow-right" style="font-size: 20px;"></i> Sair
+                    <a class="btn btn-danger fw-bold px-2 py-1" style="font-size: 15px; min-width: 70px;" href="../outros/sair.php">
+                        <i class="bi bi-box-arrow-right" style="font-size: 18px;"></i> Sair
                     </a>
                 </li>
             </ul>
@@ -198,24 +223,24 @@
         <div class="cards-container">
             <div class="row-cards">
                 <a href="perfilU.php"
-                    class="btn btn-primary btn-lg d-flex flex-column align-items-center p-4 fw-bold shadow-sm card-btn">
-                    <i class="bi bi-person-fill" style="font-size: 50px;"></i>
-                    Perfil
+                    class="btn btn-primary btn-lg card-btn shadow-sm">
+                    <i class="bi bi-person-fill"></i>
+                    <span>Perfil</span>
                 </a>
                 <a href="carteira_vac.php"
-                    class="btn btn-primary btn-lg d-flex flex-column align-items-center p-4 fw-bold shadow-sm card-btn">
-                    <i class="bi bi-postcard-heart-fill" style="font-size: 50px;"></i>
-                    Carteira de Vacina
+                    class="btn btn-primary btn-lg card-btn shadow-sm">
+                    <i class="bi bi-postcard-heart-fill"></i>
+                    <span>Carteira de Vacina</span>
                 </a>
                 <a href="proxima_vac.php"
-                    class="btn btn-primary btn-lg d-flex flex-column align-items-center p-4 fw-bold shadow-sm card-btn">
-                    <i class="bi bi-calendar2-week-fill" style="font-size: 50px;"></i>
-                    Próximas Vacinas
+                    class="btn btn-primary btn-lg card-btn shadow-sm">
+                    <i class="bi bi-calendar2-week-fill"></i>
+                    <span>Próximas Vacinas</span>
                 </a>
                 <a href="atestado_medico.php"
-                    class="btn btn-primary btn-lg d-flex flex-column align-items-center p-4 fw-bold shadow-sm card-btn">
-                    <i class="bi bi-clipboard-heart-fill" style="font-size: 50px;"></i>
-                    Atestados
+                    class="btn btn-primary btn-lg card-btn shadow-sm">
+                    <i class="bi bi-clipboard-heart-fill"></i>
+                    <span>Atestados</span>
                 </a>
             </div>
         </div>

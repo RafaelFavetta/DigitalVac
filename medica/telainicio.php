@@ -107,6 +107,27 @@ if (!isset($_SESSION['id_medico'])) {
             max-width: 260px;
             width: 100%;
             margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 160px;
+            /* Remova margens internas extras */
+            padding: 0;
+        }
+
+        .card-btn i {
+            font-size: 50px;
+            margin-bottom: 10px;
+            /* Espaço uniforme entre ícone e texto */
+        }
+
+        .card-btn span {
+            display: block;
+            font-size: 1.1rem;
+            font-weight: bold;
+            text-align: center;
+            margin: 0;
         }
 
         @media (max-width: 991.98px) {
@@ -129,9 +150,41 @@ if (!isset($_SESSION['id_medico'])) {
         .navbar-nav.ms-auto.position-absolute.end-0.me-3 {
             top: 50% !important;
             transform: translateY(-50%);
-            right: 24px;
+            right: 12px;
             left: auto;
             bottom: auto;
+        }
+
+        .navbar .btn-danger {
+            padding: 4px 10px !important;
+            font-size: 15px !important;
+            min-width: 70px;
+        }
+
+        .navbar .nav-link {
+            white-space: nowrap;
+            padding-left: 12px !important;
+            padding-right: 12px !important;
+        }
+
+        .navbar-brand {
+            font-size: 1.5rem !important;
+            font-weight: bold !important;
+            margin-left: 0.5rem !important;
+        }
+
+        .navbar-nav .nav-link {
+            font-size: 1rem !important;
+            padding-left: 10px !important;
+            padding-right: 10px !important;
+        }
+
+        @media (max-width: 991.98px) {
+            .navbar-nav .nav-link {
+                font-size: 1rem !important;
+                padding-left: 10px !important;
+                padding-right: 10px !important;
+            }
         }
     </style>
 </head>
@@ -155,6 +208,7 @@ if (!isset($_SESSION['id_medico'])) {
         </div>
     </div>
     <?php endif; ?>
+    <!-- Navbar padronizada -->
     <nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">
         <div class="container-fluid">
             <div class="navbar-content-center">
@@ -166,8 +220,8 @@ if (!isset($_SESSION['id_medico'])) {
             </div>
             <ul class="navbar-nav ms-auto position-absolute end-0 me-3" style="z-index:2; top:16px;">
                 <li class="nav-item">
-                    <a class="btn btn-danger fw-bold" href="../outros/sair.php">
-                        <i class="bi bi-box-arrow-right" style="font-size: 20px;"></i> Sair
+                    <a class="btn btn-danger fw-bold px-2 py-1" style="font-size: 15px; min-width: 70px;" href="../outros/sair.php">
+                        <i class="bi bi-box-arrow-right" style="font-size: 18px;"></i> Sair
                     </a>
                 </li>
             </ul>
@@ -178,31 +232,36 @@ if (!isset($_SESSION['id_medico'])) {
         <div class="cards-container">
             <div class="row-cards">
                 <a href="cadastroaplic.html"
-                    class="btn btn-primary btn-lg d-flex flex-column align-items-center p-4 fw-bold shadow-sm card-btn">
-                    <i class="bi bi-clipboard2-heart-fill" style="font-size: 50px;"></i>
-                    Aplicação de Vacinas
+                    class="btn btn-primary btn-lg card-btn shadow-sm">
+                    <i class="bi bi-clipboard2-heart-fill"></i>
+                    <span>Aplicação de Vacinas</span>
                 </a>
                 <a href="cadastropac.html"
-                    class="btn btn-primary btn-lg d-flex flex-column align-items-center p-4 fw-bold shadow-sm card-btn">
-                    <i class="bi bi-person-plus-fill" style="font-size: 50px;"></i>
-                    Cadastrar Pacientes
+                    class="btn btn-primary btn-lg card-btn shadow-sm">
+                    <i class="bi bi-person-plus-fill"></i>
+                    <span>Cadastrar Pacientes</span>
                 </a>
                 <a href="listavac.php"
-                    class="btn btn-primary btn-lg d-flex flex-column align-items-center p-4 fw-bold shadow-sm card-btn">
-                    <i class="bi bi-list" style="font-size: 50px;"></i>
-                    Lista de Vacinas
+                    class="btn btn-primary btn-lg card-btn shadow-sm">
+                    <i class="bi bi-list"></i>
+                    <span>Lista de Vacinas</span>
                 </a>
             </div>
             <div class="row-cards">
                 <a href="pesquisa_paciente.php"
-                    class="btn btn-primary btn-lg d-flex flex-column align-items-center p-4 fw-bold shadow-sm card-btn">
-                    <i class="bi bi-person-lines-fill" style="font-size: 50px;"></i>
-                    Pesquisar Pacientes
+                    class="btn btn-primary btn-lg card-btn shadow-sm">
+                    <i class="bi bi-person-lines-fill"></i>
+                    <span>Pesquisar Pacientes</span>
                 </a>
                 <a href="cadastroatestado.html"
-                    class="btn btn-primary btn-lg d-flex flex-column align-items-center p-4 fw-bold shadow-sm card-btn">
-                    <i class="bi bi-clipboard2-plus-fill" style="font-size: 50px;"></i>
-                    Cadastrar Atestado
+                    class="btn btn-primary btn-lg card-btn shadow-sm">
+                    <i class="bi bi-clipboard2-plus-fill"></i>
+                    <span>Cadastrar Atestado</span>
+                </a>
+                <a href="atestado_medico.php"
+                    class="btn btn-primary btn-lg card-btn shadow-sm">
+                    <i class="bi bi-clipboard-heart-fill"></i>
+                    <span>Meus Atestados</span>
                 </a>
             </div>
         </div>

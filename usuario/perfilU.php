@@ -105,6 +105,13 @@ function buscarEnderecoPorCEP($cep)
     <link rel="icon" href="../img/logo.png" type="image/png">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        .navbar-brand {
+            font-size: 1.5rem !important;
+            font-weight: bold !important;
+            margin-left: 0.5rem !important;
+        }
+    </style>
 </head>
 
 <body>
@@ -125,7 +132,6 @@ function buscarEnderecoPorCEP($cep)
         <div class="container-fluid">
             <div class="d-flex align-items-center">
                 <img src="../img/logo_vetor.png" alt="Logo DigitalVac" width="55" height="55">
-                <a class="navbar-brand fs-4 fw-bold ms-2">DigitalVac</a>
             </div>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
                 aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
@@ -149,6 +155,13 @@ function buscarEnderecoPorCEP($cep)
                         <i class="bi bi-clipboard-heart-fill"></i> Atestados
                     </a>
                 </div>
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="btn btn-danger fw-bold px-2 py-1" style="font-size: 15px; min-width: 70px;" href="../outros/sair.php">
+                            <i class="bi bi-box-arrow-right" style="font-size: 18px;"></i> Sair
+                        </a>
+                    </li>
+                </ul>
             </div>
         </div>
     </nav>
@@ -168,9 +181,10 @@ function buscarEnderecoPorCEP($cep)
                                 d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z" />
                         </svg> Editar perfil
                     </a>
-                    <a href="../outros/sair.php" class="btn btn-danger fw-bold mt-3">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor"
-                            class="bi bi-box-arrow-right" viewBox="0 0 16 16">
+                    <a href="../outros/sair.php" class="btn btn-danger fw-bold mt-3 px-2 py-1"
+                        style="font-size: 15px; min-width: 70px;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor"
+                            class="bi bi-box-arrow-right" viewBox="0 0 16 16" style="vertical-align: middle;">
                             <path fill-rule="evenodd"
                                 d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0z" />
                             <path fill-rule="evenodd"

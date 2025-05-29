@@ -2,14 +2,14 @@
 session_start();
 require_once '../outros/db_connect.php';
 
-// Verifica se o ID do usuário está na sessão
-if (!isset($_SESSION['id_usuario'])) {
+// Verifica se o ID do médico está na sessão
+if (!isset($_SESSION['id_medico'])) {
     die("Usuário não autenticado.");
 }
 
-$id_usuario = $_SESSION['id_usuario'];
+$id_medico = $_SESSION['id_medico'];
 
-// Consulta para buscar os atestados relacionados ao usuário
+// Consulta para buscar os atestados cadastrados pelo médico logado
 $sql = "SELECT 
             a.id_atestado, 
             u.nome_usuario AS nome_paciente, 
@@ -20,7 +20,7 @@ $sql = "SELECT
         FROM atestado a
         JOIN usuario u ON a.id_paci = u.id_usuario
         JOIN medico m ON a.id_medico = m.id_medico
-        WHERE a.id_paci = ?
+        WHERE a.id_medico = ?
         ORDER BY a.data_inicio DESC";
 
 $stmt = $conn->prepare($sql);
@@ -29,7 +29,7 @@ if ($stmt === false) {
     die("Erro ao preparar a consulta: " . $conn->error);
 }
 
-$stmt->bind_param("i", $id_usuario);
+$stmt->bind_param("i", $id_medico);
 $stmt->execute();
 $result = $stmt->get_result();
 ?>
@@ -95,20 +95,26 @@ $result = $stmt->get_result();
             </button>
             <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                 <div class="navbar-nav">
-                    <a class="nav-link active fs-6 fw-bold" href="telainicioU.php">
-                        <i class="bi bi-house-fill"></i> Inicio
+                    <a class="nav-link active fs-6 fw-bold" href="telainicio.php">
+                        <i class="bi bi-house-fill"></i> Início
                     </a>
-                    <a class="nav-link active fs-6 fw-bold" href="perfilU.php">
-                        <i class="bi bi-person-fill"></i> Perfil
+                    <a class="nav-link active fs-6 fw-bold" href="cadastroaplic.html">
+                        <i class="bi bi-clipboard2-heart-fill"></i> Aplicação de Vacinas
                     </a>
-                    <a class="nav-link active fs-6 fw-bold" href="carteira_vac.php">
-                        <i class="bi bi-postcard-heart-fill"></i> Carteira de Vacinas
+                    <a class="nav-link active fs-6 fw-bold" href="cadastropac.html">
+                        <i class="bi bi-person-plus-fill"></i> Cadastrar Pacientes
                     </a>
-                    <a class="nav-link active fs-6 fw-bold" href="proxima_vac.php">
-                        <i class="bi bi-calendar2-week-fill"></i> Próximas Vacinas
+                    <a class="nav-link active fs-6 fw-bold" href="listavac.php">
+                        <i class="bi bi-list"></i> Lista de Vacinas
+                    </a>
+                    <a class="nav-link active fs-6 fw-bold" href="pesquisa_paciente.php">
+                        <i class="bi bi-person-lines-fill"></i> Pesquisar Pacientes
+                    </a>
+                    <a class="nav-link active fs-6 fw-bold" href="cadastroatestado.html">
+                        <i class="bi bi-clipboard2-plus-fill"></i> Cadastrar Atestado
                     </a>
                     <a class="nav-link disabled fs-6 fw-bold" aria-disabled="true" href="atestado_medico.php">
-                        <i class="bi bi-clipboard-heart-fill"></i> Atestados
+                        <i class="bi bi-clipboard-heart-fill"></i> Meus Atestados
                     </a>
                 </div>
                 <ul class="navbar-nav ms-auto">
@@ -124,7 +130,7 @@ $result = $stmt->get_result();
 
     <!-- Conteúdo Principal -->
     <div class="container mt-4" style="margin-bottom: 40px;">
-        <h2 class="text-center text-primary fw-bold">Atestados Médicos</h2>
+        <h2 class="text-center text-primary fw-bold">Atestados Cadastrados</h2>
         <div class="row row-cols-1 row-cols-md-3 g-2" style="margin-top:32px; max-width:1200px; margin-left:auto; margin-right:auto;">
         <?php if ($result->num_rows > 0): ?>
             <?php

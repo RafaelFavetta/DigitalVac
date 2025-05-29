@@ -59,11 +59,18 @@ $conn->close();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login Médico</title>
+    <title>DigitalVac</title>
     <link rel="icon" href="../img/logo.png" type="image/png">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
     <link rel="stylesheet" href="../css/telalogin.css">
+    <style>
+        .navbar-brand {
+            font-size: 1.5rem !important;
+            font-weight: bold !important;
+            margin-left: 0.5rem !important;
+        }
+    </style>
 </head>
 
 <body class="bg-light">
@@ -72,6 +79,25 @@ $conn->close();
             <?php echo $erro; ?>
         </div>
     <?php endif; ?>
+
+    <!-- Navbar padronizada -->
+    <nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">
+        <div class="container-fluid">
+            <div class="d-flex align-items-center">
+                <img src="../img/logo_vetor.png" alt="Logo DigitalVac" width="55" height="55">
+                <!-- Removido: <a class="navbar-brand fs-4 fw-bold ms-2">DigitalVac</a> -->
+            </div>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
+                aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                <div class="navbar-nav">
+                    <!-- Apenas login, sem links ativos -->
+                </div>
+            </div>
+        </div>
+    </nav>
 
     <div class="container d-flex justify-content-center align-items-center vh-100">
         <div class="card p-4 shadow-sm" style="width: 400px; position: relative;">

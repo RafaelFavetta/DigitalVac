@@ -41,7 +41,19 @@ $email = $user['email_usuario'];
         <div class="container-fluid">
             <div class="d-flex align-items-center">
                 <img src="../img/logo_vetor.png" alt="Logo DigitalVac" width="55" height="55">
-                <a class="navbar-brand fs-4 fw-bold ms-2">DigitalVac</a>
+            </div>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
+                aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="btn btn-danger fw-bold px-2 py-1" style="font-size: 15px; min-width: 70px;" href="../outros/sair.php">
+                            <i class="bi bi-box-arrow-right" style="font-size: 18px;"></i> Sair
+                        </a>
+                    </li>
+                </ul>
             </div>
         </div>
     </nav>
@@ -78,7 +90,7 @@ $email = $user['email_usuario'];
                                 value="<?php echo htmlspecialchars($email); ?>" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$">
                         </div>
                         <button type="submit" class="btn btn-primary fw-bold">Salvar Alterações</button>
-                        <a href="perfilU.php" class="btn btn-danger fw-bold">Cancelar</a>
+                        <a href="perfilU.php" class="btn btn-danger fw-bold px-2 py-1" style="font-size: 15px; min-width: 70px;">Cancelar</a>
                     </form>
                 </div>
             </div>
