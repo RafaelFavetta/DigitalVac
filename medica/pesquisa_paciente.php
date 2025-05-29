@@ -136,11 +136,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['cpf'])) {
                     <a class="nav-link active fs-6 fw-bold" href="cadastroatestado.html">
                         <i class="bi bi-clipboard2-plus-fill" style="font-size: 20px;"></i> Cadastrar Atestado
                     </a>
+                    <a class="nav-link active fs-6 fw-bold" href="atestado_medico.php">
+                        <i class="bi bi-clipboard-heart-fill" style="font-size: 20px;"></i> Meus Atestados
+                    </a>
                 </div>
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="btn btn-danger fw-bold" href="../outros/sair.php">
-                            <i class="bi bi-box-arrow-right" style="font-size: 20px;"></i> Sair
+                        <a class="btn btn-danger fw-bold px-2 py-1" style="font-size: 15px;" href="../outros/sair.php">
+                            <i class="bi bi-box-arrow-right" style="font-size: 18px;"></i> Sair
                         </a>
                     </li>
                 </ul>
