@@ -160,7 +160,7 @@
             <div class="navbar-content-center">
                 <div class="d-none d-md-flex navbar-hr-left"></div>
                 <div class="navbar-logo-center">
-                    <img src="../img/logo_vetor.png" alt="Logo DigitalVac" width="50" height="50">
+                    <img src="../img/logo_vetor.png" alt="Logo DigitalVac" width="50" height="50" class="me-3">
                 </div>
                 <div class="d-none d-md-flex navbar-hr-right"></div>
             </div>
