@@ -224,6 +224,11 @@ if (
             </form>
         </div>
         <br>
+        <div class="d-flex justify-content-end align-items-center mb-2" style="width:100%;">
+            <a href="https://www.gov.br/saude/pt-br/vacinacao/calendario" target="_blank" class="custom-vac-link">
+                <i class="bi bi-link-45deg me-1"></i> Lista de vacinas
+            </a>
+        </div>
         <div class="table-responsive d-flex justify-content-center" id="tabela-proxima-vacina">
             <div style="width: 100%;">
                 <table class="table table-bordered text-center w-100 mx-auto">
@@ -261,10 +266,7 @@ if (
                 </table>
             </div>
         </div>
-        <p class="text-center mt-4">
-            <a href="https://www.gov.br/saude/pt-br/vacinacao/calendario" target="_blank" class="link">Acesse a lista de
-                vacinas</a>
-        </p>
+        <!-- Removido o botão/link abaixo da tabela -->
     </div>
 </body>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
@@ -285,4 +287,30 @@ if (
             });
     });
 </script>
+<style>
+    .custom-vac-link {
+        display: inline-block;
+        padding: 5px 14px;
+        border-radius: 20px;
+        background: #0d6efd;
+        color: #fff !important;
+        font-weight: 500;
+        font-size: 0.98rem;
+        text-decoration: none;
+        box-shadow: 0 2px 8px rgba(13,110,253,0.08);
+        transition: background 0.2s, box-shadow 0.2s, color 0.2s;
+        margin-top: 0;
+    }
+    .custom-vac-link:hover, .custom-vac-link:focus {
+        background: #084298;
+        color: #fff !important;
+        text-decoration: none;
+        box-shadow: 0 4px 12px rgba(13,110,253,0.15);
+        outline: none;
+    }
+    .custom-vac-link i {
+        font-size: 1.1em;
+        vertical-align: middle;
+    }
+</style>
 </html>
