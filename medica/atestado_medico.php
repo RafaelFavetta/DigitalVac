@@ -9,6 +9,10 @@ if (!isset($_SESSION['id_medico'])) {
 
 $id_medico = $_SESSION['id_medico'];
 
+// Filtro de ordem
+$ordem = (isset($_GET['ordem']) && $_GET['ordem'] === 'asc') ? 'asc' : 'desc';
+$ordem_sql = ($ordem === 'asc') ? 'ASC' : 'DESC';
+
 // Consulta para buscar os atestados cadastrados pelo médico logado
 $sql = "SELECT 
             a.id_atestado, 
@@ -21,7 +25,7 @@ $sql = "SELECT
         JOIN usuario u ON a.id_paci = u.id_usuario
         JOIN medico m ON a.id_medico = m.id_medico
         WHERE a.id_medico = ?
-        ORDER BY a.data_inicio DESC";
+        ORDER BY a.data_inicio $ordem_sql";
 
 $stmt = $conn->prepare($sql);
 
@@ -78,6 +82,47 @@ $result = $stmt->get_result();
             padding: 4px 16px;
             font-size: 1rem;
         }
+
+        .filter-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5em;
+            background: #0d6efd;
+            color: #fff;
+            border: none;
+            border-radius: 22px;
+            padding: 8px 22px;
+            font-size: 1rem;
+            font-weight: 600;
+            box-shadow: 0 2px 10px rgba(13, 110, 253, 0.08);
+            transition: background 0.2s, box-shadow 0.2s;
+            margin-bottom: 18px;
+        }
+
+        .filter-btn:hover,
+        .filter-btn:focus {
+            background: #084298;
+            color: #fff;
+            box-shadow: 0 4px 16px rgba(13, 110, 253, 0.18);
+            outline: none;
+            text-decoration: none;
+        }
+
+        .filter-btn i {
+            font-size: 1.2em;
+        }
+
+        .filter-bar {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            margin-bottom: 0;
+            border-bottom: none !important; /* Remove qualquer linha inferior */
+        }
+        /* Remove linha inferior padrão do Bootstrap para .filter-bar se houver */
+        .filter-bar, .filter-bar + hr, .filter-bar:after {
+            border-bottom: none !important;
+        }
     </style>
 </head>
 
@@ -131,6 +176,12 @@ $result = $stmt->get_result();
     <!-- Conteúdo Principal -->
     <div class="container mt-4" style="margin-bottom: 40px;">
         <h2 class="text-center text-primary fw-bold">Atestados Cadastrados</h2>
+        <div class="filter-bar">
+            <a href="?ordem=<?php echo $ordem === 'desc' ? 'asc' : 'desc'; ?>" class="filter-btn" title="Alterar ordem dos atestados">
+                <i class="bi <?php echo $ordem === 'desc' ? 'bi-sort-down' : 'bi-sort-up'; ?>"></i>
+                <?php echo $ordem === 'desc' ? 'Mais recentes primeiro' : 'Mais antigos primeiro'; ?>
+            </a>
+        </div>
         <div class="row row-cols-1 row-cols-md-3 g-2" style="margin-top:32px; max-width:1200px; margin-left:auto; margin-right:auto;">
         <?php if ($result->num_rows > 0): ?>
             <?php
