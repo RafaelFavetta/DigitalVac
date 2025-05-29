@@ -39,11 +39,17 @@ $result = $stmt->get_result();
 
 <head>
     <meta charset="UTF-8">
-    <title>DigitalVac - Atestados Cadastrados</title>
+    <title>DigitalVac</title>
     <link rel="icon" href="../img/logo.png" type="image/png">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
     <style>
+        .navbar-brand {
+            font-size: 1.5rem !important;
+            font-weight: bold !important;
+            margin-left: 0.5rem !important;
+        }
+
         .container {
             max-width: 95%;
         }
@@ -82,7 +88,6 @@ $result = $stmt->get_result();
         <div class="container-fluid">
             <div class="d-flex align-items-center">
                 <img src="../img/logo_vetor.png" alt="Logo DigitalVac" width="55" height="55">
-                <a class="navbar-brand fs-4 fw-bold ms-2">DigitalVac</a>
             </div>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
                 aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
@@ -158,6 +163,14 @@ $result = $stmt->get_result();
                             <?php echo htmlspecialchars(date('d/m/Y', strtotime($row['data_emissao']))); ?></p>
                         <p><strong>Justificativa:</strong> <?php echo htmlspecialchars($row['justificativa']); ?></p>
                         <p><strong>Período de Afastamento:</strong> <?php echo htmlspecialchars($row['periodo_afastamento']); ?> dia(s)</p>
+                        <?php
+                        // Busca a data de término do afastamento
+                        $data_fim_formatada = '';
+                        if (!empty($data_fim)) {
+                            $data_fim_formatada = date('d/m/Y', strtotime($data_fim));
+                        }
+                        ?>
+                        <p><strong>Término de Afastamento:</strong> <?php echo htmlspecialchars($data_fim_formatada); ?></p>
                         <div class="text-center mt-3">
                             <a href="download_atestado.php?id=<?php echo $row['id_atestado']; ?>" class="btn btn-primary">Baixar o atestado</a>
                         </div>

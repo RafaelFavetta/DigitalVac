@@ -106,6 +106,12 @@ if (
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
 
     <style>
+        .navbar-brand {
+            font-size: 1.5rem !important;
+            font-weight: bold !important;
+            margin-left: 0.5rem !important;
+        }
+
         .container {
             max-width: 95%;
         }
@@ -158,7 +164,6 @@ if (
         <div class="container-fluid">
             <div class="d-flex align-items-center">
                 <img src="../img/logo_vetor.png" alt="Logo DigitalVac" width="55" height="55">
-                <a class="navbar-brand fs-4 fw-bold ms-2">DigitalVac</a>
             </div>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
                 aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
@@ -182,14 +187,13 @@ if (
                         <i class="bi bi-clipboard-heart-fill"></i> Atestados
                     </a>
                 </div>
-                <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-                    <ul class="navbar-nav ms-auto">
-                        <li class="nav-item">
-                            <a class="btn btn-danger fw-bold" href="../outros/sair.php">
-                                <i class="bi bi-box-arrow-right" style="font-size: 20px;"></i> Sair</a>
-                        </li>
-                    </ul>
-                </div>
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="btn btn-danger fw-bold px-2 py-1" style="font-size: 15px; min-width: 70px;" href="../outros/sair.php">
+                            <i class="bi bi-box-arrow-right" style="font-size: 18px;"></i> Sair
+                        </a>
+                    </li>
+                </ul>
             </div>
         </div>
     </nav>

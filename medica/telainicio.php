@@ -107,6 +107,27 @@ if (!isset($_SESSION['id_medico'])) {
             max-width: 260px;
             width: 100%;
             margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 160px;
+            /* Remova margens internas extras */
+            padding: 0;
+        }
+
+        .card-btn i {
+            font-size: 50px;
+            margin-bottom: 10px;
+            /* Espaço uniforme entre ícone e texto */
+        }
+
+        .card-btn span {
+            display: block;
+            font-size: 1.1rem;
+            font-weight: bold;
+            text-align: center;
+            margin: 0;
         }
 
         @media (max-width: 991.98px) {
@@ -147,7 +168,9 @@ if (!isset($_SESSION['id_medico'])) {
         }
 
         .navbar-brand {
-            font-size: 1.25rem !important;
+            font-size: 1.5rem !important;
+            font-weight: bold !important;
+            margin-left: 0.5rem !important;
         }
 
         .navbar-nav .nav-link {
@@ -185,48 +208,23 @@ if (!isset($_SESSION['id_medico'])) {
         </div>
     </div>
     <?php endif; ?>
+    <!-- Navbar padronizada -->
     <nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">
         <div class="container-fluid">
-            <div class="d-flex align-items-center">
-                <img src="../img/logo_vetor.png" alt="Logo DigitalVac" width="40" height="40">
-                <a class="navbar-brand fs-5 fw-bold ms-2">DigitalVac</a>
-            </div>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
-                aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-                <div class="navbar-nav">
-                    <a class="nav-link active fs-6 fw-semibold px-2" href="telainicio.php">
-                        <i class="bi bi-house-fill"></i> Início
-                    </a>
-                    <a class="nav-link active fs-6 fw-semibold px-2" href="cadastroaplic.html">
-                        <i class="bi bi-clipboard2-heart-fill"></i> Aplicação de Vacinas
-                    </a>
-                    <a class="nav-link active fs-6 fw-semibold px-2" href="cadastropac.html">
-                        <i class="bi bi-person-plus-fill"></i> Cadastrar Pacientes
-                    </a>
-                    <a class="nav-link active fs-6 fw-semibold px-2" href="listavac.php">
-                        <i class="bi bi-list"></i> Lista de Vacinas
-                    </a>
-                    <a class="nav-link active fs-6 fw-semibold px-2" href="pesquisa_paciente.php">
-                        <i class="bi bi-person-lines-fill"></i> Pesquisar Pacientes
-                    </a>
-                    <a class="nav-link active fs-6 fw-semibold px-2" href="cadastroatestado.html">
-                        <i class="bi bi-clipboard2-plus-fill"></i> Cadastrar Atestado
-                    </a>
-                    <a class="nav-link active fs-6 fw-semibold px-2" href="atestado_medico.php">
-                        <i class="bi bi-clipboard-heart-fill"></i> Meus Atestados
-                    </a>
+            <div class="navbar-content-center">
+                <div class="d-none d-md-flex navbar-hr-left"></div>
+                <div class="navbar-logo-center">
+                    <img src="../img/logo_vetor.png" alt="Logo DigitalVac" width="50" height="50">
                 </div>
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a class="btn btn-danger fw-bold px-2 py-1 ms-2" style="font-size: 15px; min-width: 70px;" href="../outros/sair.php">
-                            <i class="bi bi-box-arrow-right" style="font-size: 18px;"></i> Sair
-                        </a>
-                    </li>
-                </ul>
+                <div class="d-none d-md-flex navbar-hr-right"></div>
             </div>
+            <ul class="navbar-nav ms-auto position-absolute end-0 me-3" style="z-index:2; top:16px;">
+                <li class="nav-item">
+                    <a class="btn btn-danger fw-bold px-2 py-1" style="font-size: 15px; min-width: 70px;" href="../outros/sair.php">
+                        <i class="bi bi-box-arrow-right" style="font-size: 18px;"></i> Sair
+                    </a>
+                </li>
+            </ul>
         </div>
     </nav>
 
@@ -234,36 +232,36 @@ if (!isset($_SESSION['id_medico'])) {
         <div class="cards-container">
             <div class="row-cards">
                 <a href="cadastroaplic.html"
-                    class="btn btn-primary btn-lg d-flex flex-column align-items-center p-4 fw-bold shadow-sm card-btn">
-                    <i class="bi bi-clipboard2-heart-fill" style="font-size: 50px;"></i>
-                    Aplicação de Vacinas
+                    class="btn btn-primary btn-lg card-btn shadow-sm">
+                    <i class="bi bi-clipboard2-heart-fill"></i>
+                    <span>Aplicação de Vacinas</span>
                 </a>
                 <a href="cadastropac.html"
-                    class="btn btn-primary btn-lg d-flex flex-column align-items-center p-4 fw-bold shadow-sm card-btn">
-                    <i class="bi bi-person-plus-fill" style="font-size: 50px;"></i>
-                    Cadastrar Pacientes
+                    class="btn btn-primary btn-lg card-btn shadow-sm">
+                    <i class="bi bi-person-plus-fill"></i>
+                    <span>Cadastrar Pacientes</span>
                 </a>
                 <a href="listavac.php"
-                    class="btn btn-primary btn-lg d-flex flex-column align-items-center p-4 fw-bold shadow-sm card-btn">
-                    <i class="bi bi-list" style="font-size: 50px;"></i>
-                    Lista de Vacinas
+                    class="btn btn-primary btn-lg card-btn shadow-sm">
+                    <i class="bi bi-list"></i>
+                    <span>Lista de Vacinas</span>
                 </a>
             </div>
             <div class="row-cards">
                 <a href="pesquisa_paciente.php"
-                    class="btn btn-primary btn-lg d-flex flex-column align-items-center p-4 fw-bold shadow-sm card-btn">
-                    <i class="bi bi-person-lines-fill" style="font-size: 50px;"></i>
-                    Pesquisar Pacientes
+                    class="btn btn-primary btn-lg card-btn shadow-sm">
+                    <i class="bi bi-person-lines-fill"></i>
+                    <span>Pesquisar Pacientes</span>
                 </a>
                 <a href="cadastroatestado.html"
-                    class="btn btn-primary btn-lg d-flex flex-column align-items-center p-4 fw-bold shadow-sm card-btn">
-                    <i class="bi bi-clipboard2-plus-fill" style="font-size: 50px;"></i>
-                    Cadastrar Atestado
+                    class="btn btn-primary btn-lg card-btn shadow-sm">
+                    <i class="bi bi-clipboard2-plus-fill"></i>
+                    <span>Cadastrar Atestado</span>
                 </a>
                 <a href="atestado_medico.php"
-                    class="btn btn-primary btn-lg d-flex flex-column align-items-center p-4 fw-bold shadow-sm card-btn">
-                    <i class="bi bi-clipboard-heart-fill" style="font-size: 50px;"></i>
-                    Meus Atestados
+                    class="btn btn-primary btn-lg card-btn shadow-sm">
+                    <i class="bi bi-clipboard-heart-fill"></i>
+                    <span>Meus Atestados</span>
                 </a>
             </div>
         </div>
