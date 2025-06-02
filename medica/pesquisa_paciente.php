@@ -4,36 +4,34 @@ include('../outros/db_connect.php');
 include('../Recebedados/validacoes.php'); // Include validation functions
 session_start();
 
+$erro = "";
+
 if (!isset($_SESSION['id_medico'])) {
     header("Location: login.php");
     exit();
 }
 
-$erro = "";
-$pacientes = [];
-
-// Pesquisa de pacientes
-if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['cpf'])) {
+// Verifica se o formulário foi enviado
+$cpf = '';
+if (isset($_GET['cpf'])) {
     $cpf = preg_replace('/[^0-9]/', '', $_GET['cpf']); // Remove caracteres não numéricos
-    $stmt = $conn->prepare("SELECT * FROM usuario WHERE cpf LIKE CONCAT('%', ?, '%')"); // Busca parcial por CPF
-    $stmt->bind_param("s", $cpf);
-    $stmt->execute();
-    $result = $stmt->get_result();
-
-    if ($result->num_rows > 0) {
-        $pacientes = $result->fetch_all(MYSQLI_ASSOC);
-    } else {
-        $erro = "Nenhum paciente encontrado.";
-    }
-} else {
-    // Exibe todos os pacientes se nenhum CPF for pesquisado
-    $result = $conn->query("SELECT * FROM usuario");
-    if ($result->num_rows > 0) {
-        $pacientes = $result->fetch_all(MYSQLI_ASSOC);
-    }
 }
-?>
 
+// Consulta SQL para buscar pacientes
+$sql = "SELECT * FROM usuario";
+if (!empty($cpf)) {
+    $sql = "SELECT * FROM usuario WHERE cpf = ?";
+}
+
+$stmt = $conn->prepare($sql);
+
+if (!empty($cpf)) {
+    $stmt->bind_param('s', $cpf); // Vincula o CPF como parâmetro
+}
+
+$stmt->execute();
+$result = $stmt->get_result();
+?>
 <!DOCTYPE html>
 <html lang="pt-BR">
 
@@ -86,7 +84,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['cpf'])) {
         .btn-outline-danger {
             border-color: red;
             color: red;
-            width: 220px; /* Aumenta o comprimento do botão */
+            width: 220px;
+            /* Aumenta o comprimento do botão */
         }
 
         .btn-outline-danger:hover {
@@ -95,13 +94,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['cpf'])) {
         }
 
         .btn-outline-success {
-            width: 220px; /* Aumenta o comprimento do botão */
+            width: 220px;
+            /* Aumenta o comprimento do botão */
         }
 
         /* Destaque para o bloco dos títulos */
         .table thead th {
-            background-color: #0d6efd; /* Azul do site */
-            color: white; /* Texto branco */
+            background-color: #0d6efd;
+            /* Azul do site */
+            color: white;
+            /* Texto branco */
             font-weight: bold;
         }
     </style>
@@ -155,36 +157,34 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['cpf'])) {
 
     <div class="container mt-4">
         <h2 class="text-center text-primary fw-bold">Pesquisar Pacientes</h2>
-        <div class="text-end mb-3">
-            <!-- Removido o botão "Cadastrar Atestado" daqui -->
-        </div>
         <div class="container-fluid col-md-6 mt-4">
             <form class="d-flex position-relative" role="search" method="get" action="pesquisa_paciente.php" id="form-pesquisa-cpf">
                 <input class="form-control me-2 border border-primary fw-bold" type="search" name="cpf" id="cpf"
                     placeholder="Digite o CPF" aria-label="CPF" value="<?php echo isset($cpf) ? htmlspecialchars($cpf) : ''; ?>" autocomplete="off">
-                <!-- Removido botão customizado "X" -->
             </form>
         </div>
         <br>
         <div id="tabela-pacientes" class="d-flex justify-content-center">
-        <?php if (!empty($pacientes)): ?>
             <table class="table table-bordered text-center mx-auto">
                 <thead>
                     <tr>
+                        <th>ID</th>
                         <th>Nome</th>
                         <th>CPF</th>
-                        <th>Data de Nascimento</th>
-                        <th>Telefone</th>
                         <th>E-mail</th>
-                        <th>Tipo Sanguíneo</th>
-                        <th>Peso (kg)</th>
+                        <th>Telefone</th>
                         <th>Gênero</th>
+                        <th>Data de Nascimento</th>
+                        <th>Peso</th>
+                        <th>Tipo Sanguíneo</th>
+                        <th>Ações</th>
                     </tr>
                 </thead>
                 <tbody>
                     <?php
                     $rowIndex = 0;
-                    foreach ($pacientes as $paciente):
+                    while ($row = $result->fetch_assoc()):
+                        // Primeira linha branca, depois alterna entre cinza e branco
                         if ($rowIndex === 0) {
                             $rowClass = 'bg-white';
                         } else {
@@ -192,28 +192,39 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['cpf'])) {
                         }
                     ?>
                         <tr class="<?php echo $rowClass; ?>">
-                            <td><?php echo htmlspecialchars($paciente['nome_usuario']); ?></td>
-                            <td><?php echo htmlspecialchars($paciente['cpf']); ?></td>
-                            <td><?php echo htmlspecialchars(date('d/m/Y', strtotime($paciente['naci_usuario']))); ?></td>
-                            <td><?php echo htmlspecialchars($paciente['tel_usuario']); ?></td>
-                            <td><?php echo htmlspecialchars($paciente['email_usuario']); ?></td>
-                            <td><?php echo htmlspecialchars($paciente['tipo_sang_usuario']); ?></td>
-                            <td><?php echo htmlspecialchars($paciente['peso_usuario']); ?></td>
-                            <td><?php echo htmlspecialchars($paciente['genero_usuario']); ?></td>
+                            <td><?php echo htmlspecialchars($row['id_usuario']); ?></td>
+                            <td><?php echo htmlspecialchars($row['nome_usuario']); ?></td>
+                            <td><?php echo htmlspecialchars($row['cpf']); ?></td>
+                            <td><?php echo htmlspecialchars($row['email_usuario']); ?></td>
+                            <td><?php echo htmlspecialchars($row['tel_usuario']); ?></td>
+                            <td><?php echo htmlspecialchars($row['genero_usuario']); ?></td>
+                            <td><?php echo htmlspecialchars($row['naci_usuario']); ?></td>
+                            <td><?php echo htmlspecialchars($row['peso_usuario']); ?></td>
+                            <td><?php echo htmlspecialchars($row['tipo_sang_usuario']); ?></td>
+                            <td>
+                                <a href="editar_paciente.php?id=<?php echo $row['id_usuario']; ?>" class="btn btn-sm btn-warning mb-1" title="Editar Perfil">
+                                    <i class="bi bi-pencil-square"></i>
+                                </a>
+                                <a href="ver_paciente.php?id=<?php echo $row['id_usuario']; ?>" class="btn btn-sm btn-info mb-1" title="Ver Informações">
+                                    <i class="bi bi-info-circle"></i>
+                                </a>
+                                <a href="historico_vacinacao.php?id=<?php echo $row['id_usuario']; ?>" class="btn btn-sm btn-success mb-1" title="Ver Histórico de Vacinação">
+                                    <i class="bi bi-journal-medical"></i>
+                                </a>
+                            </td>
                         </tr>
-                    <?php $rowIndex++; endforeach; ?>
+                    <?php $rowIndex++; endwhile; ?>
                 </tbody>
             </table>
-        <?php elseif ($erro): ?>
-            <p class="alert alert-warning text-center"><?php echo htmlspecialchars($erro); ?></p>
-        <?php endif; ?>
         </div>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
     <script>
         $(document).ready(function () {
             $('#cpf').mask('000.000.000-00');
-            // Pesquisa automática AJAX
             $('#cpf').on('input', function () {
                 var cpf = $(this).val();
                 $.ajax({
@@ -229,15 +240,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['cpf'])) {
                         }
                     }
                 });
-                // Removido btnLimpar.toggle
             });
-
-            // Removido botão customizado "X" e eventos relacionados
         });
     </script>
 </body>
 </html>
-
 <?php
 $conn->close();
 ?>
