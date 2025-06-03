@@ -142,7 +142,6 @@ if (!$result) {
                         <th>Número de Doses</th>
                         <th>Intervalo entre Doses (meses)</th>
                         <th>Estoque</th>
-                        <th>Ações</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -165,11 +164,6 @@ if (!$result) {
                         <td><?php echo htmlspecialchars($row['n_dose']); ?></td>
                         <td><?php echo htmlspecialchars($row['intervalo_dose']); ?></td>
                         <td><?php echo htmlspecialchars($row['estoque']); ?></td>
-                        <td>
-                            <a href="ver_vacina.php?id_vaci=<?php echo urlencode($row['id_vaci']); ?>" class="btn btn-info btn-sm fw-bold">
-                                <i class="bi bi-info-circle"></i> Ver informações
-                            </a>
-                        </td>
                     </tr>
                     <?php $rowIndex++; endwhile; ?>
                 </tbody>

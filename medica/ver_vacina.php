@@ -8,9 +8,8 @@ if (!isset($_SESSION['id_medico'])) {
 }
 
 $id_aplica = isset($_GET['id_aplica']) ? intval($_GET['id_aplica']) : 0;
-$id_vaci = isset($_GET['id_vaci']) ? intval($_GET['id_vaci']) : 0;
-if ($id_aplica <= 0 && $id_vaci <= 0) {
-    echo "Aplicação ou vacina inválida.";
+if ($id_aplica <= 0) {
+    echo "Aplicação inválida.";
     exit;
 }
 
@@ -37,60 +36,36 @@ function formatarCorenCrm($coren) {
     return $coren;
 }
 
-if ($id_aplica > 0) {
-    // Busca dados da aplicação e da vacina
-    $sql = "SELECT 
-                a.*, 
-                v.nome_vaci, v.fabri_vaci, v.lote_vaci, v.idade_aplica, v.via_adimicao, v.n_dose, v.intervalo_dose, v.estoque,
-                u.nome_usuario, u.cpf, u.email_usuario,
-                p.nome_posto,
-                m.nome_medico, m.coren_crm
-            FROM aplicacao a
-            JOIN vacina v ON a.id_vaci = v.id_vaci
-            JOIN usuario u ON a.id_usuario = u.id_usuario
-            JOIN posto p ON a.id_posto = p.id_posto
-            JOIN medico m ON a.id_medico = m.id_medico
-            WHERE a.id_aplica = ?";
-    $stmt = $conn->prepare($sql);
-    if (!$stmt) {
-        echo "Erro ao preparar consulta: " . $conn->error;
-        exit;
-    }
-    $stmt->bind_param("i", $id_aplica);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    if (!$result || $result->num_rows === 0) {
-        echo "Aplicação não encontrada.";
-        exit;
-    }
-    $row = $result->fetch_assoc();
-
-    // Verificações para campos possivelmente nulos
-    $data_aplica = !empty($row['data_aplica']) ? date('d/m/Y', strtotime($row['data_aplica'])) : '';
-    $dose_aplicad = isset($row['dose_aplicad']) ? $row['dose_aplicad'] : '';
-} elseif ($id_vaci > 0) {
-    // Busca apenas dados da vacina
-    $sql = "SELECT 
-                v.nome_vaci, v.fabri_vaci, v.lote_vaci, v.idade_aplica, v.via_adimicao, v.n_dose, v.intervalo_dose, v.estoque
-            FROM vacina v
-            WHERE v.id_vaci = ?";
-    $stmt = $conn->prepare($sql);
-    if (!$stmt) {
-        echo "Erro ao preparar consulta: " . $conn->error;
-        exit;
-    }
-    $stmt->bind_param("i", $id_vaci);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    if (!$result || $result->num_rows === 0) {
-        echo "Vacina não encontrada.";
-        exit;
-    }
-    $row = $result->fetch_assoc();
-    // Preenche campos de aplicação como vazio
-    $data_aplica = '';
-    $dose_aplicad = '';
+// Busca dados da aplicação e da vacina
+$sql = "SELECT 
+            a.*, 
+            v.nome_vaci, v.fabri_vaci, v.lote_vaci, v.idade_aplica, v.via_adimicao, v.n_dose, v.intervalo_dose, v.estoque,
+            u.nome_usuario, u.cpf, u.email_usuario,
+            p.nome_posto,
+            m.nome_medico, m.coren_crm
+        FROM aplicacao a
+        JOIN vacina v ON a.id_vaci = v.id_vaci
+        JOIN usuario u ON a.id_usuario = u.id_usuario
+        JOIN posto p ON a.id_posto = p.id_posto
+        JOIN medico m ON a.id_medico = m.id_medico
+        WHERE a.id_aplica = ?";
+$stmt = $conn->prepare($sql);
+if (!$stmt) {
+    echo "Erro ao preparar consulta: " . $conn->error;
+    exit;
 }
+$stmt->bind_param("i", $id_aplica);
+$stmt->execute();
+$result = $stmt->get_result();
+if (!$result || $result->num_rows === 0) {
+    echo "Aplicação não encontrada.";
+    exit;
+}
+$row = $result->fetch_assoc();
+
+// Verificações para campos possivelmente nulos
+$data_aplica = !empty($row['data_aplica']) ? date('d/m/Y', strtotime($row['data_aplica'])) : '';
+$dose_aplicad = isset($row['dose_aplicad']) ? $row['dose_aplicad'] : '';
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -154,9 +129,7 @@ if ($id_aplica > 0) {
     <div class="container">
         <div class="card mx-auto" style="max-width: 700px;">
             <h2 class="card-title mb-4">Informações da Vacina Aplicada</h2>
-            <?php if ($id_aplica > 0): ?>
             <h5 class="mb-3">Paciente: <?php echo htmlspecialchars($row['nome_usuario']); ?> (CPF: <?php echo htmlspecialchars(formatarCPF($row['cpf'])); ?>)</h5>
-            <?php endif; ?>
             <h6 class="mb-3">Vacina: <?php echo htmlspecialchars($row['nome_vaci']); ?></h6>
             <ul class="list-group mb-3">
                 <li class="list-group-item"><strong>Fabricante:</strong> <?php echo htmlspecialchars($row['fabri_vaci']); ?></li>
@@ -167,7 +140,6 @@ if ($id_aplica > 0) {
                 <li class="list-group-item"><strong>Intervalo entre Doses:</strong> <?php echo htmlspecialchars($row['intervalo_dose']); ?> meses</li>
                 <li class="list-group-item"><strong>Estoque Atual:</strong> <?php echo htmlspecialchars($row['estoque']); ?></li>
             </ul>
-            <?php if ($id_aplica > 0): ?>
             <h6 class="mb-3">Informações da Aplicação</h6>
             <ul class="list-group mb-3">
                 <li class="list-group-item"><strong>Data da Aplicação:</strong> <?php echo htmlspecialchars($data_aplica); ?></li>
@@ -189,7 +161,6 @@ if ($id_aplica > 0) {
                     ?>
                 </li>
             </ul>
-            <?php endif; ?>
             <a href="javascript:history.back()" class="btn btn-secondary btn-back"><i class="bi bi-arrow-left"></i> Voltar</a>
         </div>
     </div>
