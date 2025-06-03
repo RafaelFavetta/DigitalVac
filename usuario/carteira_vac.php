@@ -116,10 +116,6 @@ if (
             max-width: 95%;
         }
 
-        .table-responsive {
-            /* min-width: 700px; */ /* Removido para padrão Bootstrap */
-        }
-
         .table {
             background: white;
             border-radius: 10px;
