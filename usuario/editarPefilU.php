@@ -23,10 +23,6 @@ $nome = $user['nome_usuario'];
 $telefone = $user['tel_usuario'];
 $genero = $user['genero_usuario'];
 $email = $user['email_usuario'];
-$peso = $user['peso_usuario'];
-$alergias = $user['ale_usuario'];
-$doencas = $user['doen_usuario'];
-$medicamentos = $user['med_usuario'];
 ?>
 
 <!DOCTYPE html>
@@ -38,6 +34,7 @@ $medicamentos = $user['med_usuario'];
     <title>Editar Perfil - DigitalVac</title>
     <link rel="icon" href="../img/logo.png" type="image/png">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
 </head>
 
 <body>
@@ -51,6 +48,23 @@ $medicamentos = $user['med_usuario'];
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                <div class="navbar-nav">
+                    <a class="nav-link active fs-6 fw-bold" href="telainicioU.php">
+                        <i class="bi bi-house-fill"></i> Inicio
+                    </a>
+                    <a class="nav-link active fs-6 fw-bold" href="perfilU.php">
+                        <i class="bi bi-person-fill"></i> Perfil
+                    </a>
+                    <a class="nav-link active fs-6 fw-bold" href="carteira_vac.php">
+                        <i class="bi bi-postcard-heart-fill"></i> Carteira de Vacinas
+                    </a>
+                    <a class="nav-link active fs-6 fw-bold" href="proxima_vac.php">
+                        <i class="bi bi-calendar2-week-fill"></i> Próximas Vacinas
+                    </a>
+                    <a class="nav-link active fs-6 fw-bold" href="atestado_medico.php">
+                        <i class="bi bi-clipboard-heart-fill"></i> Atestados
+                    </a>
+                </div>
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
                         <a class="btn btn-danger fw-bold px-2 py-1" style="font-size: 15px; min-width: 70px;" href="../outros/sair.php">
@@ -91,26 +105,7 @@ $medicamentos = $user['med_usuario'];
                             <input type="email" class="form-control" id="email" name="email"
                                 value="<?php echo htmlspecialchars($email); ?>" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$">
                         </div>
-                        <div class="mb-3">
-                            <label for="peso" class="form-label"><strong>Peso (kg):</strong></label>
-                            <input type="number" class="form-control" id="peso" name="peso"
-                                value="<?php echo htmlspecialchars($peso); ?>" min="1" step="0.01" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="alergias" class="form-label"><strong>Alergias:</strong></label>
-                            <input type="text" class="form-control" id="alergias" name="alergias"
-                                value="<?php echo htmlspecialchars($alergias); ?>">
-                        </div>
-                        <div class="mb-3">
-                            <label for="doencas" class="form-label"><strong>Doenças:</strong></label>
-                            <input type="text" class="form-control" id="doencas" name="doencas"
-                                value="<?php echo htmlspecialchars($doencas); ?>">
-                        </div>
-                        <div class="mb-3">
-                            <label for="medicamentos" class="form-label"><strong>Medicamentos:</strong></label>
-                            <input type="text" class="form-control" id="medicamentos" name="medicamentos"
-                                value="<?php echo htmlspecialchars($medicamentos); ?>">
-                        </div>
+                        <!-- Campos abaixo de email removidos -->
                         <button type="submit" class="btn btn-primary fw-bold">Salvar Alterações</button>
                         <a href="perfilU.php" class="btn btn-danger fw-bold px-2 py-1" style="font-size: 15px; min-width: 70px;">Cancelar</a>
                     </form>
@@ -137,8 +132,9 @@ $medicamentos = $user['med_usuario'];
     <script>
         // Máscara para telefone brasileiro (celular e fixo)
         new Cleave('#telefone', {
-            phone: true,
-            phoneRegionCode: 'BR'
+            delimiters: ['(', ') ', '-'],
+            blocks: [0, 2, 5, 4],
+            numericOnly: true
         });
 
         // Toast Bootstrap
