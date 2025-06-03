@@ -112,6 +112,8 @@ $cidade = $user['cidade'];
     <link rel="icon" href="../img/logo.png" type="image/png">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/cleave.js"></script>
     <style>
         .navbar-brand {
             font-size: 1.5rem !important;
@@ -186,7 +188,7 @@ $cidade = $user['cidade'];
                     <?php elseif ($erro): ?>
                         <div class="alert alert-danger"><?php echo htmlspecialchars($erro); ?></div>
                     <?php endif; ?>
-                    <form method="post" autocomplete="off">
+                    <form method="post" autocomplete="off" id="form-editar-paciente">
                         <div class="row mb-2">
                             <div class="col-md-6">
                                 <label class="form-label fw-bold">Nome</label>
@@ -194,7 +196,7 @@ $cidade = $user['cidade'];
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label fw-bold">CPF</label>
-                                <input type="text" name="cpf" class="form-control" required maxlength="11" value="<?php echo htmlspecialchars($cpf); ?>">
+                                <input type="text" name="cpf" id="cpf" class="form-control" required maxlength="14" value="<?php echo htmlspecialchars(formatarCPF($cpf)); ?>">
                             </div>
                         </div>
                         <div class="row mb-2">
@@ -204,7 +206,7 @@ $cidade = $user['cidade'];
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label fw-bold">Telefone</label>
-                                <input type="text" name="tel_usuario" class="form-control" required maxlength="11" value="<?php echo htmlspecialchars($telefone); ?>">
+                                <input type="text" name="tel_usuario" id="tel_usuario" class="form-control" required maxlength="15" value="<?php echo htmlspecialchars(formatarTelefone($telefone)); ?>">
                             </div>
                         </div>
                         <div class="row mb-2">
@@ -219,6 +221,7 @@ $cidade = $user['cidade'];
                             <div class="col-md-6">
                                 <label class="form-label fw-bold">Data de Nascimento</label>
                                 <input type="date" name="naci_usuario" class="form-control" required value="<?php echo htmlspecialchars($dataNascimento); ?>">
+                                <small class="text-muted">Formato: mm/dd/yyyy</small>
                             </div>
                         </div>
                         <div class="row mb-2">
@@ -278,7 +281,29 @@ $cidade = $user['cidade'];
             </div>
         </div>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Máscara para CPF
+        new Cleave('#cpf', {
+            delimiters: ['.', '.', '-'],
+            blocks: [3, 3, 3, 2],
+            numericOnly: true
+        });
+
+        // Máscara para telefone (celular/fixo)
+        new Cleave('#tel_usuario', {
+            phone: true,
+            phoneRegionCode: 'BR'
+        });
+
+        // Remove máscara antes de enviar o formulário
+        document.getElementById('form-editar-paciente').addEventListener('submit', function(e) {
+            var cpfInput = document.getElementById('cpf');
+            cpfInput.value = cpfInput.value.replace(/\D/g, '');
+
+            var telInput = document.getElementById('tel_usuario');
+            telInput.value = telInput.value.replace(/\D/g, '');
+        });
+    </script>
 </body>
 </html>
 <?php $conn->close(); ?>
