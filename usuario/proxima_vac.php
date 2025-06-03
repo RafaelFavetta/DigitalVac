@@ -87,11 +87,16 @@ if (
                     <td><?= htmlspecialchars($vacina['nome_vaci']) ?></td>
                     <td><?= $vacina['idade_aplica'] ?> anos</td>
                     <td><?= $vacina['n_dose'] ?></td>
+                    <td>
+                        <a href="../medica/ver_vacina.php?id_vaci=<?= urlencode($vacina['id_vaci']) ?>" class="btn btn-info btn-sm fw-bold">
+                            <i class="bi bi-info-circle"></i> Ver informações
+                        </a>
+                    </td>
                 </tr>
             <?php $rowIndex++; endforeach; ?>
         <?php else: ?>
             <tr>
-                <td colspan="3">Nenhuma vacina pendente.</td>
+                <td colspan="4">Nenhuma vacina pendente.</td>
             </tr>
         <?php endif; ?>
     </tbody>
@@ -237,6 +242,7 @@ if (
                             <th>Vacina</th>
                             <th>Idade Recomendada</th>
                             <th>Doses</th>
+                            <th>Ações</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -255,11 +261,16 @@ if (
                                     <td><?= htmlspecialchars($vacina['nome_vaci']) ?></td>
                                     <td><?= $vacina['idade_aplica'] ?> anos</td>
                                     <td><?= $vacina['n_dose'] ?></td>
+                                    <td>
+                                        <a href="../medica/ver_vacina.php?id_vaci=<?= urlencode($vacina['id_vaci']) ?>" class="btn btn-info btn-sm fw-bold">
+                                            <i class="bi bi-info-circle"></i> Ver informações
+                                        </a>
+                                    </td>
                                 </tr>
                             <?php $rowIndex++; endforeach; ?>
                         <?php else: ?>
                             <tr>
-                                <td colspan="3">Nenhuma vacina pendente.</td>
+                                <td colspan="4">Nenhuma vacina pendente.</td>
                             </tr>
                         <?php endif; ?>
                     </tbody>
