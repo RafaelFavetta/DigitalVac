@@ -44,7 +44,6 @@ $tipoSanguineo = $user['tipo_sang_usuario'];
 $alergias = $user['ale_usuario'];
 $doencas = $user['doen_usuario'];
 $medicamentos = $user['med_usuario'];
-$endereco = buscarEnderecoPorCEP($cep);
 $numero_casa = $user['nc_usuario'];
 
 // Função para formatar CPF
@@ -64,12 +63,31 @@ function formatarTelefone($telefone)
     return $telefone; // Retorna sem formatação se não for 10 ou 11 dígitos
 }
 
+// Função para formatar CEP
+function formatarCEP($cep)
+{
+    $cep = preg_replace('/[^0-9]/', '', $cep);
+    if (strlen($cep) === 8) {
+        return substr($cep, 0, 5) . '-' . substr($cep, 5, 3);
+    }
+    return $cep;
+}
+
 if ($genero == 'M') {
     $genero = 'Masculino';
 } elseif ($genero == 'F') {
     $genero = 'Feminino';
 } else {
     $genero = 'Outro';
+}
+
+// Adicione cidade e endereço (caso não exista, busca pelo CEP)
+$cidade = isset($user['cidade']) ? $user['cidade'] : '';
+$endereco_db = isset($user['endereco']) ? $user['endereco'] : '';
+if (!$endereco_db) {
+    $endereco = buscarEnderecoPorCEP($cep);
+} else {
+    $endereco = $endereco_db;
 }
 
 // Função para buscar endereço pelo CEP usando a API ViaCEP
@@ -202,8 +220,10 @@ function buscarEnderecoPorCEP($cep)
                     <p><strong>Data de Nascimento:</strong> <?php echo htmlspecialchars($dataNascimentoFormatada); ?>
                     </p>
                     <p><strong>E-mail:</strong> <?php echo htmlspecialchars($email); ?></p>
+                    <p><strong>CEP:</strong> <?php echo htmlspecialchars(formatarCEP($cep)); ?></p>
                     <p><strong>Endereço:</strong> <?php echo htmlspecialchars($endereco); ?> Nº
                         <?php echo htmlspecialchars($numero_casa); ?></p>
+                    <p><strong>Cidade:</strong> <?php echo htmlspecialchars($cidade); ?></p>
                     <p><strong>Peso:</strong> <?php echo htmlspecialchars($peso); ?> Kg</p>
                     <p><strong>Tipo Sanguíneo:</strong> <?php echo htmlspecialchars($tipoSanguineo); ?></p>
                     <p><strong>Alergias:</strong> <?php echo htmlspecialchars($alergias); ?></p>

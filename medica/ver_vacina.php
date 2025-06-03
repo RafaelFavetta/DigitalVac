@@ -13,6 +13,29 @@ if ($id_aplica <= 0) {
     exit;
 }
 
+// Função para formatar CPF
+function formatarCPF($cpf) {
+    $cpf = preg_replace('/[^0-9]/', '', $cpf);
+    if (strlen($cpf) === 11) {
+        return substr($cpf,0,3).'.'.substr($cpf,3,3).'.'.substr($cpf,6,3).'-'.substr($cpf,9,2);
+    }
+    return $cpf;
+}
+
+// Função para formatar COREN/CRM (exemplo: COREN-XX 123456 ou CRM-XX 123456)
+function formatarCorenCrm($coren) {
+    $coren = trim($coren);
+    // Tenta separar prefixo (COREN/CRM), UF e número
+    if (preg_match('/^(COREN|CRM)[-\s]?([A-Z]{2})\s?(\d+)$/i', $coren, $m)) {
+        return strtoupper($m[1]) . '-' . strtoupper($m[2]) . ' ' . $m[3];
+    }
+    // Fallback: separa letras e números
+    if (preg_match('/^([A-Z\-]+)\s*(\d+)$/i', $coren, $m)) {
+        return strtoupper($m[1]) . ' ' . $m[2];
+    }
+    return $coren;
+}
+
 // Busca dados da aplicação e da vacina
 $sql = "SELECT 
             a.*, 
@@ -27,14 +50,22 @@ $sql = "SELECT
         JOIN medico m ON a.id_medico = m.id_medico
         WHERE a.id_aplica = ?";
 $stmt = $conn->prepare($sql);
+if (!$stmt) {
+    echo "Erro ao preparar consulta: " . $conn->error;
+    exit;
+}
 $stmt->bind_param("i", $id_aplica);
 $stmt->execute();
 $result = $stmt->get_result();
-if ($result->num_rows === 0) {
+if (!$result || $result->num_rows === 0) {
     echo "Aplicação não encontrada.";
     exit;
 }
 $row = $result->fetch_assoc();
+
+// Verificações para campos possivelmente nulos
+$data_aplica = !empty($row['data_aplica']) ? date('d/m/Y', strtotime($row['data_aplica'])) : '';
+$dose_aplicad = isset($row['dose_aplicad']) ? $row['dose_aplicad'] : '';
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -98,7 +129,7 @@ $row = $result->fetch_assoc();
     <div class="container">
         <div class="card mx-auto" style="max-width: 700px;">
             <h2 class="card-title mb-4">Informações da Vacina Aplicada</h2>
-            <h5 class="mb-3">Paciente: <?php echo htmlspecialchars($row['nome_usuario']); ?> (CPF: <?php echo htmlspecialchars($row['cpf']); ?>)</h5>
+            <h5 class="mb-3">Paciente: <?php echo htmlspecialchars($row['nome_usuario']); ?> (CPF: <?php echo htmlspecialchars(formatarCPF($row['cpf'])); ?>)</h5>
             <h6 class="mb-3">Vacina: <?php echo htmlspecialchars($row['nome_vaci']); ?></h6>
             <ul class="list-group mb-3">
                 <li class="list-group-item"><strong>Fabricante:</strong> <?php echo htmlspecialchars($row['fabri_vaci']); ?></li>
@@ -111,10 +142,24 @@ $row = $result->fetch_assoc();
             </ul>
             <h6 class="mb-3">Informações da Aplicação</h6>
             <ul class="list-group mb-3">
-                <li class="list-group-item"><strong>Data da Aplicação:</strong> <?php echo htmlspecialchars(date('d/m/Y', strtotime($row['data_aplica']))); ?></li>
-                <li class="list-group-item"><strong>Dose Aplicada:</strong> <?php echo htmlspecialchars($row['dose_aplicad']); ?></li>
+                <li class="list-group-item"><strong>Data da Aplicação:</strong> <?php echo htmlspecialchars($data_aplica); ?></li>
+                <li class="list-group-item"><strong>Dose Aplicada:</strong> <?php echo htmlspecialchars($dose_aplicad); ?></li>
                 <li class="list-group-item"><strong>Posto:</strong> <?php echo htmlspecialchars($row['nome_posto']); ?></li>
-                <li class="list-group-item"><strong>Profissional Responsável:</strong> <?php echo htmlspecialchars($row['nome_medico']); ?> (<?php echo htmlspecialchars($row['coren_crm']); ?>)</li>
+                <li class="list-group-item"><strong>Profissional Responsável:</strong>
+                    <?php
+                        echo htmlspecialchars($row['nome_medico']);
+                        $coren = trim($row['coren_crm']);
+                        // Força a máscara COREN-XX 123456 ou CRM-XX 123456
+                        if (preg_match('/^(COREN|CRM)[\s\-]*([A-Z]{2})[\s\-]*(\d+)$/i', $coren, $m)) {
+                            $coren_formatado = strtoupper($m[1]) . '-' . strtoupper($m[2]) . ' ' . $m[3];
+                        } elseif (preg_match('/^([A-Z\-]+)\s*(\d+)$/i', $coren, $m)) {
+                            $coren_formatado = strtoupper($m[1]) . ' ' . $m[2];
+                        } else {
+                            $coren_formatado = $coren;
+                        }
+                        echo ' (' . htmlspecialchars($coren_formatado) . ')';
+                    ?>
+                </li>
             </ul>
             <a href="javascript:history.back()" class="btn btn-secondary btn-back"><i class="bi bi-arrow-left"></i> Voltar</a>
         </div>

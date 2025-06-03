@@ -58,6 +58,13 @@ function buscarEnderecoPorCEP($cep) {
     }
     return "{$dados['logradouro']}, {$dados['bairro']}, {$dados['localidade']} - {$dados['uf']}";
 }
+function formatarCEP($cep) {
+    $cep = preg_replace('/[^0-9]/', '', $cep);
+    if (strlen($cep) === 8) {
+        return substr($cep, 0, 5) . '-' . substr($cep, 5, 3);
+    }
+    return $cep;
+}
 
 // Dados do usuário
 $nome = $user['nome_usuario'];
@@ -158,7 +165,7 @@ $cidade = $user['cidade'];
                     <p><strong>Gênero:</strong> <?php echo htmlspecialchars(formatarGenero($genero)); ?></p>
                     <p><strong>Data de Nascimento:</strong> <?php echo htmlspecialchars(formatarData($dataNascimento)); ?></p>
                     <p><strong>E-mail:</strong> <?php echo htmlspecialchars($email); ?></p>
-                    <p><strong>CEP:</strong> <?php echo htmlspecialchars($cep); ?></p>
+                    <p><strong>CEP:</strong> <?php echo htmlspecialchars(formatarCEP($cep)); ?></p>
                     <p><strong>Endereço:</strong> <?php echo htmlspecialchars($endereco); ?> Nº <?php echo htmlspecialchars($numero_casa); ?></p>
                     <p><strong>Cidade:</strong> <?php echo htmlspecialchars($cidade); ?></p>
                     <p><strong>Peso:</strong> <?php echo htmlspecialchars($peso); ?> Kg</p>
