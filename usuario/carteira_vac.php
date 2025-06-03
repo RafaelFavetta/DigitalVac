@@ -168,7 +168,7 @@ if (
             <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                 <div class="navbar-nav">
                     <a class="nav-link active fs-6 fw-bold" href="telainicioU.php">
-                        <i class="bi bi-house-fill"></i> Inicio
+                        <i class="bi bi-house-fill"></i> Início
                     </a>
                     <a class="nav-link active fs-6 fw-bold" href="perfilU.php">
                         <i class="bi bi-person-fill"></i> Perfil
