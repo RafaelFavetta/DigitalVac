@@ -23,6 +23,10 @@ $nome = $user['nome_usuario'];
 $telefone = $user['tel_usuario'];
 $genero = $user['genero_usuario'];
 $email = $user['email_usuario'];
+$peso = $user['peso_usuario'];
+$alergias = $user['ale_usuario'];
+$doencas = $user['doen_usuario'];
+$medicamentos = $user['med_usuario'];
 ?>
 
 <!DOCTYPE html>
@@ -68,8 +72,7 @@ $email = $user['email_usuario'];
             <div class="col-md-8">
                 <div class="card shadow-lg p-4">
                     <h3 class="text-primary fw-bold">Editar Perfil</h3>
-                    <form id="editarPerfilForm" action="salvarPerfil.php" method="POST">
-
+                    <form id="editarPerfilForm" action="../Recebedados/salvarPerfil.php" method="POST">
                         <div class="mb-3">
                             <label for="telefone" class="form-label"><strong>Telefone:</strong></label>
                             <input type="text" class="form-control" id="telefone" name="telefone"
@@ -83,11 +86,30 @@ $email = $user['email_usuario'];
                                 <option value="O" <?php echo $genero == 'O' ? 'selected' : ''; ?>>Outro</option>
                             </select>
                         </div>
-
                         <div class="mb-3">
                             <label for="email" class="form-label"><strong>E-mail:</strong></label>
                             <input type="email" class="form-control" id="email" name="email"
                                 value="<?php echo htmlspecialchars($email); ?>" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$">
+                        </div>
+                        <div class="mb-3">
+                            <label for="peso" class="form-label"><strong>Peso (kg):</strong></label>
+                            <input type="number" class="form-control" id="peso" name="peso"
+                                value="<?php echo htmlspecialchars($peso); ?>" min="1" step="0.01" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="alergias" class="form-label"><strong>Alergias:</strong></label>
+                            <input type="text" class="form-control" id="alergias" name="alergias"
+                                value="<?php echo htmlspecialchars($alergias); ?>">
+                        </div>
+                        <div class="mb-3">
+                            <label for="doencas" class="form-label"><strong>Doenças:</strong></label>
+                            <input type="text" class="form-control" id="doencas" name="doencas"
+                                value="<?php echo htmlspecialchars($doencas); ?>">
+                        </div>
+                        <div class="mb-3">
+                            <label for="medicamentos" class="form-label"><strong>Medicamentos:</strong></label>
+                            <input type="text" class="form-control" id="medicamentos" name="medicamentos"
+                                value="<?php echo htmlspecialchars($medicamentos); ?>">
                         </div>
                         <button type="submit" class="btn btn-primary fw-bold">Salvar Alterações</button>
                         <a href="perfilU.php" class="btn btn-danger fw-bold px-2 py-1" style="font-size: 15px; min-width: 70px;">Cancelar</a>
@@ -160,5 +182,4 @@ $email = $user['email_usuario'];
         });
     </script>
 </body>
-
 </html>

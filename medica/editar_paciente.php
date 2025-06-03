@@ -38,7 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         WHERE id_usuario=?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param(
-        "sssssssdsssssssi",
+        "sssssssssssssssi", // <-- Corrigido: tipo_sang_usuario agora é 's'
         $nome_usuario, $cpf, $email_usuario, $tel_usuario, $genero_usuario, $naci_usuario, $peso_usuario, $tipo_sang_usuario,
         $ale_usuario, $doen_usuario, $med_usuario, $cep_usuario, $nc_usuario, $endereco, $cidade, $id
     );
@@ -168,6 +168,18 @@ $cidade = $user['cidade'];
     </nav>
 
     <div class="container mt-4">
+        <!-- Toast Bootstrap -->
+        <div aria-live="polite" aria-atomic="true" class="position-fixed top-0 start-50 translate-middle-x p-3"
+            style="z-index: 1080; top: 80px;">
+            <div id="toast-alert" class="toast align-items-center text-bg-success border-0" role="alert"
+                aria-live="assertive" aria-atomic="true" style="min-width:350px; max-width:500px;">
+                <div class="d-flex">
+                    <div class="toast-body" id="toast-alert-body"></div>
+                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
+                        aria-label="Close"></button>
+                </div>
+            </div>
+        </div>
         <div class="row">
             <div class="col-md-4">
                 <div class="card shadow-lg p-4 text-center">
@@ -183,9 +195,7 @@ $cidade = $user['cidade'];
             <div class="col-md-8">
                 <div class="card shadow-lg p-4">
                     <h3 class="text-primary fw-bold">Editar Dados</h3>
-                    <?php if ($sucesso): ?>
-                        <div class="alert alert-success">Dados atualizados com sucesso!</div>
-                    <?php elseif ($erro): ?>
+                    <?php if ($erro): ?>
                         <div class="alert alert-danger"><?php echo htmlspecialchars($erro); ?></div>
                     <?php endif; ?>
                     <form method="post" autocomplete="off" id="form-editar-paciente">
@@ -231,6 +241,7 @@ $cidade = $user['cidade'];
                             <div class="col-md-6">
                                 <label class="form-label fw-bold">Tipo Sanguíneo</label>
                                 <select name="tipo_sang_usuario" class="form-select" required>
+                                    <option value="">Selecione</option>
                                     <?php
                                     $tipos = ['O+','O-','A+','A-','B+','B-','AB+','AB-'];
                                     foreach ($tipos as $tipo) {
@@ -302,6 +313,29 @@ $cidade = $user['cidade'];
             var telInput = document.getElementById('tel_usuario');
             telInput.value = telInput.value.replace(/\D/g, '');
         });
+
+        // Toast Bootstrap
+        function showAlert(type, message) {
+            const toastEl = document.getElementById('toast-alert');
+            const toastBody = document.getElementById('toast-alert-body');
+            toastBody.textContent = message;
+            toastEl.classList.remove('text-bg-success', 'text-bg-danger', 'text-bg-primary');
+            if (type === 'success') {
+                toastEl.classList.add('text-bg-success');
+            } else if (type === 'error') {
+                toastEl.classList.add('text-bg-danger');
+            } else {
+                toastEl.classList.add('text-bg-primary');
+            }
+            const toast = new bootstrap.Toast(toastEl, { delay: 4000 });
+            toast.show();
+        }
+
+        <?php if ($sucesso): ?>
+            window.addEventListener('DOMContentLoaded', function() {
+                showAlert('success', 'Dados atualizados com sucesso!');
+            });
+        <?php endif; ?>
     </script>
 </body>
 </html>
