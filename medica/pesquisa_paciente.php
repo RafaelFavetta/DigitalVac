@@ -202,9 +202,6 @@ $result = $stmt->get_result();
                             <td><?php echo htmlspecialchars($row['peso_usuario']); ?></td>
                             <td><?php echo htmlspecialchars($row['tipo_sang_usuario']); ?></td>
                             <td>
-                                <a href="editar_paciente.php?id=<?php echo $row['id_usuario']; ?>" class="btn btn-sm btn-warning mb-1" title="Editar Perfil">
-                                    <i class="bi bi-pencil-square"></i>
-                                </a>
                                 <a href="ver_paciente.php?id=<?php echo $row['id_usuario']; ?>" class="btn btn-sm btn-info mb-1" title="Ver Informações">
                                     <i class="bi bi-info-circle"></i>
                                 </a>
