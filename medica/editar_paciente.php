@@ -221,7 +221,6 @@ $cidade = $user['cidade'];
                             <div class="col-md-6">
                                 <label class="form-label fw-bold">Data de Nascimento</label>
                                 <input type="date" name="naci_usuario" class="form-control" required value="<?php echo htmlspecialchars($dataNascimento); ?>">
-                                <small class="text-muted">Formato: mm/dd/yyyy</small>
                             </div>
                         </div>
                         <div class="row mb-2">
