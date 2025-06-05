@@ -19,7 +19,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // Upload da imagem
     $imagem = $_FILES['imagem'];
-    $upload_dir = "../uploads/campanhas/";
+    $upload_dir = "..img/uploads/campanhas/";
     if (!is_dir($upload_dir)) {
         mkdir($upload_dir, 0777, true);
     }
