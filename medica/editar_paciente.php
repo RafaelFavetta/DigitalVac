@@ -118,8 +118,8 @@ $alergias = $user['ale_usuario'];
 $doencas = $user['doen_usuario'];
 $medicamentos = $user['med_usuario'];
 $numero_casa = $user['nc_usuario'];
-$endereco = $user['endereco'] ?: buscarEnderecoPorCEP($cep);
-$cidade = $user['cidade'];
+$endereco = ($user['endereco'] ?? '') ?: buscarEnderecoPorCEP($cep);
+$cidade = $user['cidade'] ?? '';
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
