@@ -71,7 +71,7 @@ function renderTabelaCarteiraVac($vacinas)
                     <th>Data(s) de Aplicação</th>
                     <th>Posto</th>
                     <th>Médico</th>
-                    <th>Intervalo entre Doses (meses)</th>
+                    <!-- Coluna de intervalo removida -->
                 </tr>
             </thead>
             <tbody>
@@ -87,22 +87,22 @@ function renderTabelaCarteiraVac($vacinas)
                     $medicos = [];
                     foreach ($vacina['doses'] as $dose) {
                         $doses_info[] = $dose['dose_aplicad'];
-                        $datas[] = date('d/m/Y', strtotime($dose['data_aplica'])) . " (Dose " . $dose['dose_aplicad'] . ")";
+                        $datas[] = date('d/m/Y', strtotime($dose['data_aplica']));
                         $postos[] = htmlspecialchars($dose['nome_posto']);
                         $medicos[] = htmlspecialchars($dose['nome_medico']);
                     }
                 ?>
                     <tr class="<?php echo $rowClass; ?>">
                         <td><?php echo htmlspecialchars($vacina['nome_vaci']); ?></td>
-                        <td><?php echo $doses_tomadas . "/" . $n_dose . " (Doses: " . implode(', ', $doses_info) . ")"; ?></td>
+                        <td><?php echo $doses_tomadas . "/" . $n_dose; ?></td>
                         <td><?php echo implode('<br>', $datas); ?></td>
                         <td><?php echo implode('<br>', $postos); ?></td>
                         <td><?php echo implode('<br>', $medicos); ?></td>
-                        <td><?php echo htmlspecialchars($vacina['intervalo_dose']); ?></td>
+                        <!-- Coluna de intervalo removida -->
                     </tr>
                 <?php $rowIndex++; endforeach; ?>
                 <?php if ($rowIndex === 0): ?>
-                    <tr><td colspan="6">Nenhuma aplicação registrada.</td></tr>
+                    <tr><td colspan="5">Nenhuma aplicação registrada.</td></tr>
                 <?php endif; ?>
             </tbody>
         </table>
