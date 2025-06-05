@@ -31,12 +31,12 @@ if ($user_data) {
 
     $vacinas_disponiveis = [];
     while ($row = $result_vacinas->fetch_assoc()) {
-        $vacinas_disponiveis[] = $row;
+        $vacinas_disponiveis[$row['id_vaci']] = $row;
     }
 
-    // Buscar vacinas já aplicadas ao usuário
+    // Buscar vacinas já aplicadas ao usuário (e doses)
     $query_aplicadas = "
-        SELECT a.id_vaci
+        SELECT a.id_vaci, a.dose_aplicad
         FROM aplicacao a
         WHERE a.id_usuario = ?
     ";
@@ -47,7 +47,9 @@ if ($user_data) {
 
     $vacinas_aplicadas = [];
     while ($row = $result_aplicadas->fetch_assoc()) {
-        $vacinas_aplicadas[] = $row['id_vaci'];
+        $id_vaci = $row['id_vaci'];
+        if (!isset($vacinas_aplicadas[$id_vaci])) $vacinas_aplicadas[$id_vaci] = [];
+        $vacinas_aplicadas[$id_vaci][] = $row['dose_aplicad'];
     }
 
     // Filtro por pesquisa (AJAX)
@@ -60,14 +62,17 @@ if ($user_data) {
         $pesquisa = trim($_GET['pesquisa']);
     }
 
-    // Filtrar vacinas que o usuário ainda não tomou e, se pesquisa, filtrar pelo nome
-    $vacinas_nao_tomadas = array_filter($vacinas_disponiveis, function ($vacina) use ($vacinas_aplicadas, $pesquisa) {
-        $nao_tomou = !in_array($vacina['id_vaci'], $vacinas_aplicadas);
-        if ($pesquisa !== '') {
-            return $nao_tomou && (stripos($vacina['nome_vaci'], $pesquisa) !== false);
+    // Filtrar vacinas que o usuário ainda não completou o esquema
+    $vacinas_nao_tomadas = [];
+    foreach ($vacinas_disponiveis as $id_vaci => $vacina) {
+        $doses_tomadas = isset($vacinas_aplicadas[$id_vaci]) ? count($vacinas_aplicadas[$id_vaci]) : 0;
+        if ($doses_tomadas < $vacina['n_dose']) {
+            if ($pesquisa === '' || stripos($vacina['nome_vaci'], $pesquisa) !== false) {
+                $vacina['doses_tomadas'] = $doses_tomadas;
+                $vacinas_nao_tomadas[] = $vacina;
+            }
         }
-        return $nao_tomou;
-    });
+    }
 }
 
 // Se for AJAX, retorna só o <tbody>
@@ -82,15 +87,27 @@ if (
             $rowIndex = 0;
             foreach ($vacinas_nao_tomadas as $vacina):
                 $rowClass = ($rowIndex === 0) ? 'bg-white' : (($rowIndex % 2 === 1) ? 'table-secondary' : 'bg-white');
+                $proxima_dose = $vacina['doses_tomadas'] + 1;
             ?>
                 <tr class="<?php echo $rowClass; ?>">
                     <td><?= htmlspecialchars($vacina['nome_vaci']) ?></td>
                     <td><?= $vacina['idade_aplica'] ?> anos</td>
-                    <td><?= $vacina['n_dose'] ?></td>
+                    <td>
+                        <?= $vacina['doses_tomadas'] . "/" . $vacina['n_dose'] ?>
+                        <br>
+                        <span class="badge bg-primary">Próxima: Dose <?= $proxima_dose ?></span>
+                    </td>
                     <td>
                         <a href="../medica/ver_vacina.php?id_vaci=<?= urlencode($vacina['id_vaci']) ?>" class="btn btn-primary btn-sm">
                             <i class="bi bi-info-circle"></i> Ver informações
                         </a>
+                        <span class="d-block mt-2 text-muted" style="font-size:0.95em;">
+                            <?php if ($vacina['doses_tomadas'] > 0): ?>
+                                Doses já tomadas: <?= implode(', ', range(1, $vacina['doses_tomadas'])) ?>
+                            <?php else: ?>
+                                Nenhuma dose tomada ainda
+                            <?php endif; ?>
+                        </span>
                     </td>
                 </tr>
             <?php $rowIndex++; endforeach; ?>
@@ -256,15 +273,27 @@ if (
                                 } else {
                                     $rowClass = ($rowIndex % 2 === 1) ? 'table-secondary' : 'bg-white';
                                 }
+                                $proxima_dose = $vacina['doses_tomadas'] + 1;
                             ?>
                                 <tr class="<?php echo $rowClass; ?>">
                                     <td><?= htmlspecialchars($vacina['nome_vaci']) ?></td>
                                     <td><?= $vacina['idade_aplica'] ?> anos</td>
-                                    <td><?= $vacina['n_dose'] ?></td>
+                                    <td>
+                                        <?= $vacina['doses_tomadas'] . "/" . $vacina['n_dose'] ?>
+                                        <br>
+                                        <span class="badge bg-primary">Próxima: Dose <?= $proxima_dose ?></span>
+                                    </td>
                                     <td>
                                         <a href="../medica/ver_vacina.php?id_vaci=<?= urlencode($vacina['id_vaci']) ?>" class="btn btn-primary btn-sm">
                                             <i class="bi bi-info-circle"></i> Ver informações
                                         </a>
+                                        <span class="d-block mt-2 text-muted" style="font-size:0.95em;">
+                                            <?php if ($vacina['doses_tomadas'] > 0): ?>
+                                                Doses já tomadas: <?= implode(', ', range(1, $vacina['doses_tomadas'])) ?>
+                                            <?php else: ?>
+                                                Nenhuma dose tomada ainda
+                                            <?php endif; ?>
+                                        </span>
                                     </td>
                                 </tr>
                             <?php $rowIndex++; endforeach; ?>

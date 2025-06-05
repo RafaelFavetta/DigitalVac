@@ -12,7 +12,7 @@ if (isset($_GET['pesquisa'])) {
 }
 
 // Consulta com filtro se houver pesquisa
-$sql = "SELECT v.nome_vaci, a.dose_aplicad AS dose_vaci, a.data_aplica, p.nome_posto, m.nome_medico, v.intervalo_dose
+$sql = "SELECT v.id_vaci, v.nome_vaci, v.n_dose, a.dose_aplicad, a.data_aplica, p.nome_posto, m.nome_medico, v.intervalo_dose
         FROM aplicacao a
         JOIN vacina v ON a.id_vaci = v.id_vaci
         JOIN medico m ON a.id_medico = m.id_medico
@@ -37,8 +37,28 @@ if ($pesquisa !== '') {
 $stmt->execute();
 $result = $stmt->get_result();
 
+// Agrupa doses por vacina
+$vacinas = [];
+while ($row = $result->fetch_assoc()) {
+    $id_vaci = $row['id_vaci'];
+    if (!isset($vacinas[$id_vaci])) {
+        $vacinas[$id_vaci] = [
+            'nome_vaci' => $row['nome_vaci'],
+            'n_dose' => $row['n_dose'],
+            'intervalo_dose' => $row['intervalo_dose'],
+            'doses' => [],
+        ];
+    }
+    $vacinas[$id_vaci]['doses'][] = [
+        'dose_aplicad' => $row['dose_aplicad'],
+        'data_aplica' => $row['data_aplica'],
+        'nome_posto' => $row['nome_posto'],
+        'nome_medico' => $row['nome_medico'],
+    ];
+}
+
 // Função para renderizar apenas a tabela (para AJAX)
-function renderTabelaCarteiraVac($result)
+function renderTabelaCarteiraVac($vacinas)
 {
     ob_start();
     ?>
@@ -47,8 +67,8 @@ function renderTabelaCarteiraVac($result)
             <thead>
                 <tr>
                     <th>Nome da Vacina</th>
-                    <th>Dose</th>
-                    <th>Data de Aplicação</th>
+                    <th>Doses Tomadas</th>
+                    <th>Data(s) de Aplicação</th>
                     <th>Posto</th>
                     <th>Médico</th>
                     <th>Intervalo entre Doses (meses)</th>
@@ -57,22 +77,30 @@ function renderTabelaCarteiraVac($result)
             <tbody>
                 <?php
                 $rowIndex = 0;
-                while ($row = $result->fetch_assoc()):
-                    if ($rowIndex === 0) {
-                        $rowClass = 'bg-white';
-                    } else {
-                        $rowClass = ($rowIndex % 2 === 1) ? 'table-secondary' : 'bg-white';
+                foreach ($vacinas as $vacina):
+                    $rowClass = ($rowIndex % 2 === 1) ? 'table-secondary' : 'bg-white';
+                    $doses_tomadas = count($vacina['doses']);
+                    $n_dose = $vacina['n_dose'];
+                    $doses_info = [];
+                    $datas = [];
+                    $postos = [];
+                    $medicos = [];
+                    foreach ($vacina['doses'] as $dose) {
+                        $doses_info[] = $dose['dose_aplicad'];
+                        $datas[] = date('d/m/Y', strtotime($dose['data_aplica'])) . " (Dose " . $dose['dose_aplicad'] . ")";
+                        $postos[] = htmlspecialchars($dose['nome_posto']);
+                        $medicos[] = htmlspecialchars($dose['nome_medico']);
                     }
                 ?>
                     <tr class="<?php echo $rowClass; ?>">
-                        <td><?php echo htmlspecialchars($row['nome_vaci']); ?></td>
-                        <td><?php echo htmlspecialchars($row['dose_vaci']); ?></td>
-                        <td><?php echo htmlspecialchars(date('d/m/Y', strtotime($row['data_aplica']))); ?></td>
-                        <td><?php echo htmlspecialchars($row['nome_posto']); ?></td>
-                        <td><?php echo htmlspecialchars($row['nome_medico']); ?></td>
-                        <td><?php echo htmlspecialchars($row['intervalo_dose']); ?></td>
+                        <td><?php echo htmlspecialchars($vacina['nome_vaci']); ?></td>
+                        <td><?php echo $doses_tomadas . "/" . $n_dose . " (Doses: " . implode(', ', $doses_info) . ")"; ?></td>
+                        <td><?php echo implode('<br>', $datas); ?></td>
+                        <td><?php echo implode('<br>', $postos); ?></td>
+                        <td><?php echo implode('<br>', $medicos); ?></td>
+                        <td><?php echo htmlspecialchars($vacina['intervalo_dose']); ?></td>
                     </tr>
-                <?php $rowIndex++; endwhile; ?>
+                <?php $rowIndex++; endforeach; ?>
                 <?php if ($rowIndex === 0): ?>
                     <tr><td colspan="6">Nenhuma aplicação registrada.</td></tr>
                 <?php endif; ?>
@@ -89,7 +117,7 @@ if (
     strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest'
 ) {
     echo '<div id="tabela-carteira-vac">';
-    echo renderTabelaCarteiraVac($result);
+    echo renderTabelaCarteiraVac($vacinas);
     echo '</div>';
     $conn->close();
     exit;
@@ -205,7 +233,7 @@ if (
         <br>
         <div id="tabela-carteira-vac">
             <div style="width: 100%;">
-                <?php echo renderTabelaCarteiraVac($result); ?>
+                <?php echo renderTabelaCarteiraVac($vacinas); ?>
             </div>
         </div>
     </div>

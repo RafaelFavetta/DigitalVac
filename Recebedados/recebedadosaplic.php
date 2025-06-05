@@ -28,10 +28,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     // Busca id_vaci pelo nome da vacina
-    $stmt = $conn->prepare("SELECT id_vaci FROM vacina WHERE nome_vaci = ?");
+    $stmt = $conn->prepare("SELECT id_vaci, n_dose, estoque FROM vacina WHERE nome_vaci = ?");
     $stmt->bind_param("s", $nome_vacina);
     $stmt->execute();
-    $stmt->bind_result($id_vaci);
+    $stmt->bind_result($id_vaci, $n_dose, $estoque_atual);
     $stmt->fetch();
     $stmt->close();
 
@@ -62,27 +62,51 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $stmt->close();
 
     if (!$id_medico) {
-        echo json_encode(['success' => false, 'message' => 'Médico/Enfermeiro não encontrado.']);
+        echo json_encode(['success' => false, 'message' => 'Profissional não encontrado.']);
         exit;
     }
 
-    // Verifica se todos os campos obrigatórios estão presentes
-    if (!$id_usuario || !$id_posto || !$id_medico || !$id_vaci || !$data_aplica || !$dose_aplicad) {
-        echo json_encode(['success' => false, 'message' => 'Dados obrigatórios faltando.']);
+    // Busca quantas doses já aplicadas para este usuário/vacina
+    $stmt = $conn->prepare("SELECT COUNT(*) FROM aplicacao WHERE id_usuario = ? AND id_vaci = ?");
+    $stmt->bind_param("ii", $id_usuario, $id_vaci);
+    $stmt->execute();
+    $stmt->bind_result($doses_tomadas);
+    $stmt->fetch();
+    $stmt->close();
+
+    // Verifica se ainda há doses a serem tomadas
+    if ($doses_tomadas >= $n_dose) {
+        echo json_encode(['success' => false, 'message' => 'Todas as doses desta vacina já foram aplicadas para este paciente.']);
         exit;
     }
+
+    // Verifica estoque
+    if ($estoque_atual <= 0) {
+        echo json_encode(['success' => false, 'message' => 'Estoque insuficiente para esta vacina.']);
+        exit;
+    }
+
+    // Calcula a próxima dose a ser aplicada
+    $proxima_dose = $doses_tomadas + 1;
 
     // Insere na tabela aplicacao
     $stmt = $conn->prepare("INSERT INTO aplicacao (id_usuario, id_posto, id_medico, id_vaci, data_aplica, dose_aplicad) VALUES (?, ?, ?, ?, ?, ?)");
-    $stmt->bind_param("iiiisi", $id_usuario, $id_posto, $id_medico, $id_vaci, $data_aplica, $dose_aplicad);
+    $stmt->bind_param("iiiisi", $id_usuario, $id_posto, $id_medico, $id_vaci, $data_aplica, $proxima_dose);
 
     if ($stmt->execute()) {
+        // Atualiza o estoque da vacina
+        $stmt->close();
+        $stmt = $conn->prepare("UPDATE vacina SET estoque = estoque - 1 WHERE id_vaci = ?");
+        $stmt->bind_param("i", $id_vaci);
+        $stmt->execute();
+        $stmt->close();
+        $conn->close();
         echo json_encode(['success' => true, 'message' => 'Aplicação cadastrada com sucesso!']);
     } else {
         echo json_encode(['success' => false, 'message' => 'Erro ao cadastrar aplicação: ' . $stmt->error]);
+        $stmt->close();
+        $conn->close();
     }
-    $stmt->close();
-    $conn->close();
     exit;
 }
 
