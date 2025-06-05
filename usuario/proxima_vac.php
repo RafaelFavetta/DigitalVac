@@ -20,7 +20,7 @@ if ($user_data) {
 
     // Buscar vacinas dentro ou acima da faixa etária
     $query_vacinas = "
-        SELECT v.id_vaci, v.nome_vaci, v.idade_aplica, v.n_dose
+        SELECT v.id_vaci, v.nome_vaci, v.idade_aplica, v.n_dose, v.intervalo_dose
         FROM vacina v
         WHERE v.idade_aplica <= ?
     ";
@@ -254,6 +254,7 @@ if (
                         <tr>
                             <th>Vacina</th>
                             <th>Idade Recomendada</th>
+                            <th>Próxima Dose</th>
                             <th>Doses</th>
                             <th>Ações</th>
                         </tr>
@@ -263,18 +264,41 @@ if (
                             <?php
                             $rowIndex = 0;
                             foreach ($vacinas_nao_tomadas as $vacina):
-                                // Primeira linha branca, depois alterna entre cinza e branco
-                                if ($rowIndex === 0) {
-                                    $rowClass = 'bg-white';
-                                } else {
-                                    $rowClass = ($rowIndex % 2 === 1) ? 'table-secondary' : 'bg-white';
-                                }
+                                $rowClass = ($rowIndex === 0) ? 'bg-white' : (($rowIndex % 2 === 1) ? 'table-secondary' : 'bg-white');
                                 $proxima_dose = $vacina['doses_tomadas'] + 1;
+
+                                // Cálculo da data da próxima dose
+                                $proxima_data = '';
+                                if (!isset($vacina['intervalo_dose'])) {
+                                    $vacina['intervalo_dose'] = 0;
+                                }
+                                if ($vacina['n_dose'] == 1) {
+                                    $data_nascimento = $user_data['naci_usuario'];
+                                    $data_aplicacao = date('Y-m-d', strtotime($data_nascimento . ' + ' . $vacina['idade_aplica'] . ' years'));
+                                    $proxima_data = date('d/m/Y', strtotime($data_aplicacao));
+                                } else {
+                                    $sql_ultima = "SELECT data_aplica FROM aplicacao WHERE id_usuario = ? AND id_vaci = ? ORDER BY dose_aplicad DESC LIMIT 1";
+                                    $stmt_ultima = $conn->prepare($sql_ultima);
+                                    $stmt_ultima->bind_param("ii", $user_id, $vacina['id_vaci']);
+                                    $stmt_ultima->execute();
+                                    $result_ultima = $stmt_ultima->get_result();
+                                    if ($row_ultima = $result_ultima->fetch_assoc()) {
+                                        $data_ultima = $row_ultima['data_aplica'];
+                                        $intervalo = (int)$vacina['intervalo_dose'];
+                                        $data_proxima = date('Y-m-d', strtotime($data_ultima . " +$intervalo months"));
+                                        $proxima_data = date('d/m/Y', strtotime($data_proxima));
+                                    } else {
+                                        $data_nascimento = $user_data['naci_usuario'];
+                                        $data_aplicacao = date('Y-m-d', strtotime($data_nascimento . ' + ' . $vacina['idade_aplica'] . ' years'));
+                                        $proxima_data = date('d/m/Y', strtotime($data_aplicacao));
+                                    }
+                                }
                             ?>
                                 <tr class="<?php echo $rowClass; ?>" style="height:38px;">
-                                    <td style="vertical-align:middle; padding-top:4px; padding-bottom:4px;"><?= htmlspecialchars($vacina['nome_vaci']) ?></td>
-                                    <td style="vertical-align:middle; text-align:center; padding-top:4px; padding-bottom:4px;"><?= $vacina['idade_aplica'] ?> anos</td>
-                                    <td style="vertical-align:middle; text-align:center; padding-top:4px; padding-bottom:4px;">
+                                    <td style="vertical-align:middle;"><?= htmlspecialchars($vacina['nome_vaci']) ?></td>
+                                    <td style="vertical-align:middle; text-align:center;"><?= $vacina['idade_aplica'] ?> anos</td>
+                                    <td style="vertical-align:middle; text-align:center;"><?= $proxima_data ?></td>
+                                    <td style="vertical-align:middle; text-align:center;">
                                         <div style="display:flex; flex-direction:row; align-items:center; justify-content:center; gap:8px; height:100%;">
                                             <span style="font-size:1.02em;"><?= $vacina['doses_tomadas'] . "/" . $vacina['n_dose'] ?></span>
                                             <span class="badge bg-primary" style="font-size:0.90em; min-width:80px; padding:4px 6px;">
@@ -291,7 +315,7 @@ if (
                             <?php $rowIndex++; endforeach; ?>
                         <?php else: ?>
                             <tr>
-                                <td colspan="4">Nenhuma vacina pendente.</td>
+                                <td colspan="5">Nenhuma vacina pendente.</td>
                             </tr>
                         <?php endif; ?>
                     </tbody>
