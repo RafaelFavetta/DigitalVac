@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.1
+-- version 5.2.0
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 04/06/2025 às 01:30
--- Versão do servidor: 10.4.32-MariaDB
--- Versão do PHP: 8.0.30
+-- Generation Time: Jun 05, 2025 at 09:21 PM
+-- Server version: 10.4.24-MariaDB
+-- PHP Version: 8.1.6
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,13 +18,13 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Banco de dados: `vac`
+-- Database: `vac`
 --
 
 -- --------------------------------------------------------
 
 --
--- Estrutura para tabela `aplicacao`
+-- Table structure for table `aplicacao`
 --
 
 CREATE TABLE `aplicacao` (
@@ -35,20 +35,22 @@ CREATE TABLE `aplicacao` (
   `id_vaci` int(11) NOT NULL,
   `data_aplica` date NOT NULL,
   `dose_aplicad` int(1) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Despejando dados para a tabela `aplicacao`
+-- Dumping data for table `aplicacao`
 --
 
 INSERT INTO `aplicacao` (`id_aplica`, `id_usuario`, `id_posto`, `id_medico`, `id_vaci`, `data_aplica`, `dose_aplicad`) VALUES
-(2408, 3, 5, 3, 5, '2025-06-03', 1),
-(2409, 4, 2, 3, 5, '2025-06-03', 1);
+(2408, 3, 9, 3, 5, '2025-06-03', 1),
+(2409, 3, 2, 1, 5, '2025-06-05', 2),
+(2411, 3, 3, 3, 4, '2025-06-05', 1),
+(2412, 3, 10, 1, 2, '2025-06-05', 1);
 
 -- --------------------------------------------------------
 
 --
--- Estrutura para tabela `atestado`
+-- Table structure for table `atestado`
 --
 
 CREATE TABLE `atestado` (
@@ -58,10 +60,10 @@ CREATE TABLE `atestado` (
   `data_inicio` date NOT NULL,
   `data_fim` date NOT NULL,
   `justificativa` text DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Despejando dados para a tabela `atestado`
+-- Dumping data for table `atestado`
 --
 
 INSERT INTO `atestado` (`id_atestado`, `id_paci`, `id_medico`, `data_inicio`, `data_fim`, `justificativa`) VALUES
@@ -96,12 +98,13 @@ INSERT INTO `atestado` (`id_atestado`, `id_paci`, `id_medico`, `data_inicio`, `d
 (29, 3, 2, '2025-06-08', '2025-07-08', 'repouso extremo devido ao procedimento realizado em seu coração'),
 (30, 3, 2, '2025-09-06', '2025-09-07', 'é aniversário dele'),
 (31, 3, 2, '2026-09-06', '2026-09-07', 'é aniversário dele de novo'),
-(32, 3, 2, '2025-05-28', '2025-09-20', 'comeu demais');
+(32, 3, 2, '2025-05-28', '2025-09-20', 'comeu demais'),
+(33, 3, 2, '2025-02-09', '2026-03-01', 'testetstetsteeertrff');
 
 -- --------------------------------------------------------
 
 --
--- Estrutura para tabela `medico`
+-- Table structure for table `medico`
 --
 
 CREATE TABLE `medico` (
@@ -115,10 +118,10 @@ CREATE TABLE `medico` (
   `naci_medico` date NOT NULL,
   `id_posto` int(11) NOT NULL,
   `senha` varchar(100) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Despejando dados para a tabela `medico`
+-- Dumping data for table `medico`
 --
 
 INSERT INTO `medico` (`id_medico`, `nome_medico`, `cpf`, `email_medico`, `tel_medico`, `coren_crm`, `tipo_medico`, `naci_medico`, `id_posto`, `senha`) VALUES
@@ -129,7 +132,7 @@ INSERT INTO `medico` (`id_medico`, `nome_medico`, `cpf`, `email_medico`, `tel_me
 -- --------------------------------------------------------
 
 --
--- Estrutura para tabela `posto`
+-- Table structure for table `posto`
 --
 
 CREATE TABLE `posto` (
@@ -139,10 +142,10 @@ CREATE TABLE `posto` (
   `n_posto` int(10) NOT NULL,
   `endereco` varchar(255) DEFAULT NULL,
   `cidade` varchar(100) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Despejando dados para a tabela `posto`
+-- Dumping data for table `posto`
 --
 
 INSERT INTO `posto` (`id_posto`, `nome_posto`, `cep_posto`, `n_posto`, `endereco`, `cidade`) VALUES
@@ -163,7 +166,7 @@ INSERT INTO `posto` (`id_posto`, `nome_posto`, `cep_posto`, `n_posto`, `endereco
 -- --------------------------------------------------------
 
 --
--- Estrutura para tabela `usuario`
+-- Table structure for table `usuario`
 --
 
 CREATE TABLE `usuario` (
@@ -184,20 +187,19 @@ CREATE TABLE `usuario` (
   `senha` varchar(100) NOT NULL,
   `endereco` varchar(255) DEFAULT NULL,
   `cidade` varchar(100) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Despejando dados para a tabela `usuario`
+-- Dumping data for table `usuario`
 --
 
 INSERT INTO `usuario` (`id_usuario`, `nome_usuario`, `cpf`, `email_usuario`, `tel_usuario`, `genero_usuario`, `naci_usuario`, `peso_usuario`, `tipo_sang_usuario`, `med_usuario`, `doen_usuario`, `ale_usuario`, `cep_usuario`, `nc_usuario`, `senha`, `endereco`, `cidade`) VALUES
-(3, 'Rafael Favetta', '45260925840', 'rafaelfavetta@gmail.com', '19981084437', 'M', '2007-09-06', 77.00, 'A+', '', '', '', '13607030', 231, '$2y$10$zUO4p0W0OoScwzXiiLcrGeUchmtk5Zrlsdry5LWOeD5WJLY02ACsS', 'Rua Professor Vicente Casale Padovani, Jardim Nossa Senhora de Fátima, Araras - SP', 'Araras'),
-(4, 'Miguel Di-Tanno Viganó', '51382943857', 'miguel@digmail.com', '19919194191', 'F', '2008-06-16', 85.00, 'O-', '', 'Asma', '', '13602024', 170, '$2y$10$aTwti7.N4ljbIwER9OqQbuGTh6mx5oGBZ.z20ejTtWKLm48HS5ONu', 'Rua das Primaveras, Jardim São Nicolau, Araras - SP', 'Araras');
+(3, 'Rafael Favetta', '45260925840', 'rafaelfavetta@gmail.com', '19981084437', 'M', '2007-09-06', '80.00', 'A+', '', '', '', '13607030', 231, '$2y$10$zUO4p0W0OoScwzXiiLcrGeUchmtk5Zrlsdry5LWOeD5WJLY02ACsS', 'Rua Professor Vicente Casale Padovani, Jardim Nossa Senhora de Fátima, Araras - SP', 'Araras');
 
 -- --------------------------------------------------------
 
 --
--- Estrutura para tabela `vacina`
+-- Table structure for table `vacina`
 --
 
 CREATE TABLE `vacina` (
@@ -210,26 +212,27 @@ CREATE TABLE `vacina` (
   `n_dose` int(1) NOT NULL,
   `intervalo_dose` int(11) NOT NULL,
   `estoque` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Despejando dados para a tabela `vacina`
+-- Dumping data for table `vacina`
 --
 
 INSERT INTO `vacina` (`id_vaci`, `nome_vaci`, `fabri_vaci`, `lote_vaci`, `idade_aplica`, `via_adimicao`, `n_dose`, `intervalo_dose`, `estoque`) VALUES
 (1, 'Vacina A', 'Fabricante A', 'Lote001', 18, 'Intramuscular', 2, 30, 100),
-(2, 'Vacina B', 'Fabricante B', 'Lote002', 12, 'Subcutânea', 1, 0, 50),
+(2, 'Vacina B', 'Fabricante B', 'Lote002', 12, 'Subcutânea', 1, 0, 48),
 (3, 'Vacina C', 'Fabricante C', 'Lote003', 60, 'Oral', 3, 60, 200),
-(4, 'Rafafez', 'Rafa', '25', 10, 'Intravenoso', 2, 1, 0),
-(5, 'Vacina do Rafa', 'eu mesmo', '44', 10, 'Gotinha', 5, 4, 1885),
-(6, 'Favas', 'Favetta Supermercados', '1', 10, 'Injeção', 2, 2, 500);
+(4, 'Rafafez', 'Rafa', '25', 10, 'Intravenoso', 2, 1, 817),
+(5, 'Vacina do Rafa', 'eu mesmo', '44', 10, 'Gotinha', 5, 4, 1884),
+(6, 'Favas', 'Favetta Supermercados', '1', 10, 'Injeção', 2, 2, 500),
+(7, 'DbH', 'Detris', '10', 15, 'Intravenoso', 3, 11, 1405);
 
 --
--- Índices para tabelas despejadas
+-- Indexes for dumped tables
 --
 
 --
--- Índices de tabela `aplicacao`
+-- Indexes for table `aplicacao`
 --
 ALTER TABLE `aplicacao`
   ADD PRIMARY KEY (`id_aplica`),
@@ -239,7 +242,7 @@ ALTER TABLE `aplicacao`
   ADD KEY `id_vaci` (`id_vaci`);
 
 --
--- Índices de tabela `atestado`
+-- Indexes for table `atestado`
 --
 ALTER TABLE `atestado`
   ADD PRIMARY KEY (`id_atestado`),
@@ -247,7 +250,7 @@ ALTER TABLE `atestado`
   ADD KEY `id_medico` (`id_medico`);
 
 --
--- Índices de tabela `medico`
+-- Indexes for table `medico`
 --
 ALTER TABLE `medico`
   ADD PRIMARY KEY (`id_medico`),
@@ -255,70 +258,70 @@ ALTER TABLE `medico`
   ADD KEY `id_posto` (`id_posto`);
 
 --
--- Índices de tabela `posto`
+-- Indexes for table `posto`
 --
 ALTER TABLE `posto`
   ADD PRIMARY KEY (`id_posto`);
 
 --
--- Índices de tabela `usuario`
+-- Indexes for table `usuario`
 --
 ALTER TABLE `usuario`
   ADD PRIMARY KEY (`id_usuario`),
   ADD UNIQUE KEY `cpf` (`cpf`);
 
 --
--- Índices de tabela `vacina`
+-- Indexes for table `vacina`
 --
 ALTER TABLE `vacina`
   ADD PRIMARY KEY (`id_vaci`);
 
 --
--- AUTO_INCREMENT para tabelas despejadas
+-- AUTO_INCREMENT for dumped tables
 --
 
 --
--- AUTO_INCREMENT de tabela `aplicacao`
+-- AUTO_INCREMENT for table `aplicacao`
 --
 ALTER TABLE `aplicacao`
-  MODIFY `id_aplica` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2410;
+  MODIFY `id_aplica` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2413;
 
 --
--- AUTO_INCREMENT de tabela `atestado`
+-- AUTO_INCREMENT for table `atestado`
 --
 ALTER TABLE `atestado`
-  MODIFY `id_atestado` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
+  MODIFY `id_atestado` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
 
 --
--- AUTO_INCREMENT de tabela `medico`
+-- AUTO_INCREMENT for table `medico`
 --
 ALTER TABLE `medico`
   MODIFY `id_medico` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
--- AUTO_INCREMENT de tabela `posto`
+-- AUTO_INCREMENT for table `posto`
 --
 ALTER TABLE `posto`
   MODIFY `id_posto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
--- AUTO_INCREMENT de tabela `usuario`
+-- AUTO_INCREMENT for table `usuario`
 --
 ALTER TABLE `usuario`
-  MODIFY `id_usuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id_usuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
--- AUTO_INCREMENT de tabela `vacina`
+-- AUTO_INCREMENT for table `vacina`
 --
 ALTER TABLE `vacina`
-  MODIFY `id_vaci` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id_vaci` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
--- Restrições para tabelas despejadas
+-- Constraints for dumped tables
 --
 
 --
--- Restrições para tabelas `aplicacao`
+-- Constraints for table `aplicacao`
 --
 ALTER TABLE `aplicacao`
   ADD CONSTRAINT `aplicacao_ibfk_1` FOREIGN KEY (`id_usuario`) REFERENCES `usuario` (`id_usuario`) ON DELETE CASCADE ON UPDATE CASCADE,
