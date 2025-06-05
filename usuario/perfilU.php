@@ -20,11 +20,13 @@ if (!$user) {
     die("Usuário não encontrado.");
 }
 
-function formatarCPF($cpf) {
+function formatarCPF($cpf)
+{
     return preg_replace("/(\d{3})(\d{3})(\d{3})(\d{2})/", "$1.$2.$3-$4", $cpf);
 }
 
-function formatarTelefone($telefone) {
+function formatarTelefone($telefone)
+{
     if (strlen($telefone) == 11) {
         return preg_replace("/(\d{2})(\d{5})(\d{4})/", "($1) $2-$3", $telefone);
     } elseif (strlen($telefone) == 10) {
@@ -33,7 +35,8 @@ function formatarTelefone($telefone) {
     return $telefone;
 }
 
-function formatarCEP($cep) {
+function formatarCEP($cep)
+{
     $cep = preg_replace('/[^0-9]/', '', $cep);
     if (strlen($cep) === 8) {
         return substr($cep, 0, 5) . '-' . substr($cep, 5, 3);
@@ -41,7 +44,8 @@ function formatarCEP($cep) {
     return $cep;
 }
 
-function buscarEnderecoPorCEP($cep) {
+function buscarEnderecoPorCEP($cep)
+{
     $cep = preg_replace('/[^0-9]/', '', $cep);
     $url = "https://viacep.com.br/ws/{$cep}/json/";
     $ch = curl_init();
@@ -98,6 +102,7 @@ if (!$endereco_db) {
             font-weight: bold !important;
             margin-left: 0.5rem !important;
         }
+
         /* Mesmas medidas do botão editar do ver_paciente.php */
         .btn-editar {
             font-weight: bold;
@@ -140,7 +145,8 @@ if (!$endereco_db) {
                 </div>
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="btn btn-danger fw-bold px-2 py-1" style="font-size: 15px; min-width: 70px;" href="../outros/sair.php">
+                        <a class="btn btn-danger fw-bold px-2 py-1" style="font-size: 15px; min-width: 70px;"
+                            href="../outros/sair.php">
                             <i class="bi bi-box-arrow-right" style="font-size: 18px;"></i> Sair
                         </a>
                     </li>
@@ -160,7 +166,8 @@ if (!$endereco_db) {
                         <i class="bi bi-pencil-square"></i> Editar perfil
                     </a>
 
-                    <a href="../outros/sair.php" class="btn btn-danger fw-bold mt-3 px-2 py-1" style="font-size: 15px; min-width: 70px;">
+                    <a href="../outros/sair.php" class="btn btn-danger fw-bold mt-3 px-2 py-1"
+                        style="font-size: 15px; min-width: 70px;">
                         <i class="bi bi-box-arrow-right" style="font-size: 18px;"></i> Sair
                     </a>
                 </div>
@@ -171,10 +178,12 @@ if (!$endereco_db) {
                     <p><strong>CPF:</strong> <?php echo htmlspecialchars(formatarCPF($cpf)); ?></p>
                     <p><strong>Telefone:</strong> <?php echo htmlspecialchars(formatarTelefone($telefone)); ?></p>
                     <p><strong>Gênero:</strong> <?php echo htmlspecialchars($generoTexto); ?></p>
-                    <p><strong>Data de Nascimento:</strong> <?php echo htmlspecialchars($dataNascimentoFormatada); ?></p>
+                    <p><strong>Data de Nascimento:</strong> <?php echo htmlspecialchars($dataNascimentoFormatada); ?>
+                    </p>
                     <p><strong>E-mail:</strong> <?php echo htmlspecialchars($email); ?></p>
                     <p><strong>CEP:</strong> <?php echo htmlspecialchars(formatarCEP($cep)); ?></p>
-                    <p><strong>Endereço:</strong> <?php echo htmlspecialchars($endereco); ?> Nº <?php echo htmlspecialchars($numero_casa); ?></p>
+                    <p><strong>Endereço:</strong> <?php echo htmlspecialchars($endereco); ?> Nº
+                        <?php echo htmlspecialchars($numero_casa); ?></p>
                     <p><strong>Cidade:</strong> <?php echo htmlspecialchars($cidade); ?></p>
                     <p><strong>Peso:</strong> <?php echo htmlspecialchars($peso); ?> Kg</p>
                     <p><strong>Tipo Sanguíneo:</strong> <?php echo htmlspecialchars($tipoSanguineo); ?></p>

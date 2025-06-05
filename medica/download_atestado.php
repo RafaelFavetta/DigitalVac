@@ -43,12 +43,15 @@ if ($result->num_rows === 0) {
 $atestado = $result->fetch_assoc();
 
 // Busca cidade pelo CEP (pois campo cidade pode não existir)
-function buscarCidadePorCEP($cep) {
+function buscarCidadePorCEP($cep)
+{
     $cep = preg_replace('/[^0-9]/', '', $cep);
-    if (strlen($cep) !== 8) return null;
+    if (strlen($cep) !== 8)
+        return null;
     $url = "https://viacep.com.br/ws/{$cep}/json/";
     $response = @file_get_contents($url);
-    if ($response === false) return null;
+    if ($response === false)
+        return null;
     $dados = json_decode($response, true);
     if (isset($dados['localidade']) && !empty($dados['localidade'])) {
         return $dados['localidade'];

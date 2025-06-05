@@ -3,7 +3,8 @@ include('../outros/db_connect.php');
 $q = isset($_GET['q']) ? $_GET['q'] : '';
 
 // Função para remover acentos, hífens, espaços e pontuação
-function normalize($str) {
+function normalize($str)
+{
     $str = iconv('UTF-8', 'ASCII//TRANSLIT', $str);
     $str = preg_replace('/[^a-zA-Z0-9]/', '', $str);
     return strtolower($str);
@@ -18,7 +19,8 @@ $found = [];
 while ($row = $result->fetch_assoc()) {
     $nome = $row['nome_usuario'];
     $nome_norm = normalize($nome);
-    if ($search === '' ||
+    if (
+        $search === '' ||
         strpos($nome_norm, $search) !== false ||
         similar_text($nome_norm, $search) / max(strlen($nome_norm), 1) > 0.7 ||
         preg_match('/' . implode('.*', str_split($search)) . '/i', $nome_norm)

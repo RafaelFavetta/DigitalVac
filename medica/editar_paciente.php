@@ -39,8 +39,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt = $conn->prepare($sql);
     $stmt->bind_param(
         "sssssssssssssssi", // <-- Corrigido: tipo_sang_usuario agora é 's'
-        $nome_usuario, $cpf, $email_usuario, $tel_usuario, $genero_usuario, $naci_usuario, $peso_usuario, $tipo_sang_usuario,
-        $ale_usuario, $doen_usuario, $med_usuario, $cep_usuario, $nc_usuario, $endereco, $cidade, $id
+        $nome_usuario,
+        $cpf,
+        $email_usuario,
+        $tel_usuario,
+        $genero_usuario,
+        $naci_usuario,
+        $peso_usuario,
+        $tipo_sang_usuario,
+        $ale_usuario,
+        $doen_usuario,
+        $med_usuario,
+        $cep_usuario,
+        $nc_usuario,
+        $endereco,
+        $cidade,
+        $id
     );
     if ($stmt->execute()) {
         $sucesso = true;
@@ -61,10 +75,12 @@ if ($result->num_rows === 0) {
 $user = $result->fetch_assoc();
 
 // Funções utilitárias
-function formatarCPF($cpf) {
+function formatarCPF($cpf)
+{
     return preg_replace("/(\d{3})(\d{3})(\d{3})(\d{2})/", "$1.$2.$3-$4", $cpf);
 }
-function formatarTelefone($telefone) {
+function formatarTelefone($telefone)
+{
     if (strlen($telefone) == 11) {
         return preg_replace("/(\d{2})(\d{5})(\d{4})/", "($1) $2-$3", $telefone);
     } elseif (strlen($telefone) == 10) {
@@ -72,7 +88,8 @@ function formatarTelefone($telefone) {
     }
     return $telefone;
 }
-function buscarEnderecoPorCEP($cep) {
+function buscarEnderecoPorCEP($cep)
+{
     $cep = preg_replace('/[^0-9]/', '', $cep);
     $url = "https://viacep.com.br/ws/{$cep}/json/";
     $ch = curl_init();
@@ -106,6 +123,7 @@ $cidade = $user['cidade'];
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <title>Editar Paciente</title>
@@ -122,6 +140,7 @@ $cidade = $user['cidade'];
         }
     </style>
 </head>
+
 <body>
     <nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">
         <div class="container-fluid">
@@ -158,7 +177,8 @@ $cidade = $user['cidade'];
                 </div>
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="btn btn-danger fw-bold px-2 py-1" style="font-size: 15px; min-width: 70px;" href="../outros/sair.php">
+                        <a class="btn btn-danger fw-bold px-2 py-1" style="font-size: 15px; min-width: 70px;"
+                            href="../outros/sair.php">
                             <i class="bi bi-box-arrow-right" style="font-size: 18px;"></i> Sair
                         </a>
                     </li>
@@ -187,7 +207,8 @@ $cidade = $user['cidade'];
                     <a href="ver_paciente.php?id=<?php echo $id; ?>" class="btn btn-outline-primary fw-bold mt-3">
                         <i class="bi bi-info-circle"></i> Ver informações
                     </a>
-                    <a href="pesquisa_paciente.php" class="btn btn-danger fw-bold mt-3 px-2 py-1" style="font-size: 15px; min-width: 70px;">
+                    <a href="pesquisa_paciente.php" class="btn btn-danger fw-bold mt-3 px-2 py-1"
+                        style="font-size: 15px; min-width: 70px;">
                         <i class="bi bi-arrow-left"></i> Voltar
                     </a>
                 </div>
@@ -202,50 +223,59 @@ $cidade = $user['cidade'];
                         <div class="row mb-2">
                             <div class="col-md-6">
                                 <label class="form-label fw-bold">Nome</label>
-                                <input type="text" name="nome_usuario" class="form-control" required value="<?php echo htmlspecialchars($nome); ?>">
+                                <input type="text" name="nome_usuario" class="form-control" required
+                                    value="<?php echo htmlspecialchars($nome); ?>">
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label fw-bold">CPF</label>
-                                <input type="text" name="cpf" id="cpf" class="form-control" required maxlength="14" value="<?php echo htmlspecialchars(formatarCPF($cpf)); ?>">
+                                <input type="text" name="cpf" id="cpf" class="form-control" required maxlength="14"
+                                    value="<?php echo htmlspecialchars(formatarCPF($cpf)); ?>">
                             </div>
                         </div>
                         <div class="row mb-2">
                             <div class="col-md-6">
                                 <label class="form-label fw-bold">E-mail</label>
-                                <input type="email" name="email_usuario" class="form-control" required value="<?php echo htmlspecialchars($email); ?>">
+                                <input type="email" name="email_usuario" class="form-control" required
+                                    value="<?php echo htmlspecialchars($email); ?>">
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label fw-bold">Telefone</label>
-                                <input type="text" name="tel_usuario" id="tel_usuario" class="form-control" required maxlength="15" value="<?php echo htmlspecialchars(formatarTelefone($telefone)); ?>">
+                                <input type="text" name="tel_usuario" id="tel_usuario" class="form-control" required
+                                    maxlength="15" value="<?php echo htmlspecialchars(formatarTelefone($telefone)); ?>">
                             </div>
                         </div>
                         <div class="row mb-2">
                             <div class="col-md-6">
                                 <label class="form-label fw-bold">Gênero</label>
                                 <select name="genero_usuario" class="form-select" required>
-                                    <option value="M" <?php if($genero=='M') echo 'selected'; ?>>Masculino</option>
-                                    <option value="F" <?php if($genero=='F') echo 'selected'; ?>>Feminino</option>
-                                    <option value="O" <?php if($genero=='O') echo 'selected'; ?>>Outro</option>
+                                    <option value="M" <?php if ($genero == 'M')
+                                        echo 'selected'; ?>>Masculino</option>
+                                    <option value="F" <?php if ($genero == 'F')
+                                        echo 'selected'; ?>>Feminino</option>
+                                    <option value="O" <?php if ($genero == 'O')
+                                        echo 'selected'; ?>>Outro</option>
                                 </select>
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label fw-bold">Data de Nascimento</label>
-                                <input type="date" name="naci_usuario" class="form-control" required value="<?php echo htmlspecialchars($dataNascimento); ?>">
+                                <input type="date" name="naci_usuario" class="form-control" required
+                                    value="<?php echo htmlspecialchars($dataNascimento); ?>">
                             </div>
                         </div>
                         <div class="row mb-2">
                             <div class="col-md-6">
                                 <label class="form-label fw-bold">Peso (kg)</label>
-                                <input type="number" step="0.01" name="peso_usuario" class="form-control" required value="<?php echo htmlspecialchars($peso); ?>">
+                                <input type="number" step="0.01" name="peso_usuario" class="form-control" required
+                                    value="<?php echo htmlspecialchars($peso); ?>">
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label fw-bold">Tipo Sanguíneo</label>
                                 <select name="tipo_sang_usuario" class="form-select" required>
                                     <option value="">Selecione</option>
                                     <?php
-                                    $tipos = ['O+','O-','A+','A-','B+','B-','AB+','AB-'];
+                                    $tipos = ['O+', 'O-', 'A+', 'A-', 'B+', 'B-', 'AB+', 'AB-'];
                                     foreach ($tipos as $tipo) {
-                                        echo "<option value=\"$tipo\"".($tipoSanguineo==$tipo?' selected':'').">$tipo</option>";
+                                        echo "<option value=\"$tipo\"" . ($tipoSanguineo == $tipo ? ' selected' : '') . ">$tipo</option>";
                                     }
                                     ?>
                                 </select>
@@ -254,34 +284,41 @@ $cidade = $user['cidade'];
                         <div class="row mb-2">
                             <div class="col-md-6">
                                 <label class="form-label fw-bold">Alergias</label>
-                                <input type="text" name="ale_usuario" class="form-control" value="<?php echo htmlspecialchars($alergias); ?>">
+                                <input type="text" name="ale_usuario" class="form-control"
+                                    value="<?php echo htmlspecialchars($alergias); ?>">
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label fw-bold">Doenças</label>
-                                <input type="text" name="doen_usuario" class="form-control" value="<?php echo htmlspecialchars($doencas); ?>">
+                                <input type="text" name="doen_usuario" class="form-control"
+                                    value="<?php echo htmlspecialchars($doencas); ?>">
                             </div>
                         </div>
                         <div class="mb-2">
                             <label class="form-label fw-bold">Medicamentos</label>
-                            <input type="text" name="med_usuario" class="form-control" value="<?php echo htmlspecialchars($medicamentos); ?>">
+                            <input type="text" name="med_usuario" class="form-control"
+                                value="<?php echo htmlspecialchars($medicamentos); ?>">
                         </div>
                         <div class="row mb-2">
                             <div class="col-md-6">
                                 <label class="form-label fw-bold">CEP</label>
-                                <input type="text" name="cep_usuario" class="form-control" required maxlength="8" value="<?php echo htmlspecialchars($cep); ?>">
+                                <input type="text" name="cep_usuario" class="form-control" required maxlength="8"
+                                    value="<?php echo htmlspecialchars($cep); ?>">
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label fw-bold">Número da Casa</label>
-                                <input type="text" name="nc_usuario" class="form-control" required maxlength="10" value="<?php echo htmlspecialchars($numero_casa); ?>">
+                                <input type="text" name="nc_usuario" class="form-control" required maxlength="10"
+                                    value="<?php echo htmlspecialchars($numero_casa); ?>">
                             </div>
                         </div>
                         <div class="mb-2">
                             <label class="form-label fw-bold">Endereço</label>
-                            <input type="text" name="endereco" class="form-control" value="<?php echo htmlspecialchars($endereco); ?>">
+                            <input type="text" name="endereco" class="form-control"
+                                value="<?php echo htmlspecialchars($endereco); ?>">
                         </div>
                         <div class="mb-2">
                             <label class="form-label fw-bold">Cidade</label>
-                            <input type="text" name="cidade" class="form-control" value="<?php echo htmlspecialchars($cidade); ?>">
+                            <input type="text" name="cidade" class="form-control"
+                                value="<?php echo htmlspecialchars($cidade); ?>">
                         </div>
                         <div class="text-end mt-3">
                             <button type="submit" class="btn btn-primary fw-bold">Salvar Alterações</button>
@@ -306,7 +343,7 @@ $cidade = $user['cidade'];
         });
 
         // Remove máscara antes de enviar o formulário
-        document.getElementById('form-editar-paciente').addEventListener('submit', function(e) {
+        document.getElementById('form-editar-paciente').addEventListener('submit', function (e) {
             var cpfInput = document.getElementById('cpf');
             cpfInput.value = cpfInput.value.replace(/\D/g, '');
 
@@ -332,11 +369,12 @@ $cidade = $user['cidade'];
         }
 
         <?php if ($sucesso): ?>
-            window.addEventListener('DOMContentLoaded', function() {
+            window.addEventListener('DOMContentLoaded', function () {
                 showAlert('success', 'Dados atualizados com sucesso!');
             });
         <?php endif; ?>
     </script>
 </body>
+
 </html>
 <?php $conn->close(); ?>

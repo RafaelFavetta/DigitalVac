@@ -70,11 +70,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <form method="POST" action="">
                 <div class="mb-3">
                     <label for="nova_senha" class="form-label">Nova Senha</label>
-                    <input type="password" id="nova_senha" name="nova_senha" class="form-control" placeholder="Nova senha" required>
+                    <input type="password" id="nova_senha" name="nova_senha" class="form-control"
+                        placeholder="Nova senha" required>
                 </div>
                 <div class="mb-3">
                     <label for="confirmar_senha" class="form-label">Confirmar Senha</label>
-                    <input type="password" id="confirmar_senha" name="confirmar_senha" class="form-control" placeholder="Confirme a senha" required>
+                    <input type="password" id="confirmar_senha" name="confirmar_senha" class="form-control"
+                        placeholder="Confirme a senha" required>
                 </div>
                 <button type="submit" class="btn btn-primary w-100">Redefinir Senha</button>
             </form>

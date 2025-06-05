@@ -16,7 +16,8 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
             max-width: 800px;
             margin: auto;
-            margin-top: 32px; /* Adicionado para afastar da navbar */
+            margin-top: 32px;
+            /* Adicionado para afastar da navbar */
         }
 
         /* Remover linha azul dos inputs ao focar */
@@ -142,7 +143,8 @@
                 </div>
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="btn btn-danger fw-bold px-2 py-1" style="font-size: 15px; min-width: 70px;" href="../outros/sair.php">
+                        <a class="btn btn-danger fw-bold px-2 py-1" style="font-size: 15px; min-width: 70px;"
+                            href="../outros/sair.php">
                             <i class="bi bi-box-arrow-right" style="font-size: 18px;"></i> Sair
                         </a>
                     </li>
@@ -174,13 +176,15 @@
                     <div class="col-md-6">
                         <label for="nome_paciente" class="form-label fw-bold">Nome do Paciente</label>
                         <input type="text" id="nome_paciente" name="nome_paciente" class="form-control" required
-                            autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Digite o nome do paciente">
+                            autocomplete="off" autocapitalize="off" spellcheck="false"
+                            placeholder="Digite o nome do paciente">
                         <div id="autocomplete-nome_paciente" class="autocomplete-suggestions"></div>
                     </div>
                     <div class="col-md-6">
                         <label for="nome_medico" class="form-label fw-bold">Nome do Médico</label>
                         <input type="text" id="nome_medico" name="nome_medico" class="form-control" required
-                            autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Digite o nome do médico">
+                            autocomplete="off" autocapitalize="off" spellcheck="false"
+                            placeholder="Digite o nome do médico">
                         <div id="autocomplete-nome_medico" class="autocomplete-suggestions"></div>
                     </div>
                 </div>
@@ -199,7 +203,8 @@
                         <label for="justificativa" class="form-label fw-bold">Justificativa</label>
                         <textarea id="justificativa" name="justificativa" class="form-control" rows="3"
                             required></textarea>
-                        <small class="text-muted">* Não coloque ponto final. Ele será adicionado automaticamente no documento.</small>
+                        <small class="text-muted">* Não coloque ponto final. Ele será adicionado automaticamente no
+                            documento.</small>
                     </div>
                 </div>
                 <div class="row g-3 mt-2 text-center">
@@ -224,7 +229,7 @@
                 btn.type = 'button';
                 btn.className = 'btn btn-success mt-2 fw-bold';
                 btn.textContent = 'Baixar Atestado';
-                btn.onclick = function() {
+                btn.onclick = function () {
                     window.location = '../medica/download_atestado.php?id=' + encodeURIComponent(atestadoId);
                     setTimeout(() => {
                         // Fecha o toast após o clique no botão
@@ -257,7 +262,7 @@
                 method: "POST",
                 body: formData,
             })
-                .then((response) => response.json().catch(() => ({success: false, message: "Erro inesperado do servidor."})))
+                .then((response) => response.json().catch(() => ({ success: false, message: "Erro inesperado do servidor." })))
                 .then((data) => {
                     if (data.success) {
                         // Exibe toast de sucesso com botão de download

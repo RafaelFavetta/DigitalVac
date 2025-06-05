@@ -3,7 +3,8 @@ include('../outros/db_connect.php');
 session_start();
 
 // Adiciona função utilitária para formatar CPF
-function formatarCPF($cpf) {
+function formatarCPF($cpf)
+{
     return preg_replace("/(\d{3})(\d{3})(\d{3})(\d{2})/", "$1.$2.$3-$4", $cpf);
 }
 
@@ -85,6 +86,7 @@ if ($id_aplica > 0) {
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <title>Informações da Vacina</title>
@@ -92,12 +94,29 @@ if ($id_aplica > 0) {
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
     <style>
-        body { background-color: #f8f9fa; }
-        .card { background: white; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.2); padding: 32px; margin-top: 32px;}
-        .card-title { color: #0d6efd; font-weight: bold; }
-        .btn-back { margin-top: 24px; }
+        body {
+            background-color: #f8f9fa;
+        }
+
+        .card {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            padding: 32px;
+            margin-top: 32px;
+        }
+
+        .card-title {
+            color: #0d6efd;
+            font-weight: bold;
+        }
+
+        .btn-back {
+            margin-top: 24px;
+        }
     </style>
 </head>
+
 <body>
     <nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">
         <div class="container-fluid">
@@ -134,7 +153,8 @@ if ($id_aplica > 0) {
                 </div>
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="btn btn-danger fw-bold px-2 py-1" style="font-size: 15px; min-width: 70px;" href="../outros/sair.php">
+                        <a class="btn btn-danger fw-bold px-2 py-1" style="font-size: 15px; min-width: 70px;"
+                            href="../outros/sair.php">
                             <i class="bi bi-box-arrow-right" style="font-size: 18px;"></i> Sair
                         </a>
                     </li>
@@ -152,26 +172,37 @@ if ($id_aplica > 0) {
                 <?php endif; ?>
             </h2>
             <?php if ($id_aplica > 0): ?>
-            <h5 class="mb-3">Paciente: <?php echo htmlspecialchars($row['nome_usuario']); ?> (CPF: <?php echo htmlspecialchars(formatarCPF($row['cpf'])); ?>)</h5>
+                <h5 class="mb-3">Paciente: <?php echo htmlspecialchars($row['nome_usuario']); ?> (CPF:
+                    <?php echo htmlspecialchars(formatarCPF($row['cpf'])); ?>)</h5>
             <?php endif; ?>
             <h6 class="mb-3">Vacina: <?php echo htmlspecialchars($row['nome_vaci']); ?></h6>
             <ul class="list-group mb-3">
-                <li class="list-group-item"><strong>Fabricante:</strong> <?php echo htmlspecialchars($row['fabri_vaci']); ?></li>
-                <li class="list-group-item"><strong>Lote:</strong> <?php echo htmlspecialchars($row['lote_vaci']); ?></li>
-                <li class="list-group-item"><strong>Idade de Aplicação Recomendada:</strong> <?php echo htmlspecialchars($row['idade_aplica']); ?> anos</li>
-                <li class="list-group-item"><strong>Via de Administração:</strong> <?php echo htmlspecialchars($row['via_adimicao']); ?></li>
-                <li class="list-group-item"><strong>Número de Doses do Esquema:</strong> <?php echo htmlspecialchars($row['n_dose']); ?></li>
-                <li class="list-group-item"><strong>Intervalo entre Doses:</strong> <?php echo htmlspecialchars($row['intervalo_dose']); ?> meses</li>
-                <li class="list-group-item"><strong>Estoque Atual:</strong> <?php echo htmlspecialchars($row['estoque']); ?></li>
+                <li class="list-group-item"><strong>Fabricante:</strong>
+                    <?php echo htmlspecialchars($row['fabri_vaci']); ?></li>
+                <li class="list-group-item"><strong>Lote:</strong> <?php echo htmlspecialchars($row['lote_vaci']); ?>
+                </li>
+                <li class="list-group-item"><strong>Idade de Aplicação Recomendada:</strong>
+                    <?php echo htmlspecialchars($row['idade_aplica']); ?> anos</li>
+                <li class="list-group-item"><strong>Via de Administração:</strong>
+                    <?php echo htmlspecialchars($row['via_adimicao']); ?></li>
+                <li class="list-group-item"><strong>Número de Doses do Esquema:</strong>
+                    <?php echo htmlspecialchars($row['n_dose']); ?></li>
+                <li class="list-group-item"><strong>Intervalo entre Doses:</strong>
+                    <?php echo htmlspecialchars($row['intervalo_dose']); ?> meses</li>
+                <li class="list-group-item"><strong>Estoque Atual:</strong>
+                    <?php echo htmlspecialchars($row['estoque']); ?></li>
             </ul>
             <?php if ($id_aplica > 0): ?>
-            <h6 class="mb-3">Informações da Aplicação</h6>
-            <ul class="list-group mb-3">
-                <li class="list-group-item"><strong>Data da Aplicação:</strong> <?php echo htmlspecialchars($data_aplica); ?></li>
-                <li class="list-group-item"><strong>Dose Aplicada:</strong> <?php echo htmlspecialchars($dose_aplicad); ?></li>
-                <li class="list-group-item"><strong>Posto:</strong> <?php echo htmlspecialchars($row['nome_posto']); ?></li>
-                <li class="list-group-item"><strong>Profissional Responsável:</strong>
-                    <?php
+                <h6 class="mb-3">Informações da Aplicação</h6>
+                <ul class="list-group mb-3">
+                    <li class="list-group-item"><strong>Data da Aplicação:</strong>
+                        <?php echo htmlspecialchars($data_aplica); ?></li>
+                    <li class="list-group-item"><strong>Dose Aplicada:</strong>
+                        <?php echo htmlspecialchars($dose_aplicad); ?></li>
+                    <li class="list-group-item"><strong>Posto:</strong> <?php echo htmlspecialchars($row['nome_posto']); ?>
+                    </li>
+                    <li class="list-group-item"><strong>Profissional Responsável:</strong>
+                        <?php
                         echo htmlspecialchars($row['nome_medico']);
                         $coren = trim($row['coren_crm']);
                         // Força a máscara COREN-XX 123456 ou CRM-XX 123456
@@ -183,13 +214,15 @@ if ($id_aplica > 0) {
                             $coren_formatado = $coren;
                         }
                         echo ' (' . htmlspecialchars($coren_formatado) . ')';
-                    ?>
-                </li>
-            </ul>
+                        ?>
+                    </li>
+                </ul>
             <?php endif; ?>
-            <a href="javascript:history.back()" class="btn btn-secondary btn-back"><i class="bi bi-arrow-left"></i> Voltar</a>
+            <a href="javascript:history.back()" class="btn btn-secondary btn-back"><i class="bi bi-arrow-left"></i>
+                Voltar</a>
         </div>
     </div>
 </body>
+
 </html>
 <?php $conn->close(); ?>

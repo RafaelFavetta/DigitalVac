@@ -73,7 +73,8 @@
                 </div>
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="btn btn-danger fw-bold px-2 py-1" style="font-size: 15px; min-width: 70px;" href="../outros/sair.php">
+                        <a class="btn btn-danger fw-bold px-2 py-1" style="font-size: 15px; min-width: 70px;"
+                            href="../outros/sair.php">
                             <i class="bi bi-box-arrow-right" style="font-size: 18px;"></i> Sair
                         </a>
                     </li>
@@ -87,9 +88,8 @@
             <!-- Toast Bootstrap -->
             <div aria-live="polite" aria-atomic="true" class="position-fixed top-0 start-50 translate-middle-x p-3"
                 style="z-index: 1080; top: 80px;">
-                <div id="toast-alert"
-                    class="toast align-items-center text-bg-primary border-0" role="alert" aria-live="assertive"
-                    aria-atomic="true" style="min-width:350px; max-width:500px;">
+                <div id="toast-alert" class="toast align-items-center text-bg-primary border-0" role="alert"
+                    aria-live="assertive" aria-atomic="true" style="min-width:350px; max-width:500px;">
                     <div class="d-flex">
                         <div class="toast-body" id="toast-alert-body"></div>
                         <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
@@ -107,14 +107,15 @@
                     </div>
                     <div class="col-md-6">
                         <label for="cpf" class="form-label fw-bold">CPF</label>
-                        <input type="text" id="cpf" name="cpf" class="form-control" placeholder="CPF" required maxlength="14"
-                            minlength="14">
+                        <input type="text" id="cpf" name="cpf" class="form-control" placeholder="CPF" required
+                            maxlength="14" minlength="14">
                     </div>
                 </div>
                 <div class="row g-2 mt-2">
                     <div class="col-md-6">
                         <label for="telefone" class="form-label fw-bold">Telefone</label>
-                        <input type="text" id="telefone" name="telefone" class="form-control" placeholder="Telefone" required>
+                        <input type="text" id="telefone" name="telefone" class="form-control" placeholder="Telefone"
+                            required>
                     </div>
                     <div class="col-md-6">
                         <label for="email" class="form-label fw-bold">Email</label>
@@ -231,18 +232,18 @@
                 method: "POST",
                 body: formData
             })
-            .then(response => response.json().catch(() => ({success: false, message: "Erro inesperado do servidor."})))
-            .then(data => {
-                if (data.success) {
-                    showAlert('success', data.message);
-                    setTimeout(() => { form.reset(); }, 1500);
-                } else {
-                    showAlert('error', data.message);
-                }
-            })
-            .catch(error => {
-                showAlert('error', "Ocorreu um erro ao cadastrar. Tente novamente.");
-            });
+                .then(response => response.json().catch(() => ({ success: false, message: "Erro inesperado do servidor." })))
+                .then(data => {
+                    if (data.success) {
+                        showAlert('success', data.message);
+                        setTimeout(() => { form.reset(); }, 1500);
+                    } else {
+                        showAlert('error', data.message);
+                    }
+                })
+                .catch(error => {
+                    showAlert('error', "Ocorreu um erro ao cadastrar. Tente novamente.");
+                });
         });
     </script>
 </body>

@@ -24,10 +24,12 @@ if ($result->num_rows === 0) {
 $user = $result->fetch_assoc();
 
 // Funções utilitárias
-function formatarCPF($cpf) {
+function formatarCPF($cpf)
+{
     return preg_replace("/(\d{3})(\d{3})(\d{3})(\d{2})/", "$1.$2.$3-$4", $cpf);
 }
-function formatarTelefone($telefone) {
+function formatarTelefone($telefone)
+{
     if (strlen($telefone) == 11) {
         return preg_replace("/(\d{2})(\d{5})(\d{4})/", "($1) $2-$3", $telefone);
     } elseif (strlen($telefone) == 10) {
@@ -35,16 +37,22 @@ function formatarTelefone($telefone) {
     }
     return $telefone;
 }
-function formatarGenero($genero) {
-    if ($genero == 'M') return 'Masculino';
-    if ($genero == 'F') return 'Feminino';
+function formatarGenero($genero)
+{
+    if ($genero == 'M')
+        return 'Masculino';
+    if ($genero == 'F')
+        return 'Feminino';
     return 'Outro';
 }
-function formatarData($data) {
-    if (!$data) return '';
+function formatarData($data)
+{
+    if (!$data)
+        return '';
     return date('d/m/Y', strtotime($data));
 }
-function buscarEnderecoPorCEP($cep) {
+function buscarEnderecoPorCEP($cep)
+{
     $cep = preg_replace('/[^0-9]/', '', $cep);
     $url = "https://viacep.com.br/ws/{$cep}/json/";
     $ch = curl_init();
@@ -58,7 +66,8 @@ function buscarEnderecoPorCEP($cep) {
     }
     return "{$dados['logradouro']}, {$dados['bairro']}, {$dados['localidade']} - {$dados['uf']}";
 }
-function formatarCEP($cep) {
+function formatarCEP($cep)
+{
     $cep = preg_replace('/[^0-9]/', '', $cep);
     if (strlen($cep) === 8) {
         return substr($cep, 0, 5) . '-' . substr($cep, 5, 3);
@@ -85,6 +94,7 @@ $cidade = $user['cidade'];
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <title>Informações do Paciente</title>
@@ -99,6 +109,7 @@ $cidade = $user['cidade'];
         }
     </style>
 </head>
+
 <body>
     <nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">
         <div class="container-fluid">
@@ -135,7 +146,8 @@ $cidade = $user['cidade'];
                 </div>
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="btn btn-danger fw-bold px-2 py-1" style="font-size: 15px; min-width: 70px;" href="../outros/sair.php">
+                        <a class="btn btn-danger fw-bold px-2 py-1" style="font-size: 15px; min-width: 70px;"
+                            href="../outros/sair.php">
                             <i class="bi bi-box-arrow-right" style="font-size: 18px;"></i> Sair
                         </a>
                     </li>
@@ -152,7 +164,8 @@ $cidade = $user['cidade'];
                     <a href="editar_paciente.php?id=<?php echo $id; ?>" class="btn btn-outline-primary fw-bold mt-3">
                         <i class="bi bi-pencil-square"></i> Editar perfil
                     </a>
-                    <a href="pesquisa_paciente.php" class="btn btn-danger fw-bold mt-3 px-2 py-1" style="font-size: 15px; min-width: 70px;">
+                    <a href="pesquisa_paciente.php" class="btn btn-danger fw-bold mt-3 px-2 py-1"
+                        style="font-size: 15px; min-width: 70px;">
                         <i class="bi bi-arrow-left"></i> Voltar
                     </a>
                 </div>
@@ -163,10 +176,12 @@ $cidade = $user['cidade'];
                     <p><strong>CPF:</strong> <?php echo htmlspecialchars(formatarCPF($cpf)); ?></p>
                     <p><strong>Telefone:</strong> <?php echo htmlspecialchars(formatarTelefone($telefone)); ?></p>
                     <p><strong>Gênero:</strong> <?php echo htmlspecialchars(formatarGenero($genero)); ?></p>
-                    <p><strong>Data de Nascimento:</strong> <?php echo htmlspecialchars(formatarData($dataNascimento)); ?></p>
+                    <p><strong>Data de Nascimento:</strong>
+                        <?php echo htmlspecialchars(formatarData($dataNascimento)); ?></p>
                     <p><strong>E-mail:</strong> <?php echo htmlspecialchars($email); ?></p>
                     <p><strong>CEP:</strong> <?php echo htmlspecialchars(formatarCEP($cep)); ?></p>
-                    <p><strong>Endereço:</strong> <?php echo htmlspecialchars($endereco); ?> Nº <?php echo htmlspecialchars($numero_casa); ?></p>
+                    <p><strong>Endereço:</strong> <?php echo htmlspecialchars($endereco); ?> Nº
+                        <?php echo htmlspecialchars($numero_casa); ?></p>
                     <p><strong>Cidade:</strong> <?php echo htmlspecialchars($cidade); ?></p>
                     <p><strong>Peso:</strong> <?php echo htmlspecialchars($peso); ?> Kg</p>
                     <p><strong>Tipo Sanguíneo:</strong> <?php echo htmlspecialchars($tipoSanguineo); ?></p>
@@ -179,5 +194,6 @@ $cidade = $user['cidade'];
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>
 <?php $conn->close(); ?>

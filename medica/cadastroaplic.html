@@ -16,7 +16,8 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
             max-width: 500px;
             margin: auto;
-            margin-top: 32px; /* Adicionado para afastar da navbar */
+            margin-top: 32px;
+            /* Adicionado para afastar da navbar */
         }
 
         /* Remover linha azul dos inputs ao focar */
@@ -142,7 +143,8 @@
                 </div>
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="btn btn-danger fw-bold px-2 py-1" style="font-size: 15px; min-width: 70px;" href="../outros/sair.php">
+                        <a class="btn btn-danger fw-bold px-2 py-1" style="font-size: 15px; min-width: 70px;"
+                            href="../outros/sair.php">
                             <i class="bi bi-box-arrow-right" style="font-size: 18px;"></i> Sair
                         </a>
                     </li>
@@ -155,11 +157,14 @@
         <div class="form-container mx-auto">
             <!-- ALERTAS PERSONALIZADOS -->
             <!-- Toasts Bootstrap -->
-            <div aria-live="polite" aria-atomic="true" class="position-fixed top-0 start-50 translate-middle-x p-3" style="z-index: 1080; top: 80px;">
-                <div id="toast-alert" class="toast align-items-center text-bg-primary border-0" role="alert" aria-live="assertive" aria-atomic="true" style="min-width:350px; max-width:500px;">
+            <div aria-live="polite" aria-atomic="true" class="position-fixed top-0 start-50 translate-middle-x p-3"
+                style="z-index: 1080; top: 80px;">
+                <div id="toast-alert" class="toast align-items-center text-bg-primary border-0" role="alert"
+                    aria-live="assertive" aria-atomic="true" style="min-width:350px; max-width:500px;">
                     <div class="d-flex">
                         <div class="toast-body" id="toast-alert-body"></div>
-                        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
+                            aria-label="Close"></button>
                     </div>
                 </div>
             </div>
@@ -168,8 +173,8 @@
                 <div class="row g-2">
                     <div class="col-md-6">
                         <label for="nome-vacina" class="form-label fw-bold">Nome da Vacina</label>
-                        <input type="text" class="form-control" name="nome_vacina" id="nome-vacina" 
-                            autocomplete="off" autocapitalize="off" spellcheck="false" required placeholder="Digite o nome da vacina">
+                        <input type="text" class="form-control" name="nome_vacina" id="nome-vacina" autocomplete="off"
+                            autocapitalize="off" spellcheck="false" required placeholder="Digite o nome da vacina">
                         <div id="autocomplete-nome-vacina" class="autocomplete-suggestions"></div>
                     </div>
                     <div class="col-md-6">
@@ -185,22 +190,23 @@
                     </div>
                     <div class="col-md-12">
                         <label for="cpf-paciente" class="form-label fw-bold">CPF do Paciente</label>
-                        <input type="text" class="form-control" name="cpf_paciente" id="cpf-paciente" 
-                            autocomplete="off" autocapitalize="off" spellcheck="false" required placeholder="Digite o CPF do paciente">
+                        <input type="text" class="form-control" name="cpf_paciente" id="cpf-paciente" autocomplete="off"
+                            autocapitalize="off" spellcheck="false" required placeholder="Digite o CPF do paciente">
                         <div id="autocomplete-cpf-paciente" class="autocomplete-suggestions"></div>
                     </div>
                 </div>
                 <div class="row g-2 mt-2">
                     <div class="col-md-6">
                         <label for="nome-posto" class="form-label fw-bold">Posto</label>
-                        <input type="text" class="form-control" name="nome_posto" id="nome-posto" 
-                            autocomplete="off" autocapitalize="off" spellcheck="false" required placeholder="Digite o nome do posto">
+                        <input type="text" class="form-control" name="nome_posto" id="nome-posto" autocomplete="off"
+                            autocapitalize="off" spellcheck="false" required placeholder="Digite o nome do posto">
                         <div id="autocomplete-nome-posto" class="autocomplete-suggestions"></div>
                     </div>
                     <div class="col-md-6">
                         <label for="coren-crm" class="form-label fw-bold">COREN/CRM</label>
-                        <input type="text" class="form-control" name="coren_crm" id="coren-crm" 
-                            autocomplete="off" autocapitalize="off" spellcheck="false" required placeholder="COREN/CRM-UF 000000" maxlength="15" minlength="13">
+                        <input type="text" class="form-control" name="coren_crm" id="coren-crm" autocomplete="off"
+                            autocapitalize="off" spellcheck="false" required placeholder="COREN/CRM-UF 000000"
+                            maxlength="15" minlength="13">
                         <div id="autocomplete-coren-crm" class="autocomplete-suggestions"></div>
                     </div>
                 </div>
@@ -256,7 +262,7 @@
                 method: "POST",
                 body: formData,
             })
-                .then((response) => response.json().catch(() => ({success: false, message: "Erro inesperado do servidor."})))
+                .then((response) => response.json().catch(() => ({ success: false, message: "Erro inesperado do servidor." })))
                 .then((data) => {
                     if (data.success) {
                         showAlert('success', data.message || "Cadastro realizado com sucesso!");

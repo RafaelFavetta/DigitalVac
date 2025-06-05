@@ -48,7 +48,8 @@ if ($user_data) {
     $vacinas_aplicadas = [];
     while ($row = $result_aplicadas->fetch_assoc()) {
         $id_vaci = $row['id_vaci'];
-        if (!isset($vacinas_aplicadas[$id_vaci])) $vacinas_aplicadas[$id_vaci] = [];
+        if (!isset($vacinas_aplicadas[$id_vaci]))
+            $vacinas_aplicadas[$id_vaci] = [];
         $vacinas_aplicadas[$id_vaci][] = $row['dose_aplicad'];
     }
 
@@ -87,7 +88,7 @@ if ($user_data) {
                     $result_ultima = $stmt_ultima->get_result();
                     if ($row_ultima = $result_ultima->fetch_assoc()) {
                         $data_ultima = $row_ultima['data_aplica'];
-                        $intervalo = (int)$vacina['intervalo_dose'];
+                        $intervalo = (int) $vacina['intervalo_dose'];
                         $data_proxima = date('Y-m-d', strtotime($data_ultima . " +$intervalo months"));
                         $proxima_data = date('Y-m-d', strtotime($data_proxima));
                     } else {
@@ -103,7 +104,7 @@ if ($user_data) {
     }
 
     // Ordena pela data da próxima dose (mais antiga primeiro)
-    usort($vacinas_nao_tomadas, function($a, $b) {
+    usort($vacinas_nao_tomadas, function ($a, $b) {
         // Datas no formato Y-m-d
         return strtotime($a['proxima_data']) <=> strtotime($b['proxima_data']);
     });
@@ -124,13 +125,14 @@ if (
                 $proxima_dose = $vacina['doses_tomadas'] + 1;
                 // Usa a data já calculada e salva no array
                 $proxima_data = $vacina['proxima_data'] ? date('d/m/Y', strtotime($vacina['proxima_data'])) : '';
-            ?>
+                ?>
                 <tr class="<?php echo $rowClass; ?>" style="height:38px;">
                     <td style="vertical-align:middle;"><?= htmlspecialchars($vacina['nome_vaci']) ?></td>
                     <td style="vertical-align:middle; text-align:center;"><?= $vacina['idade_aplica'] ?> anos</td>
                     <td style="vertical-align:middle; text-align:center;"><?= $proxima_data ?></td>
                     <td style="vertical-align:middle; text-align:center;">
-                        <div style="display:flex; flex-direction:row; align-items:center; justify-content:center; gap:8px; height:100%;">
+                        <div
+                            style="display:flex; flex-direction:row; align-items:center; justify-content:center; gap:8px; height:100%;">
                             <span style="font-size:1.02em;"><?= $vacina['doses_tomadas'] . "/" . $vacina['n_dose'] ?></span>
                             <span class="badge bg-primary" style="font-size:0.90em; min-width:80px; padding:4px 6px;">
                                 Próxima: Dose <?= $proxima_dose ?>
@@ -138,12 +140,13 @@ if (
                         </div>
                     </td>
                     <td style="vertical-align:middle; text-align:center; padding-top:4px; padding-bottom:4px;">
-                        <a href="../medica/ver_vacina.php?id_vaci=<?= urlencode($vacina['id_vaci']) ?>" class="btn btn-primary btn-sm" style="padding:2px 8px; font-size:0.95em;">
+                        <a href="../medica/ver_vacina.php?id_vaci=<?= urlencode($vacina['id_vaci']) ?>"
+                            class="btn btn-primary btn-sm" style="padding:2px 8px; font-size:0.95em;">
                             <i class="bi bi-info-circle"></i> Sobre a vacina
                         </a>
                     </td>
                 </tr>
-            <?php $rowIndex++; endforeach; ?>
+                <?php $rowIndex++; endforeach; ?>
         <?php else: ?>
             <tr>
                 <td colspan="4">Nenhuma vacina pendente.</td>
@@ -261,7 +264,8 @@ if (
                 </div>
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="btn btn-danger fw-bold px-2 py-1" style="font-size: 15px; min-width: 70px;" href="../outros/sair.php">
+                        <a class="btn btn-danger fw-bold px-2 py-1" style="font-size: 15px; min-width: 70px;"
+                            href="../outros/sair.php">
                             <i class="bi bi-box-arrow-right" style="font-size: 18px;"></i> Sair
                         </a>
                     </li>
@@ -273,9 +277,11 @@ if (
     <div class="container mt-4">
         <h2 class="text-center text-primary fw-bold">Vacinas a serem aplicadas</h2>
         <div class="w-100 d-flex justify-content-center">
-            <form class="d-flex position-relative" role="search" id="form-pesquisa-proxima-vacina" style="max-width:600px; width:100%;">
+            <form class="d-flex position-relative" role="search" id="form-pesquisa-proxima-vacina"
+                style="max-width:600px; width:100%;">
                 <input class="form-control me-2 border border-primary" type="search" placeholder="Nome da vacina"
-                    aria-label="Pesquisar" id="pesquisa-proxima-vacina" autocomplete="off" maxlength="50" pattern="[A-Za-zÀ-ÿ\s]+">
+                    aria-label="Pesquisar" id="pesquisa-proxima-vacina" autocomplete="off" maxlength="50"
+                    pattern="[A-Za-zÀ-ÿ\s]+">
             </form>
         </div>
         <br>
@@ -321,7 +327,7 @@ if (
                                     $result_ultima = $stmt_ultima->get_result();
                                     if ($row_ultima = $result_ultima->fetch_assoc()) {
                                         $data_ultima = $row_ultima['data_aplica'];
-                                        $intervalo = (int)$vacina['intervalo_dose'];
+                                        $intervalo = (int) $vacina['intervalo_dose'];
                                         $data_proxima = date('Y-m-d', strtotime($data_ultima . " +$intervalo months"));
                                         $proxima_data = date('d/m/Y', strtotime($data_proxima));
                                     } else {
@@ -330,26 +336,31 @@ if (
                                         $proxima_data = date('d/m/Y', strtotime($data_aplicacao));
                                     }
                                 }
-                            ?>
+                                ?>
                                 <tr class="<?php echo $rowClass; ?>" style="height:38px;">
                                     <td style="vertical-align:middle;"><?= htmlspecialchars($vacina['nome_vaci']) ?></td>
-                                    <td style="vertical-align:middle; text-align:center;"><?= $vacina['idade_aplica'] ?> anos</td>
+                                    <td style="vertical-align:middle; text-align:center;"><?= $vacina['idade_aplica'] ?> anos
+                                    </td>
                                     <td style="vertical-align:middle; text-align:center;"><?= $proxima_data ?></td>
                                     <td style="vertical-align:middle; text-align:center;">
-                                        <div style="display:flex; flex-direction:row; align-items:center; justify-content:center; gap:8px; height:100%;">
-                                            <span style="font-size:1.02em;"><?= $vacina['doses_tomadas'] . "/" . $vacina['n_dose'] ?></span>
-                                            <span class="badge bg-primary" style="font-size:0.90em; min-width:80px; padding:4px 6px;">
+                                        <div
+                                            style="display:flex; flex-direction:row; align-items:center; justify-content:center; gap:8px; height:100%;">
+                                            <span
+                                                style="font-size:1.02em;"><?= $vacina['doses_tomadas'] . "/" . $vacina['n_dose'] ?></span>
+                                            <span class="badge bg-primary"
+                                                style="font-size:0.90em; min-width:80px; padding:4px 6px;">
                                                 Próxima: Dose <?= $proxima_dose ?>
                                             </span>
                                         </div>
                                     </td>
                                     <td style="vertical-align:middle; text-align:center; padding-top:4px; padding-bottom:4px;">
-                                        <a href="../medica/ver_vacina.php?id_vaci=<?= urlencode($vacina['id_vaci']) ?>" class="btn btn-primary btn-sm" style="padding:2px 8px; font-size:0.95em;">
+                                        <a href="../medica/ver_vacina.php?id_vaci=<?= urlencode($vacina['id_vaci']) ?>"
+                                            class="btn btn-primary btn-sm" style="padding:2px 8px; font-size:0.95em;">
                                             <i class="bi bi-info-circle"></i> Sobre a vacina
                                         </a>
                                     </td>
                                 </tr>
-                            <?php $rowIndex++; endforeach; ?>
+                                <?php $rowIndex++; endforeach; ?>
                         <?php else: ?>
                             <tr>
                                 <td colspan="5">Nenhuma vacina pendente.</td>
@@ -390,20 +401,24 @@ if (
         font-weight: 500;
         font-size: 0.98rem;
         text-decoration: none;
-        box-shadow: 0 2px 8px rgba(13,110,253,0.08);
+        box-shadow: 0 2px 8px rgba(13, 110, 253, 0.08);
         transition: background 0.2s, box-shadow 0.2s, color 0.2s;
         margin-top: 0;
     }
-    .custom-vac-link:hover, .custom-vac-link:focus {
+
+    .custom-vac-link:hover,
+    .custom-vac-link:focus {
         background: #084298;
         color: #fff !important;
         text-decoration: none;
-        box-shadow: 0 4px 12px rgba(13,110,253,0.15);
+        box-shadow: 0 4px 12px rgba(13, 110, 253, 0.15);
         outline: none;
     }
+
     .custom-vac-link i {
         font-size: 1.1em;
         vertical-align: middle;
     }
 </style>
+
 </html>

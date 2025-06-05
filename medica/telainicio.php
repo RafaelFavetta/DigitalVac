@@ -191,22 +191,26 @@ if (!isset($_SESSION['id_medico'])) {
 
 <body style="background: #fdfdfd;">
     <?php if (isset($_GET['atestado_id']) && is_numeric($_GET['atestado_id'])): ?>
-    <div id="atestado-toast" style="position: fixed; top: 24px; right: 24px; z-index: 2000; min-width: 320px; max-width: 400px;">
-        <div class="alert alert-success alert-dismissible fade show shadow" role="alert" style="display: flex; align-items: center;">
-            <div style="flex:1;">
-                <strong>Atestado cadastrado!</strong><br>
-                O atestado foi gerado com sucesso.
-            </div>
-            <div class="ms-3 d-flex flex-column gap-1">
-                <a href="download_atestado.php?id=<?php echo intval($_GET['atestado_id']); ?>" class="btn btn-primary btn-sm">
-                    Baixar atestado
-                </a>
-                <button type="button" class="btn btn-outline-secondary btn-sm mt-1" onclick="document.getElementById('atestado-toast').remove();">
-                    Fechar
-                </button>
+        <div id="atestado-toast"
+            style="position: fixed; top: 24px; right: 24px; z-index: 2000; min-width: 320px; max-width: 400px;">
+            <div class="alert alert-success alert-dismissible fade show shadow" role="alert"
+                style="display: flex; align-items: center;">
+                <div style="flex:1;">
+                    <strong>Atestado cadastrado!</strong><br>
+                    O atestado foi gerado com sucesso.
+                </div>
+                <div class="ms-3 d-flex flex-column gap-1">
+                    <a href="download_atestado.php?id=<?php echo intval($_GET['atestado_id']); ?>"
+                        class="btn btn-primary btn-sm">
+                        Baixar atestado
+                    </a>
+                    <button type="button" class="btn btn-outline-secondary btn-sm mt-1"
+                        onclick="document.getElementById('atestado-toast').remove();">
+                        Fechar
+                    </button>
+                </div>
             </div>
         </div>
-    </div>
     <?php endif; ?>
     <!-- Navbar padronizada -->
     <nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">
@@ -220,7 +224,8 @@ if (!isset($_SESSION['id_medico'])) {
             </div>
             <ul class="navbar-nav ms-auto position-absolute end-0 me-3" style="z-index:2; top:16px;">
                 <li class="nav-item">
-                    <a class="btn btn-danger fw-bold px-2 py-1" style="font-size: 15px; min-width: 70px;" href="../outros/sair.php">
+                    <a class="btn btn-danger fw-bold px-2 py-1" style="font-size: 15px; min-width: 70px;"
+                        href="../outros/sair.php">
                         <i class="bi bi-box-arrow-right" style="font-size: 18px;"></i> Sair
                     </a>
                 </li>
@@ -231,35 +236,29 @@ if (!isset($_SESSION['id_medico'])) {
     <div class="cards-outer">
         <div class="cards-container">
             <div class="row-cards">
-                <a href="cadastroaplic.html"
-                    class="btn btn-primary btn-lg card-btn shadow-sm">
+                <a href="cadastroaplic.html" class="btn btn-primary btn-lg card-btn shadow-sm">
                     <i class="bi bi-clipboard2-heart-fill"></i>
                     <span>Aplicação de Vacinas</span>
                 </a>
-                <a href="cadastropac.html"
-                    class="btn btn-primary btn-lg card-btn shadow-sm">
+                <a href="cadastropac.html" class="btn btn-primary btn-lg card-btn shadow-sm">
                     <i class="bi bi-person-plus-fill"></i>
                     <span>Cadastrar Pacientes</span>
                 </a>
-                <a href="listavac.php"
-                    class="btn btn-primary btn-lg card-btn shadow-sm">
+                <a href="listavac.php" class="btn btn-primary btn-lg card-btn shadow-sm">
                     <i class="bi bi-list"></i>
                     <span>Lista de Vacinas</span>
                 </a>
             </div>
             <div class="row-cards">
-                <a href="pesquisa_paciente.php"
-                    class="btn btn-primary btn-lg card-btn shadow-sm">
+                <a href="pesquisa_paciente.php" class="btn btn-primary btn-lg card-btn shadow-sm">
                     <i class="bi bi-person-lines-fill"></i>
                     <span>Pesquisar Pacientes</span>
                 </a>
-                <a href="cadastroatestado.html"
-                    class="btn btn-primary btn-lg card-btn shadow-sm">
+                <a href="cadastroatestado.html" class="btn btn-primary btn-lg card-btn shadow-sm">
                     <i class="bi bi-clipboard2-plus-fill"></i>
                     <span>Cadastrar Atestado</span>
                 </a>
-                <a href="atestado_medico.php"
-                    class="btn btn-primary btn-lg card-btn shadow-sm">
+                <a href="atestado_medico.php" class="btn btn-primary btn-lg card-btn shadow-sm">
                     <i class="bi bi-clipboard-heart-fill"></i>
                     <span>Meus Atestados</span>
                 </a>

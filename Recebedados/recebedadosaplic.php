@@ -8,7 +8,7 @@ include(__DIR__ . '/../outros/db_connect.php');
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Recebe os dados do formulário
     $nome_vacina = $_POST['nome_vacina'];
-    $dose_aplicad = isset($_POST['dose_aplicad']) ? (int)$_POST['dose_aplicad'] : 0;
+    $dose_aplicad = isset($_POST['dose_aplicad']) ? (int) $_POST['dose_aplicad'] : 0;
     $data_aplica = $_POST['data_aplica'];
     $cpf_paciente = preg_replace('/\D/', '', $_POST['cpf_paciente']);
     $nome_posto = $_POST['nome_posto'];

@@ -16,7 +16,8 @@
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
       max-width: 600px;
       margin: auto;
-      margin-top: 32px; /* Adicionado para afastar da navbar */
+      margin-top: 32px;
+      /* Adicionado para afastar da navbar */
     }
 
     /* Remover linha azul dos inputs ao focar */
@@ -110,7 +111,8 @@
         </div>
         <ul class="navbar-nav ms-auto">
           <li class="nav-item">
-            <a class="btn btn-danger fw-bold px-2 py-1" style="font-size: 15px; min-width: 70px;" href="../outros/sair.php">
+            <a class="btn btn-danger fw-bold px-2 py-1" style="font-size: 15px; min-width: 70px;"
+              href="../outros/sair.php">
               <i class="bi bi-box-arrow-right" style="font-size: 18px;"></i> Sair
             </a>
           </li>
@@ -358,7 +360,7 @@
         method: "POST",
         body: formData,
       })
-        .then((response) => response.json().catch(() => ({success: false, message: "Erro inesperado do servidor."})))
+        .then((response) => response.json().catch(() => ({ success: false, message: "Erro inesperado do servidor." })))
         .then((data) => {
           if (data.success) {
             showAlert('success', data.message || "Cadastro realizado com sucesso!");

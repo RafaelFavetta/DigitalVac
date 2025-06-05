@@ -3,7 +3,8 @@ include('../outros/db_connect.php');
 $q = isset($_GET['q']) ? $_GET['q'] : '';
 
 // Remove tudo que não é número
-function normalize($str) {
+function normalize($str)
+{
     return preg_replace('/\D/', '', $str);
 }
 
@@ -15,7 +16,8 @@ $result = $conn->query($sql);
 $found = [];
 while ($row = $result->fetch_assoc()) {
     $cpf = preg_replace('/\D/', '', $row['cpf']);
-    if ($search === '' ||
+    if (
+        $search === '' ||
         strpos($cpf, $search) !== false ||
         preg_match('/' . implode('.*', str_split($search)) . '/i', $cpf)
     ) {

@@ -89,7 +89,7 @@ function renderTabelaCarteiraVac($vacinas)
                 $rowIndex = 0;
                 // Ordena as doses de cada vacina pela data de aplicação (mais recente primeiro)
                 foreach ($vacinas as &$vacina) {
-                    usort($vacina['doses'], function($a, $b) {
+                    usort($vacina['doses'], function ($a, $b) {
                         // Corrigir para usar 'data_aplica' (não 'data_aplicada')
                         return strtotime($b['data_aplica']) - strtotime($a['data_aplica']);
                     });
@@ -108,7 +108,7 @@ function renderTabelaCarteiraVac($vacinas)
                         $postos[] = htmlspecialchars($dose['nome_posto']);
                         $medicos[] = htmlspecialchars($dose['nome_medico']);
                     }
-                ?>
+                    ?>
                     <tr class="<?php echo $rowClass; ?>">
                         <td><?php echo htmlspecialchars($vacina['nome_vaci']); ?></td>
                         <td><?php echo $doses_tomadas . "/" . $n_dose; ?></td>
@@ -116,9 +116,11 @@ function renderTabelaCarteiraVac($vacinas)
                         <td><?php echo implode('<br>', $postos); ?></td>
                         <td><?php echo implode('<br>', $medicos); ?></td>
                     </tr>
-                <?php $rowIndex++; endforeach; ?>
+                    <?php $rowIndex++; endforeach; ?>
                 <?php if ($rowIndex === 0): ?>
-                    <tr><td colspan="5">Nenhuma aplicação registrada.</td></tr>
+                    <tr>
+                        <td colspan="5">Nenhuma aplicação registrada.</td>
+                    </tr>
                 <?php endif; ?>
             </tbody>
         </table>
@@ -232,7 +234,8 @@ if (
                 </div>
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="btn btn-danger fw-bold px-2 py-1" style="font-size: 15px; min-width: 70px;" href="../outros/sair.php">
+                        <a class="btn btn-danger fw-bold px-2 py-1" style="font-size: 15px; min-width: 70px;"
+                            href="../outros/sair.php">
                             <i class="bi bi-box-arrow-right" style="font-size: 18px;"></i> Sair
                         </a>
                     </li>
@@ -244,24 +247,31 @@ if (
     <div class="container mt-4">
         <h2 class="text-center text-primary fw-bold">Aplicações de Vacina</h2>
         <div class="w-100 d-flex justify-content-center">
-            <form class="d-flex position-relative" role="search" id="form-pesquisa-vacina" style="max-width:600px; width:100%;">
+            <form class="d-flex position-relative" role="search" id="form-pesquisa-vacina"
+                style="max-width:600px; width:100%;">
                 <input class="form-control me-2 border border-primary" type="search" placeholder="Nome da vacina"
-                    aria-label="Pesquisar" id="pesquisa-vacina" autocomplete="off" maxlength="50" pattern="[A-Za-zÀ-ÿ\s]+">
+                    aria-label="Pesquisar" id="pesquisa-vacina" autocomplete="off" maxlength="50"
+                    pattern="[A-Za-zÀ-ÿ\s]+">
             </form>
         </div>
         <div class="d-flex justify-content-end align-items-center mb-2" style="width:100%;">
             <div class="dropdown">
-                <button class="btn btn-outline-primary dropdown-toggle dropdown-sort" type="button" id="dropdownOrdenarPor" data-bs-toggle="dropdown" aria-expanded="false">
+                <button class="btn btn-outline-primary dropdown-toggle dropdown-sort" type="button"
+                    id="dropdownOrdenarPor" data-bs-toggle="dropdown" aria-expanded="false">
                     <i class="bi bi-funnel"></i> Ordenar por: <span id="ordenar-label">
                         <?php
-                        if ($ordenar_por === 'nome') echo 'Nome';
-                        elseif ($ordenar_por === 'doses') echo 'Doses Tomadas';
-                        else echo 'Data de Aplicação';
+                        if ($ordenar_por === 'nome')
+                            echo 'Nome';
+                        elseif ($ordenar_por === 'doses')
+                            echo 'Doses Tomadas';
+                        else
+                            echo 'Data de Aplicação';
                         ?>
                     </span>
                 </button>
                 <ul class="dropdown-menu" aria-labelledby="dropdownOrdenarPor">
-                    <li><a class="dropdown-item ordenar-opcao" data-value="data_aplica" href="#">Data de Aplicação</a></li>
+                    <li><a class="dropdown-item ordenar-opcao" data-value="data_aplica" href="#">Data de Aplicação</a>
+                    </li>
                     <li><a class="dropdown-item ordenar-opcao" data-value="nome" href="#">Nome</a></li>
                     <li><a class="dropdown-item ordenar-opcao" data-value="doses" href="#">Doses Tomadas</a></li>
                 </ul>
@@ -282,7 +292,7 @@ if (
         };
 
         // Permite apenas letras e espaços no campo de pesquisa
-        document.getElementById('pesquisa-vacina').addEventListener('input', function() {
+        document.getElementById('pesquisa-vacina').addEventListener('input', function () {
             this.value = this.value.replace(/[^A-Za-zÀ-ÿ\s]/g, '').slice(0, 50);
         });
 
@@ -311,8 +321,8 @@ if (
         });
 
         // Dropdown de ordenação
-        document.querySelectorAll('.ordenar-opcao').forEach(function(el) {
-            el.addEventListener('click', function(e) {
+        document.querySelectorAll('.ordenar-opcao').forEach(function (el) {
+            el.addEventListener('click', function (e) {
                 e.preventDefault();
                 ordenarPor = this.getAttribute('data-value');
                 document.getElementById('ordenar-label').textContent = this.textContent;

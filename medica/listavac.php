@@ -110,7 +110,8 @@ if (!$result) {
                 </div>
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="btn btn-danger fw-bold px-2 py-1" style="font-size: 15px; min-width: 70px;" href="../outros/sair.php">
+                        <a class="btn btn-danger fw-bold px-2 py-1" style="font-size: 15px; min-width: 70px;"
+                            href="../outros/sair.php">
                             <i class="bi bi-box-arrow-right" style="font-size: 18px;"></i> Sair
                         </a>
                     </li>
@@ -124,8 +125,8 @@ if (!$result) {
         <div class="container-fluid col-md-6 mt-4">
             <form class="d-flex position-relative" role="search" id="form-pesquisa-vacina">
                 <input class="form-control me-2 border border-primary fw-bold" type="search" name="nome_vacina"
-                    placeholder="Digite o nome da vacina"
-                    value="<?php echo htmlspecialchars($nome_vacina); ?>" id="input-nome-vacina" autocomplete="off">
+                    placeholder="Digite o nome da vacina" value="<?php echo htmlspecialchars($nome_vacina); ?>"
+                    id="input-nome-vacina" autocomplete="off">
             </form>
         </div>
         <br>
@@ -154,24 +155,25 @@ if (!$result) {
                         } else {
                             $rowClass = ($rowIndex % 2 === 1) ? 'table-secondary' : 'bg-white';
                         }
-                    ?>
-                    <tr class="<?php echo $rowClass; ?>">
-                        <td><?php echo htmlspecialchars($row['id_vaci']); ?></td>
-                        <td><?php echo htmlspecialchars($row['nome_vaci']); ?></td>
-                        <td><?php echo htmlspecialchars($row['fabri_vaci']); ?></td>
-                        <td><?php echo htmlspecialchars($row['lote_vaci']); ?></td>
-                        <td><?php echo htmlspecialchars($row['idade_aplica']); ?></td>
-                        <td><?php echo htmlspecialchars($row['via_adimicao']); ?></td>
-                        <td><?php echo htmlspecialchars($row['n_dose']); ?></td>
-                        <td><?php echo htmlspecialchars($row['intervalo_dose']); ?></td>
-                        <td><?php echo htmlspecialchars($row['estoque']); ?></td>
-                        <td>
-                            <a href="ver_vacina.php?id_vaci=<?php echo urlencode($row['id_vaci']); ?>" class="btn btn-primary btn-sm">
-                                <i class="bi bi-info-circle"></i> Ver informações
-                            </a>
-                        </td>
-                    </tr>
-                    <?php $rowIndex++; endwhile; ?>
+                        ?>
+                        <tr class="<?php echo $rowClass; ?>">
+                            <td><?php echo htmlspecialchars($row['id_vaci']); ?></td>
+                            <td><?php echo htmlspecialchars($row['nome_vaci']); ?></td>
+                            <td><?php echo htmlspecialchars($row['fabri_vaci']); ?></td>
+                            <td><?php echo htmlspecialchars($row['lote_vaci']); ?></td>
+                            <td><?php echo htmlspecialchars($row['idade_aplica']); ?></td>
+                            <td><?php echo htmlspecialchars($row['via_adimicao']); ?></td>
+                            <td><?php echo htmlspecialchars($row['n_dose']); ?></td>
+                            <td><?php echo htmlspecialchars($row['intervalo_dose']); ?></td>
+                            <td><?php echo htmlspecialchars($row['estoque']); ?></td>
+                            <td>
+                                <a href="ver_vacina.php?id_vaci=<?php echo urlencode($row['id_vaci']); ?>"
+                                    class="btn btn-primary btn-sm">
+                                    <i class="bi bi-info-circle"></i> Ver informações
+                                </a>
+                            </td>
+                        </tr>
+                        <?php $rowIndex++; endwhile; ?>
                 </tbody>
             </table>
         </div>
@@ -179,20 +181,21 @@ if (!$result) {
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-    // Pesquisa automática AJAX
-    document.getElementById('input-nome-vacina').addEventListener('input', function () {
-        const nome = this.value;
-        const tabela = document.getElementById('tabela-vacinas');
-        const params = new URLSearchParams({ nome_vacina: nome });
-        fetch('listavac.php?' + params.toString(), { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
-            .then(res => res.text())
-            .then(html => {
-                const temp = document.createElement('div');
-                temp.innerHTML = html;
-                const novaTabela = temp.querySelector('#tabela-vacinas');
-                if (novaTabela) tabela.innerHTML = novaTabela.innerHTML;
-            });
-    });
+        // Pesquisa automática AJAX
+        document.getElementById('input-nome-vacina').addEventListener('input', function () {
+            const nome = this.value;
+            const tabela = document.getElementById('tabela-vacinas');
+            const params = new URLSearchParams({ nome_vacina: nome });
+            fetch('listavac.php?' + params.toString(), { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
+                .then(res => res.text())
+                .then(html => {
+                    const temp = document.createElement('div');
+                    temp.innerHTML = html;
+                    const novaTabela = temp.querySelector('#tabela-vacinas');
+                    if (novaTabela) tabela.innerHTML = novaTabela.innerHTML;
+                });
+        });
     </script>
 </body>
+
 </html>

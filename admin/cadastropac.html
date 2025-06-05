@@ -83,7 +83,8 @@
         </div>
         <ul class="navbar-nav ms-auto">
           <li class="nav-item">
-            <a class="btn btn-danger fw-bold px-2 py-1" style="font-size: 15px; min-width: 70px;" href="../outros/sair.php">
+            <a class="btn btn-danger fw-bold px-2 py-1" style="font-size: 15px; min-width: 70px;"
+              href="../outros/sair.php">
               <i class="bi bi-box-arrow-right" style="font-size: 18px;"></i> Sair
             </a>
           </li>
@@ -267,7 +268,7 @@
         method: "POST",
         body: formData,
       })
-        .then((response) => response.json().catch(() => ({success: false, message: "Erro inesperado do servidor."})))
+        .then((response) => response.json().catch(() => ({ success: false, message: "Erro inesperado do servidor." })))
         .then((data) => {
           if (data.success) {
             showAlert('success', data.message || "Cadastro realizado com sucesso!");

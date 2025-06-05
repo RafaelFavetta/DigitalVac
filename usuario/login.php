@@ -77,7 +77,8 @@ $conn->close();
             <form method="POST" action="">
                 <div class="mb-3">
                     <label for="cpf" class="form-label">CPF</label>
-                    <input type="text" name="cpf" id="cpf" class="form-control" placeholder="Digite seu CPF" required maxlength="14" inputmode="numeric" pattern="\d{3}\.\d{3}\.\d{3}-\d{2}">
+                    <input type="text" name="cpf" id="cpf" class="form-control" placeholder="Digite seu CPF" required
+                        maxlength="14" inputmode="numeric" pattern="\d{3}\.\d{3}\.\d{3}-\d{2}">
                 </div>
                 <div class="mb-3">
                     <label for="senha" class="form-label">Senha</label>
@@ -108,7 +109,7 @@ $conn->close();
         });
 
         // Máscara para senha: apenas impede colar espaços e limita tamanho
-        document.getElementById('senha').addEventListener('input', function() {
+        document.getElementById('senha').addEventListener('input', function () {
             this.value = this.value.replace(/\s/g, '').slice(0, 20);
         });
 

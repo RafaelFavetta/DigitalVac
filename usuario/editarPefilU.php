@@ -67,7 +67,8 @@ $email = $user['email_usuario'];
                 </div>
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="btn btn-danger fw-bold px-2 py-1" style="font-size: 15px; min-width: 70px;" href="../outros/sair.php">
+                        <a class="btn btn-danger fw-bold px-2 py-1" style="font-size: 15px; min-width: 70px;"
+                            href="../outros/sair.php">
                             <i class="bi bi-box-arrow-right" style="font-size: 18px;"></i> Sair
                         </a>
                     </li>
@@ -90,7 +91,8 @@ $email = $user['email_usuario'];
                         <div class="mb-3">
                             <label for="telefone" class="form-label"><strong>Telefone:</strong></label>
                             <input type="text" class="form-control" id="telefone" name="telefone"
-                                value="<?php echo htmlspecialchars($telefone); ?>" maxlength="15" inputmode="tel" pattern="\(?\d{2}\)?\s?\d{4,5}-?\d{4}">
+                                value="<?php echo htmlspecialchars($telefone); ?>" maxlength="15" inputmode="tel"
+                                pattern="\(?\d{2}\)?\s?\d{4,5}-?\d{4}">
                         </div>
                         <div class="mb-3">
                             <label for="genero" class="form-label"><strong>Gênero:</strong></label>
@@ -103,11 +105,13 @@ $email = $user['email_usuario'];
                         <div class="mb-3">
                             <label for="email" class="form-label"><strong>E-mail:</strong></label>
                             <input type="email" class="form-control" id="email" name="email"
-                                value="<?php echo htmlspecialchars($email); ?>" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$">
+                                value="<?php echo htmlspecialchars($email); ?>"
+                                pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$">
                         </div>
                         <!-- Campos abaixo de email removidos -->
                         <button type="submit" class="btn btn-primary fw-bold">Salvar Alterações</button>
-                        <a href="perfilU.php" class="btn btn-danger fw-bold px-2 py-1" style="font-size: 15px; min-width: 70px;">Cancelar</a>
+                        <a href="perfilU.php" class="btn btn-danger fw-bold px-2 py-1"
+                            style="font-size: 15px; min-width: 70px;">Cancelar</a>
                     </form>
                 </div>
             </div>
@@ -163,19 +167,20 @@ $email = $user['email_usuario'];
                 method: "POST",
                 body: formData,
             })
-            .then((response) => response.json().catch(() => ({success: false, message: "Erro inesperado do servidor."})))
-            .then((data) => {
-                if (data.success) {
-                    showAlert('success', data.message || "Alterações salvas com sucesso!");
-                    setTimeout(() => { window.location.href = "perfilU.php"; }, 1500);
-                } else {
-                    showAlert('error', data.message || "Erro ao salvar alterações.");
-                }
-            })
-            .catch((error) => {
-                showAlert('error', "Ocorreu um erro ao salvar. Tente novamente.");
-            });
+                .then((response) => response.json().catch(() => ({ success: false, message: "Erro inesperado do servidor." })))
+                .then((data) => {
+                    if (data.success) {
+                        showAlert('success', data.message || "Alterações salvas com sucesso!");
+                        setTimeout(() => { window.location.href = "perfilU.php"; }, 1500);
+                    } else {
+                        showAlert('error', data.message || "Erro ao salvar alterações.");
+                    }
+                })
+                .catch((error) => {
+                    showAlert('error', "Ocorreu um erro ao salvar. Tente novamente.");
+                });
         });
     </script>
 </body>
+
 </html>

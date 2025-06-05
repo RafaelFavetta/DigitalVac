@@ -146,7 +146,8 @@ $result = $stmt->get_result();
                 </div>
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="btn btn-danger fw-bold px-2 py-1" style="font-size: 15px; min-width: 70px;" href="../outros/sair.php">
+                        <a class="btn btn-danger fw-bold px-2 py-1" style="font-size: 15px; min-width: 70px;"
+                            href="../outros/sair.php">
                             <i class="bi bi-box-arrow-right" style="font-size: 18px;"></i> Sair
                         </a>
                     </li>
@@ -158,9 +159,11 @@ $result = $stmt->get_result();
     <div class="container mt-4">
         <h2 class="text-center text-primary fw-bold">Pesquisar Pacientes</h2>
         <div class="container-fluid col-md-6 mt-4">
-            <form class="d-flex position-relative" role="search" method="get" action="pesquisa_paciente.php" id="form-pesquisa-cpf">
+            <form class="d-flex position-relative" role="search" method="get" action="pesquisa_paciente.php"
+                id="form-pesquisa-cpf">
                 <input class="form-control me-2 border border-primary fw-bold" type="search" name="cpf" id="cpf"
-                    placeholder="Digite o CPF" aria-label="CPF" value="<?php echo isset($cpf) ? htmlspecialchars($cpf) : ''; ?>" autocomplete="off">
+                    placeholder="Digite o CPF" aria-label="CPF"
+                    value="<?php echo isset($cpf) ? htmlspecialchars($cpf) : ''; ?>" autocomplete="off">
             </form>
         </div>
         <br>
@@ -190,7 +193,7 @@ $result = $stmt->get_result();
                         } else {
                             $rowClass = ($rowIndex % 2 === 1) ? 'table-secondary' : 'bg-white';
                         }
-                    ?>
+                        ?>
                         <tr class="<?php echo $rowClass; ?>">
                             <td><?php echo htmlspecialchars($row['id_usuario']); ?></td>
                             <td><?php echo htmlspecialchars($row['nome_usuario']); ?></td>
@@ -202,15 +205,17 @@ $result = $stmt->get_result();
                             <td><?php echo htmlspecialchars($row['peso_usuario']); ?></td>
                             <td><?php echo htmlspecialchars($row['tipo_sang_usuario']); ?></td>
                             <td>
-                                <a href="ver_paciente.php?id=<?php echo $row['id_usuario']; ?>" class="btn btn-sm btn-info mb-1" title="Ver Informações">
+                                <a href="ver_paciente.php?id=<?php echo $row['id_usuario']; ?>"
+                                    class="btn btn-sm btn-info mb-1" title="Ver Informações">
                                     <i class="bi bi-info-circle"></i>
                                 </a>
-                                <a href="historico_vacinacao.php?id=<?php echo $row['id_usuario']; ?>" class="btn btn-sm btn-success mb-1" title="Ver Histórico de Vacinação">
+                                <a href="historico_vacinacao.php?id=<?php echo $row['id_usuario']; ?>"
+                                    class="btn btn-sm btn-success mb-1" title="Ver Histórico de Vacinação">
                                     <i class="bi bi-journal-medical"></i>
                                 </a>
                             </td>
                         </tr>
-                    <?php $rowIndex++; endwhile; ?>
+                        <?php $rowIndex++; endwhile; ?>
                 </tbody>
             </table>
         </div>
@@ -241,6 +246,7 @@ $result = $stmt->get_result();
         });
     </script>
 </body>
+
 </html>
 <?php
 $conn->close();

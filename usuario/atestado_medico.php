@@ -153,7 +153,8 @@ $result = $stmt->get_result();
                 </div>
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="btn btn-danger fw-bold px-2 py-1" style="font-size: 15px; min-width: 70px;" href="../outros/sair.php">
+                        <a class="btn btn-danger fw-bold px-2 py-1" style="font-size: 15px; min-width: 70px;"
+                            href="../outros/sair.php">
                             <i class="bi bi-box-arrow-right" style="font-size: 18px;"></i> Sair
                         </a>
                     </li>
@@ -175,55 +176,58 @@ $result = $stmt->get_result();
         <div class="row row-cols-1 row-cols-md-3 g-2"
             style="margin-top:32px; max-width:1200px; margin-left:auto; margin-right:auto;">
             <?php if ($result->num_rows > 0): ?>
-            <?php
-            $today = date('Y-m-d');
-            while ($row = $result->fetch_assoc()):
-                // Buscar data_fim para saber se está vencido
-                $sql_fim = "SELECT data_fim FROM atestado WHERE id_atestado = ?";
-                $stmt_fim = $conn->prepare($sql_fim);
-                $stmt_fim->bind_param("i", $row['id_atestado']);
-                $stmt_fim->execute();
-                $res_fim = $stmt_fim->get_result();
-                $data_fim = $res_fim->fetch_assoc()['data_fim'];
-                $is_expired = ($data_fim < $today);
-            ?>
-            <div class="col mb-2 d-flex align-items-stretch">
-                <div class="card position-relative w-100">
-                    <!-- Ícone de status no canto superior direito -->
-                    <span class="position-absolute top-0 end-0 p-2">
-                        <?php if ($is_expired): ?>
-                        <!-- Ícone relógio vermelho (Bootstrap) -->
-                        <i class="bi bi-alarm-fill text-danger" title="Atestado vencido" style="font-size: 2rem;"></i>
-                        <?php else: ?>
-                        <!-- Ícone relógio verde (Bootstrap) -->
-                        <i class="bi bi-alarm-fill text-success" title="Atestado válido" style="font-size: 2rem;"></i>
-                        <?php endif; ?>
-                    </span>
-                    <p><strong>Nome do Paciente:</strong> <?php echo htmlspecialchars($row['nome_paciente']); ?></p>
-                    <p><strong>Médico Responsável:</strong> <?php echo htmlspecialchars($row['medico_responsavel']); ?></p>
-                    <p><strong>Data de Emissão:</strong>
-                        <?php echo htmlspecialchars(date('d/m/Y', strtotime($row['data_emissao']))); ?></p>
-                    <p><strong>Justificativa:</strong> <?php echo htmlspecialchars($row['justificativa']); ?></p>
-                    <p><strong>Período de Afastamento:</strong> <?php echo htmlspecialchars($row['periodo_afastamento']); ?>
-                        dia(s)
-                    </p>
-                    <?php
-                        // Busca a data de término do afastamento
-                        $data_fim_formatada = '';
-                        if (!empty($data_fim)) {
-                            $data_fim_formatada = date('d/m/Y', strtotime($data_fim));
-                        }
-                        ?>
-                    <p><strong>Término de Afastamento:</strong> <?php echo htmlspecialchars($data_fim_formatada); ?></p>
-                    <div class="text-center mt-3">
-                        <a href="download_atestado.php?id=<?php echo $row['id_atestado']; ?>" class="btn btn-primary">Baixar o
-                            atestado</a>
+                <?php
+                $today = date('Y-m-d');
+                while ($row = $result->fetch_assoc()):
+                    // Buscar data_fim para saber se está vencido
+                    $sql_fim = "SELECT data_fim FROM atestado WHERE id_atestado = ?";
+                    $stmt_fim = $conn->prepare($sql_fim);
+                    $stmt_fim->bind_param("i", $row['id_atestado']);
+                    $stmt_fim->execute();
+                    $res_fim = $stmt_fim->get_result();
+                    $data_fim = $res_fim->fetch_assoc()['data_fim'];
+                    $is_expired = ($data_fim < $today);
+                    ?>
+                    <div class="col mb-2 d-flex align-items-stretch">
+                        <div class="card position-relative w-100">
+                            <!-- Ícone de status no canto superior direito -->
+                            <span class="position-absolute top-0 end-0 p-2">
+                                <?php if ($is_expired): ?>
+                                    <!-- Ícone relógio vermelho (Bootstrap) -->
+                                    <i class="bi bi-alarm-fill text-danger" title="Atestado vencido" style="font-size: 2rem;"></i>
+                                <?php else: ?>
+                                    <!-- Ícone relógio verde (Bootstrap) -->
+                                    <i class="bi bi-alarm-fill text-success" title="Atestado válido" style="font-size: 2rem;"></i>
+                                <?php endif; ?>
+                            </span>
+                            <p><strong>Nome do Paciente:</strong> <?php echo htmlspecialchars($row['nome_paciente']); ?></p>
+                            <p><strong>Médico Responsável:</strong> <?php echo htmlspecialchars($row['medico_responsavel']); ?>
+                            </p>
+                            <p><strong>Data de Emissão:</strong>
+                                <?php echo htmlspecialchars(date('d/m/Y', strtotime($row['data_emissao']))); ?></p>
+                            <p><strong>Justificativa:</strong> <?php echo htmlspecialchars($row['justificativa']); ?></p>
+                            <p><strong>Período de Afastamento:</strong>
+                                <?php echo htmlspecialchars($row['periodo_afastamento']); ?>
+                                dia(s)
+                            </p>
+                            <?php
+                            // Busca a data de término do afastamento
+                            $data_fim_formatada = '';
+                            if (!empty($data_fim)) {
+                                $data_fim_formatada = date('d/m/Y', strtotime($data_fim));
+                            }
+                            ?>
+                            <p><strong>Término de Afastamento:</strong> <?php echo htmlspecialchars($data_fim_formatada); ?></p>
+                            <div class="text-center mt-3">
+                                <a href="download_atestado.php?id=<?php echo $row['id_atestado']; ?>"
+                                    class="btn btn-primary">Baixar o
+                                    atestado</a>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
-            <?php endwhile; ?>
+                <?php endwhile; ?>
             <?php else: ?>
-            <p class="alert alert-warning text-center">Nenhum atestado encontrado.</p>
+                <p class="alert alert-warning text-center">Nenhum atestado encontrado.</p>
             <?php endif; ?>
         </div>
     </div>

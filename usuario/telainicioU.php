@@ -49,7 +49,8 @@ $conn->close();
             </div>
             <ul class="navbar-nav ms-auto position-absolute end-0 me-3" style="z-index:2; top:16px;">
                 <li class="nav-item">
-                    <a class="btn btn-danger fw-bold px-2 py-1" style="font-size: 15px; min-width: 70px;" href="../outros/sair.php">
+                    <a class="btn btn-danger fw-bold px-2 py-1" style="font-size: 15px; min-width: 70px;"
+                        href="../outros/sair.php">
                         <i class="bi bi-box-arrow-right" style="font-size: 18px;"></i> Sair
                     </a>
                 </li>
@@ -61,28 +62,34 @@ $conn->close();
         <div class="row justify-content-center">
             <div class="col-md-10">
                 <?php if (count($imagens) === 1): ?>
-                    <img src="../img/<?php echo htmlspecialchars($imagens[0]); ?>" alt="" class="campanha-img-unica shadow-sm">
+                    <img src="../img/<?php echo htmlspecialchars($imagens[0]); ?>" alt=""
+                        class="campanha-img-unica shadow-sm">
                 <?php elseif (count($imagens) > 1): ?>
                     <div id="carouselCampanha" class="carousel slide" data-bs-ride="carousel" data-bs-interval="3000">
                         <div class="carousel-indicators">
                             <?php foreach ($imagens as $idx => $img): ?>
                                 <button type="button" data-bs-target="#carouselCampanha" data-bs-slide-to="<?php echo $idx; ?>"
-                                    <?php if ($idx === 0) echo 'class="active" aria-current="true"'; ?>
-                                    aria-label="Slide <?php echo $idx+1; ?>"></button>
+                                    <?php if ($idx === 0)
+                                        echo 'class="active" aria-current="true"'; ?>
+                                    aria-label="Slide <?php echo $idx + 1; ?>"></button>
                             <?php endforeach; ?>
                         </div>
                         <div class="carousel-inner">
                             <?php foreach ($imagens as $idx => $img): ?>
-                                <div class="carousel-item<?php if ($idx === 0) echo ' active'; ?>">
-                                    <img src="../img/<?php echo htmlspecialchars($img); ?>" class="d-block w-100" alt="Campanha <?php echo $idx+1; ?>">
+                                <div class="carousel-item<?php if ($idx === 0)
+                                    echo ' active'; ?>">
+                                    <img src="../img/<?php echo htmlspecialchars($img); ?>" class="d-block w-100"
+                                        alt="Campanha <?php echo $idx + 1; ?>">
                                 </div>
                             <?php endforeach; ?>
                         </div>
-                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselCampanha" data-bs-slide="prev">
+                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselCampanha"
+                            data-bs-slide="prev">
                             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                             <span class="visually-hidden">Anterior</span>
                         </button>
-                        <button class="carousel-control-next" type="button" data-bs-target="#carouselCampanha" data-bs-slide="next">
+                        <button class="carousel-control-next" type="button" data-bs-target="#carouselCampanha"
+                            data-bs-slide="next">
                             <span class="carousel-control-next-icon" aria-hidden="true"></span>
                             <span class="visually-hidden">Próximo</span>
                         </button>
@@ -93,29 +100,36 @@ $conn->close();
     </div>
 
     <!-- Cards centralizados padrão medica/telainicio.php -->
-    <div class="container my-4">
+    <?php $semImagem = count($imagens) === 0; ?>
+    <div
+        class="container my-4<?php if ($semImagem)
+            echo ' d-flex justify-content-center align-items-center min-vh-100'; ?>">
         <div class="bg-white rounded-4 shadow p-4 mx-auto" style="max-width: 800px;">
             <div class="row row-cols-1 row-cols-md-4 g-3 justify-content-center">
                 <div class="col d-flex">
-                    <a href="perfilU.php" class="btn btn-primary btn-lg w-100 h-100 d-flex flex-column align-items-center justify-content-center shadow-sm py-4">
+                    <a href="perfilU.php"
+                        class="btn btn-primary btn-lg w-100 h-100 d-flex flex-column align-items-center justify-content-center shadow-sm py-4">
                         <i class="bi bi-person-fill mb-2" style="font-size: 50px;"></i>
                         <span class="fw-bold">Perfil</span>
                     </a>
                 </div>
                 <div class="col d-flex">
-                    <a href="carteira_vac.php" class="btn btn-primary btn-lg w-100 h-100 d-flex flex-column align-items-center justify-content-center shadow-sm py-4">
+                    <a href="carteira_vac.php"
+                        class="btn btn-primary btn-lg w-100 h-100 d-flex flex-column align-items-center justify-content-center shadow-sm py-4">
                         <i class="bi bi-postcard-heart-fill mb-2" style="font-size: 50px;"></i>
                         <span class="fw-bold">Carteira de Vacina</span>
                     </a>
                 </div>
                 <div class="col d-flex">
-                    <a href="proxima_vac.php" class="btn btn-primary btn-lg w-100 h-100 d-flex flex-column align-items-center justify-content-center shadow-sm py-4">
+                    <a href="proxima_vac.php"
+                        class="btn btn-primary btn-lg w-100 h-100 d-flex flex-column align-items-center justify-content-center shadow-sm py-4">
                         <i class="bi bi-calendar2-week-fill mb-2" style="font-size: 50px;"></i>
                         <span class="fw-bold">Próximas Vacinas</span>
                     </a>
                 </div>
                 <div class="col d-flex">
-                    <a href="atestado_medico.php" class="btn btn-primary btn-lg w-100 h-100 d-flex flex-column align-items-center justify-content-center shadow-sm py-4">
+                    <a href="atestado_medico.php"
+                        class="btn btn-primary btn-lg w-100 h-100 d-flex flex-column align-items-center justify-content-center shadow-sm py-4">
                         <i class="bi bi-clipboard-heart-fill mb-2" style="font-size: 50px;"></i>
                         <span class="fw-bold">Atestados</span>
                     </a>
