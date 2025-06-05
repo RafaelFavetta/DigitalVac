@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>DigitalVac</title>
+  <title>Cadastro de Campanha - DigitalVac</title>
   <link rel="icon" href="../img/logo.png" type="image/png" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" />
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet" />
@@ -64,11 +64,11 @@
             <i class="bi bi-person-badge" style="font-size: 20px"></i>
             Cadastrar Enfermeiro
           </a>
-          <a class="nav-link disabled fs-6 fw-bold" aria-disabled="true" href="cadastroposto.html">
-            <i class="bi bi-building-fill-add" style="font-size: 20px;"></i>
+          <a class="nav-link active fs-6 fw-bold" href="cadastroposto.html">
+            <i class="bi bi-building-fill-add" style="font-size: 20px"></i>
             Cadastrar Posto
           </a>
-          <a class="nav-link active fs-6 fw-bold" href="cadastrocampanha.html">
+          <a class="nav-link disabled fs-6 fw-bold" aria-disabled="true" href="cadastrocampanha.html">
             <i class="bi bi-megaphone-fill" style="font-size: 20px"></i>
             Cadastrar Campanha
           </a>
@@ -96,33 +96,31 @@
           </div>
         </div>
       </div>
-      <h2 class="text-center text-primary fw-bold">Cadastro de Posto</h2>
-      <form id="cadastroPostoForm" action="../Recebedados/recebedadosposto.php" method="POST">
+      <h2 class="text-center text-primary fw-bold">Cadastro de Campanha</h2>
+      <form id="cadastroCampanhaForm" action="../Recebedados/recebedadoscampanha.php" method="POST" enctype="multipart/form-data">
         <div class="mb-3">
-          <label for="nome_posto" class="form-label fw-bold">Nome do Posto</label>
-          <input type="text" id="nome_posto" name="nome_posto" class="form-control" placeholder="Nome do Posto"
-            required />
+          <label for="nome_campanha" class="form-label fw-bold">Nome da Campanha</label>
+          <input type="text" id="nome_campanha" name="nome_campanha" class="form-control" required />
         </div>
         <div class="mb-3">
-          <label for="cep" class="form-label fw-bold">CEP</label>
-          <input type="text" id="cep" name="cep" class="form-control" placeholder="CEP" required />
+          <label for="data_inicio" class="form-label fw-bold">Data de Início</label>
+          <input type="date" id="data_inicio" name="data_inicio" class="form-control" required />
         </div>
         <div class="mb-3">
-          <label for="numero_posto" class="form-label fw-bold">Número do Posto</label>
-          <input type="text" id="numero_posto" name="numero_posto" class="form-control" placeholder="Número do Posto"
-            required />
+          <label for="data_fim" class="form-label fw-bold">Data de Término</label>
+          <input type="date" id="data_fim" name="data_fim" class="form-control" required />
         </div>
-        <!-- Novo campo de endereço preenchido automaticamente -->
         <div class="mb-3">
-          <label for="endereco" class="form-label fw-bold">Endereço</label>
-          <input type="text" id="endereco" name="endereco" class="form-control"
-            placeholder="Endereço será preenchido automaticamente" readonly>
-          <!-- Campo oculto para cidade -->
-          <input type="hidden" id="cidade" name="cidade">
+          <label for="imagem" class="form-label fw-bold">Imagem de Divulgação</label>
+          <input type="file" id="imagem" name="imagem" class="form-control" accept="image/*" required />
+        </div>
+        <div class="mb-3">
+          <label for="descricao" class="form-label fw-bold">Descrição</label>
+          <textarea id="descricao" name="descricao" class="form-control" rows="3" required></textarea>
         </div>
         <div class="text-center">
           <button type="submit" class="btn btn-primary fw-bold">
-            Cadastrar
+            Cadastrar Campanha
           </button>
         </div>
       </form>
@@ -130,16 +128,7 @@
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/cleave.js"></script>
   <script>
-    // Máscara para CEP
-    new Cleave('#cep', {
-      delimiters: ['-'],
-      blocks: [5, 3],
-      numericOnly: true
-    });
-
-    // Toast Bootstrap
     function showAlert(type, message) {
       const toastEl = document.getElementById('toast-alert');
       const toastBody = document.getElementById('toast-alert-body');
@@ -156,55 +145,8 @@
       toast.show();
     }
 
-    // Consulta ViaCEP ao sair do campo CEP
-    document.getElementById('cep').addEventListener('blur', function () {
-      const cep = this.value.replace(/\D/g, '');
-      if (cep.length === 8) {
-        fetch(`https://viacep.com.br/ws/${cep}/json/`)
-          .then(response => response.json())
-          .then(data => {
-            if (!data.erro) {
-              document.getElementById('endereco').value =
-                `${data.logradouro || ''}, ${data.bairro || ''}, ${data.localidade || ''} - ${data.uf || ''}`;
-              // Preenche o campo oculto cidade
-              document.getElementById('cidade').value = data.localidade || '';
-            } else {
-              document.getElementById('endereco').value = 'CEP não encontrado';
-              document.getElementById('cidade').value = '';
-            }
-          })
-          .catch(() => {
-            document.getElementById('endereco').value = 'Erro ao buscar endereço';
-            document.getElementById('cidade').value = '';
-          });
-      } else {
-        document.getElementById('endereco').value = '';
-        document.getElementById('cidade').value = '';
-      }
-    });
-
-    // Validação do CEP
-    function validarCEP(cep) {
-      cep = cep.replace(/\D/g, '');
-      return cep.length === 8;
-    }
-
-    document.getElementById("cadastroPostoForm").addEventListener("submit", function (event) {
+    document.getElementById("cadastroCampanhaForm").addEventListener("submit", function (event) {
       event.preventDefault();
-
-      const cep = document.getElementById("cep").value.replace(/\D/g, "");
-      const endereco = document.getElementById("endereco").value;
-
-      if (!validarCEP(cep)) {
-        showAlert('error', "CEP inválido!");
-        return;
-      }
-
-      if (!endereco || endereco === "CEP não encontrado" || endereco === "Erro ao buscar endereço") {
-        showAlert('error', "Por favor, informe um CEP válido e aguarde o endereço ser preenchido.");
-        return;
-      }
-
       const formData = new FormData(this);
 
       fetch(this.action, {
@@ -216,8 +158,6 @@
           if (data.success) {
             showAlert('success', data.message || "Cadastro realizado com sucesso!");
             this.reset();
-            document.getElementById('endereco').value = '';
-            document.getElementById('cidade').value = '';
           } else {
             showAlert('error', data.message || "Erro ao cadastrar.");
           }

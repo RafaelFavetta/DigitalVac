@@ -12,7 +12,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Verificar se os campos estão preenchidos
     if (empty($coren_crm) || empty($senha)) {
         $erro = "Preencha todos os campos!";
-    } else {
+    } 
+    // Verificação para o usuário administrador
+    elseif ($coren_crm === 'administrador' && $senha === 'admin') {
+        header('Location: ../admin/cadastroaplic.html');
+        exit();
+    } 
+    else {
         $stmt = $conn->prepare("SELECT id_medico, coren_crm, senha FROM medico WHERE coren_crm = ?");
         if (!$stmt) {
             error_log("Erro ao preparar a consulta: " . $conn->error); // Log de erro
@@ -80,24 +86,7 @@ $conn->close();
         </div>
     <?php endif; ?>
 
-    <!-- Navbar padronizada -->
-    <nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">
-        <div class="container-fluid">
-            <div class="d-flex align-items-center">
-                <img src="../img/logo_vetor.png" alt="Logo DigitalVac" width="55" height="55" class="me-3">
-                <!-- Removido: <a class="navbar-brand fs-4 fw-bold ms-2">DigitalVac</a> -->
-            </div>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
-                aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-                <div class="navbar-nav">
-                    <!-- Apenas login, sem links ativos -->
-                </div>
-            </div>
-        </div>
-    </nav>
+    
 
     <div class="container d-flex justify-content-center align-items-center vh-100">
         <div class="card p-4 shadow-sm" style="width: 400px; position: relative;">

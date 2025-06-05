@@ -67,6 +67,9 @@
                     <a class="nav-link active fs-6 fw-bold" href="cadastroposto.html">
                         <i class="bi bi-building-fill-add" style="font-size: 20px;"></i> Cadastrar Posto
                     </a>
+                    <a class="nav-link active fs-6 fw-bold" href="cadastrocampanha.html">
+                        <i class="bi bi-megaphone-fill" style="font-size: 20px;"></i> Cadastrar Campanha
+                    </a>
                 </div>
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
