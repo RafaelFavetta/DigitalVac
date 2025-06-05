@@ -69,10 +69,44 @@ if ($user_data) {
         if ($doses_tomadas < $vacina['n_dose']) {
             if ($pesquisa === '' || stripos($vacina['nome_vaci'], $pesquisa) !== false) {
                 $vacina['doses_tomadas'] = $doses_tomadas;
+
+                // Cálculo da data da próxima dose (igual ao do HTML)
+                $proxima_data = '';
+                if (!isset($vacina['intervalo_dose'])) {
+                    $vacina['intervalo_dose'] = 0;
+                }
+                if ($vacina['n_dose'] == 1) {
+                    $data_nascimento = $user_data['naci_usuario'];
+                    $data_aplicacao = date('Y-m-d', strtotime($data_nascimento . ' + ' . $vacina['idade_aplica'] . ' years'));
+                    $proxima_data = date('Y-m-d', strtotime($data_aplicacao));
+                } else {
+                    $sql_ultima = "SELECT data_aplica FROM aplicacao WHERE id_usuario = ? AND id_vaci = ? ORDER BY dose_aplicad DESC LIMIT 1";
+                    $stmt_ultima = $conn->prepare($sql_ultima);
+                    $stmt_ultima->bind_param("ii", $user_id, $vacina['id_vaci']);
+                    $stmt_ultima->execute();
+                    $result_ultima = $stmt_ultima->get_result();
+                    if ($row_ultima = $result_ultima->fetch_assoc()) {
+                        $data_ultima = $row_ultima['data_aplica'];
+                        $intervalo = (int)$vacina['intervalo_dose'];
+                        $data_proxima = date('Y-m-d', strtotime($data_ultima . " +$intervalo months"));
+                        $proxima_data = date('Y-m-d', strtotime($data_proxima));
+                    } else {
+                        $data_nascimento = $user_data['naci_usuario'];
+                        $data_aplicacao = date('Y-m-d', strtotime($data_nascimento . ' + ' . $vacina['idade_aplica'] . ' years'));
+                        $proxima_data = date('Y-m-d', strtotime($data_aplicacao));
+                    }
+                }
+                $vacina['proxima_data'] = $proxima_data;
                 $vacinas_nao_tomadas[] = $vacina;
             }
         }
     }
+
+    // Ordena pela data da próxima dose (mais antiga primeiro)
+    usort($vacinas_nao_tomadas, function($a, $b) {
+        // Datas no formato Y-m-d
+        return strtotime($a['proxima_data']) <=> strtotime($b['proxima_data']);
+    });
 }
 
 // Se for AJAX, retorna só o <tbody>
@@ -88,11 +122,14 @@ if (
             foreach ($vacinas_nao_tomadas as $vacina):
                 $rowClass = ($rowIndex === 0) ? 'bg-white' : (($rowIndex % 2 === 1) ? 'table-secondary' : 'bg-white');
                 $proxima_dose = $vacina['doses_tomadas'] + 1;
+                // Usa a data já calculada e salva no array
+                $proxima_data = $vacina['proxima_data'] ? date('d/m/Y', strtotime($vacina['proxima_data'])) : '';
             ?>
                 <tr class="<?php echo $rowClass; ?>" style="height:38px;">
-                    <td style="vertical-align:middle; padding-top:4px; padding-bottom:4px;"><?= htmlspecialchars($vacina['nome_vaci']) ?></td>
-                    <td style="vertical-align:middle; text-align:center; padding-top:4px; padding-bottom:4px;"><?= $vacina['idade_aplica'] ?> anos</td>
-                    <td style="vertical-align:middle; text-align:center; padding-top:4px; padding-bottom:4px;">
+                    <td style="vertical-align:middle;"><?= htmlspecialchars($vacina['nome_vaci']) ?></td>
+                    <td style="vertical-align:middle; text-align:center;"><?= $vacina['idade_aplica'] ?> anos</td>
+                    <td style="vertical-align:middle; text-align:center;"><?= $proxima_data ?></td>
+                    <td style="vertical-align:middle; text-align:center;">
                         <div style="display:flex; flex-direction:row; align-items:center; justify-content:center; gap:8px; height:100%;">
                             <span style="font-size:1.02em;"><?= $vacina['doses_tomadas'] . "/" . $vacina['n_dose'] ?></span>
                             <span class="badge bg-primary" style="font-size:0.90em; min-width:80px; padding:4px 6px;">
