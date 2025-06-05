@@ -30,15 +30,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $med_usuario = trim($_POST['med_usuario']);
     $cep_usuario = preg_replace('/\D/', '', $_POST['cep_usuario']);
     $nc_usuario = $_POST['nc_usuario'];
-    $endereco = trim($_POST['endereco']);
-    $cidade = trim($_POST['cidade']);
 
     $sql = "UPDATE usuario SET 
-        nome_usuario=?, cpf=?, email_usuario=?, tel_usuario=?, genero_usuario=?, naci_usuario=?, peso_usuario=?, tipo_sang_usuario=?, ale_usuario=?, doen_usuario=?, med_usuario=?, cep_usuario=?, nc_usuario=?, endereco=?, cidade=?
+        nome_usuario=?, cpf=?, email_usuario=?, tel_usuario=?, genero_usuario=?, naci_usuario=?, peso_usuario=?, tipo_sang_usuario=?, ale_usuario=?, doen_usuario=?, med_usuario=?, cep_usuario=?, nc_usuario=?
         WHERE id_usuario=?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param(
-        "sssssssssssssssi", // <-- Corrigido: tipo_sang_usuario agora é 's'
+        "sssssssssssssi",
         $nome_usuario,
         $cpf,
         $email_usuario,
@@ -52,8 +50,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $med_usuario,
         $cep_usuario,
         $nc_usuario,
-        $endereco,
-        $cidade,
         $id
     );
     if ($stmt->execute()) {
@@ -309,16 +305,6 @@ $cidade = $user['cidade'] ?? '';
                                 <input type="text" name="nc_usuario" class="form-control" required maxlength="10"
                                     value="<?php echo htmlspecialchars($numero_casa); ?>">
                             </div>
-                        </div>
-                        <div class="mb-2">
-                            <label class="form-label fw-bold">Endereço</label>
-                            <input type="text" name="endereco" class="form-control"
-                                value="<?php echo htmlspecialchars($endereco); ?>">
-                        </div>
-                        <div class="mb-2">
-                            <label class="form-label fw-bold">Cidade</label>
-                            <input type="text" name="cidade" class="form-control"
-                                value="<?php echo htmlspecialchars($cidade); ?>">
                         </div>
                         <div class="text-end mt-3">
                             <button type="submit" class="btn btn-primary fw-bold">Salvar Alterações</button>
