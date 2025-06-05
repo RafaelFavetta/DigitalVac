@@ -89,35 +89,21 @@ if (
                 $rowClass = ($rowIndex === 0) ? 'bg-white' : (($rowIndex % 2 === 1) ? 'table-secondary' : 'bg-white');
                 $proxima_dose = $vacina['doses_tomadas'] + 1;
             ?>
-                <tr class="<?php echo $rowClass; ?>">
-                    <td style="height:70px;">
-                        <div style="height:100%; display:flex; flex-direction:column; justify-content:center; align-items:center;">
-                            <span style="display:inline-block; vertical-align:middle;">
-                                <?= htmlspecialchars($vacina['nome_vaci']) ?>
-                            </span>
-                        </div>
-                    </td>
-                    <td>
-                        <div style="height:100%; display:flex; flex-direction:column; justify-content:center; align-items:center;">
-                            <span style="display:inline-block; vertical-align:middle;">
-                                <?= $vacina['idade_aplica'] ?> anos
-                            </span>
-                        </div>
-                    </td>
-                    <td>
-                        <div style="height:100%; display:flex; flex-direction:row; align-items:center; justify-content:center; gap:10px;">
-                            <span style="font-size:1.08em;"><?= $vacina['doses_tomadas'] . "/" . $vacina['n_dose'] ?></span>
-                            <span class="badge bg-primary" style="font-size:0.93em; min-width:90px;">
+                <tr class="<?php echo $rowClass; ?>" style="height:38px;">
+                    <td style="vertical-align:middle; padding-top:4px; padding-bottom:4px;"><?= htmlspecialchars($vacina['nome_vaci']) ?></td>
+                    <td style="vertical-align:middle; text-align:center; padding-top:4px; padding-bottom:4px;"><?= $vacina['idade_aplica'] ?> anos</td>
+                    <td style="vertical-align:middle; text-align:center; padding-top:4px; padding-bottom:4px;">
+                        <div style="display:flex; flex-direction:row; align-items:center; justify-content:center; gap:8px; height:100%;">
+                            <span style="font-size:1.02em;"><?= $vacina['doses_tomadas'] . "/" . $vacina['n_dose'] ?></span>
+                            <span class="badge bg-primary" style="font-size:0.90em; min-width:80px; padding:4px 6px;">
                                 Próxima: Dose <?= $proxima_dose ?>
                             </span>
                         </div>
                     </td>
-                    <td>
-                        <div style="height:100%; display:flex; flex-direction:column; justify-content:center; align-items:center;">
-                            <a href="../medica/ver_vacina.php?id_vaci=<?= urlencode($vacina['id_vaci']) ?>" class="btn btn-primary btn-sm">
-                                <i class="bi bi-info-circle"></i> Sobre a vacina
-                            </a>
-                        </div>
+                    <td style="vertical-align:middle; text-align:center; padding-top:4px; padding-bottom:4px;">
+                        <a href="../medica/ver_vacina.php?id_vaci=<?= urlencode($vacina['id_vaci']) ?>" class="btn btn-primary btn-sm" style="padding:2px 8px; font-size:0.95em;">
+                            <i class="bi bi-info-circle"></i> Sobre a vacina
+                        </a>
                     </td>
                 </tr>
             <?php $rowIndex++; endforeach; ?>
@@ -285,35 +271,21 @@ if (
                                 }
                                 $proxima_dose = $vacina['doses_tomadas'] + 1;
                             ?>
-                                <tr class="<?php echo $rowClass; ?>">
-                                    <td style="height:70px;">
-                                        <div style="height:100%; display:flex; flex-direction:column; justify-content:center; align-items:center;">
-                                            <span style="display:inline-block; vertical-align:middle;">
-                                                <?= htmlspecialchars($vacina['nome_vaci']) ?>
-                                            </span>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div style="height:100%; display:flex; flex-direction:column; justify-content:center; align-items:center;">
-                                            <span style="display:inline-block; vertical-align:middle;">
-                                                <?= $vacina['idade_aplica'] ?> anos
-                                            </span>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div style="height:100%; display:flex; flex-direction:row; align-items:center; justify-content:center; gap:10px;">
-                                            <span style="font-size:1.08em;"><?= $vacina['doses_tomadas'] . "/" . $vacina['n_dose'] ?></span>
-                                            <span class="badge bg-primary" style="font-size:0.93em; min-width:90px;">
+                                <tr class="<?php echo $rowClass; ?>" style="height:38px;">
+                                    <td style="vertical-align:middle; padding-top:4px; padding-bottom:4px;"><?= htmlspecialchars($vacina['nome_vaci']) ?></td>
+                                    <td style="vertical-align:middle; text-align:center; padding-top:4px; padding-bottom:4px;"><?= $vacina['idade_aplica'] ?> anos</td>
+                                    <td style="vertical-align:middle; text-align:center; padding-top:4px; padding-bottom:4px;">
+                                        <div style="display:flex; flex-direction:row; align-items:center; justify-content:center; gap:8px; height:100%;">
+                                            <span style="font-size:1.02em;"><?= $vacina['doses_tomadas'] . "/" . $vacina['n_dose'] ?></span>
+                                            <span class="badge bg-primary" style="font-size:0.90em; min-width:80px; padding:4px 6px;">
                                                 Próxima: Dose <?= $proxima_dose ?>
                                             </span>
                                         </div>
                                     </td>
-                                    <td>
-                                        <div style="height:100%; display:flex; flex-direction:column; justify-content:center; align-items:center;">
-                                            <a href="../medica/ver_vacina.php?id_vaci=<?= urlencode($vacina['id_vaci']) ?>" class="btn btn-primary btn-sm">
-                                                <i class="bi bi-info-circle"></i> Sobre a vacina
-                                            </a>
-                                        </div>
+                                    <td style="vertical-align:middle; text-align:center; padding-top:4px; padding-bottom:4px;">
+                                        <a href="../medica/ver_vacina.php?id_vaci=<?= urlencode($vacina['id_vaci']) ?>" class="btn btn-primary btn-sm" style="padding:2px 8px; font-size:0.95em;">
+                                            <i class="bi bi-info-circle"></i> Sobre a vacina
+                                        </a>
                                     </td>
                                 </tr>
                             <?php $rowIndex++; endforeach; ?>
