@@ -1,8 +1,12 @@
 <?php
 require_once("../outros/db_connect.php");
 $imagens = [];
-$sql = "SELECT imagem FROM campanha WHERE imagem IS NOT NULL AND imagem <> ''";
-$result = $conn->query($sql);
+$hoje = date('Y-m-d');
+$sql = "SELECT imagem FROM campanha WHERE imagem IS NOT NULL AND imagem <> '' AND data_fim >= ?";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("s", $hoje);
+$stmt->execute();
+$result = $stmt->get_result();
 if ($result && $result->num_rows > 0) {
     while ($row = $result->fetch_assoc()) {
         $imagens[] = $row['imagem'];
@@ -57,7 +61,7 @@ $conn->close();
         <div class="row justify-content-center">
             <div class="col-md-10">
                 <?php if (count($imagens) === 1): ?>
-                    <img src="../img/<?php echo htmlspecialchars($imagens[0]); ?>" alt="Campanha" class="campanha-img-unica shadow-sm">
+                    <img src="../img/<?php echo htmlspecialchars($imagens[0]); ?>" alt="" class="campanha-img-unica shadow-sm">
                 <?php elseif (count($imagens) > 1): ?>
                     <div id="carouselCampanha" class="carousel slide" data-bs-ride="carousel" data-bs-interval="3000">
                         <div class="carousel-indicators">
@@ -83,8 +87,6 @@ $conn->close();
                             <span class="visually-hidden">Próximo</span>
                         </button>
                     </div>
-                <?php else: ?>
-                    <img src="../img/imagem1.jpg" alt="Campanha" class="campanha-img-unica shadow-sm">
                 <?php endif; ?>
             </div>
         </div>
