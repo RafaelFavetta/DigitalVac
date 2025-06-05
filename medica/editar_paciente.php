@@ -353,13 +353,20 @@ $cidade = $user['cidade'] ?? '';
             const toast = new bootstrap.Toast(toastEl, { delay: 4000 });
             toast.show();
         }
-
-        <?php if ($sucesso): ?>
-            window.addEventListener('DOMContentLoaded', function () {
-                showAlert('success', 'Dados atualizados com sucesso!');
-            });
-        <?php endif; ?>
     </script>
+    <?php if ($sucesso): ?>
+    <script>
+        window.addEventListener('DOMContentLoaded', function () {
+            showAlert('success', 'Dados atualizados com sucesso!');
+        });
+    </script>
+    <?php elseif ($erro): ?>
+    <script>
+        window.addEventListener('DOMContentLoaded', function () {
+            showAlert('error', <?php echo json_encode($erro); ?>);
+        });
+    </script>
+    <?php endif; ?>
 </body>
 
 </html>
