@@ -11,6 +11,16 @@ if (isset($_GET['pesquisa'])) {
     $pesquisa = trim($_GET['pesquisa']);
 }
 
+// Filtro de ordenação
+$ordenar_por = isset($_GET['ordenar_por']) ? $_GET['ordenar_por'] : 'data_aplica';
+$ordem_sql = "a.data_aplica DESC"; // padrão
+
+if ($ordenar_por === 'nome') {
+    $ordem_sql = "v.nome_vaci ASC";
+} elseif ($ordenar_por === 'doses') {
+    $ordem_sql = "v.n_dose DESC";
+}
+
 // Consulta com filtro se houver pesquisa
 $sql = "SELECT v.id_vaci, v.nome_vaci, v.n_dose, a.dose_aplicad, a.data_aplica, p.nome_posto, m.nome_medico, v.intervalo_dose
         FROM aplicacao a
@@ -21,6 +31,7 @@ $sql = "SELECT v.id_vaci, v.nome_vaci, v.n_dose, a.dose_aplicad, a.data_aplica, 
 if ($pesquisa !== '') {
     $sql .= " AND v.nome_vaci LIKE ?";
 }
+$sql .= " ORDER BY $ordem_sql";
 
 $stmt = $conn->prepare($sql);
 
@@ -71,22 +82,28 @@ function renderTabelaCarteiraVac($vacinas)
                     <th>Data(s) de Aplicação</th>
                     <th>Posto</th>
                     <th>Médico</th>
-                    <!-- Coluna de intervalo removida -->
                 </tr>
             </thead>
             <tbody>
                 <?php
                 $rowIndex = 0;
+                // Ordena as doses de cada vacina pela data de aplicação (mais recente primeiro)
+                foreach ($vacinas as &$vacina) {
+                    usort($vacina['doses'], function($a, $b) {
+                        // Corrigir para usar 'data_aplica' (não 'data_aplicada')
+                        return strtotime($b['data_aplica']) - strtotime($a['data_aplica']);
+                    });
+                }
+                unset($vacina);
                 foreach ($vacinas as $vacina):
                     $rowClass = ($rowIndex % 2 === 1) ? 'table-secondary' : 'bg-white';
                     $doses_tomadas = count($vacina['doses']);
                     $n_dose = $vacina['n_dose'];
-                    $doses_info = [];
                     $datas = [];
                     $postos = [];
                     $medicos = [];
                     foreach ($vacina['doses'] as $dose) {
-                        $doses_info[] = $dose['dose_aplicad'];
+                        // Corrigir para usar 'data_aplica' (não 'data_aplicada')
                         $datas[] = date('d/m/Y', strtotime($dose['data_aplica']));
                         $postos[] = htmlspecialchars($dose['nome_posto']);
                         $medicos[] = htmlspecialchars($dose['nome_medico']);
@@ -98,7 +115,6 @@ function renderTabelaCarteiraVac($vacinas)
                         <td><?php echo implode('<br>', $datas); ?></td>
                         <td><?php echo implode('<br>', $postos); ?></td>
                         <td><?php echo implode('<br>', $medicos); ?></td>
-                        <!-- Coluna de intervalo removida -->
                     </tr>
                 <?php $rowIndex++; endforeach; ?>
                 <?php if ($rowIndex === 0): ?>
@@ -173,8 +189,11 @@ if (
             width: 100%;
         }
 
+        .dropdown-sort {
+            min-width: 180px;
+        }
+
         @media (max-width: 800px) {
-            /* Não altere min-width para manter o tamanho fixo */
             .table {
                 font-size: 0.95rem;
             }
@@ -230,7 +249,24 @@ if (
                     aria-label="Pesquisar" id="pesquisa-vacina" autocomplete="off" maxlength="50" pattern="[A-Za-zÀ-ÿ\s]+">
             </form>
         </div>
-        <br>
+        <div class="d-flex justify-content-end align-items-center mb-2" style="width:100%;">
+            <div class="dropdown">
+                <button class="btn btn-outline-primary dropdown-toggle dropdown-sort" type="button" id="dropdownOrdenarPor" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="bi bi-funnel"></i> Ordenar por: <span id="ordenar-label">
+                        <?php
+                        if ($ordenar_por === 'nome') echo 'Nome';
+                        elseif ($ordenar_por === 'doses') echo 'Doses Tomadas';
+                        else echo 'Data de Aplicação';
+                        ?>
+                    </span>
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="dropdownOrdenarPor">
+                    <li><a class="dropdown-item ordenar-opcao" data-value="data_aplica" href="#">Data de Aplicação</a></li>
+                    <li><a class="dropdown-item ordenar-opcao" data-value="nome" href="#">Nome</a></li>
+                    <li><a class="dropdown-item ordenar-opcao" data-value="doses" href="#">Doses Tomadas</a></li>
+                </ul>
+            </div>
+        </div>
         <div id="tabela-carteira-vac">
             <div style="width: 100%;">
                 <?php echo renderTabelaCarteiraVac($vacinas); ?>
@@ -253,10 +289,11 @@ if (
         // Pesquisa automática AJAX igual às tabelas da pasta medica
         const inputVacina = document.getElementById('pesquisa-vacina');
         const tabela = document.getElementById('tabela-carteira-vac');
+        let ordenarPor = "<?php echo $ordenar_por; ?>";
 
         function atualizarTabelaCarteiraVac() {
             const termo = inputVacina.value;
-            fetch('carteira_vac.php?pesquisa=' + encodeURIComponent(termo), { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
+            fetch('carteira_vac.php?pesquisa=' + encodeURIComponent(termo) + '&ordenar_por=' + encodeURIComponent(ordenarPor), { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
                 .then(res => res.text())
                 .then(html => {
                     const temp = document.createElement('div');
@@ -271,6 +308,16 @@ if (
         // Mostra todas as vacinas ao focar se o campo estiver vazio
         inputVacina.addEventListener('focus', function () {
             if (!this.value) atualizarTabelaCarteiraVac();
+        });
+
+        // Dropdown de ordenação
+        document.querySelectorAll('.ordenar-opcao').forEach(function(el) {
+            el.addEventListener('click', function(e) {
+                e.preventDefault();
+                ordenarPor = this.getAttribute('data-value');
+                document.getElementById('ordenar-label').textContent = this.textContent;
+                atualizarTabelaCarteiraVac();
+            });
         });
     </script>
 </body>
