@@ -34,6 +34,82 @@ $conn->close();
             object-fit: cover !important;
             border-radius: 8px;
         }
+
+        /* Cards grid centralizado e agrupado (igual medica/telainicio.php) */
+        .cards-outer {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 70vh;
+            margin-top: 40px;
+            background: #fdfdfd;
+        }
+
+        .cards-container {
+            background: #fdfdfd;
+            border-radius: 18px;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.07);
+            padding: 40px 32px 32px 32px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .row-cards {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            margin-bottom: 32px;
+            flex-wrap: nowrap;
+        }
+
+        .row-cards:last-child {
+            margin-bottom: 0;
+        }
+
+        .card-btn {
+            min-width: 180px;
+            max-width: 220px;
+            width: 100%;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 160px;
+            padding: 0;
+        }
+
+        .card-btn i {
+            font-size: 50px;
+            margin-bottom: 10px;
+        }
+
+        .card-btn span {
+            display: block;
+            font-size: 1.1rem;
+            font-weight: bold;
+            text-align: center;
+            margin: 0;
+        }
+
+        @media (max-width: 991.98px) {
+            .cards-container {
+                padding: 24px 8px;
+            }
+
+            .row-cards {
+                flex-direction: column;
+                gap: 20px;
+                align-items: center;
+                flex-wrap: wrap;
+            }
+
+            .card-btn {
+                min-width: 0;
+                max-width: 100%;
+            }
+        }
     </style>
 </head>
 
@@ -101,39 +177,29 @@ $conn->close();
 
     <!-- Cards centralizados padrão medica/telainicio.php -->
     <?php $semImagem = count($imagens) === 0; ?>
-    <div
-        class="container my-4<?php if ($semImagem)
-            echo ' d-flex justify-content-center align-items-center min-vh-100'; ?>">
-        <div class="bg-white rounded-4 shadow p-4 mx-auto" style="max-width: 800px;">
-            <div class="row row-cols-1 row-cols-md-4 g-3 justify-content-center">
-                <div class="col d-flex">
-                    <a href="perfilU.php"
-                        class="btn btn-primary btn-lg w-100 h-100 d-flex flex-column align-items-center justify-content-center shadow-sm py-4">
-                        <i class="bi bi-person-fill mb-2" style="font-size: 50px;"></i>
-                        <span class="fw-bold">Perfil</span>
-                    </a>
-                </div>
-                <div class="col d-flex">
-                    <a href="carteira_vac.php"
-                        class="btn btn-primary btn-lg w-100 h-100 d-flex flex-column align-items-center justify-content-center shadow-sm py-4">
-                        <i class="bi bi-postcard-heart-fill mb-2" style="font-size: 50px;"></i>
-                        <span class="fw-bold">Carteira de Vacina</span>
-                    </a>
-                </div>
-                <div class="col d-flex">
-                    <a href="proxima_vac.php"
-                        class="btn btn-primary btn-lg w-100 h-100 d-flex flex-column align-items-center justify-content-center shadow-sm py-4">
-                        <i class="bi bi-calendar2-week-fill mb-2" style="font-size: 50px;"></i>
-                        <span class="fw-bold">Próximas Vacinas</span>
-                    </a>
-                </div>
-                <div class="col d-flex">
-                    <a href="atestado_medico.php"
-                        class="btn btn-primary btn-lg w-100 h-100 d-flex flex-column align-items-center justify-content-center shadow-sm py-4">
-                        <i class="bi bi-clipboard-heart-fill mb-2" style="font-size: 50px;"></i>
-                        <span class="fw-bold">Atestados</span>
-                    </a>
-                </div>
+    <div class="cards-outer<?php if ($semImagem) echo ' min-vh-100'; ?>">
+        <div class="cards-container">
+            <div class="row-cards">
+                <a href="perfilU.php"
+                    class="btn btn-primary btn-lg card-btn shadow-sm">
+                    <i class="bi bi-person-fill"></i>
+                    <span>Perfil</span>
+                </a>
+                <a href="carteira_vac.php"
+                    class="btn btn-primary btn-lg card-btn shadow-sm">
+                    <i class="bi bi-postcard-heart-fill"></i>
+                    <span>Carteira de Vacina</span>
+                </a>
+                <a href="proxima_vac.php"
+                    class="btn btn-primary btn-lg card-btn shadow-sm">
+                    <i class="bi bi-calendar2-week-fill"></i>
+                    <span>Próximas Vacinas</span>
+                </a>
+                <a href="atestado_medico.php"
+                    class="btn btn-primary btn-lg card-btn shadow-sm">
+                    <i class="bi bi-clipboard-heart-fill"></i>
+                    <span>Atestados</span>
+                </a>
             </div>
         </div>
     </div>
