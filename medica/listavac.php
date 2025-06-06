@@ -124,7 +124,7 @@ if (!$result) {
         <h2 class="text-center text-primary fw-bold">Lista de Vacinas</h2>
         <div class="container-fluid col-md-6 mt-4">
             <form class="d-flex position-relative" role="search" id="form-pesquisa-vacina">
-                <input class="form-control me-2 border border-primary fw-bold" type="search" name="nome_vacina"
+                <input class="form-control me-2 border border-primary" type="search" name="nome_vacina"
                     placeholder="Digite o nome da vacina" value="<?php echo htmlspecialchars($nome_vacina); ?>"
                     id="input-nome-vacina" autocomplete="off">
             </form>

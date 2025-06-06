@@ -161,7 +161,7 @@ $result = $stmt->get_result();
         <div class="container-fluid col-md-6 mt-4">
             <form class="d-flex position-relative" role="search" method="get" action="pesquisa_paciente.php"
                 id="form-pesquisa-cpf">
-                <input class="form-control me-2 border border-primary fw-bold" type="search" name="cpf" id="cpf"
+                <input class="form-control me-2 border border-primary" type="search" name="cpf" id="cpf"
                     placeholder="Digite o CPF" aria-label="CPF"
                     value="<?php echo isset($cpf) ? htmlspecialchars($cpf) : ''; ?>" autocomplete="off">
             </form>
