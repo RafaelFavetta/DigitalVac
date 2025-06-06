@@ -207,21 +207,9 @@ session_start();
                     </div>
                     <div class="col-md-6">
                         <label for="coren-crm" class="form-label fw-bold">COREN/CRM</label>
-                        <?php
-                        include_once("../outros/db_connect.php");
-                        $coren_crm = '';
-                        if (isset($_SESSION['id_medico'])) {
-                            $id_medico = $_SESSION['id_medico'];
-                            $stmt = $conn->prepare("SELECT coren_crm FROM medico WHERE id_medico = ?");
-                            $stmt->bind_param("i", $id_medico);
-                            $stmt->execute();
-                            $stmt->bind_result($coren_crm);
-                            $stmt->fetch();
-                            $stmt->close();
-                        }
-                        ?>
-                        <input type="hidden" class="form-control" name="coren_crm" id="coren-crm" value="<?php echo htmlspecialchars($coren_crm); ?>">
-                        <input type="text" class="form-control" value="<?php echo htmlspecialchars($coren_crm); ?>" readonly>
+                        <input type="text" class="form-control" name="coren_crm" id="coren-crm" autocomplete="off"
+                            autocapitalize="off" spellcheck="false" required placeholder="Digite ou selecione o COREN/CRM">
+                        <div id="autocomplete-coren-crm" class="autocomplete-suggestions"></div>
                     </div>
                 </div>
                 <input type="hidden" name="origem" value="medica">
