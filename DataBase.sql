@@ -42,7 +42,7 @@ CREATE TABLE `aplicacao` (
 --
 
 INSERT INTO `aplicacao` (`id_aplica`, `id_usuario`, `id_posto`, `id_medico`, `id_vaci`, `data_aplica`, `dose_aplicad`) VALUES
-(1, 1, 11, 1, 1, '2025-05-01', 1);
+(1, 1, 11, 1, 1, '2025-05-01', 1),
 (2, 1, 11, 2, 2, '2025-05-08', 1),
 (3, 1, 11, 3, 3, '2025-05-15', 2),
 (2406, 2, 12, 1, 4, '2025-05-01', 1);
