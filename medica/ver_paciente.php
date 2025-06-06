@@ -125,7 +125,7 @@ $cidade = $user['cidade'] ?? '';
                     <a class="nav-link active fs-6 fw-bold" href="telainicio.php">
                         <i class="bi bi-house-fill"></i> Início
                     </a>
-                    <a class="nav-link active fs-6 fw-bold" href="cadastroaplic.html">
+                    <a class="nav-link active fs-6 fw-bold" href="cadastroaplic.php">
                         <i class="bi bi-clipboard2-heart-fill"></i> Aplicação de Vacinas
                     </a>
                     <a class="nav-link active fs-6 fw-bold" href="cadastropac.html">

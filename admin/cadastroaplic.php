@@ -94,7 +94,7 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
         <div class="navbar-nav">
-          <a class="nav-link disabled fs-6 fw-bold" aria-disabled="true" href="cadastroaplic.html">
+          <a class="nav-link disabled fs-6 fw-bold" aria-disabled="true" href="cadastroaplic.php">
             <i class="bi bi-clipboard2-heart-fill" style="font-size: 20px"></i>
             Aplicação de Vacinas
           </a>
@@ -185,9 +185,22 @@
           </div>
           <div class="col-md-6">
             <label for="coren-crm" class="form-label fw-bold">COREN/CRM</label>
-            <input type="text" class="form-control" name="coren_crm" id="coren-crm" placeholder="COREN/CRM-UF 000000"
-              autocomplete="off" autocapitalize="off" spellcheck="false" required maxlength="15" minlength="13" />
-            <div id="autocomplete-coren-crm" class="autocomplete-suggestions"></div>
+            <?php
+            if (session_status() !== PHP_SESSION_ACTIVE) session_start();
+            include_once("../outros/db_connect.php");
+            $coren_crm = '';
+            if (isset($_SESSION['id_medico'])) {
+                $id_medico = $_SESSION['id_medico'];
+                $stmt = $conn->prepare("SELECT coren_crm FROM medico WHERE id_medico = ?");
+                $stmt->bind_param("i", $id_medico);
+                $stmt->execute();
+                $stmt->bind_result($coren_crm);
+                $stmt->fetch();
+                $stmt->close();
+            }
+            ?>
+            <input type="hidden" class="form-control" name="coren_crm" id="coren-crm" value="<?php echo htmlspecialchars($coren_crm); ?>">
+            <input type="text" class="form-control" value="<?php echo htmlspecialchars($coren_crm); ?>" readonly>
           </div>
         </div>
         <input type="hidden" name="origem" value="admin">

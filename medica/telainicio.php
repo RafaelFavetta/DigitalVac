@@ -236,7 +236,7 @@ if (!isset($_SESSION['id_medico'])) {
     <div class="cards-outer">
         <div class="cards-container">
             <div class="row-cards">
-                <a href="cadastroaplic.html" class="btn btn-primary btn-lg card-btn shadow-sm">
+                <a href="cadastroaplic.php" class="btn btn-primary btn-lg card-btn shadow-sm">
                     <i class="bi bi-clipboard2-heart-fill"></i>
                     <span>Aplicação de Vacinas</span>
                 </a>

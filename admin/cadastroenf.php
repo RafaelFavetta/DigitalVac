@@ -52,7 +52,7 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                 <div class="navbar-nav">
-                    <a class="nav-link active fs-6 fw-bold" href="cadastroaplic.html">
+                    <a class="nav-link active fs-6 fw-bold" href="cadastroaplic.php">
                         <i class="bi bi-clipboard2-heart-fill" style="font-size: 20px;"></i> Aplicação de Vacinas
                     </a>
                     <a class="nav-link active fs-6 fw-bold" href="cadastropac.html">
@@ -129,7 +129,7 @@
                     </div>
                     <div class="col-md-6">
                         <label for="coren_crm" class="form-label fw-bold">COREN/CRM</label>
-                        <input type="text" id="coren_crm" name="coren_crm" maxlength="15" minlength="13"
+                        <input type="text" id="coren_crm" name="coren_crm" maxlength="20" minlength="8"
                             class="form-control" placeholder="COREN/CRM-UF 000000" required>
                     </div>
                 </div>

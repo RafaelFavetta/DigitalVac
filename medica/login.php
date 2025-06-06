@@ -15,7 +15,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
     // Verificação para o usuário administrador
     elseif ($coren_crm === 'administrador' && $senha === 'admin') {
-        header('Location: ../admin/cadastroaplic.html');
+        header('Location: ../admin/cadastroaplic.php');
         exit();
     } else {
         $stmt = $conn->prepare("SELECT id_medico, coren_crm, senha FROM medico WHERE coren_crm = ?");
