@@ -5,8 +5,8 @@ require_once '../outros/db_connect.php'; // Ajuste o caminho para o arquivo de c
 // Obter o ID do usuário da sessão
 $user_id = $_SESSION['id_usuario'];
 
-// Buscar a data de nascimento do usuário
-$query_user = "SELECT naci_usuario FROM usuario WHERE id_usuario = ?";
+// Buscar a data de nascimento e gênero do usuário
+$query_user = "SELECT naci_usuario, genero_usuario FROM usuario WHERE id_usuario = ?";
 $stmt_user = $conn->prepare($query_user);
 $stmt_user->bind_param("i", $user_id);
 $stmt_user->execute();
@@ -16,6 +16,7 @@ $user_data = $result_user->fetch_assoc();
 $vacinas_nao_tomadas = [];
 if ($user_data) {
     $data_nascimento = $user_data['naci_usuario'];
+    $genero_usuario = $user_data['genero_usuario'];
     $idade = date_diff(date_create($data_nascimento), date_create('today'))->y;
 
     // Buscar vacinas dentro ou acima da faixa etária
@@ -31,6 +32,10 @@ if ($user_data) {
 
     $vacinas_disponiveis = [];
     while ($row = $result_vacinas->fetch_assoc()) {
+        // Filtro: se vacina tem "(Gestante)" no nome, só exibe para feminino
+        if (stripos($row['nome_vaci'], '(Gestante)') !== false && $genero_usuario !== 'F') {
+            continue;
+        }
         $vacinas_disponiveis[$row['id_vaci']] = $row;
     }
 
