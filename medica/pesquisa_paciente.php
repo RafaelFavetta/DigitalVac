@@ -43,7 +43,7 @@ if (
         <table class="table table-bordered text-center mx-auto">
             <thead>
                 <tr>
-                    <th>ID</th>
+                    <!-- <th>ID</th> -->
                     <th>Nome</th>
                     <th>CPF</th>
                     <th>E-mail</th>
@@ -66,7 +66,7 @@ if (
                     }
                     ?>
                     <tr class="<?php echo $rowClass; ?>">
-                        <td><?php echo htmlspecialchars($row['id_usuario']); ?></td>
+                        <!-- <td><?php echo htmlspecialchars($row['id_usuario']); ?></td> -->
                         <td><?php echo htmlspecialchars($row['nome_usuario']); ?></td>
                         <td><?php echo htmlspecialchars($row['cpf']); ?></td>
                         <td><?php echo htmlspecialchars($row['email_usuario']); ?></td>
@@ -235,7 +235,7 @@ if (
             <table class="table table-bordered text-center mx-auto">
                 <thead>
                     <tr>
-                        <th>ID</th>
+                        <!-- <th>ID</th> -->
                         <th>Nome</th>
                         <th>CPF</th>
                         <th>E-mail</th>
@@ -259,7 +259,7 @@ if (
                         }
                         ?>
                         <tr class="<?php echo $rowClass; ?>">
-                            <td><?php echo htmlspecialchars($row['id_usuario']); ?></td>
+                            <!-- <td><?php echo htmlspecialchars($row['id_usuario']); ?></td> -->
                             <td><?php echo htmlspecialchars($row['nome_usuario']); ?></td>
                             <td><?php echo htmlspecialchars($row['cpf']); ?></td>
                             <td><?php echo htmlspecialchars($row['email_usuario']); ?></td>

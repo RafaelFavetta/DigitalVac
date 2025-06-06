@@ -134,7 +134,7 @@ if (!$result) {
             <table class="table table-bordered text-center mx-auto">
                 <thead>
                     <tr>
-                        <th>ID</th>
+                        <!-- <th>ID</th> -->
                         <th>Nome</th>
                         <th>Fabricante</th>
                         <th>Lote</th>
@@ -157,7 +157,7 @@ if (!$result) {
                         }
                         ?>
                         <tr class="<?php echo $rowClass; ?>">
-                            <td><?php echo htmlspecialchars($row['id_vaci']); ?></td>
+                            <!-- <td><?php echo htmlspecialchars($row['id_vaci']); ?></td> -->
                             <td><?php echo htmlspecialchars($row['nome_vaci']); ?></td>
                             <td><?php echo htmlspecialchars($row['fabri_vaci']); ?></td>
                             <td><?php echo htmlspecialchars($row['lote_vaci']); ?></td>
