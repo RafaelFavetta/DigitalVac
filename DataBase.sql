@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 06/06/2025 às 00:33
+-- Tempo de geração: 06/06/2025 às 13:34
 -- Versão do servidor: 10.4.32-MariaDB
 -- Versão do PHP: 8.2.12
 
@@ -37,15 +37,6 @@ CREATE TABLE `aplicacao` (
   `dose_aplicad` int(1) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Despejando dados para a tabela `aplicacao`
---
-
-INSERT INTO `aplicacao` (`id_aplica`, `id_usuario`, `id_posto`, `id_medico`, `id_vaci`, `data_aplica`, `dose_aplicad`) VALUES
-(1, 1, 11, 1, 1, '2025-05-01', 1),
-(2, 1, 11, 2, 2, '2025-05-08', 1),
-(3, 1, 11, 3, 3, '2025-05-15', 2),
-(2406, 2, 12, 1, 4, '2025-05-01', 1);
 -- --------------------------------------------------------
 
 --
@@ -175,7 +166,7 @@ CREATE TABLE `usuario` (
 
 INSERT INTO `usuario` (`id_usuario`, `nome_usuario`, `cpf`, `email_usuario`, `tel_usuario`, `genero_usuario`, `naci_usuario`, `peso_usuario`, `tipo_sang_usuario`, `med_usuario`, `doen_usuario`, `ale_usuario`, `cep_usuario`, `nc_usuario`, `senha`) VALUES
 (1, 'Rafael Favetta', '45260925840', 'rafaelfavetta@gmail.com', '19981084437', 'M', '2007-09-06', 77.00, 'A+', '', '', '', '13607030', 231, '$2y$10$7AgFK/3Cj6LkYeq2sB3OmeWAr0s7uys9zIL5C/kuPtykLhxT2bBXi'),
-(2, 'Miguel Di-Tanno Viganó', '51382943857', 'miguelzin@gmail.com', '19999999999', 'M', '2007-02-20', 80.00, 'O+', '', '', '', '12600074', 211, '$2y$10$OFVLttem/NAXkhttj/x9putG92ZeO65A.0bweCIl7ilc4ptFP5xuq');
+(2, 'Miguel Di-Tanno Viganó', '51382943857', 'miguelzin@gmail.com', '19999999999', 'M', '2007-02-20', 80.00, 'O+', '', '', '', '13602024', 211, '$2y$10$yWPTxyGTlXvj1iLqAFaj5etsAdxZ8xuFBJGn.YrR0EFZmnUyKgJA2');
 
 -- --------------------------------------------------------
 
@@ -200,10 +191,23 @@ CREATE TABLE `vacina` (
 --
 
 INSERT INTO `vacina` (`id_vaci`, `nome_vaci`, `fabri_vaci`, `lote_vaci`, `idade_aplica`, `via_adimicao`, `n_dose`, `intervalo_dose`, `estoque`) VALUES
-(1, 'Vacina A', 'Fabricante A', 'Lote001', 18, 'Intramuscular', 2, 30, 100),
-(2, 'Vacina B', 'Fabricante B', 'Lote002', 12, 'Subcutânea', 1, 0, 50),
-(3, 'Vacina C', 'Fabricante C', 'Lote003', 60, 'Oral', 3, 60, 200),
-(4, 'Rafafez', 'Rafa', '25', 10, 'Intravenoso', 2, 1, 0);
+(5, 'BCG', 'Bio-Manguinhos', 'BCG-2025-A', 0, 'Intradérmica', 1, 0, 500),
+(6, 'Hepatite B', 'Butantan', 'HEPB-2025-A', 0, 'Intramuscular', 3, 30, 500),
+(7, 'Pentavalente (DTP+Hib+Hep B)', 'Bio-Manguinhos', 'PENTA-2025-A', 60, 'Intramuscular', 3, 60, 500),
+(8, 'Vacina Inativada Poliomielite (VIP)', 'Butantan', 'VIP-2025-A', 60, 'Intramuscular', 3, 60, 500),
+(9, 'Vacina Oral Poliomielite (VOP)', 'Bio-Manguinhos', 'VOP-2025-A', 240, 'Oral', 2, 60, 500),
+(10, 'Rotavírus Humano G1P1', 'GlaxoSmithKline', 'ROTA-2025-A', 60, 'Oral', 2, 60, 500),
+(11, 'Pneumocócica 10-valente', 'Fiocruz', 'PNEUMO10-2025-A', 60, 'Intramuscular', 3, 60, 500),
+(12, 'Meningocócica C (conjugada)', 'Butantan', 'MENINGO-C-2025-A', 90, 'Intramuscular', 3, 60, 500),
+(13, 'Febre Amarela', 'Bio-Manguinhos', 'FA-2025-A', 270, 'Subcutânea', 1, 0, 500),
+(14, 'Tríplice Viral (Sarampo, Caxumba e Rubéola)', 'Serum Institute', 'TV-2025-A', 365, 'Subcutânea', 2, 90, 500),
+(15, 'DTP (Tríplice bacteriana)', 'Butantan', 'DTP-2025-A', 480, 'Intramuscular', 3, 60, 500),
+(16, 'Hepatite A', 'GSK', 'HEPA-2025-A', 540, 'Intramuscular', 1, 0, 500),
+(17, 'Varicela', 'MSD', 'VAR-2025-A', 540, 'Subcutânea', 1, 0, 500),
+(18, 'HPV Quadrivalente', 'MSD', 'HPV4-2025-A', 3240, 'Intramuscular', 2, 180, 500),
+(19, 'Meningocócica ACWY', 'Butantan', 'MENINGO-ACWY-2025-A', 3960, 'Intramuscular', 1, 0, 500),
+(20, 'Influenza (Gripe)', 'Instituto Butantan', 'INFLU-2025-A', 180, 'Intramuscular', 1, 365, 1000),
+(21, 'COVID-19 (atualizada)', 'Pfizer', 'COVID-2025-A', 180, 'Intramuscular', 2, 21, 1000);
 
 --
 -- Índices para tabelas despejadas
@@ -303,7 +307,7 @@ ALTER TABLE `usuario`
 -- AUTO_INCREMENT de tabela `vacina`
 --
 ALTER TABLE `vacina`
-  MODIFY `id_vaci` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id_vaci` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- Restrições para tabelas despejadas
