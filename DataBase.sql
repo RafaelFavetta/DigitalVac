@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 07/06/2025 às 00:38
+-- Tempo de geração: 07/06/2025 às 01:20
 -- Versão do servidor: 10.4.32-MariaDB
 -- Versão do PHP: 8.2.12
 
@@ -200,23 +200,31 @@ CREATE TABLE `vacina` (
 --
 
 INSERT INTO `vacina` (`id_vaci`, `nome_vaci`, `fabri_vaci`, `lote_vaci`, `idade_aplica`, `via_adimicao`, `n_dose`, `intervalo_dose`, `estoque`) VALUES
-(5, 'BCG', 'Bio-Manguinhos', 'BCG-2025-A', 0, 'Intradérmica', 1, 0, 500),
-(6, 'Hepatite B', 'Butantan', 'HEPB-2025-A', 0, 'Intramuscular', 3, 30, 500),
-(7, 'Pentavalente (DTP+Hib+Hep B)', 'Bio-Manguinhos', 'PENTA-2025-A', 60, 'Intramuscular', 3, 60, 500),
-(8, 'Vacina Inativada Poliomielite (VIP)', 'Butantan', 'VIP-2025-A', 60, 'Intramuscular', 3, 60, 500),
-(9, 'Vacina Oral Poliomielite (VOP)', 'Bio-Manguinhos', 'VOP-2025-A', 240, 'Oral', 2, 60, 500),
-(10, 'Rotavírus Humano G1P1', 'GlaxoSmithKline', 'ROTA-2025-A', 60, 'Oral', 2, 60, 500),
-(11, 'Pneumocócica 10-valente', 'Fiocruz', 'PNEUMO10-2025-A', 60, 'Intramuscular', 3, 60, 500),
-(12, 'Meningocócica C (conjugada)', 'Butantan', 'MENINGO-C-2025-A', 90, 'Intramuscular', 3, 60, 500),
-(13, 'Febre Amarela', 'Bio-Manguinhos', 'FA-2025-A', 270, 'Subcutânea', 1, 0, 500),
-(14, 'Tríplice Viral (Sarampo, Caxumba e Rubéola)', 'Serum Institute', 'TV-2025-A', 365, 'Subcutânea', 2, 90, 500),
-(15, 'DTP (Tríplice bacteriana)', 'Butantan', 'DTP-2025-A', 480, 'Intramuscular', 3, 60, 500),
-(16, 'Hepatite A', 'GSK', 'HEPA-2025-A', 540, 'Intramuscular', 1, 0, 500),
-(17, 'Varicela', 'MSD', 'VAR-2025-A', 540, 'Subcutânea', 1, 0, 500),
-(18, 'HPV Quadrivalente', 'MSD', 'HPV4-2025-A', 3240, 'Intramuscular', 2, 180, 500),
-(19, 'Meningocócica ACWY', 'Butantan', 'MENINGO-ACWY-2025-A', 3960, 'Intramuscular', 1, 0, 500),
-(20, 'Influenza (Gripe)', 'Instituto Butantan', 'INFLU-2025-A', 180, 'Intramuscular', 1, 365, 1000),
-(21, 'COVID-19 (atualizada)', 'Pfizer', 'COVID-2025-A', 180, 'Intramuscular', 2, 21, 1000);
+(22, 'BCG', 'Instituto Butantan', 'L12345', 0, 'Intradérmica', 1, 0, 100),
+(23, 'Hepatite B', 'Fiocruz', 'L12346', 0, 'Intramuscular', 1, 1, 100),
+(24, 'Penta (DTP/Hib/Hepatite B)', 'Fiocruz', 'L12347', 2, 'Intramuscular', 3, 2, 100),
+(25, 'VIP (Poliomielite inativada)', 'Sanofi', 'L12348', 2, 'Intramuscular', 3, 2, 100),
+(26, 'VOP (Poliomielite oral)', 'Fiocruz', 'L12349', 15, 'Oral', 2, 6, 100),
+(27, 'Pneumocócica 10-valente', 'GSK', 'L12350', 2, 'Intramuscular', 3, 2, 100),
+(28, 'Meningocócica C (conjugada)', 'Fiocruz', 'L12351', 3, 'Intramuscular', 2, 11, 100),
+(29, 'Rotavírus humano', 'GSK', 'L12352', 2, 'Oral', 2, 2, 100),
+(30, 'Febre amarela', 'Bio-Manguinhos', 'L12353', 9, 'Subcutânea', 1, 0, 100),
+(31, 'Tríplice viral (SCR)', 'MSD', 'L12354', 12, 'Subcutânea', 2, 3, 100),
+(32, 'DTP (tríplice bacteriana)', 'Fiocruz', 'L12355', 15, 'Intramuscular', 1, 0, 100),
+(33, 'Hepatite A', 'Fiocruz', 'L12356', 15, 'Intramuscular', 1, 0, 100),
+(34, 'Varicela', 'MSD', 'L12357', 15, 'Subcutânea', 1, 0, 100),
+(35, 'HPV quadrivalente', 'MSD', 'L12358', 108, 'Intramuscular', 2, 6, 100),
+(36, 'dT (Dupla adulto)', 'Fiocruz', 'L12359', 120, 'Intramuscular', 3, 12, 100),
+(37, 'Meningocócica ACWY', 'Fiocruz', 'L12360', 132, 'Intramuscular', 1, 0, 100),
+(38, 'dT (reforço)', 'Fiocruz', 'L12361', 240, 'Intramuscular', 1, 120, 100),
+(39, 'Hepatite B (adulto)', 'Fiocruz', 'L12362', 240, 'Intramuscular', 3, 1, 100),
+(40, 'Influenza', 'Butantan', 'L12363', 720, 'Intramuscular', 1, 12, 100),
+(41, 'Pneumocócica 23-valente', 'MSD', 'L12364', 720, 'Intramuscular', 1, 60, 100),
+(42, 'Hepatite B (Gestante)', 'Fiocruz', 'HG001', 0, 'Intramuscular', 3, 1, 100),
+(43, 'dT (Dupla adulto - Gestante)', 'Fiocruz', 'DG001', 0, 'Intramuscular', 1, 120, 100),
+(44, 'Influenza (Gestante)', 'Instituto Butantan', 'IG001', 0, 'Intramuscular', 1, 12, 100),
+(45, 'Covid-19 (Gestante)', 'Pfizer', 'CG001', 0, 'Intramuscular', 1, 12, 100),
+(46, 'dTpa (Gestante)', 'Sanofi', 'DP001', 5, 'Intramuscular', 1, 0, 100);
 
 --
 -- Índices para tabelas despejadas
@@ -316,7 +324,7 @@ ALTER TABLE `usuario`
 -- AUTO_INCREMENT de tabela `vacina`
 --
 ALTER TABLE `vacina`
-  MODIFY `id_vaci` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `id_vaci` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=47;
 
 --
 -- Restrições para tabelas despejadas
