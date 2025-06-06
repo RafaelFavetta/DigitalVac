@@ -26,6 +26,16 @@ if (!isset($_SESSION['id_medico'])) {
             position: relative;
         }
 
+        .navbar-content-center {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            width: 100%;
+            gap: 32px;
+            /* Espaço igual entre linhas e logo */
+        }
+
         .navbar-logo-center {
             display: flex;
             align-items: center;
@@ -34,30 +44,25 @@ if (!isset($_SESSION['id_medico'])) {
             z-index: 2;
         }
 
+        .navbar-logo-center img {
+            margin: 0 !important;
+        }
+
         .navbar-hr-left,
         .navbar-hr-right {
             border-top: 2px solid #fff;
             opacity: 0.5;
-            margin: 0 105px;
             height: 0;
-        }
-
-        .navbar-hr-left {
             flex: 1 1 0%;
-            margin-right: 24px;
-        }
-
-        .navbar-hr-right {
-            flex: 1 1 0%;
-            margin-left: 24px;
-        }
-
-        .navbar-content-center {
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            min-width: 0;
+            max-width: 500px;
+            /* diminui o comprimento máximo das linhas */
             width: 100%;
-            position: relative;
+        }
+
+        .navbar-hr-left,
+        .navbar-hr-right {
+            margin: 0 !important;
         }
 
         @media (max-width: 991.98px) {

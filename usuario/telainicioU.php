@@ -93,6 +93,11 @@ $conn->close();
             margin: 0;
         }
 
+        html,
+        body {
+            overflow: hidden;
+        }
+
         @media (max-width: 991.98px) {
             .cards-container {
                 padding: 24px 8px;
@@ -110,18 +115,122 @@ $conn->close();
                 max-width: 100%;
             }
         }
+
+        .navbar {
+            position: relative;
+        }
+
+        .navbar-content-center {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            width: 100%;
+            gap: 32px;
+            /* Espaço igual entre linhas e logo */
+        }
+
+        .navbar-logo-center {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 55px;
+            z-index: 2;
+            /* Remover margin da logo */
+        }
+
+        .navbar-logo-center img {
+            margin: 0 !important;
+        }
+
+        .navbar-hr-left,
+        .navbar-hr-right {
+            border-top: 2px solid #fff;
+            opacity: 0.5;
+            height: 0;
+            flex: 1 1 0%;
+            min-width: 0;
+            max-width: 500px;
+            width: 100%;
+        }
+
+        /* Remover margin-right e margin-left das linhas */
+        .navbar-hr-left,
+        .navbar-hr-right {
+            margin: 0 !important;
+        }
+
+        .navbar-content-center {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            position: relative;
+        }
+
+        @media (max-width: 991.98px) {
+            .navbar-content-center {
+                flex-direction: column;
+            }
+
+            .navbar-hr-left,
+            .navbar-hr-right {
+                display: none;
+            }
+        }
+
+        .navbar-nav.ms-auto.position-absolute.end-0.me-3 {
+            top: 50% !important;
+            transform: translateY(-50%);
+            right: 12px;
+            left: auto;
+            bottom: auto;
+        }
+
+        .navbar .btn-danger {
+            padding: 4px 10px !important;
+            font-size: 15px !important;
+            min-width: 70px;
+        }
+
+        .navbar .nav-link {
+            white-space: nowrap;
+            padding-left: 12px !important;
+            padding-right: 12px !important;
+        }
+
+        .navbar-brand {
+            font-size: 1.5rem !important;
+            font-weight: bold !important;
+            margin-left: 0.5rem !important;
+        }
+
+        .navbar-nav .nav-link {
+            font-size: 1rem !important;
+            padding-left: 10px !important;
+            padding-right: 10px !important;
+        }
+
+        @media (max-width: 991.98px) {
+            .navbar-nav .nav-link {
+                font-size: 1rem !important;
+                padding-left: 10px !important;
+                padding-right: 10px !important;
+            }
+        }
     </style>
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg bg-primary navbar-dark">
+    <!-- Navbar igual à de medica/telainicio.php -->
+    <nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">
         <div class="container-fluid">
-            <div class="d-flex flex-grow-1 align-items-center justify-content-center position-relative">
-                <div class="d-none d-md-block flex-grow-1 border-top border-2 border-white opacity-50 me-3"></div>
-                <div class="d-flex align-items-center justify-content-center" style="height:55px;z-index:2;">
+            <div class="navbar-content-center">
+                <div class="d-none d-md-flex navbar-hr-left"></div>
+                <div class="navbar-logo-center">
                     <img src="../img/logo_vetor.png" alt="Logo DigitalVac" width="50" height="50" class="me-3">
                 </div>
-                <div class="d-none d-md-block flex-grow-1 border-top border-2 border-white opacity-50 ms-3"></div>
+                <div class="d-none d-md-flex navbar-hr-right"></div>
             </div>
             <ul class="navbar-nav ms-auto position-absolute end-0 me-3" style="z-index:2; top:16px;">
                 <li class="nav-item">
