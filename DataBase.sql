@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 06/06/2025 às 13:34
+-- Tempo de geração: 07/06/2025 às 00:38
 -- Versão do servidor: 10.4.32-MariaDB
 -- Versão do PHP: 8.2.12
 
@@ -75,6 +75,15 @@ CREATE TABLE `campanha` (
   `imagem` varchar(255) NOT NULL,
   `descricao` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Despejando dados para a tabela `campanha`
+--
+
+INSERT INTO `campanha` (`id_campanha`, `nome_campanha`, `data_inicio`, `data_fim`, `imagem`, `descricao`) VALUES
+(1, 'Campanha A', '2025-06-05', '2025-06-04', 'uploads/campanhas/campanha_68421c2385cc34.67209433.jpg', 'Campanha de teste para saber se funciona'),
+(2, 'Campanha B', '2025-03-13', '2025-06-04', 'uploads/campanhas/campanha_684221f7d0b843.06649431.jpg', 'campanha para não aparecer'),
+(3, 'Campanha C', '2025-06-19', '2025-09-18', 'uploads/campanhas/campanha_68422518518599.94111440.jpg', 'sl só teste');
 
 -- --------------------------------------------------------
 
@@ -165,8 +174,8 @@ CREATE TABLE `usuario` (
 --
 
 INSERT INTO `usuario` (`id_usuario`, `nome_usuario`, `cpf`, `email_usuario`, `tel_usuario`, `genero_usuario`, `naci_usuario`, `peso_usuario`, `tipo_sang_usuario`, `med_usuario`, `doen_usuario`, `ale_usuario`, `cep_usuario`, `nc_usuario`, `senha`) VALUES
-(1, 'Rafael Favetta', '45260925840', 'rafaelfavetta@gmail.com', '19981084437', 'M', '2007-09-06', 77.00, 'A+', '', '', '', '13607030', 231, '$2y$10$7AgFK/3Cj6LkYeq2sB3OmeWAr0s7uys9zIL5C/kuPtykLhxT2bBXi'),
-(2, 'Miguel Di-Tanno Viganó', '51382943857', 'miguelzin@gmail.com', '19999999999', 'M', '2007-02-20', 80.00, 'O+', '', '', '', '13602024', 211, '$2y$10$yWPTxyGTlXvj1iLqAFaj5etsAdxZ8xuFBJGn.YrR0EFZmnUyKgJA2');
+(1, 'Rafael Favetta', '45260925840', 'rafaelfavetta@gmail.com', '19981084437', 'O', '2007-09-06', 77.00, 'A+', '', '', '', '13607030', 231, '$2y$10$7AgFK/3Cj6LkYeq2sB3OmeWAr0s7uys9zIL5C/kuPtykLhxT2bBXi'),
+(2, 'Miguel Di-Tanno Viganó', '51382943857', 'miguelzin@gmail.com', '19999999999', 'M', '2007-02-20', 80.00, 'O+', '', '', '', '12600074', 211, '$2y$10$MRpGXV.HXK9B0X17qY6drONp1wnHMGZPJn4mNO8ce0MwB8IssYTS2');
 
 -- --------------------------------------------------------
 
@@ -283,7 +292,7 @@ ALTER TABLE `atestado`
 -- AUTO_INCREMENT de tabela `campanha`
 --
 ALTER TABLE `campanha`
-  MODIFY `id_campanha` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_campanha` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de tabela `medico`
