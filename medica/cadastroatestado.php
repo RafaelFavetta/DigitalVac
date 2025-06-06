@@ -11,6 +11,16 @@ if (isset($_SESSION['id_medico'])) {
     $stmt->fetch();
     $stmt->close();
 }
+$coren_crm = '';
+if (isset($_SESSION['id_medico'])) {
+    $id_medico = $_SESSION['id_medico'];
+    $stmt2 = $conn->prepare("SELECT coren_crm FROM medico WHERE id_medico = ?");
+    $stmt2->bind_param("i", $id_medico);
+    $stmt2->execute();
+    $stmt2->bind_result($coren_crm);
+    $stmt2->fetch();
+    $stmt2->close();
+}
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -196,19 +206,29 @@ if (isset($_SESSION['id_medico'])) {
                     </div>
                     <div class="col-md-6">
                         <label for="nome_medico" class="form-label fw-bold">Nome do Médico</label>
-                        <input type="hidden" id="nome_medico" name="nome_medico" class="form-control" value="<?php echo htmlspecialchars($nome_medico); ?>">
-                        <input type="text" class="form-control" value="<?php echo htmlspecialchars($nome_medico); ?>" readonly>
+                        <input type="text" id="nome_medico" name="nome_medico" class="form-control"
+                            value="<?php echo htmlspecialchars($nome_medico); ?>" required autocomplete="off"
+                            autocapitalize="off" spellcheck="false">
+                        <div id="autocomplete-nome_medico" class="autocomplete-suggestions"></div>
                     </div>
                 </div>
                 <div class="row g-3 mt-2">
                     <div class="col-md-6">
+                        <label for="coren_crm" class="form-label fw-bold">COREN/CRM</label>
+                        <input type="text" id="coren_crm" name="coren_crm" class="form-control"
+                            value="<?php echo htmlspecialchars($coren_crm); ?>" required>
+                    </div>
+                    <div class="col-md-6">
                         <label for="data_inicio" class="form-label fw-bold">Data de Início</label>
                         <input type="date" id="data_inicio" name="data_inicio" class="form-control" required>
                     </div>
+                </div>
+                <div class="row g-3 mt-2">
                     <div class="col-md-6">
                         <label for="data_termino" class="form-label fw-bold">Data de Término</label>
                         <input type="date" id="data_termino" name="data_termino" class="form-control" required>
                     </div>
+                    <div class="col-md-6"></div>
                 </div>
                 <div class="row g-3 mt-2">
                     <div class="col-md-12">
@@ -385,7 +405,8 @@ if (isset($_SESSION['id_medico'])) {
 
         // Autocomplete apenas para nome do paciente
         setupAutocomplete('nome_paciente', '../ajax/autocomplete_nomepaciente.php');
-        // Remover setupAutocomplete para nome_medico
+        // Adicionado autocomplete para nome_medico
+        setupAutocomplete('nome_medico', '../ajax/autocomplete_nomemedico.php');
     </script>
 </body>
 

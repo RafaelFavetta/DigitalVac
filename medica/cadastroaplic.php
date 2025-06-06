@@ -1,5 +1,19 @@
 <?php
 session_start();
+include('../outros/db_connect.php');
+
+// Recupera nome e coren_crm do médico logado
+$nome_medico = '';
+$coren_crm = '';
+if (isset($_SESSION['id_medico'])) {
+    $id_medico = $_SESSION['id_medico'];
+    $stmt = $conn->prepare("SELECT nome_medico, coren_crm FROM medico WHERE id_medico = ?");
+    $stmt->bind_param("i", $id_medico);
+    $stmt->execute();
+    $stmt->bind_result($nome_medico, $coren_crm);
+    $stmt->fetch();
+    $stmt->close();
+}
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -208,7 +222,8 @@ session_start();
                     <div class="col-md-6">
                         <label for="coren-crm" class="form-label fw-bold">COREN/CRM</label>
                         <input type="text" class="form-control" name="coren_crm" id="coren-crm" autocomplete="off"
-                            autocapitalize="off" spellcheck="false" required placeholder="Digite ou selecione o COREN/CRM">
+                            autocapitalize="off" spellcheck="false" required placeholder="Digite ou selecione o COREN/CRM"
+                            value="<?php echo htmlspecialchars($coren_crm); ?>">
                         <div id="autocomplete-coren-crm" class="autocomplete-suggestions"></div>
                     </div>
                 </div>
