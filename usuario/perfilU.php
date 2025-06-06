@@ -119,7 +119,6 @@ if (!$endereco_db) {
         <div class="container-fluid">
             <div class="d-flex align-items-center">
                 <img src="../img/logo_vetor.png" alt="Logo DigitalVac" width="55" height="55" class="me-3" />
-                <a class="navbar-brand" href="#">DigitalVac</a>
             </div>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
                 aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
