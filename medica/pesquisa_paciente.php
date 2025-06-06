@@ -20,7 +20,7 @@ if (isset($_GET['cpf'])) {
 // Consulta SQL para buscar pacientes
 $sql = "SELECT * FROM usuario";
 if (!empty($cpf)) {
-    $sql = "SELECT * FROM usuario WHERE cpf = ?";
+    $sql = "SELECT * FROM usuario WHERE cpf LIKE CONCAT('%', ?, '%')";
 }
 
 $stmt = $conn->prepare($sql);
@@ -31,6 +31,70 @@ if (!empty($cpf)) {
 
 $stmt->execute();
 $result = $stmt->get_result();
+
+// Se for requisição AJAX, retorna só a tabela
+if (
+    isset($_SERVER['HTTP_X_REQUESTED_WITH']) &&
+    strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest'
+) {
+    ob_start();
+    ?>
+    <div id="tabela-pacientes">
+        <table class="table table-bordered text-center mx-auto">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nome</th>
+                    <th>CPF</th>
+                    <th>E-mail</th>
+                    <th>Telefone</th>
+                    <th>Gênero</th>
+                    <th>Data de Nascimento</th>
+                    <th>Peso</th>
+                    <th>Tipo Sanguíneo</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php
+                $rowIndex = 0;
+                while ($row = $result->fetch_assoc()):
+                    if ($rowIndex === 0) {
+                        $rowClass = 'bg-white';
+                    } else {
+                        $rowClass = ($rowIndex % 2 === 1) ? 'table-secondary' : 'bg-white';
+                    }
+                    ?>
+                    <tr class="<?php echo $rowClass; ?>">
+                        <td><?php echo htmlspecialchars($row['id_usuario']); ?></td>
+                        <td><?php echo htmlspecialchars($row['nome_usuario']); ?></td>
+                        <td><?php echo htmlspecialchars($row['cpf']); ?></td>
+                        <td><?php echo htmlspecialchars($row['email_usuario']); ?></td>
+                        <td><?php echo htmlspecialchars($row['tel_usuario']); ?></td>
+                        <td><?php echo htmlspecialchars($row['genero_usuario']); ?></td>
+                        <td><?php echo htmlspecialchars($row['naci_usuario']); ?></td>
+                        <td><?php echo htmlspecialchars($row['peso_usuario']); ?></td>
+                        <td><?php echo htmlspecialchars($row['tipo_sang_usuario']); ?></td>
+                        <td>
+                            <a href="ver_paciente.php?id=<?php echo $row['id_usuario']; ?>"
+                                class="btn btn-sm btn-info mb-1" title="Ver Informações">
+                                <i class="bi bi-info-circle"></i>
+                            </a>
+                            <a href="historico_vacinacao.php?id=<?php echo $row['id_usuario']; ?>"
+                                class="btn btn-sm btn-success mb-1" title="Ver Histórico de Vacinação">
+                                <i class="bi bi-journal-medical"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    <?php $rowIndex++; endwhile; ?>
+            </tbody>
+        </table>
+    </div>
+    <?php
+    echo ob_get_clean();
+    $conn->close();
+    exit;
+}
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -235,11 +299,7 @@ $result = $stmt->get_result();
                     data: { cpf: cpf },
                     headers: { 'X-Requested-With': 'XMLHttpRequest' },
                     success: function (data) {
-                        var html = $('<div>').html(data);
-                        var novaTabela = html.find('#tabela-pacientes');
-                        if (novaTabela.length) {
-                            $('#tabela-pacientes').html(novaTabela.html());
-                        }
+                        $('#tabela-pacientes').replaceWith(data);
                     }
                 });
             });
