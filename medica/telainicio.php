@@ -254,7 +254,7 @@ if (!isset($_SESSION['id_medico'])) {
                     <i class="bi bi-person-lines-fill"></i>
                     <span>Pesquisar Pacientes</span>
                 </a>
-                <a href="cadastroatestado.html" class="btn btn-primary btn-lg card-btn shadow-sm">
+                <a href="cadastroatestado.php" class="btn btn-primary btn-lg card-btn shadow-sm">
                     <i class="bi bi-clipboard2-plus-fill"></i>
                     <span>Cadastrar Atestado</span>
                 </a>

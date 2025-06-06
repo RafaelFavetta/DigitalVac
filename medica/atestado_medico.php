@@ -159,7 +159,7 @@ $result = $stmt->get_result();
                     <a class="nav-link active fs-6 fw-bold" href="pesquisa_paciente.php">
                         <i class="bi bi-person-lines-fill"></i> Pesquisar Pacientes
                     </a>
-                    <a class="nav-link active fs-6 fw-bold" href="cadastroatestado.html">
+                    <a class="nav-link active fs-6 fw-bold" href="cadastroatestado.php">
                         <i class="bi bi-clipboard2-plus-fill"></i> Cadastrar Atestado
                     </a>
                     <a class="nav-link disabled fs-6 fw-bold" aria-disabled="true" href="atestado_medico.php">

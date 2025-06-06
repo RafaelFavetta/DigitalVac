@@ -1,3 +1,17 @@
+<?php
+session_start();
+include_once("../outros/db_connect.php");
+$nome_medico = '';
+if (isset($_SESSION['id_medico'])) {
+    $id_medico = $_SESSION['id_medico'];
+    $stmt = $conn->prepare("SELECT nome_medico FROM medico WHERE id_medico = ?");
+    $stmt->bind_param("i", $id_medico);
+    $stmt->execute();
+    $stmt->bind_result($nome_medico);
+    $stmt->fetch();
+    $stmt->close();
+}
+?>
 <!DOCTYPE html>
 <html lang="pt-BR">
 
@@ -134,7 +148,7 @@
                     <a class="nav-link active fs-6 fw-bold" href="pesquisa_paciente.php">
                         <i class="bi bi-person-lines-fill"></i> Pesquisar Pacientes
                     </a>
-                    <a class="nav-link disabled fs-6 fw-bold" aria-disabled="true" href="cadastroatestado.html">
+                    <a class="nav-link disabled fs-6 fw-bold" aria-disabled="true" href="cadastroatestado.php">
                         <i class="bi bi-clipboard2-plus-fill"></i> Cadastrar Atestado
                     </a>
                     <a class="nav-link active fs-6 fw-bold" href="atestado_medico.php">
@@ -182,10 +196,8 @@
                     </div>
                     <div class="col-md-6">
                         <label for="nome_medico" class="form-label fw-bold">Nome do Médico</label>
-                        <input type="text" id="nome_medico" name="nome_medico" class="form-control" required
-                            autocomplete="off" autocapitalize="off" spellcheck="false"
-                            placeholder="Digite o nome do médico">
-                        <div id="autocomplete-nome_medico" class="autocomplete-suggestions"></div>
+                        <input type="hidden" id="nome_medico" name="nome_medico" class="form-control" value="<?php echo htmlspecialchars($nome_medico); ?>">
+                        <input type="text" class="form-control" value="<?php echo htmlspecialchars($nome_medico); ?>" readonly>
                     </div>
                 </div>
                 <div class="row g-3 mt-2">
@@ -371,9 +383,9 @@
             });
         }
 
-        // Autocomplete para nome do paciente e nome do médico
+        // Autocomplete apenas para nome do paciente
         setupAutocomplete('nome_paciente', '../ajax/autocomplete_nomepaciente.php');
-        setupAutocomplete('nome_medico', '../ajax/autocomplete_nomemedico.php');
+        // Remover setupAutocomplete para nome_medico
     </script>
 </body>
 
