@@ -101,9 +101,9 @@
             <form id="cadastroEnfForm" action="../Recebedados/recebedadosenfermeiro.php" method="POST">
                 <div class="row g-2">
                     <div class="col-md-6">
-                        <label for="nome_medico" class="form-label fw-bold">Nome Completo</label>
+                        <label for="nome_medico" class="form-label fw-bold">Nome completo</label>
                         <input type="text" id="nome_medico" name="nome_medico" class="form-control"
-                            placeholder="Nome Completo" required>
+                            placeholder="Nome completo" required>
                     </div>
                     <div class="col-md-6">
                         <label for="cpf" class="form-label fw-bold">CPF</label>
@@ -118,13 +118,13 @@
                             required>
                     </div>
                     <div class="col-md-6">
-                        <label for="email" class="form-label fw-bold">Email</label>
-                        <input type="email" id="email" name="email" class="form-control" placeholder="Email" required>
+                        <label for="email" class="form-label fw-bold">E-mail</label>
+                        <input type="email" id="email" name="email" class="form-control" placeholder="E-mail" required>
                     </div>
                 </div>
                 <div class="row g-2 mt-2">
                     <div class="col-md-6">
-                        <label for="data_nascimento" class="form-label fw-bold">Data de Nascimento</label>
+                        <label for="data_nascimento" class="form-label fw-bold">Data de nascimento</label>
                         <input type="date" id="data_nascimento" name="data_nascimento" class="form-control" required>
                     </div>
                     <div class="col-md-6">
@@ -135,7 +135,7 @@
                 </div>
                 <div class="row g-2 mt-2">
                     <div class="col-md-6">
-                        <label for="tipo_medico" class="form-label fw-bold">Tipo de Médico</label>
+                        <label for="tipo_medico" class="form-label fw-bold">Tipo de médico</label>
                         <select id="tipo_medico" name="tipo_medico" class="form-select" required>
                             <option value="" type="select"></option>
                             <option value="Cardiologista">Cardiologista</option>
@@ -152,7 +152,7 @@
                         </select>
                     </div>
                     <div class="col-md-6">
-                        <label for="id_posto_trabalho" class="form-label fw-bold">Posto de Trabalho</label>
+                        <label for="id_posto_trabalho" class="form-label fw-bold">Posto de trabalho</label>
                         <select id="id_posto_trabalho" name="posto_trabalho" class="form-select" required>
                             <option value=""></option>
                             <?php
