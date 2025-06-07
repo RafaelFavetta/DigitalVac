@@ -70,7 +70,7 @@ if ($user_data) {
         $pesquisa = trim($_GET['pesquisa']);
     }
 
-    // 5. Verifica vacinas obrigatórias com doses pendentes
+    // Verifica vacinas obrigatórias com doses pendentes
     foreach ($vacinas_fisicas as $id_vaci => $vacina) {
         // Só considera vacinas do calendário SUS=1
         if ($vacina['sus'] != 1) continue;
@@ -144,7 +144,7 @@ if (
                         </div>
                     </td>
                     <td style="vertical-align:middle; text-align:center; padding-top:4px; padding-bottom:4px;">
-                        <a href="../medica/ver_vacina.php?id_vaci=<?= urlencode($vacina['id_vaci']) ?>"
+                        <a href="ver_vacinaU.php?id_vaci=<?= urlencode($vacina['id_vaci']) ?>"
                             class="btn btn-primary btn-sm" style="padding:2px 8px; font-size:0.95em;">
                             <i class="bi bi-info-circle"></i> Sobre a vacina
                         </a>
@@ -169,7 +169,7 @@ if (
                         </span>
                     </td>
                     <td style="vertical-align:middle; text-align:center; padding-top:4px; padding-bottom:4px;">
-                        <a href="../medica/ver_vacina.php?id_vaci=<?= urlencode($vacina['id_vaci']) ?>"
+                        <a href="ver_vacinaU.php?id_vaci=<?= urlencode($vacina['id_vaci']) ?>"
                             class="btn btn-primary btn-sm" style="padding:2px 8px; font-size:0.95em;">
                             <i class="bi bi-info-circle"></i> Sobre a vacina
                         </a>
@@ -357,7 +357,7 @@ if (
                                         </div>
                                     </td>
                                     <td style="vertical-align:middle; text-align:center; padding-top:4px; padding-bottom:4px;">
-                                        <a href="../medica/ver_vacina.php?id_vaci=<?= urlencode($vacina['id_vaci']) ?>"
+                                        <a href="ver_vacinaU.php?id_vaci=<?= urlencode($vacina['id_vaci']) ?>"
                                             class="btn btn-primary btn-sm" style="padding:2px 8px; font-size:0.95em;">
                                             <i class="bi bi-info-circle"></i> Sobre a vacina
                                         </a>
@@ -382,7 +382,7 @@ if (
                                         </span>
                                     </td>
                                     <td style="vertical-align:middle; text-align:center; padding-top:4px; padding-bottom:4px;">
-                                        <a href="../medica/ver_vacina.php?id_vaci=<?= urlencode($vacina['id_vaci']) ?>"
+                                        <a href="ver_vacinaU.php?id_vaci=<?= urlencode($vacina['id_vaci']) ?>"
                                             class="btn btn-primary btn-sm" style="padding:2px 8px; font-size:0.95em;">
                                             <i class="bi bi-info-circle"></i> Sobre a vacina
                                         </a>
@@ -430,7 +430,7 @@ if (
         font-weight: 500;
         font-size: 0.98rem;
         text-decoration: none;
-        box-shadow: 0 2px 8px rgba(13, 110, 253, 0.08);
+        box-shadow: 0 2px 8px rgba(0, 110, 253, 0.08);
         transition: background 0.2s, box-shadow 0.2s, color 0.2s;
         margin-top: 0;
     }
@@ -440,7 +440,7 @@ if (
         background: #084298;
         color: #fff !important;
         text-decoration: none;
-        box-shadow: 0 4px 12px rgba(13, 110, 253, 0.15);
+        box-shadow: 0 4px 12px rgba(0, 110, 253, 0.15);
         outline: none;
     }
 
