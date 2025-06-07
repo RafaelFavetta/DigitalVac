@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 07, 2025 at 06:02 AM
+-- Generation Time: Jun 07, 2025 at 06:51 AM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 8.1.6
 
@@ -135,6 +135,46 @@ INSERT INTO `campanha` (`id_campanha`, `nome_campanha`, `data_inicio`, `data_fim
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `grupo_especial`
+--
+
+CREATE TABLE `grupo_especial` (
+  `id` int(11) NOT NULL,
+  `id_usuario` int(11) NOT NULL,
+  `grupo` varchar(50) NOT NULL,
+  `data_resposta` datetime DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `grupo_especial`
+--
+
+INSERT INTO `grupo_especial` (`id`, `id_usuario`, `grupo`, `data_resposta`) VALUES
+(1, 1, 'Nenhum', '2025-06-07 01:40:45'),
+(2, 1, 'Nenhum', '2025-06-07 01:41:52'),
+(3, 1, 'Nenhum', '2025-06-07 01:47:22'),
+(4, 1, 'Gestante', '2025-06-07 01:51:04'),
+(5, 1, 'Nenhum', '2025-06-07 01:51:17');
+
+--
+-- Triggers `grupo_especial`
+--
+DELIMITER $$
+CREATE TRIGGER `trg_update_usuario_grupo_especial` AFTER INSERT ON `grupo_especial` FOR EACH ROW BEGIN
+  UPDATE usuario SET grupo_especial = NEW.grupo WHERE id_usuario = NEW.id_usuario;
+END
+$$
+DELIMITER ;
+DELIMITER $$
+CREATE TRIGGER `trg_update_usuario_grupo_especial_update` AFTER UPDATE ON `grupo_especial` FOR EACH ROW BEGIN
+  UPDATE usuario SET grupo_especial = NEW.grupo WHERE id_usuario = NEW.id_usuario;
+END
+$$
+DELIMITER ;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `medico`
 --
 
@@ -213,16 +253,17 @@ CREATE TABLE `usuario` (
   `ale_usuario` varchar(255) NOT NULL,
   `cep_usuario` varchar(8) NOT NULL,
   `nc_usuario` int(10) NOT NULL,
-  `senha` varchar(100) NOT NULL
+  `senha` varchar(100) NOT NULL,
+  `grupo_especial` varchar(50) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `usuario`
 --
 
-INSERT INTO `usuario` (`id_usuario`, `nome_usuario`, `cpf`, `email_usuario`, `tel_usuario`, `genero_usuario`, `naci_usuario`, `peso_usuario`, `tipo_sang_usuario`, `med_usuario`, `doen_usuario`, `ale_usuario`, `cep_usuario`, `nc_usuario`, `senha`) VALUES
-(1, 'Rafael Favetta', '45260925840', 'rafaelfavetta@gmail.com', '19981084437', 'O', '2007-09-06', '77.00', 'A+', '', '', '', '13607030', 231, '$2y$10$7AgFK/3Cj6LkYeq2sB3OmeWAr0s7uys9zIL5C/kuPtykLhxT2bBXi'),
-(2, 'Miguel Di-Tanno Viganó', '51382943857', 'miguelzin@gmail.com', '19999999999', 'M', '2007-02-20', '80.00', 'O+', '', '', '', '12600074', 211, '$2y$10$MRpGXV.HXK9B0X17qY6drONp1wnHMGZPJn4mNO8ce0MwB8IssYTS2');
+INSERT INTO `usuario` (`id_usuario`, `nome_usuario`, `cpf`, `email_usuario`, `tel_usuario`, `genero_usuario`, `naci_usuario`, `peso_usuario`, `tipo_sang_usuario`, `med_usuario`, `doen_usuario`, `ale_usuario`, `cep_usuario`, `nc_usuario`, `senha`, `grupo_especial`) VALUES
+(1, 'Rafael Favetta', '45260925840', 'rafaelfavetta@gmail.com', '19981084437', 'M', '2007-09-06', '77.00', 'A+', '', '', '', '13607030', 231, '$2y$10$7AgFK/3Cj6LkYeq2sB3OmeWAr0s7uys9zIL5C/kuPtykLhxT2bBXi', 'Nenhum'),
+(2, 'Miguel Di-Tanno Viganó', '51382943857', 'miguelzin@gmail.com', '19999999999', 'M', '2007-02-20', '80.00', 'O+', '', '', '', '12600074', 211, '$2y$10$MRpGXV.HXK9B0X17qY6drONp1wnHMGZPJn4mNO8ce0MwB8IssYTS2', NULL);
 
 -- --------------------------------------------------------
 
@@ -366,6 +407,13 @@ ALTER TABLE `campanha`
   ADD PRIMARY KEY (`id_campanha`);
 
 --
+-- Indexes for table `grupo_especial`
+--
+ALTER TABLE `grupo_especial`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `id_usuario` (`id_usuario`);
+
+--
 -- Indexes for table `medico`
 --
 ALTER TABLE `medico`
@@ -428,6 +476,12 @@ ALTER TABLE `campanha`
   MODIFY `id_campanha` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
+-- AUTO_INCREMENT for table `grupo_especial`
+--
+ALTER TABLE `grupo_especial`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
 -- AUTO_INCREMENT for table `medico`
 --
 ALTER TABLE `medico`
@@ -478,6 +532,12 @@ ALTER TABLE `atestado`
   ADD CONSTRAINT `atestado_ibfk_2` FOREIGN KEY (`id_medico`) REFERENCES `medico` (`id_medico`);
 
 --
+-- Constraints for table `grupo_especial`
+--
+ALTER TABLE `grupo_especial`
+  ADD CONSTRAINT `grupo_especial_ibfk_1` FOREIGN KEY (`id_usuario`) REFERENCES `usuario` (`id_usuario`) ON DELETE CASCADE;
+
+--
 -- Constraints for table `medico`
 --
 ALTER TABLE `medico`
@@ -499,11 +559,3 @@ COMMIT;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
-
-CREATE TABLE IF NOT EXISTS grupo_especial (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    id_usuario INT NOT NULL,
-    grupo VARCHAR(50) NOT NULL,
-    data_resposta DATETIME DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (id_usuario) REFERENCES usuario(id_usuario) ON DELETE CASCADE
-);
