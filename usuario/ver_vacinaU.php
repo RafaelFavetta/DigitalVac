@@ -93,7 +93,18 @@ $conn->close();
             <ul class="list-group mb-3">
                 <li class="list-group-item"><strong>Fabricante:</strong> <?php echo htmlspecialchars($row['fabri_vaci']); ?></li>
                 <li class="list-group-item"><strong>Lote:</strong> <?php echo htmlspecialchars($row['lote_vaci']); ?></li>
-                <li class="list-group-item"><strong>Idade de Aplicação Recomendada:</strong> <?php echo htmlspecialchars($row['idade_aplica']); ?> anos</li>
+                <li class="list-group-item">
+                    <strong>Idade de Aplicação Recomendada:</strong>
+                    <?php
+                        $idade_meses = isset($row['idade_meses_reco']) ? intval($row['idade_meses_reco']) : null;
+                        $idade_anos = isset($row['idade_anos_reco']) ? intval($row['idade_anos_reco']) : null;
+                        $partes = [];
+                        if ($idade_meses !== null && $idade_meses > 0) $partes[] = $idade_meses . " meses";
+                        if ($idade_anos !== null && $idade_anos > 0) $partes[] = $idade_anos . " anos";
+                        if (empty($partes)) $partes[] = "Não especificado";
+                        echo htmlspecialchars(implode(" / ", $partes));
+                    ?>
+                </li>
                 <li class="list-group-item"><strong>Via de Administração:</strong> <?php echo htmlspecialchars($row['via_adimicao']); ?></li>
                 <li class="list-group-item"><strong>Número de Doses do Esquema:</strong> <?php echo htmlspecialchars($row['n_dose']); ?></li>
                 <li class="list-group-item"><strong>Intervalo entre Doses:</strong> <?php echo htmlspecialchars($row['intervalo_dose']); ?> meses</li>

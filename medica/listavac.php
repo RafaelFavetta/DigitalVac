@@ -161,7 +161,17 @@ if (!$result) {
                             <td><?php echo htmlspecialchars($row['nome_vaci']); ?></td>
                             <td><?php echo htmlspecialchars($row['fabri_vaci']); ?></td>
                             <td><?php echo htmlspecialchars($row['lote_vaci']); ?></td>
-                            <td><?php echo htmlspecialchars($row['idade_aplica']); ?></td>
+                            <td>
+                                <?php
+                                    $idade_meses = isset($row['idade_meses_reco']) ? intval($row['idade_meses_reco']) : null;
+                                    $idade_anos = isset($row['idade_anos_reco']) ? intval($row['idade_anos_reco']) : null;
+                                    $partes = [];
+                                    if ($idade_meses !== null && $idade_meses > 0) $partes[] = $idade_meses . " meses";
+                                    if ($idade_anos !== null && $idade_anos > 0) $partes[] = $idade_anos . " anos";
+                                    if (empty($partes)) $partes[] = "-";
+                                    echo htmlspecialchars(implode(" / ", $partes));
+                                ?>
+                            </td>
                             <td><?php echo htmlspecialchars($row['via_adimicao']); ?></td>
                             <td><?php echo htmlspecialchars($row['n_dose']); ?></td>
                             <td><?php echo htmlspecialchars($row['intervalo_dose']); ?></td>

@@ -2,6 +2,12 @@
 session_start();
 require_once '../outros/db_connect.php'; // Ajuste o caminho para o arquivo de conexão com o banco
 
+// Verifica se o usuário está logado
+if (!isset($_SESSION['id_usuario'])) {
+    header("Location: login.php");
+    exit();
+}
+
 // Obter o ID do usuário da sessão
 $user_id = $_SESSION['id_usuario'];
 
@@ -19,7 +25,11 @@ $vacinas_opcionais_nao_tomadas = [];
 if ($user_data) {
     $data_nascimento = $user_data['naci_usuario'];
     $genero_usuario = $user_data['genero_usuario'];
-    $idade = date_diff(date_create($data_nascimento), date_create('today'))->y;
+    $dt_nasc = new DateTime($data_nascimento);
+    $dt_hoje = new DateTime();
+    $idade_anos = $dt_hoje->diff($dt_nasc)->y;
+    $idade_meses_usuario = $dt_hoje->diff($dt_nasc)->y * 12 + $dt_hoje->diff($dt_nasc)->m;
+    $idade = $idade_anos;
 
     // 1. Buscar vacinas obrigatórias do calendário para a idade do usuário (SUS = 1)
     $sql_calendario = "SELECT * FROM calendario_vacinal WHERE sus = 1";
@@ -49,15 +59,18 @@ if ($user_data) {
         $vacinas_fisicas[$row['id_vaci']] = $row;
     }
 
-    // 3. Buscar vacinas já aplicadas ao usuário
-    $sql_aplicadas = "SELECT id_vaci, COUNT(*) as doses_tomadas FROM aplicacao WHERE id_usuario = ? GROUP BY id_vaci";
+    // 3. Buscar vacinas já aplicadas ao usuário (inclui datas)
+    $sql_aplicadas = "SELECT id_vaci, COUNT(*) as doses_tomadas, MAX(data_aplica) as ultima_data FROM aplicacao WHERE id_usuario = ? GROUP BY id_vaci";
     $stmt_aplicadas = $conn->prepare($sql_aplicadas);
     $stmt_aplicadas->bind_param("i", $user_id);
     $stmt_aplicadas->execute();
     $result_aplicadas = $stmt_aplicadas->get_result();
     $vacinas_aplicadas = [];
     while ($row = $result_aplicadas->fetch_assoc()) {
-        $vacinas_aplicadas[$row['id_vaci']] = $row['doses_tomadas'];
+        $vacinas_aplicadas[$row['id_vaci']] = [
+            'doses_tomadas' => $row['doses_tomadas'],
+            'ultima_data' => $row['ultima_data']
+        ];
     }
 
     // 4. Filtro por pesquisa (AJAX)
@@ -89,7 +102,7 @@ if ($user_data) {
         }
         if ($n_obrig <= 0) continue;
 
-        $doses_tomadas = isset($vacinas_aplicadas[$id_vaci]) ? $vacinas_aplicadas[$id_vaci] : 0;
+        $doses_tomadas = isset($vacinas_aplicadas[$id_vaci]) ? $vacinas_aplicadas[$id_vaci]['doses_tomadas'] : 0;
         if ($doses_tomadas < $n_obrig) {
             if ($pesquisa === '' || stripos($vacina['nome_vacina'], $pesquisa) !== false) {
                 $vacina['doses_tomadas'] = $doses_tomadas;
@@ -116,6 +129,48 @@ if ($user_data) {
     }
 }
 
+// Função para calcular próxima dose e atraso usando datas corretas
+function calcular_proxima_dose($vacina, $aplicada, $idade_meses_usuario, $data_nascimento) {
+    // Idade recomendada para a primeira dose (em meses)
+    $idade_meses_reco = isset($vacina['idade_meses_reco']) ? intval($vacina['idade_meses_reco']) : 0;
+    $idade_anos_reco = isset($vacina['idade_anos_reco']) ? intval($vacina['idade_anos_reco']) : 0;
+    $idade_recomendada_meses = $idade_anos_reco * 12 + $idade_meses_reco;
+
+    // Se nunca tomou nenhuma dose
+    if (!$aplicada || $aplicada['doses_tomadas'] == 0) {
+        // Se for "ao nascer"
+        if ($idade_recomendada_meses === 0) {
+            if ($idade_meses_usuario > 0) {
+                return ['Atrasada', true];
+            }
+            return ['Ao nascer', false];
+        }
+        // Se já atingiu ou passou da idade recomendada
+        if ($idade_meses_usuario >= $idade_recomendada_meses) {
+            // Calcule a data prevista da dose (já passou)
+            $data_prevista = date('d/m/Y', strtotime("+$idade_recomendada_meses months", strtotime($data_nascimento)));
+            return [$data_prevista . ' (Atrasada)', true];
+        } else {
+            // Calcule a data prevista para a dose
+            $data_prevista = date('d/m/Y', strtotime("+$idade_recomendada_meses months", strtotime($data_nascimento)));
+            return [$data_prevista, false];
+        }
+    } else {
+        // Já tomou alguma, calcula próxima dose pelo intervalo a partir da última aplicação
+        $intervalo = isset($vacina['intervalo_dose']) ? intval($vacina['intervalo_dose']) : 0;
+        if ($intervalo > 0 && !empty($aplicada['ultima_data'])) {
+            $data_proxima = date('d/m/Y', strtotime("+$intervalo months", strtotime($aplicada['ultima_data'])));
+            $hoje = date('Y-m-d');
+            // Verifica se a próxima dose está atrasada
+            if (strtotime($data_proxima) < strtotime($hoje)) {
+                return [$data_proxima . ' (Atrasada)', true];
+            }
+            return [$data_proxima, false];
+        }
+        return ['-', false];
+    }
+}
+
 // Se for AJAX, retorna só o <tbody>
 if (
     isset($_SERVER['HTTP_X_REQUESTED_WITH']) &&
@@ -130,11 +185,39 @@ if (
             foreach ($vacinas_obrigatorias_pendentes as $vacina):
                 $rowClass = ($rowIndex === 0) ? 'bg-white' : (($rowIndex % 2 === 1) ? 'table-secondary' : 'bg-white');
                 $proxima_dose = $vacina['doses_tomadas'] + 1;
+                $aplicada = isset($vacinas_aplicadas[$vacina['id_vaci']]) ? $vacinas_aplicadas[$vacina['id_vaci']] : null;
+                list($proxima_dose_valor, $atrasada) = calcular_proxima_dose($vacina, $aplicada, $idade_meses_usuario, $data_nascimento);
                 ?>
                 <tr class="<?php echo $rowClass; ?>" style="height:38px;">
                     <td style="vertical-align:middle;"><?= htmlspecialchars($vacina['nome_vacina']) ?></td>
-                    <td style="vertical-align:middle; text-align:center;"><?= $vacina['idade_aplica'] ?> anos</td>
-                    <td style="vertical-align:middle; text-align:center;">-</td>
+                    <td style="vertical-align:middle; text-align:center;">
+                        <?php
+                            // Idade Recomendada
+                            if (
+                                (isset($vacina['idade_meses_reco']) && intval($vacina['idade_meses_reco']) === 0) &&
+                                (isset($vacina['idade_anos_reco']) && intval($vacina['idade_anos_reco']) === 0)
+                            ) {
+                                echo "Ao nascer";
+                            } else {
+                                $idade_meses = isset($vacina['idade_meses_reco']) ? intval($vacina['idade_meses_reco']) : null;
+                                $idade_anos = isset($vacina['idade_anos_reco']) ? intval($vacina['idade_anos_reco']) : null;
+                                $partes = [];
+                                if ($idade_meses !== null && $idade_meses > 0) $partes[] = $idade_meses . " meses";
+                                if ($idade_anos !== null && $idade_anos > 0) $partes[] = $idade_anos . " anos";
+                                if (empty($partes)) $partes[] = "-";
+                                echo htmlspecialchars(implode(" / ", $partes));
+                            }
+                        ?>
+                    </td>
+                    <td style="vertical-align:middle; text-align:center;">
+                        <?php if ($atrasada): ?>
+                            <span class="badge bg-danger" style="font-size:1em;">
+                                <?= htmlspecialchars($proxima_dose_valor) ?>
+                            </span>
+                        <?php else: ?>
+                            <?= htmlspecialchars($proxima_dose_valor) ?>
+                        <?php endif; ?>
+                    </td>
                     <td style="vertical-align:middle; text-align:center;">
                         <div style="display:flex; flex-direction:row; align-items:center; justify-content:center; gap:8px; height:100%;">
                             <span style="font-size:1.02em;"><?= $vacina['doses_tomadas'] . "/" . $vacina['n_obrig'] ?></span>
@@ -161,7 +244,24 @@ if (
                 ?>
                 <tr class="<?php echo $rowClass; ?>" style="height:38px;">
                     <td style="vertical-align:middle;"><?= htmlspecialchars($vacina['nome_vacina']) ?></td>
-                    <td style="vertical-align:middle; text-align:center;"><?= $vacina['idade_aplica'] ?> anos</td>
+                    <td style="vertical-align:middle; text-align:center;">
+                        <?php
+                            if (
+                                (isset($vacina['idade_meses_reco']) && intval($vacina['idade_meses_reco']) === 0) &&
+                                (isset($vacina['idade_anos_reco']) && intval($vacina['idade_anos_reco']) === 0)
+                            ) {
+                                echo "Ao nascer";
+                            } else {
+                                $idade_meses = isset($vacina['idade_meses_reco']) ? intval($vacina['idade_meses_reco']) : null;
+                                $idade_anos = isset($vacina['idade_anos_reco']) ? intval($vacina['idade_anos_reco']) : null;
+                                $partes = [];
+                                if ($idade_meses !== null && $idade_meses > 0) $partes[] = $idade_meses . " meses";
+                                if ($idade_anos !== null && $idade_anos > 0) $partes[] = $idade_anos . " anos";
+                                if (empty($partes)) $partes[] = "-";
+                                echo htmlspecialchars(implode(" / ", $partes));
+                            }
+                        ?>
+                    </td>
                     <td style="vertical-align:middle; text-align:center;">-</td>
                     <td style="vertical-align:middle; text-align:center;">
                         <span class="badge bg-warning text-dark" style="font-size:0.95em; min-width:80px; padding:4px 6px;">
@@ -339,12 +439,38 @@ if (
                             foreach ($vacinas_obrigatorias_pendentes as $vacina):
                                 $rowClass = ($rowIndex === 0) ? 'bg-white' : (($rowIndex % 2 === 1) ? 'table-secondary' : 'bg-white');
                                 $proxima_dose = $vacina['doses_tomadas'] + 1;
+                                $aplicada = isset($vacinas_aplicadas[$vacina['id_vaci']]) ? $vacinas_aplicadas[$vacina['id_vaci']] : null;
+                                list($proxima_dose_valor, $atrasada) = calcular_proxima_dose($vacina, $aplicada, $idade_meses_usuario, $data_nascimento);
                                 ?>
                                 <tr class="<?php echo $rowClass; ?>" style="height:38px;">
                                     <td style="vertical-align:middle;"><?= htmlspecialchars($vacina['nome_vacina']) ?></td>
-                                    <td style="vertical-align:middle; text-align:center;"><?= $vacina['idade_aplica'] ?> anos
+                                    <td style="vertical-align:middle; text-align:center;">
+                                        <?php
+                                            if (
+                                                (isset($vacina['idade_meses_reco']) && intval($vacina['idade_meses_reco']) === 0) &&
+                                                (isset($vacina['idade_anos_reco']) && intval($vacina['idade_anos_reco']) === 0)
+                                            ) {
+                                                echo "Ao nascer";
+                                            } else {
+                                                $idade_meses = isset($vacina['idade_meses_reco']) ? intval($vacina['idade_meses_reco']) : null;
+                                                $idade_anos = isset($vacina['idade_anos_reco']) ? intval($vacina['idade_anos_reco']) : null;
+                                                $partes = [];
+                                                if ($idade_meses !== null && $idade_meses > 0) $partes[] = $idade_meses . " meses";
+                                                if ($idade_anos !== null && $idade_anos > 0) $partes[] = $idade_anos . " anos";
+                                                if (empty($partes)) $partes[] = "-";
+                                                echo htmlspecialchars(implode(" / ", $partes));
+                                            }
+                                        ?>
                                     </td>
-                                    <td style="vertical-align:middle; text-align:center;">-</td>
+                                    <td style="vertical-align:middle; text-align:center;">
+                                        <?php if ($atrasada): ?>
+                                            <span class="badge bg-danger" style="font-size:1em;">
+                                                <?= htmlspecialchars($proxima_dose_valor) ?>
+                                            </span>
+                                        <?php else: ?>
+                                            <?= htmlspecialchars($proxima_dose_valor) ?>
+                                        <?php endif; ?>
+                                    </td>
                                     <td style="vertical-align:middle; text-align:center;">
                                         <div
                                             style="display:flex; flex-direction:row; align-items:center; justify-content:center; gap:8px; height:100%;">
@@ -373,7 +499,23 @@ if (
                                 ?>
                                 <tr class="<?php echo $rowClass; ?>" style="height:38px;">
                                     <td style="vertical-align:middle;"><?= htmlspecialchars($vacina['nome_vacina']) ?></td>
-                                    <td style="vertical-align:middle; text-align:center;"><?= $vacina['idade_aplica'] ?> anos
+                                    <td style="vertical-align:middle; text-align:center;">
+                                        <?php
+                                            if (
+                                                (isset($vacina['idade_meses_reco']) && intval($vacina['idade_meses_reco']) === 0) &&
+                                                (isset($vacina['idade_anos_reco']) && intval($vacina['idade_anos_reco']) === 0)
+                                            ) {
+                                                echo "Ao nascer";
+                                            } else {
+                                                $idade_meses = isset($vacina['idade_meses_reco']) ? intval($vacina['idade_meses_reco']) : null;
+                                                $idade_anos = isset($vacina['idade_anos_reco']) ? intval($vacina['idade_anos_reco']) : null;
+                                                $partes = [];
+                                                if ($idade_meses !== null && $idade_meses > 0) $partes[] = $idade_meses . " meses";
+                                                if ($idade_anos !== null && $idade_anos > 0) $partes[] = $idade_anos . " anos";
+                                                if (empty($partes)) $partes[] = "-";
+                                                echo htmlspecialchars(implode(" / ", $partes));
+                                            }
+                                        ?>
                                     </td>
                                     <td style="vertical-align:middle; text-align:center;">-</td>
                                     <td style="vertical-align:middle; text-align:center;">
