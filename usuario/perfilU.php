@@ -182,7 +182,7 @@ $conn->close();
                     </a>
 
                     <!-- Botão para editar grupo especial -->
-                    <button type="button" class="btn btn-outline-secondary btn-editar mt-2" id="btn-editar-grupo-especial">
+                    <button type="button" class="btn btn-outline-success btn-editar mt-2" id="btn-editar-grupo-especial">
                         <i class="bi bi-person-gear"></i> Grupo Especial
                     </button>
 
