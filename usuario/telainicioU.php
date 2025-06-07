@@ -36,14 +36,34 @@ $conn->close();
         }
 
         /* Cards grid centralizado e agrupado (igual medica/telainicio.php) */
+        html,
+        body {
+            /* overflow: hidden; */ /* Remova para permitir rolagem se necessário */
+            height: 100%;
+        }
+
+        body {
+            min-height: 100vh;
+            width: 100vw;
+            overflow-x: hidden;
+        }
+
         .cards-outer {
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
-            min-height: 70vh;
-            margin-top: 40px;
+            justify-content: flex-start;
+            min-height: 0;
+            margin-top: 0;
+            /* Remove o espaçamento extra */
             background: #fdfdfd;
+            width: 100%;
+            height: auto;
+        }
+
+        .container.mt-4 {
+            margin-bottom: 0 !important;
+            /* Garante que não haja espaço extra após o carrossel */
         }
 
         .cards-container {
@@ -51,8 +71,11 @@ $conn->close();
             border-radius: 18px;
             box-shadow: 0 4px 24px rgba(0, 0, 0, 0.07);
             padding: 40px 32px 32px 32px;
-            max-width: 800px;
+            max-width: 1000px;
             margin: 0 auto;
+            width: 100%;
+            margin-top: 16px;
+            /* Aproxima os cards do carrossel */
         }
 
         .row-cards {
@@ -61,6 +84,7 @@ $conn->close();
             gap: 24px;
             margin-bottom: 32px;
             flex-wrap: nowrap;
+            width: 100%;
         }
 
         .row-cards:last-child {
@@ -93,9 +117,14 @@ $conn->close();
             margin: 0;
         }
 
-        html,
-        body {
-            overflow: hidden;
+        @media (max-width: 1200px) {
+            .cards-container {
+                max-width: 98vw;
+                padding: 24px 4px;
+            }
+            .row-cards {
+                gap: 16px;
+            }
         }
 
         @media (max-width: 991.98px) {
