@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 07, 2025 at 06:51 AM
+-- Generation Time: Jun 07, 2025 at 08:19 PM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 8.1.6
 
@@ -280,6 +280,8 @@ CREATE TABLE `vacina` (
   `via_adimicao` varchar(50) NOT NULL,
   `n_dose` int(1) NOT NULL,
   `intervalo_dose` int(11) NOT NULL,
+  `idade_meses_reco` smallint(6) DEFAULT NULL,
+  `idade_anos_reco` smallint(6) DEFAULT NULL,
   `estoque` int(11) NOT NULL,
   `id_calendario` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -288,41 +290,41 @@ CREATE TABLE `vacina` (
 -- Dumping data for table `vacina`
 --
 
-INSERT INTO `vacina` (`id_vaci`, `nome_vaci`, `fabri_vaci`, `lote_vaci`, `idade_aplica`, `via_adimicao`, `n_dose`, `intervalo_dose`, `estoque`, `id_calendario`) VALUES
-(22, 'BCG', 'Instituto Butantan', 'L12345', 0, 'Intradérmica', 1, 0, 100, 1),
-(23, 'Hepatite B', 'Fiocruz', 'L12346', 0, 'Intramuscular', 1, 1, 100, 2),
-(24, 'Penta (DTP/Hib/Hepatite B)', 'Fiocruz', 'L12347', 2, 'Intramuscular', 3, 2, 100, 3),
-(25, 'Poliomielite inativada (VIP)', 'Sanofi', 'L12348', 2, 'Intramuscular', 3, 2, 100, 4),
-(27, 'Pneumocócica 10-valente', 'GSK', 'L12350', 2, 'Intramuscular', 3, 2, 100, 6),
-(28, 'Meningocócica C (conjugada)', 'Fiocruz', 'L12351', 3, 'Intramuscular', 2, 11, 100, 8),
-(29, 'Rotavírus humano', 'GSK', 'L12352', 2, 'Oral', 2, 2, 100, 10),
-(30, 'Febre amarela', 'Bio-Manguinhos', 'L12353', 9, 'Subcutânea', 1, 0, 100, 11),
-(31, 'Tríplice viral (SCR)', 'MSD', 'L12354', 12, 'Subcutânea', 2, 3, 100, 12),
-(33, 'Hepatite A', 'Fiocruz', 'L12356', 15, 'Intramuscular', 1, 0, 100, 15),
-(34, 'Varicela', 'MSD', 'L12357', 15, 'Subcutânea', 1, 0, 100, 14),
-(35, 'HPV (quadrivalente/9-valente)', 'MSD', 'L12358', 108, 'Intramuscular', 2, 6, 100, 19),
-(36, 'dT (adulto)', 'Fiocruz', 'L12359', 120, 'Intramuscular', 3, 12, 100, 17),
-(37, 'Meningocócica ACWY', 'Fiocruz', 'ACWY202503', 132, 'Intramuscular', 1, 0, 100, 9),
-(39, 'Hepatite B (adulto)', 'Fiocruz', 'L12362', 240, 'Intramuscular', 3, 1, 100, 18),
-(40, 'Influenza', 'Butantan', 'L12363', 720, 'Intramuscular', 1, 12, 100, 20),
-(41, 'Pneumocócica 23-valente', 'MSD', 'L12364', 720, 'Intramuscular', 1, 60, 100, 7),
-(42, 'Hepatite B', 'Fiocruz', 'HG001', 0, 'Intramuscular', 3, 1, 100, 2),
-(43, 'dTpa (adulto/gestante)', 'Fiocruz', 'DG001', 0, 'Intramuscular', 1, 120, 100, 16),
-(44, 'Influenza', 'Instituto Butantan', 'IG001', 0, 'Intramuscular', 1, 12, 100, 20),
-(45, 'Covid-19', 'Pfizer', 'CG001', 0, 'Intramuscular', 1, 12, 100, 21),
-(46, 'dTpa (adulto/gestante)', 'Sanofi', 'DP001', 5, 'Intramuscular', 1, 0, 100, 16),
-(48, 'Poliomielite inativada (VIP)', '—', '—', 0, '—', 4, 0, 0, 4),
-(49, 'Poliomielite oral bivalente (VOPb)', '—', '—', 0, '—', 0, 0, 0, 5),
-(50, 'Tetraviral (SCRV)', 'MSD', 'SCRV202501', 15, 'Subcutânea', 0, 0, 0, 13),
-(51, 'dTpa (adulto/gestante)', 'Sanofi', 'DTPA202507', 216, 'Intramuscular', 1, 6, 0, 16),
-(52, 'dT (adulto)', '—', '—', 0, '—', 0, 0, 0, 17),
-(53, 'HPV (quadrivalente/9-valente)', '—', '—', 0, '—', 1, 0, 0, 19),
-(54, 'Covid-19', 'Pfizer', 'CV19PFZ2025', 0, 'Intramuscular', 0, 12, 0, 21),
-(55, 'Herpes-zóster (RZV)', 'GSK', 'HZRZV202502', 600, 'Intramuscular', 0, 2, 0, 22),
-(56, 'Dengue (Qdenga®)', 'Takeda', 'QDENGA202504', 108, 'Intramuscular', 0, 6, 0, 23),
-(57, 'VSR (Respiratório)', 'Pfizer', 'VSR202505', 720, 'Intramuscular', 0, 0, 0, 24),
-(58, 'Raiva (pré-exposição)', 'Bio-Manguinhos', 'RAIVA202506', 0, 'Intramuscular', 0, 1, 0, 25),
-(59, 'Vacinas de viajantes (tifóide, encefalite, etc.)', 'Diversos', 'VIAJANTES2025', 0, 'Variável', 0, 0, 0, 26);
+INSERT INTO `vacina` (`id_vaci`, `nome_vaci`, `fabri_vaci`, `lote_vaci`, `idade_aplica`, `via_adimicao`, `n_dose`, `intervalo_dose`, `idade_meses_reco`, `idade_anos_reco`, `estoque`, `id_calendario`) VALUES
+(22, 'BCG', 'Instituto Butantan', 'BCG2025A', 0, 'Intradérmica', 1, 0, 0, 0, 100, 1),
+(23, 'Hepatite B', 'Fiocruz', 'HEPB2025', 0, 'Intramuscular', 1, 1, 0, 0, 100, 2),
+(24, 'Penta (DTP/Hib/Hepatite B)', 'Fiocruz', 'PENTA2025', 2, 'Intramuscular', 3, 2, 2, 0, 100, 3),
+(25, 'Poliomielite inativada (VIP)', 'Sanofi', 'VIP2025L01', 2, 'Intramuscular', 3, 2, 2, 0, 100, 4),
+(27, 'Pneumocócica 10-valente', 'GSK', 'PN10V2025', 2, 'Intramuscular', 3, 2, 2, 0, 100, 6),
+(28, 'Meningocócica C (conjugada)', 'Fiocruz', 'MENCC2025', 3, 'Intramuscular', 2, 11, 3, 0, 100, 8),
+(29, 'Rotavírus humano', 'GSK', 'RTH2025', 2, 'Oral', 2, 2, 2, 0, 100, 10),
+(30, 'Febre amarela', 'Bio-Manguinhos', 'FA2025', 9, 'Subcutânea', 1, 0, 9, 0, 100, 11),
+(31, 'Tríplice viral (SCR)', 'MSD', 'SCR2025', 12, 'Subcutânea', 2, 3, 12, 1, 100, 12),
+(33, 'Hepatite A', 'Fiocruz', 'HEPA2025', 15, 'Intramuscular', 1, 0, 15, 1, 100, 15),
+(34, 'Varicela', 'MSD', 'VARIC2025', 15, 'Subcutânea', 1, 0, 15, 1, 100, 14),
+(35, 'HPV (quadrivalente/9-valente)', 'MSD', 'HPVQ2025', 108, 'Intramuscular', 2, 6, 108, 9, 100, 19),
+(36, 'dT (adulto)', 'Fiocruz', 'DT2025F', 120, 'Intramuscular', 3, 12, 120, 10, 100, 17),
+(37, 'Meningocócica ACWY', 'Fiocruz', 'ACWY2025', 132, 'Intramuscular', 1, 0, 132, 11, 100, 9),
+(39, 'Hepatite B (adulto)', 'Fiocruz', 'HEPBAD2025', 240, 'Intramuscular', 3, 1, 216, 18, 100, 18),
+(40, 'Influenza', 'Instituto Butantan', 'INF2025', 720, 'Intramuscular', 1, 12, 6, 0, 100, 20),
+(41, 'Pneumocócica 23-valente', 'MSD', 'PN23V2025', 720, 'Intramuscular', 1, 60, 720, 60, 100, 7),
+(42, 'Hepatite B', 'Fiocruz', 'HEPB2025', 0, 'Intramuscular', 3, 1, 0, 0, 100, 2),
+(43, 'dTpa (adulto/gestante)', 'Sanofi', 'DTPA2025', 0, 'Intramuscular', 1, 120, 216, 18, 100, 16),
+(44, 'Influenza', 'Instituto Butantan', 'INF2025', 0, 'Intramuscular', 1, 12, 6, 0, 100, 20),
+(45, 'Covid-19', 'Pfizer', 'COVID2025', 0, 'Intramuscular', 1, 12, 0, 0, 100, 21),
+(46, 'dTpa (adulto/gestante)', 'Sanofi', 'DTPA2025', 5, 'Intramuscular', 1, 0, 216, 18, 100, 16),
+(48, 'Poliomielite inativada (VIP)', 'Sanofi', 'VIP2025L01', 0, 'Intramuscular', 4, 0, 2, 0, 0, 4),
+(49, 'Poliomielite oral bivalente (VOPb)', 'Instituto Butantan', 'VOP2025B', 0, 'Oral', 0, 0, 3, 0, 0, 5),
+(50, 'Tetraviral (SCRV)', 'MSD', 'SCRV2025', 15, 'Subcutânea', 0, 0, 15, 1, 0, 13),
+(51, 'dTpa (adulto/gestante)', 'Sanofi', 'DTPA2025', 216, 'Intramuscular', 1, 6, 216, 18, 0, 16),
+(52, 'dT (adulto)', 'Fiocruz', 'DT2025F', 0, 'Intramuscular', 0, 0, 120, 10, 0, 17),
+(53, 'HPV (quadrivalente/9-valente)', 'MSD', 'HPVQ2025', 0, 'Intramuscular', 1, 0, 108, 9, 0, 19),
+(54, 'Covid-19', 'Pfizer', 'COVID2025', 0, 'Intramuscular', 0, 12, 0, 0, 0, 21),
+(55, 'Herpes-zóster (RZV)', 'GSK', 'HZ2025', 600, 'Intramuscular', 0, 2, 600, 50, 0, 22),
+(56, 'Dengue (Qdenga®)', 'Takeda', 'DENG2025', 108, 'Intramuscular', 0, 6, 108, 9, 0, 23),
+(57, 'VSR (Respiratório)', 'Pfizer', 'VSR2025', 720, 'Intramuscular', 0, 0, 720, 60, 0, 24),
+(58, 'Raiva (pré-exposição)', 'Bio-Manguinhos', 'RAIVA2025', 0, 'Intramuscular', 0, 1, NULL, NULL, 0, 25),
+(59, 'Vacinas de viajantes (tifóide, encefalite, etc.)', '—', '—', 0, 'Variável', 0, 0, NULL, NULL, 0, 26);
 
 -- --------------------------------------------------------
 
