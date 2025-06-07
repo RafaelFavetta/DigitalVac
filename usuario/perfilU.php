@@ -84,6 +84,22 @@ if (!$endereco_db) {
 } else {
     $endereco = $endereco_db;
 }
+
+// Verifica se o usuário já respondeu à pesquisa do grupo especial
+$mostrar_modal_grupo = false;
+if (isset($_SESSION['id_usuario'])) {
+    $id_usuario = $_SESSION['id_usuario'];
+    $sql_grupo = "SELECT grupo FROM grupo_especial WHERE id_usuario = ?";
+    $stmt_grupo = $conn->prepare($sql_grupo);
+    $stmt_grupo->bind_param("i", $id_usuario);
+    $stmt_grupo->execute();
+    $res_grupo = $stmt_grupo->get_result();
+    if ($res_grupo->num_rows === 0) {
+        $mostrar_modal_grupo = true;
+    }
+    $stmt_grupo->close();
+}
+$conn->close();
 ?>
 
 <!DOCTYPE html>
@@ -165,6 +181,11 @@ if (!$endereco_db) {
                         <i class="bi bi-pencil-square"></i> Editar perfil
                     </a>
 
+                    <!-- Botão para editar grupo especial -->
+                    <button type="button" class="btn btn-outline-secondary btn-editar mt-2" id="btn-editar-grupo-especial">
+                        <i class="bi bi-person-gear"></i> Grupo Especial
+                    </button>
+
                     <a href="../outros/sair.php" class="btn btn-danger fw-bold mt-3 px-2 py-1"
                         style="font-size: 15px; min-width: 70px;">
                         <i class="bi bi-box-arrow-right" style="font-size: 18px;"></i> Sair
@@ -194,7 +215,148 @@ if (!$endereco_db) {
         </div>
     </div>
 
+    <!-- Modal Grupo Especial -->
+    <div class="modal fade" id="modalGrupoEspecial" tabindex="-1" aria-labelledby="modalGrupoEspecialLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <form id="form-grupo-especial">
+            <div class="modal-header">
+              <h5 class="modal-title" id="modalGrupoEspecialLabel">Grupo Especial</h5>
+            </div>
+            <div class="modal-body">
+              <p class="mb-3">Você faz parte de algum grupo especial?</p>
+              <div class="form-check mb-2">
+                <input class="form-check-input" type="radio" name="grupo_especial" id="grupoImunodeprimido" value="Imunodeprimido" required>
+                <label class="form-check-label" for="grupoImunodeprimido">
+                  Imunodeprimido
+                </label>
+              </div>
+              <div class="form-check mb-2">
+                <input class="form-check-input" type="radio" name="grupo_especial" id="grupoGestante" value="Gestante" required>
+                <label class="form-check-label" for="grupoGestante">
+                  Gestante
+                </label>
+              </div>
+              <div class="form-check mb-2">
+                <input class="form-check-input" type="radio" name="grupo_especial" id="grupoIndigena" value="Indígena" required>
+                <label class="form-check-label" for="grupoIndigena">
+                  Indígena
+                </label>
+              </div>
+              <div class="form-check mb-2">
+                <input class="form-check-input" type="radio" name="grupo_especial" id="grupoRenal" value="Doença renal crônica" required>
+                <label class="form-check-label" for="grupoRenal">
+                  Doença renal crônica
+                </label>
+              </div>
+              <div class="form-check mb-2">
+                <input class="form-check-input" type="radio" name="grupo_especial" id="grupoNenhum" value="Nenhum" required>
+                <label class="form-check-label" for="grupoNenhum">
+                  Não me encaixo nesses grupos
+                </label>
+              </div>
+              <div id="grupo-erro" class="text-danger mt-2" style="display:none;"></div>
+            </div>
+            <div class="modal-footer">
+              <button type="submit" class="btn btn-primary w-100">Salvar</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+    document.getElementById('btn-editar-grupo-especial').addEventListener('click', function () {
+        var modal = new bootstrap.Modal(document.getElementById('modalGrupoEspecial'), { backdrop: 'static', keyboard: false });
+        // Buscar grupo atual do usuário via AJAX
+        fetch('get_grupo_especial.php')
+            .then(res => res.json())
+            .then(data => {
+                if (data.grupo) {
+                    document.getElementById('grupoImunodeprimido').checked = (data.grupo === 'Imunodeprimido');
+                    document.getElementById('grupoGestante').checked = (data.grupo === 'Gestante');
+                    document.getElementById('grupoNenhum').checked = (data.grupo === 'Nenhum');
+                } else {
+                    document.getElementById('grupoImunodeprimido').checked = false;
+                    document.getElementById('grupoGestante').checked = false;
+                    document.getElementById('grupoNenhum').checked = false;
+                }
+                modal.show();
+            });
+    });
+
+    document.getElementById('form-grupo-especial').addEventListener('submit', function (e) {
+        e.preventDefault();
+        var grupo = document.querySelector('input[name="grupo_especial"]:checked');
+        var erroDiv = document.getElementById('grupo-erro');
+        erroDiv.style.display = 'none';
+        if (!grupo) {
+            erroDiv.textContent = "Selecione uma opção.";
+            erroDiv.style.display = 'block';
+            return;
+        }
+        var valor = grupo.value;
+        fetch('salvar_grupo_especial.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: 'grupo=' + encodeURIComponent(valor)
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                var modal = bootstrap.Modal.getInstance(document.getElementById('modalGrupoEspecial'));
+                modal.hide();
+            } else {
+                erroDiv.textContent = data.message || "Erro ao salvar.";
+                erroDiv.style.display = 'block';
+            }
+        })
+        .catch(() => {
+            erroDiv.textContent = "Erro ao salvar.";
+            erroDiv.style.display = 'block';
+        });
+    });
+
+    // Exibe o modal se necessário
+    <?php if ($mostrar_modal_grupo): ?>
+    document.addEventListener('DOMContentLoaded', function () {
+        var modal = new bootstrap.Modal(document.getElementById('modalGrupoEspecial'), { backdrop: 'static', keyboard: false });
+        modal.show();
+
+        document.getElementById('form-grupo-especial').addEventListener('submit', function (e) {
+            e.preventDefault();
+            var grupo = document.querySelector('input[name="grupo_especial"]:checked');
+            var erroDiv = document.getElementById('grupo-erro');
+            erroDiv.style.display = 'none';
+            if (!grupo) {
+                erroDiv.textContent = "Selecione uma opção.";
+                erroDiv.style.display = 'block';
+                return;
+            }
+            var valor = grupo.value;
+            fetch('salvar_grupo_especial.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: 'grupo=' + encodeURIComponent(valor)
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    modal.hide();
+                } else {
+                    erroDiv.textContent = data.message || "Erro ao salvar.";
+                    erroDiv.style.display = 'block';
+                }
+            })
+            .catch(() => {
+                erroDiv.textContent = "Erro ao salvar.";
+                erroDiv.style.display = 'block';
+            });
+        });
+    });
+    <?php endif; ?>
+    </script>
 </body>
 
 </html>
