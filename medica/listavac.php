@@ -32,6 +32,24 @@ if (!empty($nome_vacina)) {
 if (!$result) {
     die("Erro ao buscar vacinas: " . $conn->error);
 }
+
+// Após obter $result, crie um array para ordenar pela idade de aplicação
+$vacinas = [];
+while ($row = $result->fetch_assoc()) {
+    // Calcule idade total em meses para ordenação
+    $idade_meses = (isset($row['idade_anos_reco']) ? intval($row['idade_anos_reco']) : 0) * 12 +
+                   (isset($row['idade_meses_reco']) ? intval($row['idade_meses_reco']) : 0);
+    // Para "Ao nascer", garanta que fique no início
+    if (($row['id_vaci'] == 22 || $row['id_vaci'] == 23) || ($idade_meses === 0)) {
+        $idade_meses = -1;
+    }
+    $row['idade_total_meses'] = $idade_meses;
+    $vacinas[] = $row;
+}
+// Ordena pelo campo idade_total_meses
+usort($vacinas, function($a, $b) {
+    return $a['idade_total_meses'] <=> $b['idade_total_meses'];
+});
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -149,7 +167,7 @@ if (!$result) {
                 <tbody>
                     <?php
                     $rowIndex = 0;
-                    while ($row = $result->fetch_assoc()):
+                    foreach ($vacinas as $row):
                         if ($rowIndex === 0) {
                             $rowClass = 'bg-white';
                         } else {
@@ -163,13 +181,18 @@ if (!$result) {
                             <td><?php echo htmlspecialchars($row['lote_vaci']); ?></td>
                             <td>
                                 <?php
-                                    $idade_meses = isset($row['idade_meses_reco']) ? intval($row['idade_meses_reco']) : 0;
-                                    $idade_anos = isset($row['idade_anos_reco']) ? intval($row['idade_anos_reco']) : 0;
-                                    $partes = [];
-                                    if ($idade_anos > 0) $partes[] = $idade_anos . " anos";
-                                    if ($idade_meses > 0) $partes[] = $idade_meses . " meses";
-                                    if (empty($partes)) $partes[] = "-";
-                                    echo htmlspecialchars(implode(" / ", $partes));
+                                    // Exibe "Ao nascer" para as duas primeiras vacinas (id_vaci 22 e 23)
+                                    if ($row['id_vaci'] == 22 || $row['id_vaci'] == 23) {
+                                        echo "Ao nascer";
+                                    } else {
+                                        $idade_meses = isset($row['idade_meses_reco']) ? intval($row['idade_meses_reco']) : 0;
+                                        $idade_anos = isset($row['idade_anos_reco']) ? intval($row['idade_anos_reco']) : 0;
+                                        $partes = [];
+                                        if ($idade_anos > 0) $partes[] = $idade_anos . " anos";
+                                        if ($idade_meses > 0) $partes[] = $idade_meses . " meses";
+                                        if (empty($partes)) $partes[] = "-";
+                                        echo htmlspecialchars(implode(" / ", $partes));
+                                    }
                                 ?>
                             </td>
                             <td><?php echo htmlspecialchars($row['via_adimicao']); ?></td>
@@ -183,7 +206,7 @@ if (!$result) {
                                 </a>
                             </td>
                         </tr>
-                        <?php $rowIndex++; endwhile; ?>
+                        <?php $rowIndex++; endforeach; ?>
                 </tbody>
             </table>
         </div>
