@@ -83,11 +83,11 @@ $conn->close();
                 <div class="mb-3">
                     <label for="senha" class="form-label">Senha</label>
                     <input type="password" name="senha" id="senha" class="form-control" placeholder="Digite sua senha"
-                        required minlength="6" maxlength="20" pattern=".{6,20}">
+                        required minlength="6" maxlength="20">
                 </div>
                 <button type="submit" class="btn btn-primary w-100">Entrar</button>
                 <div class="text-center mt-3">
-                    <a href="../outros/esquecisenha.php" class="text-decoration-none">Esqueceu a senha?</a>
+                    <a href="../outros/esquecisenhaU.php" class="text-decoration-none">Esqueceu a senha?</a>
                 </div>
             </form>
         </div>
