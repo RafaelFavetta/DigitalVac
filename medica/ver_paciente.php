@@ -62,9 +62,15 @@ function buscarEnderecoPorCEP($cep)
     curl_close($ch);
     $dados = json_decode($response, true);
     if (isset($dados['erro']) || !isset($dados['logradouro'])) {
-        return "CEP inválido ou não encontrado.";
+        return [
+            'endereco' => "CEP inválido ou não encontrado.",
+            'cidade' => ""
+        ];
     }
-    return "{$dados['logradouro']}, {$dados['bairro']}, {$dados['localidade']} - {$dados['uf']}";
+    return [
+        'endereco' => "{$dados['logradouro']}, {$dados['bairro']}, {$dados['localidade']} - {$dados['uf']}",
+        'cidade' => $dados['localidade'] ?? ""
+    ];
 }
 function formatarCEP($cep)
 {
@@ -89,8 +95,17 @@ $alergias = $user['ale_usuario'];
 $doencas = $user['doen_usuario'];
 $medicamentos = $user['med_usuario'];
 $numero_casa = $user['nc_usuario'];
-$endereco = ($user['endereco'] ?? '') ?: buscarEnderecoPorCEP($cep);
-$cidade = $user['cidade'] ?? '';
+$endereco_db = $user['endereco'] ?? '';
+$cidade_db = $user['cidade'] ?? '';
+
+if (!$endereco_db) {
+    $endereco_info = buscarEnderecoPorCEP($cep);
+    $endereco = $endereco_info['endereco'];
+    $cidade = $endereco_info['cidade'];
+} else {
+    $endereco = $endereco_db;
+    $cidade = $cidade_db;
+}
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">

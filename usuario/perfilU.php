@@ -55,9 +55,15 @@ function buscarEnderecoPorCEP($cep)
     curl_close($ch);
     $dados = json_decode($response, true);
     if (isset($dados['erro']) || !isset($dados['logradouro'])) {
-        return "CEP inválido ou não encontrado.";
+        return [
+            'endereco' => "CEP inválido ou não encontrado.",
+            'cidade' => ""
+        ];
     }
-    return "{$dados['logradouro']}, {$dados['bairro']}, {$dados['localidade']} - {$dados['uf']}";
+    return [
+        'endereco' => "{$dados['logradouro']}, {$dados['bairro']}, {$dados['localidade']} - {$dados['uf']}",
+        'cidade' => $dados['localidade'] ?? ""
+    ];
 }
 
 $nome = $user['nome_usuario'];
@@ -74,15 +80,18 @@ $alergias = $user['ale_usuario'];
 $doencas = $user['doen_usuario'];
 $medicamentos = $user['med_usuario'];
 $numero_casa = $user['nc_usuario'];
-$cidade = $user['cidade'] ?? '';
+$cidade_db = $user['cidade'] ?? '';
 $endereco_db = $user['endereco'] ?? '';
 
 $generoTexto = ($genero == 'M') ? 'Masculino' : (($genero == 'F') ? 'Feminino' : 'Outro');
 
 if (!$endereco_db) {
-    $endereco = buscarEnderecoPorCEP($cep);
+    $endereco_info = buscarEnderecoPorCEP($cep);
+    $endereco = $endereco_info['endereco'];
+    $cidade = $endereco_info['cidade'];
 } else {
     $endereco = $endereco_db;
+    $cidade = $cidade_db;
 }
 
 // Verifica se o usuário já respondeu à pesquisa do grupo especial
@@ -341,7 +350,7 @@ $conn->close();
                 body: 'grupo=' + encodeURIComponent(valor)
             })
             .then(res => res.json())
-            .then(data => {
+            .then((data) => {
                 if (data.success) {
                     modal.hide();
                 } else {
