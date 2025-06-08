@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 07, 2025 at 08:19 PM
+-- Generation Time: Jun 08, 2025 at 06:40 AM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 8.1.6
 
@@ -291,40 +291,40 @@ CREATE TABLE `vacina` (
 --
 
 INSERT INTO `vacina` (`id_vaci`, `nome_vaci`, `fabri_vaci`, `lote_vaci`, `idade_aplica`, `via_adimicao`, `n_dose`, `intervalo_dose`, `idade_meses_reco`, `idade_anos_reco`, `estoque`, `id_calendario`) VALUES
-(22, 'BCG', 'Instituto Butantan', 'BCG2025A', 0, 'Intradérmica', 1, 0, 0, 0, 100, 1),
-(23, 'Hepatite B', 'Fiocruz', 'HEPB2025', 0, 'Intramuscular', 1, 1, 0, 0, 100, 2),
-(24, 'Penta (DTP/Hib/Hepatite B)', 'Fiocruz', 'PENTA2025', 2, 'Intramuscular', 3, 2, 2, 0, 100, 3),
-(25, 'Poliomielite inativada (VIP)', 'Sanofi', 'VIP2025L01', 2, 'Intramuscular', 3, 2, 2, 0, 100, 4),
-(27, 'Pneumocócica 10-valente', 'GSK', 'PN10V2025', 2, 'Intramuscular', 3, 2, 2, 0, 100, 6),
-(28, 'Meningocócica C (conjugada)', 'Fiocruz', 'MENCC2025', 3, 'Intramuscular', 2, 11, 3, 0, 100, 8),
-(29, 'Rotavírus humano', 'GSK', 'RTH2025', 2, 'Oral', 2, 2, 2, 0, 100, 10),
-(30, 'Febre amarela', 'Bio-Manguinhos', 'FA2025', 9, 'Subcutânea', 1, 0, 9, 0, 100, 11),
-(31, 'Tríplice viral (SCR)', 'MSD', 'SCR2025', 12, 'Subcutânea', 2, 3, 12, 1, 100, 12),
-(33, 'Hepatite A', 'Fiocruz', 'HEPA2025', 15, 'Intramuscular', 1, 0, 15, 1, 100, 15),
-(34, 'Varicela', 'MSD', 'VARIC2025', 15, 'Subcutânea', 1, 0, 15, 1, 100, 14),
-(35, 'HPV (quadrivalente/9-valente)', 'MSD', 'HPVQ2025', 108, 'Intramuscular', 2, 6, 108, 9, 100, 19),
-(36, 'dT (adulto)', 'Fiocruz', 'DT2025F', 120, 'Intramuscular', 3, 12, 120, 10, 100, 17),
-(37, 'Meningocócica ACWY', 'Fiocruz', 'ACWY2025', 132, 'Intramuscular', 1, 0, 132, 11, 100, 9),
-(39, 'Hepatite B (adulto)', 'Fiocruz', 'HEPBAD2025', 240, 'Intramuscular', 3, 1, 216, 18, 100, 18),
-(40, 'Influenza', 'Instituto Butantan', 'INF2025', 720, 'Intramuscular', 1, 12, 6, 0, 100, 20),
-(41, 'Pneumocócica 23-valente', 'MSD', 'PN23V2025', 720, 'Intramuscular', 1, 60, 720, 60, 100, 7),
-(42, 'Hepatite B', 'Fiocruz', 'HEPB2025', 0, 'Intramuscular', 3, 1, 0, 0, 100, 2),
-(43, 'dTpa (adulto/gestante)', 'Sanofi', 'DTPA2025', 0, 'Intramuscular', 1, 120, 216, 18, 100, 16),
-(44, 'Influenza', 'Instituto Butantan', 'INF2025', 0, 'Intramuscular', 1, 12, 6, 0, 100, 20),
-(45, 'Covid-19', 'Pfizer', 'COVID2025', 0, 'Intramuscular', 1, 12, 0, 0, 100, 21),
-(46, 'dTpa (adulto/gestante)', 'Sanofi', 'DTPA2025', 5, 'Intramuscular', 1, 0, 216, 18, 100, 16),
-(48, 'Poliomielite inativada (VIP)', 'Sanofi', 'VIP2025L01', 0, 'Intramuscular', 4, 0, 2, 0, 0, 4),
-(49, 'Poliomielite oral bivalente (VOPb)', 'Instituto Butantan', 'VOP2025B', 0, 'Oral', 0, 0, 3, 0, 0, 5),
-(50, 'Tetraviral (SCRV)', 'MSD', 'SCRV2025', 15, 'Subcutânea', 0, 0, 15, 1, 0, 13),
-(51, 'dTpa (adulto/gestante)', 'Sanofi', 'DTPA2025', 216, 'Intramuscular', 1, 6, 216, 18, 0, 16),
-(52, 'dT (adulto)', 'Fiocruz', 'DT2025F', 0, 'Intramuscular', 0, 0, 120, 10, 0, 17),
-(53, 'HPV (quadrivalente/9-valente)', 'MSD', 'HPVQ2025', 0, 'Intramuscular', 1, 0, 108, 9, 0, 19),
-(54, 'Covid-19', 'Pfizer', 'COVID2025', 0, 'Intramuscular', 0, 12, 0, 0, 0, 21),
-(55, 'Herpes-zóster (RZV)', 'GSK', 'HZ2025', 600, 'Intramuscular', 0, 2, 600, 50, 0, 22),
-(56, 'Dengue (Qdenga®)', 'Takeda', 'DENG2025', 108, 'Intramuscular', 0, 6, 108, 9, 0, 23),
-(57, 'VSR (Respiratório)', 'Pfizer', 'VSR2025', 720, 'Intramuscular', 0, 0, 720, 60, 0, 24),
-(58, 'Raiva (pré-exposição)', 'Bio-Manguinhos', 'RAIVA2025', 0, 'Intramuscular', 0, 1, NULL, NULL, 0, 25),
-(59, 'Vacinas de viajantes (tifóide, encefalite, etc.)', '—', '—', 0, 'Variável', 0, 0, NULL, NULL, 0, 26);
+(22, 'BCG', 'Instituto Butantan', 'BCG2025A', 0, 'Intradérmica', 1, 0, 0, 0, 10000, 1),
+(23, 'Hepatite B', 'Fiocruz', 'HEPB2025', 0, 'Intramuscular', 1, 1, 0, 0, 10000, 2),
+(24, 'Penta (DTP/Hib/Hepatite B)', 'Fiocruz', 'PENTA2025', 2, 'Intramuscular', 3, 2, 2, 0, 10000, 3),
+(25, 'Poliomielite inativada (VIP)', 'Sanofi', 'VIP2025L01', 2, 'Intramuscular', 3, 2, 2, 0, 10000, 4),
+(27, 'Pneumocócica 10-valente', 'GSK', 'PN10V2025', 2, 'Intramuscular', 3, 2, 2, 0, 10000, 6),
+(28, 'Meningocócica C (conjugada)', 'Fiocruz', 'MENCC2025', 3, 'Intramuscular', 2, 11, 3, 0, 10000, 8),
+(29, 'Rotavírus humano', 'GSK', 'RTH2025', 2, 'Oral', 2, 2, 2, 0, 10000, 10),
+(30, 'Febre amarela', 'Bio-Manguinhos', 'FA2025', 9, 'Subcutânea', 1, 0, 9, 0, 10000, 11),
+(31, 'Tríplice viral (SCR)', 'MSD', 'SCR2025', 12, 'Subcutânea', 2, 3, 12, 1, 10000, 12),
+(33, 'Hepatite A', 'Fiocruz', 'HEPA2025', 15, 'Intramuscular', 1, 0, 15, 1, 10000, 15),
+(34, 'Varicela', 'MSD', 'VARIC2025', 15, 'Subcutânea', 1, 0, 15, 1, 10000, 14),
+(35, 'HPV (quadrivalente/9-valente)', 'MSD', 'HPVQ2025', 108, 'Intramuscular', 2, 6, 108, 9, 10000, 19),
+(36, 'dT (adulto)', 'Fiocruz', 'DT2025F', 120, 'Intramuscular', 3, 12, 120, 10, 10000, 17),
+(37, 'Meningocócica ACWY', 'Fiocruz', 'ACWY2025', 132, 'Intramuscular', 1, 0, 132, 11, 10000, 9),
+(39, 'Hepatite B (adulto)', 'Fiocruz', 'HEPBAD2025', 240, 'Intramuscular', 3, 1, 216, 18, 10000, 18),
+(40, 'Influenza', 'Instituto Butantan', 'INF2025', 720, 'Intramuscular', 1, 12, 6, 0, 10000, 20),
+(41, 'Pneumocócica 23-valente', 'MSD', 'PN23V2025', 720, 'Intramuscular', 1, 60, 720, 60, 10000, 7),
+(42, 'Hepatite B', 'Fiocruz', 'HEPB2025', 0, 'Intramuscular', 3, 1, 0, 0, 10000, 2),
+(43, 'dTpa (adulto/gestante)', 'Sanofi', 'DTPA2025', 0, 'Intramuscular', 1, 120, 216, 18, 10000, 16),
+(44, 'Influenza', 'Instituto Butantan', 'INF2025', 0, 'Intramuscular', 1, 12, 6, 0, 10000, 20),
+(45, 'Covid-19', 'Pfizer', 'COVID2025', 0, 'Intramuscular', 1, 12, 0, 0, 10000, 21),
+(46, 'dTpa (adulto/gestante)', 'Sanofi', 'DTPA2025', 5, 'Intramuscular', 1, 0, 216, 18, 10000, 16),
+(48, 'Poliomielite inativada (VIP)', 'Sanofi', 'VIP2025L01', 0, 'Intramuscular', 4, 0, 2, 0, 10000, 4),
+(49, 'Poliomielite oral bivalente (VOPb)', 'Instituto Butantan', 'VOP2025B', 0, 'Oral', 0, 0, 3, 0, 10000, 5),
+(50, 'Tetraviral (SCRV)', 'MSD', 'SCRV2025', 15, 'Subcutânea', 0, 0, 15, 1, 10000, 13),
+(51, 'dTpa (adulto/gestante)', 'Sanofi', 'DTPA2025', 216, 'Intramuscular', 1, 6, 216, 18, 10000, 16),
+(52, 'dT (adulto)', 'Fiocruz', 'DT2025F', 0, 'Intramuscular', 0, 0, 120, 10, 10000, 17),
+(53, 'HPV (quadrivalente/9-valente)', 'MSD', 'HPVQ2025', 0, 'Intramuscular', 1, 0, 108, 9, 10000, 19),
+(54, 'Covid-19', 'Pfizer', 'COVID2025', 0, 'Intramuscular', 0, 12, 0, 0, 10000, 21),
+(55, 'Herpes-zóster (RZV)', 'GSK', 'HZ2025', 600, 'Intramuscular', 0, 2, 600, 50, 10000, 22),
+(56, 'Dengue (Qdenga®)', 'Takeda', 'DENG2025', 108, 'Intramuscular', 0, 6, 108, 9, 10000, 23),
+(57, 'VSR (Respiratório)', 'Pfizer', 'VSR2025', 720, 'Intramuscular', 0, 0, 720, 60, 10000, 24),
+(58, 'Raiva (pré-exposição)', 'Bio-Manguinhos', 'RAIVA2025', 0, 'Intramuscular', 0, 1, NULL, NULL, 10000, 25),
+(59, 'Vacinas de viajantes (tifóide, encefalite, etc.)', '—', '—', 0, 'Variável', 0, 0, NULL, NULL, 10000, 26);
 
 -- --------------------------------------------------------
 
@@ -350,29 +350,6 @@ INSERT INTO `vacina_contraindicada` (`id`, `grupo_especial`, `id_calendario`) VA
 (5, 'Imunodeprimido', 14),
 (6, 'Gestante', 13),
 (7, 'Imunodeprimido', 13);
-
--- --------------------------------------------------------
-
---
--- Stand-in structure for view `vw_faltas`
--- (See below for the actual view)
---
-CREATE TABLE `vw_faltas` (
-`id_usuario` int(11)
-,`nome_usuario` varchar(100)
-,`nome_vacina` varchar(100)
-,`total_obrig` bigint(20) unsigned
-,`tomadas` bigint(21)
-);
-
--- --------------------------------------------------------
-
---
--- Structure for view `vw_faltas`
---
-DROP TABLE IF EXISTS `vw_faltas`;
-
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vw_faltas`  AS SELECT `u`.`id_usuario` AS `id_usuario`, `u`.`nome_usuario` AS `nome_usuario`, `c`.`nome_vacina` AS `nome_vacina`, cast(substring_index(`c`.`doses_obrigatorias`,' ',1) as unsigned) AS `total_obrig`, count(`a`.`id_aplica`) AS `tomadas` FROM (((`usuario` `u` left join `aplicacao` `a` on(`a`.`id_usuario` = `u`.`id_usuario`)) left join `vacina` `v` on(`v`.`id_vaci` = `a`.`id_vaci`)) left join `calendario_vacinal` `c` on(`c`.`id_calendario` = `v`.`id_calendario`)) GROUP BY `u`.`id_usuario`, `c`.`id_calendario` HAVING `tomadas` < `total_obrig``total_obrig`  ;
 
 --
 -- Indexes for dumped tables
