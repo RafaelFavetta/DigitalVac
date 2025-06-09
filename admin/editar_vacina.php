@@ -2,110 +2,77 @@
 include('../outros/db_connect.php');
 session_start();
 
-
-$id = isset($_GET['id']) ? intval($_GET['id']) : 0;
-if ($id <= 0) {
-    echo "Médico inválido.";
-    exit;
+// Validação do parâmetro
+if (!isset($_GET['id_vaci']) || !is_numeric($_GET['id_vaci'])) {
+    die('ID da vacina inválido.');
 }
+$id_vaci = intval($_GET['id_vaci']);
 
-// Excluir médico
-if (isset($_POST['apagar']) && $_POST['apagar'] === '1') {
-    $stmt = $conn->prepare("DELETE FROM medico WHERE id_medico = ?");
-    $stmt->bind_param("i", $id);
-    if ($stmt->execute()) {
-        header("Location: listamedico.php?msg=apagado");
-        exit;
-    } else {
-        $erro = "Erro ao apagar: " . $conn->error;
-    }
+// Busca os dados atuais da vacina
+$stmt = $conn->prepare("SELECT * FROM vacina WHERE id_vaci = ?");
+$stmt->bind_param('i', $id_vaci);
+$stmt->execute();
+$result = $stmt->get_result();
+if ($result->num_rows === 0) {
+    die('Vacina não encontrada.');
 }
+$vacina = $result->fetch_assoc();
 
 // Atualização dos dados
 $sucesso = false;
 $erro = '';
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_POST['apagar'])) {
-    $nome_medico = trim($_POST['nome_medico']);
-    $cpf = preg_replace('/\D/', '', $_POST['cpf']);
-    $email_medico = trim($_POST['email_medico']);
-    $tel_medico = preg_replace('/\D/', '', $_POST['tel_medico']);
-    $coren_crm = trim($_POST['coren_crm']);
-    $tipo_medico = trim($_POST['tipo_medico']);
-    $naci_medico = $_POST['naci_medico'];
-    $id_posto = intval($_POST['id_posto']);
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $nome_vaci = trim($_POST['nome_vaci']);
+    $fabri_vaci = trim($_POST['fabri_vaci']);
+    $lote_vaci = trim($_POST['lote_vaci']);
+    $idade_aplica = intval($_POST['idade_aplica']);
+    $via_adimicao = trim($_POST['via_adimicao']);
+    $n_dose = intval($_POST['n_dose']);
+    $intervalo_dose = intval($_POST['intervalo_dose']);
+    $estoque = intval($_POST['estoque']);
+    $idade_meses_reco = isset($_POST['idade_meses_reco']) ? intval($_POST['idade_meses_reco']) : null;
+    $idade_anos_reco = isset($_POST['idade_anos_reco']) ? intval($_POST['idade_anos_reco']) : null;
 
-    $sql = "UPDATE medico SET 
-        nome_medico=?, cpf=?, email_medico=?, tel_medico=?, coren_crm=?, tipo_medico=?, naci_medico=?, id_posto=?
-        WHERE id_medico=?";
-    $stmt = $conn->prepare($sql);
+    $stmt = $conn->prepare("UPDATE vacina SET nome_vaci=?, fabri_vaci=?, lote_vaci=?, idade_aplica=?, via_adimicao=?, n_dose=?, intervalo_dose=?, estoque=?, idade_meses_reco=?, idade_anos_reco=? WHERE id_vaci=?");
     $stmt->bind_param(
-        "sssssssii",
-        $nome_medico,
-        $cpf,
-        $email_medico,
-        $tel_medico,
-        $coren_crm,
-        $tipo_medico,
-        $naci_medico,
-        $id_posto,
-        $id
+        'sssssisiiii',
+        $nome_vaci,
+        $fabri_vaci,
+        $lote_vaci,
+        $idade_aplica,
+        $via_adimicao,
+        $n_dose,
+        $intervalo_dose,
+        $estoque,
+        $idade_meses_reco,
+        $idade_anos_reco,
+        $id_vaci
     );
     if ($stmt->execute()) {
         $sucesso = true;
+        // Atualiza os dados exibidos após salvar
+        $vacina = [
+            'nome_vaci' => $nome_vaci,
+            'fabri_vaci' => $fabri_vaci,
+            'lote_vaci' => $lote_vaci,
+            'idade_aplica' => $idade_aplica,
+            'via_adimicao' => $via_adimicao,
+            'n_dose' => $n_dose,
+            'intervalo_dose' => $intervalo_dose,
+            'estoque' => $estoque,
+            'idade_meses_reco' => $idade_meses_reco,
+            'idade_anos_reco' => $idade_anos_reco
+        ];
     } else {
-        $erro = "Erro ao atualizar: " . $conn->error;
+        $erro = "Erro ao atualizar vacina: " . $conn->error;
     }
-}
-
-// Busca os dados atualizados
-$stmt = $conn->prepare("SELECT * FROM medico WHERE id_medico = ?");
-$stmt->bind_param("i", $id);
-$stmt->execute();
-$result = $stmt->get_result();
-if ($result->num_rows === 0) {
-    echo "Médico não encontrado.";
-    exit;
-}
-$medico = $result->fetch_assoc();
-
-// Funções utilitárias
-function formatarCPF($cpf)
-{
-    return preg_replace("/(\d{3})(\d{3})(\d{3})(\d{2})/", "$1.$2.$3-$4", $cpf);
-}
-function formatarTelefone($telefone)
-{
-    if (strlen($telefone) == 11) {
-        return preg_replace("/(\d{2})(\d{5})(\d{4})/", "($1) $2-$3", $telefone);
-    } elseif (strlen($telefone) == 10) {
-        return preg_replace("/(\d{2})(\d{4})(\d{4})/", "($1) $2-$3", $telefone);
-    }
-    return $telefone;
-}
-
-// Dados do médico
-$nome = $medico['nome_medico'];
-$cpf = $medico['cpf'];
-$email = $medico['email_medico'];
-$telefone = $medico['tel_medico'];
-$coren_crm = $medico['coren_crm'];
-$tipo = $medico['tipo_medico'];
-$dataNascimento = $medico['naci_medico'];
-$id_posto = $medico['id_posto'];
-
-// Buscar postos para select
-$postos = [];
-$res = $conn->query("SELECT id_posto, nome_posto FROM posto ORDER BY nome_posto");
-while ($row = $res->fetch_assoc()) {
-    $postos[] = $row;
 }
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
     <meta charset="UTF-8">
-    <title>DigitalVac</title>
+    <title>Editar Vacina</title>
     <link rel="icon" href="../img/logo.png" type="image/png">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
@@ -119,7 +86,6 @@ while ($row = $res->fetch_assoc()) {
         }
     </style>
 </head>
-
 <body>
     <nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">
         <div class="container-fluid">
@@ -154,11 +120,11 @@ while ($row = $res->fetch_assoc()) {
                         <i class="bi bi-megaphone-fill" style="font-size: 20px;"></i>
                         Cadastrar Campanha
                     </a>
-                    <a class="nav-link disabled fs-6 fw-bold" href="listamedico.php">
+                    <a class="nav-link active fs-6 fw-bold" href="listamedico.php">
                         <i class="bi bi-file-earmark-text-fill" style="font-size: 20px"></i>
                         Listar Medicos
                     </a>
-                    <a class="nav-link active fs-6 fw-bold" href="listavac.php">
+                    <a class="nav-link disabled fs-6 fw-bold" href="listavac.php">
                         <i class="bi bi-list" style="font-size: 20px"></i>
                         Listar Vacinas
                     </a>
@@ -191,84 +157,82 @@ while ($row = $res->fetch_assoc()) {
         <div class="row">
             <div class="col-md-4">
                 <div class="card shadow-lg p-4 text-center">
-                    <h3 class="mt-3"><?php echo htmlspecialchars($nome); ?></h3>
-                    <a href="listamedico.php" class="btn btn-primary fw-bold mt-3 px-2 py-1"
+                    <h3 class="mt-3"><?php echo htmlspecialchars($vacina['nome_vaci']); ?></h3>
+                    <a href="listavac.php" class="btn btn-primary fw-bold mt-3 px-2 py-1"
                         style="font-size: 15px; min-width: 70px;">
                         <i class="bi bi-arrow-left"></i> Voltar
                     </a>
-                    <form method="post" onsubmit="return confirm('Tem certeza que deseja apagar este médico?');"
-                        class="mt-3">
-                        <input type="hidden" name="apagar" value="1">
-                        <button type="submit" class="btn btn-outline-danger fw-bold">
-                            <i class="bi bi-trash"></i> Apagar Médico
-                        </button>
-                    </form>
                 </div>
             </div>
             <div class="col-md-8">
                 <div class="card shadow-lg p-4">
-                    <h3 class="text-primary fw-bold">Editar Dados do Médico</h3>
+                    <h3 class="text-primary fw-bold">Editar Dados da Vacina</h3>
                     <?php if ($erro): ?>
                         <div class="alert alert-danger"><?php echo htmlspecialchars($erro); ?></div>
                     <?php endif; ?>
-                    <form method="post" autocomplete="off" id="form-editar-medico">
+                    <form method="post" autocomplete="off" id="form-editar-vacina">
                         <div class="row mb-2">
                             <div class="col-md-6">
                                 <label class="form-label fw-bold">Nome</label>
-                                <input type="text" name="nome_medico" class="form-control" required
-                                    value="<?php echo htmlspecialchars($nome); ?>">
+                                <input type="text" name="nome_vaci" class="form-control" required
+                                    value="<?php echo htmlspecialchars($vacina['nome_vaci']); ?>">
                             </div>
                             <div class="col-md-6">
-                                <label class="form-label fw-bold">CPF</label>
-                                <input type="text" name="cpf" id="cpf" class="form-control" required maxlength="14"
-                                    value="<?php echo htmlspecialchars(formatarCPF($cpf)); ?>">
-                            </div>
-                        </div>
-                        <div class="row mb-2">
-                            <div class="col-md-6">
-                                <label class="form-label fw-bold">E-mail</label>
-                                <input type="email" name="email_medico" class="form-control" required
-                                    value="<?php echo htmlspecialchars($email); ?>">
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label fw-bold">Telefone</label>
-                                <input type="text" name="tel_medico" id="tel_medico" class="form-control" required
-                                    maxlength="15" value="<?php echo htmlspecialchars(formatarTelefone($telefone)); ?>">
+                                <label class="form-label fw-bold">Fabricante</label>
+                                <input type="text" name="fabri_vaci" class="form-control" required
+                                    value="<?php echo htmlspecialchars($vacina['fabri_vaci']); ?>">
                             </div>
                         </div>
                         <div class="row mb-2">
                             <div class="col-md-6">
-                                <label class="form-label fw-bold">COREN/CRM</label>
-                                <input type="text" name="coren_crm" class="form-control" required
-                                    value="<?php echo htmlspecialchars($coren_crm); ?>">
+                                <label class="form-label fw-bold">Lote</label>
+                                <input type="text" name="lote_vaci" class="form-control" required
+                                    value="<?php echo htmlspecialchars($vacina['lote_vaci']); ?>">
                             </div>
                             <div class="col-md-6">
-                                <label class="form-label fw-bold">Tipo</label>
-                                <input type="text" name="tipo_medico" class="form-control" required
-                                    value="<?php echo htmlspecialchars($tipo); ?>">
+                                <label class="form-label fw-bold">Via de Administração</label>
+                                <input type="text" name="via_adimicao" class="form-control" required
+                                    value="<?php echo htmlspecialchars($vacina['via_adimicao']); ?>">
                             </div>
                         </div>
                         <div class="row mb-2">
                             <div class="col-md-6">
-                                <label class="form-label fw-bold">Data de Nascimento</label>
-                                <input type="date" name="naci_medico" class="form-control" required
-                                    value="<?php echo htmlspecialchars($dataNascimento); ?>">
+                                <label class="form-label fw-bold">Idade Aplicação (meses)</label>
+                                <input type="number" name="idade_aplica" class="form-control" min="0" required
+                                    value="<?php echo htmlspecialchars($vacina['idade_aplica']); ?>">
                             </div>
                             <div class="col-md-6">
-                                <label class="form-label fw-bold">Posto</label>
-                                <select name="id_posto" class="form-select" required>
-                                    <option value="">Selecione</option>
-                                    <?php foreach ($postos as $posto): ?>
-                                        <option value="<?php echo $posto['id_posto']; ?>" <?php if ($id_posto == $posto['id_posto'])
-                                               echo 'selected'; ?>>
-                                            <?php echo htmlspecialchars($posto['nome_posto']); ?>
-                                        </option>
-                                    <?php endforeach; ?>
-                                </select>
+                                <label class="form-label fw-bold">Número de Doses</label>
+                                <input type="number" name="n_dose" class="form-control" min="0" required
+                                    value="<?php echo htmlspecialchars($vacina['n_dose']); ?>">
+                            </div>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">Intervalo entre Doses (meses)</label>
+                                <input type="number" name="intervalo_dose" class="form-control" min="0" required
+                                    value="<?php echo htmlspecialchars($vacina['intervalo_dose']); ?>">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">Estoque</label>
+                                <input type="number" name="estoque" class="form-control" min="0" required
+                                    value="<?php echo htmlspecialchars($vacina['estoque']); ?>">
+                            </div>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">Idade Recomendada (meses)</label>
+                                <input type="number" name="idade_meses_reco" class="form-control" min="0"
+                                    value="<?php echo htmlspecialchars($vacina['idade_meses_reco']); ?>">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">Idade Recomendada (anos)</label>
+                                <input type="number" name="idade_anos_reco" class="form-control" min="0"
+                                    value="<?php echo htmlspecialchars($vacina['idade_anos_reco']); ?>">
                             </div>
                         </div>
                         <div class="text-end mt-3">
-                            <button type="submit" class="btn btn-primary fw-bold">Salvar Alterações</button>
+                            <button type="submit" class="btn btn-success fw-bold">Salvar</button>
                         </div>
                     </form>
                 </div>
@@ -276,28 +240,6 @@ while ($row = $res->fetch_assoc()) {
         </div>
     </div>
     <script>
-        // Máscara para CPF
-        new Cleave('#cpf', {
-            delimiters: ['.', '.', '-'],
-            blocks: [3, 3, 3, 2],
-            numericOnly: true
-        });
-
-        // Máscara para telefone (celular/fixo)
-        new Cleave('#tel_medico', {
-            phone: true,
-            phoneRegionCode: 'BR'
-        });
-
-        // Remove máscara antes de enviar o formulário
-        document.getElementById('form-editar-medico').addEventListener('submit', function (e) {
-            var cpfInput = document.getElementById('cpf');
-            cpfInput.value = cpfInput.value.replace(/\D/g, '');
-
-            var telInput = document.getElementById('tel_medico');
-            telInput.value = telInput.value.replace(/\D/g, '');
-        });
-
         // Toast Bootstrap
         function showAlert(type, message) {
             const toastEl = document.getElementById('toast-alert');
@@ -318,7 +260,7 @@ while ($row = $res->fetch_assoc()) {
     <?php if ($sucesso): ?>
         <script>
             window.addEventListener('DOMContentLoaded', function () {
-                showAlert('success', 'Dados do médico atualizados com sucesso!');
+                showAlert('success', 'Dados da vacina atualizados com sucesso!');
             });
         </script>
     <?php elseif ($erro): ?>
@@ -329,6 +271,5 @@ while ($row = $res->fetch_assoc()) {
         </script>
     <?php endif; ?>
 </body>
-
 </html>
 <?php $conn->close(); ?>

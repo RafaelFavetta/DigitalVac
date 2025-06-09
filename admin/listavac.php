@@ -3,11 +3,6 @@ include('../outros/db_connect.php');
 include('../Recebedados/validacoes.php'); // Include validation functions
 session_start();
 
-if (!isset($_SESSION['id_medico'])) {
-    header("Location: login.php");
-    exit();
-}
-
 // Campo de pesquisa por nome da vacina
 $nome_vacina = '';
 if (isset($_GET['nome_vacina'])) {
@@ -38,7 +33,7 @@ $vacinas = [];
 while ($row = $result->fetch_assoc()) {
     // Calcule idade total em meses para ordenação
     $idade_meses = (isset($row['idade_anos_reco']) ? intval($row['idade_anos_reco']) : 0) * 12 +
-                   (isset($row['idade_meses_reco']) ? intval($row['idade_meses_reco']) : 0);
+        (isset($row['idade_meses_reco']) ? intval($row['idade_meses_reco']) : 0);
     // Para "Ao nascer", garanta que fique no início
     if (($row['id_vaci'] == 22 || $row['id_vaci'] == 23) || ($idade_meses === 0)) {
         $idade_meses = -1;
@@ -47,7 +42,7 @@ while ($row = $result->fetch_assoc()) {
     $vacinas[] = $row;
 }
 // Ordena pelo campo idade_total_meses
-usort($vacinas, function($a, $b) {
+usort($vacinas, function ($a, $b) {
     return $a['idade_total_meses'] <=> $b['idade_total_meses'];
 });
 ?>
@@ -95,35 +90,44 @@ usort($vacinas, function($a, $b) {
     <!-- Navbar padronizada -->
     <nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">
         <div class="container-fluid">
-            <div class="d-flex align-items-center">
-                <img src="../img/logo_vetor.png" alt="Logo DigitalVac" width="55" height="55" class="me-3">
-            </div>
+            <img src="../img/logo_vetor.png" alt="Logo DigitalVac" width="55" height="55" class="me-3" />
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
                 aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                 <div class="navbar-nav">
-                    <a class="nav-link active fs-6 fw-bold" href="telainicio.php">
-                        <i class="bi bi-house-fill"></i> Início
-                    </a>
                     <a class="nav-link active fs-6 fw-bold" href="cadastroaplic.php">
-                        <i class="bi bi-clipboard2-heart-fill"></i> Aplicação de Vacinas
+                        <i class="bi bi-clipboard2-heart-fill" style="font-size: 20px"></i>
+                        Aplicação de Vacinas
                     </a>
                     <a class="nav-link active fs-6 fw-bold" href="cadastropac.html">
-                        <i class="bi bi-person-plus-fill"></i> Cadastrar Pacientes
+                        <i class="bi bi-person-plus-fill" style="font-size: 20px"></i>
+                        Cadastrar Pacientes
                     </a>
-                    <a class="nav-link disabled fs-6 fw-bold" aria-disabled="true" href="listavac.php">
-                        <i class="bi bi-list"></i> Lista de Vacinas
+                    <a class="nav-link active fs-6 fw-bold" aria-disabled="true" href="cadastrovac.html">
+                        <i class="bi bi-capsule" style="font-size: 20px"></i> Cadastrar
+                        Vacinas
                     </a>
-                    <a class="nav-link active fs-6 fw-bold" href="pesquisa_paciente.php">
-                        <i class="bi bi-person-lines-fill"></i> Pesquisar Pacientes
+                    <a class="nav-link active fs-6 fw-bold" href="cadastroenf.php">
+                        <i class="bi bi-person-badge" style="font-size: 20px"></i>
+                        Cadastrar Enfermeiro
                     </a>
-                    <a class="nav-link active fs-6 fw-bold" href="cadastroatestado.php">
-                        <i class="bi bi-clipboard2-plus-fill"></i> Cadastrar Atestado
+                    <a class="nav-link active fs-6 fw-bold" href="cadastroposto.html">
+                        <i class="bi bi-building-fill-add" style="font-size: 20px"></i>
+                        Cadastrar Posto
                     </a>
-                    <a class="nav-link active fs-6 fw-bold" href="atestado_medico.php">
-                        <i class="bi bi-clipboard-heart-fill"></i> Meus Atestados
+                    <a class="nav-link active fs-6 fw-bold" href="cadastrocampanha.html">
+                        <i class="bi bi-megaphone-fill" style="font-size: 20px;"></i>
+                        Cadastrar Campanha
+                    </a>
+                    <a class="nav-link active fs-6 fw-bold" href="listamedico.php">
+                        <i class="bi bi-file-earmark-text-fill" style="font-size: 20px"></i>
+                        Listar Medicos
+                    </a>
+                    <a class="nav-link disabled fs-6 fw-bold" href="listavac.php">
+                        <i class="bi bi-list" style="font-size: 20px"></i>
+                        Listar Vacinas
                     </a>
                 </div>
                 <ul class="navbar-nav ms-auto">
@@ -181,18 +185,21 @@ usort($vacinas, function($a, $b) {
                             <td><?php echo htmlspecialchars($row['lote_vaci']); ?></td>
                             <td>
                                 <?php
-                                    // Exibe "Ao nascer" para as duas primeiras vacinas (id_vaci 22 e 23)
-                                    if ($row['id_vaci'] == 22 || $row['id_vaci'] == 23) {
-                                        echo "Ao nascer";
-                                    } else {
-                                        $idade_meses = isset($row['idade_meses_reco']) ? intval($row['idade_meses_reco']) : 0;
-                                        $idade_anos = isset($row['idade_anos_reco']) ? intval($row['idade_anos_reco']) : 0;
-                                        $partes = [];
-                                        if ($idade_anos > 0) $partes[] = $idade_anos . " anos";
-                                        if ($idade_meses > 0) $partes[] = $idade_meses . " meses";
-                                        if (empty($partes)) $partes[] = "-";
-                                        echo htmlspecialchars(implode(" / ", $partes));
-                                    }
+                                // Exibe "Ao nascer" para as duas primeiras vacinas (id_vaci 22 e 23)
+                                if ($row['id_vaci'] == 22 || $row['id_vaci'] == 23) {
+                                    echo "Ao nascer";
+                                } else {
+                                    $idade_meses = isset($row['idade_meses_reco']) ? intval($row['idade_meses_reco']) : 0;
+                                    $idade_anos = isset($row['idade_anos_reco']) ? intval($row['idade_anos_reco']) : 0;
+                                    $partes = [];
+                                    if ($idade_anos > 0)
+                                        $partes[] = $idade_anos . " anos";
+                                    if ($idade_meses > 0)
+                                        $partes[] = $idade_meses . " meses";
+                                    if (empty($partes))
+                                        $partes[] = "-";
+                                    echo htmlspecialchars(implode(" / ", $partes));
+                                }
                                 ?>
                             </td>
                             <td><?php echo htmlspecialchars($row['via_adimicao']); ?></td>
@@ -200,9 +207,9 @@ usort($vacinas, function($a, $b) {
                             <td><?php echo htmlspecialchars($row['intervalo_dose']); ?></td>
                             <td><?php echo htmlspecialchars($row['estoque']); ?></td>
                             <td>
-                                <a href="ver_vacina.php?id_vaci=<?php echo urlencode($row['id_vaci']); ?>"
+                                <a href="editar_vacina.php?id_vaci=<?php echo urlencode($row['id_vaci']); ?>"
                                     class="btn btn-info btn-sm">
-                                    <i class="bi bi-info-circle"></i>
+                                    <i class="bi bi-pencil-square"></i>
                                 </a>
                             </td>
                         </tr>
