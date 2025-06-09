@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 10/06/2025 às 01:23
+-- Tempo de geração: 10/06/2025 às 01:47
 -- Versão do servidor: 10.4.32-MariaDB
 -- Versão do PHP: 8.0.30
 
@@ -302,11 +302,10 @@ INSERT INTO `vacina` (`id_vaci`, `nome_vaci`, `fabri_vaci`, `lote_vaci`, `via_ad
 (34, 'Varicela', 'MSD', 'VARIC2025', 'Subcutânea', 2, 36, 12, 1, 10000, 14),
 (35, 'HPV (quadrivalente/9-valente)', 'MSD', 'HPVQ2025', 'Intramuscular', 2, 6, 108, 9, 10000, 19),
 (37, 'Meningocócica ACWY', 'Fiocruz', 'ACWY2025', 'Intramuscular', 3, 2, 3, 0, 10000, 9),
-(39, 'Hepatite B (adulto)', 'Fiocruz', 'HEPBAD2025', 'Intramuscular', 3, 2, 192, 18, 10000, 18),
+(39, 'Hepatite B (adulto)', 'Fiocruz', 'HEPBAD2025', 'Intramuscular', 3, 2, 216, 18, 10000, 18),
 (40, 'Influenza', 'Instituto Butantan', 'INF2025', 'Intramuscular', 1, 0, 108, 9, 10000, 20),
 (41, 'Pneumocócica 23-valente', 'MSD', 'PN23V2025', 'Intramuscular', 1, 0, 60, 5, 10000, 7),
 (42, 'Hepatite B', 'Fiocruz', 'HEPB2025', 'Intramuscular', 3, 1, 0, 0, 10000, 2),
-(43, 'dTpa (adulto/gestante)', 'Sanofi', 'DTPA2025', 'Intramuscular', 1, 0, 0, 0, 10000, 16),
 (44, 'Influenza', 'Instituto Butantan', 'INF2025', 'Intramuscular', 1, 12, 6, 0, 10000, 20),
 (49, 'Poliomielite oral bivalente (VOPb)', 'Instituto Butantan', 'VOP2025B', 'Oral', 0, 0, 3, 0, 10000, 5),
 (50, 'Tetraviral (SCRV)', 'MSD', 'SCRV2025', 'Subcutânea', 2, 3, 12, 1, 10000, 13),
