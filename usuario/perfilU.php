@@ -191,7 +191,7 @@ $conn->close();
                     </a>
 
                     <!-- Botão de redefinir senha -->
-                    <a href="../outros/alterar_senha.php" class="btn btn-outline-secondary btn-editar mt-2">
+                    <a href="../outros/esquecisenhaU.php" class="btn btn-outline-secondary btn-editar mt-2">
                         <i class="bi bi-key"></i> Redefinir senha
                     </a>
                     <!-- Botão para editar grupo especial -->

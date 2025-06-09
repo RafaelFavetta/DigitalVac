@@ -56,7 +56,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </a>
             <!-- Logo -->
             <img src="../img/logo.png" alt="Logo" class="mx-auto d-block mb-4" style="width: 100px;">
-            <h2 class="text-center mb-4 text-primary fw-bold">Esqueci a Senha (Usuário)</h2>
+            <h2 class="text-center mb-4 text-primary fw-bold">Redefinir Senha</h2>
             <form method="POST" action="">
                 <div class="mb-3">
                     <label for="cpf" class="form-label">Digite seu CPF</label>
