@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.0
+-- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 08, 2025 at 06:40 AM
--- Server version: 10.4.24-MariaDB
--- PHP Version: 8.1.6
+-- Tempo de geração: 10/06/2025 às 01:23
+-- Versão do servidor: 10.4.32-MariaDB
+-- Versão do PHP: 8.0.30
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,13 +18,13 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `vac`
+-- Banco de dados: `vac`
 --
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `aplicacao`
+-- Estrutura para tabela `aplicacao`
 --
 
 CREATE TABLE `aplicacao` (
@@ -35,12 +35,12 @@ CREATE TABLE `aplicacao` (
   `id_vaci` int(11) NOT NULL,
   `data_aplica` date NOT NULL,
   `dose_aplicad` int(1) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `atestado`
+-- Estrutura para tabela `atestado`
 --
 
 CREATE TABLE `atestado` (
@@ -50,10 +50,10 @@ CREATE TABLE `atestado` (
   `data_inicio` date NOT NULL,
   `data_fim` date NOT NULL,
   `justificativa` text DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `atestado`
+-- Despejando dados para a tabela `atestado`
 --
 
 INSERT INTO `atestado` (`id_atestado`, `id_paci`, `id_medico`, `data_inicio`, `data_fim`, `justificativa`) VALUES
@@ -64,7 +64,7 @@ INSERT INTO `atestado` (`id_atestado`, `id_paci`, `id_medico`, `data_inicio`, `d
 -- --------------------------------------------------------
 
 --
--- Table structure for table `calendario_vacinal`
+-- Estrutura para tabela `calendario_vacinal`
 --
 
 CREATE TABLE `calendario_vacinal` (
@@ -74,10 +74,10 @@ CREATE TABLE `calendario_vacinal` (
   `doses_recomendadas` varchar(255) DEFAULT NULL,
   `sus` tinyint(1) NOT NULL DEFAULT 0,
   `grupo_indicado` varchar(100) DEFAULT 'Geral'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `calendario_vacinal`
+-- Despejando dados para a tabela `calendario_vacinal`
 --
 
 INSERT INTO `calendario_vacinal` (`id_calendario`, `nome_vacina`, `doses_obrigatorias`, `doses_recomendadas`, `sus`, `grupo_indicado`) VALUES
@@ -111,7 +111,7 @@ INSERT INTO `calendario_vacinal` (`id_calendario`, `nome_vacina`, `doses_obrigat
 -- --------------------------------------------------------
 
 --
--- Table structure for table `campanha`
+-- Estrutura para tabela `campanha`
 --
 
 CREATE TABLE `campanha` (
@@ -121,10 +121,10 @@ CREATE TABLE `campanha` (
   `data_fim` date NOT NULL,
   `imagem` varchar(255) NOT NULL,
   `descricao` text NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `campanha`
+-- Despejando dados para a tabela `campanha`
 --
 
 INSERT INTO `campanha` (`id_campanha`, `nome_campanha`, `data_inicio`, `data_fim`, `imagem`, `descricao`) VALUES
@@ -135,7 +135,7 @@ INSERT INTO `campanha` (`id_campanha`, `nome_campanha`, `data_inicio`, `data_fim
 -- --------------------------------------------------------
 
 --
--- Table structure for table `grupo_especial`
+-- Estrutura para tabela `grupo_especial`
 --
 
 CREATE TABLE `grupo_especial` (
@@ -143,10 +143,10 @@ CREATE TABLE `grupo_especial` (
   `id_usuario` int(11) NOT NULL,
   `grupo` varchar(50) NOT NULL,
   `data_resposta` datetime DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `grupo_especial`
+-- Despejando dados para a tabela `grupo_especial`
 --
 
 INSERT INTO `grupo_especial` (`id`, `id_usuario`, `grupo`, `data_resposta`) VALUES
@@ -157,7 +157,7 @@ INSERT INTO `grupo_especial` (`id`, `id_usuario`, `grupo`, `data_resposta`) VALU
 (5, 1, 'Nenhum', '2025-06-07 01:51:17');
 
 --
--- Triggers `grupo_especial`
+-- Acionadores `grupo_especial`
 --
 DELIMITER $$
 CREATE TRIGGER `trg_update_usuario_grupo_especial` AFTER INSERT ON `grupo_especial` FOR EACH ROW BEGIN
@@ -175,7 +175,7 @@ DELIMITER ;
 -- --------------------------------------------------------
 
 --
--- Table structure for table `medico`
+-- Estrutura para tabela `medico`
 --
 
 CREATE TABLE `medico` (
@@ -189,10 +189,10 @@ CREATE TABLE `medico` (
   `naci_medico` date NOT NULL,
   `id_posto` int(11) NOT NULL,
   `senha` varchar(100) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `medico`
+-- Despejando dados para a tabela `medico`
 --
 
 INSERT INTO `medico` (`id_medico`, `nome_medico`, `cpf`, `email_medico`, `tel_medico`, `coren_crm`, `tipo_medico`, `naci_medico`, `id_posto`, `senha`) VALUES
@@ -203,7 +203,7 @@ INSERT INTO `medico` (`id_medico`, `nome_medico`, `cpf`, `email_medico`, `tel_me
 -- --------------------------------------------------------
 
 --
--- Table structure for table `posto`
+-- Estrutura para tabela `posto`
 --
 
 CREATE TABLE `posto` (
@@ -211,10 +211,10 @@ CREATE TABLE `posto` (
   `nome_posto` varchar(100) NOT NULL,
   `cep_posto` int(8) NOT NULL,
   `n_posto` int(10) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `posto`
+-- Despejando dados para a tabela `posto`
 --
 
 INSERT INTO `posto` (`id_posto`, `nome_posto`, `cep_posto`, `n_posto`) VALUES
@@ -235,7 +235,7 @@ INSERT INTO `posto` (`id_posto`, `nome_posto`, `cep_posto`, `n_posto`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `usuario`
+-- Estrutura para tabela `usuario`
 --
 
 CREATE TABLE `usuario` (
@@ -255,20 +255,20 @@ CREATE TABLE `usuario` (
   `nc_usuario` int(10) NOT NULL,
   `senha` varchar(100) NOT NULL,
   `grupo_especial` varchar(50) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `usuario`
+-- Despejando dados para a tabela `usuario`
 --
 
 INSERT INTO `usuario` (`id_usuario`, `nome_usuario`, `cpf`, `email_usuario`, `tel_usuario`, `genero_usuario`, `naci_usuario`, `peso_usuario`, `tipo_sang_usuario`, `med_usuario`, `doen_usuario`, `ale_usuario`, `cep_usuario`, `nc_usuario`, `senha`, `grupo_especial`) VALUES
-(1, 'Rafael Favetta', '45260925840', 'rafaelfavetta@gmail.com', '19981084437', 'M', '2007-09-06', '77.00', 'A+', '', '', '', '13607030', 231, '$2y$10$7AgFK/3Cj6LkYeq2sB3OmeWAr0s7uys9zIL5C/kuPtykLhxT2bBXi', 'Nenhum'),
-(2, 'Miguel Di-Tanno Viganó', '51382943857', 'miguelzin@gmail.com', '19999999999', 'M', '2007-02-20', '80.00', 'O+', '', '', '', '12600074', 211, '$2y$10$MRpGXV.HXK9B0X17qY6drONp1wnHMGZPJn4mNO8ce0MwB8IssYTS2', NULL);
+(1, 'Rafael Favetta', '45260925840', 'rafaelfavetta@gmail.com', '19981084437', 'M', '2007-09-06', 77.00, 'A+', '', '', '', '13607030', 231, '$2y$10$7AgFK/3Cj6LkYeq2sB3OmeWAr0s7uys9zIL5C/kuPtykLhxT2bBXi', 'Nenhum'),
+(2, 'Miguel Di-Tanno Viganó', '51382943857', 'miguelzin@gmail.com', '19999999999', 'M', '2007-02-20', 80.00, 'O+', '', '', '', '12600074', 211, '$2y$10$MRpGXV.HXK9B0X17qY6drONp1wnHMGZPJn4mNO8ce0MwB8IssYTS2', NULL);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `vacina`
+-- Estrutura para tabela `vacina`
 --
 
 CREATE TABLE `vacina` (
@@ -276,7 +276,6 @@ CREATE TABLE `vacina` (
   `nome_vaci` varchar(100) NOT NULL,
   `fabri_vaci` varchar(100) NOT NULL,
   `lote_vaci` varchar(50) NOT NULL,
-  `idade_aplica` int(3) NOT NULL,
   `via_adimicao` varchar(50) NOT NULL,
   `n_dose` int(1) NOT NULL,
   `intervalo_dose` int(11) NOT NULL,
@@ -284,62 +283,57 @@ CREATE TABLE `vacina` (
   `idade_anos_reco` smallint(6) DEFAULT NULL,
   `estoque` int(11) NOT NULL,
   `id_calendario` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `vacina`
+-- Despejando dados para a tabela `vacina`
 --
 
-INSERT INTO `vacina` (`id_vaci`, `nome_vaci`, `fabri_vaci`, `lote_vaci`, `idade_aplica`, `via_adimicao`, `n_dose`, `intervalo_dose`, `idade_meses_reco`, `idade_anos_reco`, `estoque`, `id_calendario`) VALUES
-(22, 'BCG', 'Instituto Butantan', 'BCG2025A', 0, 'Intradérmica', 1, 0, 0, 0, 10000, 1),
-(23, 'Hepatite B', 'Fiocruz', 'HEPB2025', 0, 'Intramuscular', 1, 1, 0, 0, 10000, 2),
-(24, 'Penta (DTP/Hib/Hepatite B)', 'Fiocruz', 'PENTA2025', 2, 'Intramuscular', 3, 2, 2, 0, 10000, 3),
-(25, 'Poliomielite inativada (VIP)', 'Sanofi', 'VIP2025L01', 2, 'Intramuscular', 3, 2, 2, 0, 10000, 4),
-(27, 'Pneumocócica 10-valente', 'GSK', 'PN10V2025', 2, 'Intramuscular', 3, 2, 2, 0, 10000, 6),
-(28, 'Meningocócica C (conjugada)', 'Fiocruz', 'MENCC2025', 3, 'Intramuscular', 2, 11, 3, 0, 10000, 8),
-(29, 'Rotavírus humano', 'GSK', 'RTH2025', 2, 'Oral', 2, 2, 2, 0, 10000, 10),
-(30, 'Febre amarela', 'Bio-Manguinhos', 'FA2025', 9, 'Subcutânea', 1, 0, 9, 0, 10000, 11),
-(31, 'Tríplice viral (SCR)', 'MSD', 'SCR2025', 12, 'Subcutânea', 2, 3, 12, 1, 10000, 12),
-(33, 'Hepatite A', 'Fiocruz', 'HEPA2025', 15, 'Intramuscular', 1, 0, 15, 1, 10000, 15),
-(34, 'Varicela', 'MSD', 'VARIC2025', 15, 'Subcutânea', 1, 0, 15, 1, 10000, 14),
-(35, 'HPV (quadrivalente/9-valente)', 'MSD', 'HPVQ2025', 108, 'Intramuscular', 2, 6, 108, 9, 10000, 19),
-(36, 'dT (adulto)', 'Fiocruz', 'DT2025F', 120, 'Intramuscular', 3, 12, 120, 10, 10000, 17),
-(37, 'Meningocócica ACWY', 'Fiocruz', 'ACWY2025', 132, 'Intramuscular', 1, 0, 132, 11, 10000, 9),
-(39, 'Hepatite B (adulto)', 'Fiocruz', 'HEPBAD2025', 240, 'Intramuscular', 3, 1, 216, 18, 10000, 18),
-(40, 'Influenza', 'Instituto Butantan', 'INF2025', 720, 'Intramuscular', 1, 12, 6, 0, 10000, 20),
-(41, 'Pneumocócica 23-valente', 'MSD', 'PN23V2025', 720, 'Intramuscular', 1, 60, 720, 60, 10000, 7),
-(42, 'Hepatite B', 'Fiocruz', 'HEPB2025', 0, 'Intramuscular', 3, 1, 0, 0, 10000, 2),
-(43, 'dTpa (adulto/gestante)', 'Sanofi', 'DTPA2025', 0, 'Intramuscular', 1, 120, 216, 18, 10000, 16),
-(44, 'Influenza', 'Instituto Butantan', 'INF2025', 0, 'Intramuscular', 1, 12, 6, 0, 10000, 20),
-(45, 'Covid-19', 'Pfizer', 'COVID2025', 0, 'Intramuscular', 1, 12, 0, 0, 10000, 21),
-(46, 'dTpa (adulto/gestante)', 'Sanofi', 'DTPA2025', 5, 'Intramuscular', 1, 0, 216, 18, 10000, 16),
-(48, 'Poliomielite inativada (VIP)', 'Sanofi', 'VIP2025L01', 0, 'Intramuscular', 4, 0, 2, 0, 10000, 4),
-(49, 'Poliomielite oral bivalente (VOPb)', 'Instituto Butantan', 'VOP2025B', 0, 'Oral', 0, 0, 3, 0, 10000, 5),
-(50, 'Tetraviral (SCRV)', 'MSD', 'SCRV2025', 15, 'Subcutânea', 0, 0, 15, 1, 10000, 13),
-(51, 'dTpa (adulto/gestante)', 'Sanofi', 'DTPA2025', 216, 'Intramuscular', 1, 6, 216, 18, 10000, 16),
-(52, 'dT (adulto)', 'Fiocruz', 'DT2025F', 0, 'Intramuscular', 0, 0, 120, 10, 10000, 17),
-(53, 'HPV (quadrivalente/9-valente)', 'MSD', 'HPVQ2025', 0, 'Intramuscular', 1, 0, 108, 9, 10000, 19),
-(54, 'Covid-19', 'Pfizer', 'COVID2025', 0, 'Intramuscular', 0, 12, 0, 0, 10000, 21),
-(55, 'Herpes-zóster (RZV)', 'GSK', 'HZ2025', 600, 'Intramuscular', 0, 2, 600, 50, 10000, 22),
-(56, 'Dengue (Qdenga®)', 'Takeda', 'DENG2025', 108, 'Intramuscular', 0, 6, 108, 9, 10000, 23),
-(57, 'VSR (Respiratório)', 'Pfizer', 'VSR2025', 720, 'Intramuscular', 0, 0, 720, 60, 10000, 24),
-(58, 'Raiva (pré-exposição)', 'Bio-Manguinhos', 'RAIVA2025', 0, 'Intramuscular', 0, 1, NULL, NULL, 10000, 25),
-(59, 'Vacinas de viajantes (tifóide, encefalite, etc.)', '—', '—', 0, 'Variável', 0, 0, NULL, NULL, 10000, 26);
+INSERT INTO `vacina` (`id_vaci`, `nome_vaci`, `fabri_vaci`, `lote_vaci`, `via_adimicao`, `n_dose`, `intervalo_dose`, `idade_meses_reco`, `idade_anos_reco`, `estoque`, `id_calendario`) VALUES
+(22, 'BCG', 'Instituto Butantan', 'BCG2025A', 'Intradérmica', 1, 0, 0, 0, 10000, 1),
+(24, 'Penta (DTP/Hib/Hepatite B)', 'Fiocruz', 'PENTA2025', 'Intramuscular', 3, 2, 2, 0, 10000, 3),
+(25, 'Poliomielite inativada (VIP)', 'Sanofi', 'VIP2025L01', 'Intramuscular', 4, 2, 2, 0, 10000, 4),
+(27, 'Pneumocócica 10-valente', 'GSK', 'PN10V2025', 'Intramuscular', 3, 2, 2, 0, 10000, 6),
+(28, 'Meningocócica C (conjugada)', 'Fiocruz', 'MENCC2025', 'Intramuscular', 2, 11, 3, 0, 10000, 8),
+(29, 'Rotavírus humano', 'GSK', 'RTH2025', 'Oral', 2, 2, 2, 0, 10000, 10),
+(30, 'Febre amarela', 'Bio-Manguinhos', 'FA2025', 'Subcutânea', 1, 0, 60, 5, 10000, 11),
+(31, 'Tríplice viral (SCR)', 'MSD', 'SCR2025', 'Subcutânea', 2, 3, 12, 1, 10000, 12),
+(33, 'Hepatite A', 'Fiocruz', 'HEPA2025', 'Intramuscular', 2, 6, 12, 1, 10000, 15),
+(34, 'Varicela', 'MSD', 'VARIC2025', 'Subcutânea', 2, 36, 12, 1, 10000, 14),
+(35, 'HPV (quadrivalente/9-valente)', 'MSD', 'HPVQ2025', 'Intramuscular', 2, 6, 108, 9, 10000, 19),
+(37, 'Meningocócica ACWY', 'Fiocruz', 'ACWY2025', 'Intramuscular', 3, 2, 3, 0, 10000, 9),
+(39, 'Hepatite B (adulto)', 'Fiocruz', 'HEPBAD2025', 'Intramuscular', 3, 2, 192, 18, 10000, 18),
+(40, 'Influenza', 'Instituto Butantan', 'INF2025', 'Intramuscular', 1, 0, 108, 9, 10000, 20),
+(41, 'Pneumocócica 23-valente', 'MSD', 'PN23V2025', 'Intramuscular', 1, 0, 60, 5, 10000, 7),
+(42, 'Hepatite B', 'Fiocruz', 'HEPB2025', 'Intramuscular', 3, 1, 0, 0, 10000, 2),
+(43, 'dTpa (adulto/gestante)', 'Sanofi', 'DTPA2025', 'Intramuscular', 1, 0, 0, 0, 10000, 16),
+(44, 'Influenza', 'Instituto Butantan', 'INF2025', 'Intramuscular', 1, 12, 6, 0, 10000, 20),
+(49, 'Poliomielite oral bivalente (VOPb)', 'Instituto Butantan', 'VOP2025B', 'Oral', 0, 0, 3, 0, 10000, 5),
+(50, 'Tetraviral (SCRV)', 'MSD', 'SCRV2025', 'Subcutânea', 2, 3, 12, 1, 10000, 13),
+(51, 'dTpa (adulto/gestante)', 'Sanofi', 'DTPA2025', 'Intramuscular', 1, 0, 216, 18, 10000, 16),
+(53, 'HPV (quadrivalente/9-valente)', 'MSD', 'HPVQ2025', 'Intramuscular', 1, 0, 108, 9, 10000, 19),
+(55, 'Herpes-zóster (RZV)', 'GSK', 'HZ2025', 'Intramuscular', 2, 2, 600, 50, 10000, 22),
+(56, 'Dengue (Qdenga®)', 'Takeda', 'DENG2025', 'Intramuscular', 2, 3, 120, 10, 10000, 23),
+(57, 'VSR (Respiratório)', 'Pfizer', 'VSR2025', 'Intramuscular', 1, 0, 216, 18, 10000, 24),
+(58, 'Raiva (pré-exposição)', 'Bio-Manguinhos', 'RAIVA2025', 'Intramuscular', 0, 1, NULL, NULL, 10000, 25),
+(59, 'Vacinas de viajantes (tifóide, encefalite, etc.)', '—', '—', 'Variável', 0, 0, NULL, NULL, 10000, 26),
+(63, 'Meningocócica C (conjugada)', 'Fiocruz', 'MENCC2025', 'Intramuscular', 2, 2, 3, 0, 10000, 8),
+(64, 'dT (adulto)', 'Fiocruz', 'DT2025F', 'Intramuscular', 10, 120, 84, 7, 10000, 17);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `vacina_contraindicada`
+-- Estrutura para tabela `vacina_contraindicada`
 --
 
 CREATE TABLE `vacina_contraindicada` (
   `id` int(11) NOT NULL,
   `grupo_especial` varchar(100) NOT NULL,
   `id_calendario` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `vacina_contraindicada`
+-- Despejando dados para a tabela `vacina_contraindicada`
 --
 
 INSERT INTO `vacina_contraindicada` (`id`, `grupo_especial`, `id_calendario`) VALUES
@@ -352,11 +346,11 @@ INSERT INTO `vacina_contraindicada` (`id`, `grupo_especial`, `id_calendario`) VA
 (7, 'Imunodeprimido', 13);
 
 --
--- Indexes for dumped tables
+-- Índices para tabelas despejadas
 --
 
 --
--- Indexes for table `aplicacao`
+-- Índices de tabela `aplicacao`
 --
 ALTER TABLE `aplicacao`
   ADD PRIMARY KEY (`id_aplica`),
@@ -366,7 +360,7 @@ ALTER TABLE `aplicacao`
   ADD KEY `id_vaci` (`id_vaci`);
 
 --
--- Indexes for table `atestado`
+-- Índices de tabela `atestado`
 --
 ALTER TABLE `atestado`
   ADD PRIMARY KEY (`id_atestado`),
@@ -374,128 +368,128 @@ ALTER TABLE `atestado`
   ADD KEY `id_medico` (`id_medico`);
 
 --
--- Indexes for table `calendario_vacinal`
+-- Índices de tabela `calendario_vacinal`
 --
 ALTER TABLE `calendario_vacinal`
   ADD PRIMARY KEY (`id_calendario`);
 
 --
--- Indexes for table `campanha`
+-- Índices de tabela `campanha`
 --
 ALTER TABLE `campanha`
   ADD PRIMARY KEY (`id_campanha`);
 
 --
--- Indexes for table `grupo_especial`
+-- Índices de tabela `grupo_especial`
 --
 ALTER TABLE `grupo_especial`
   ADD PRIMARY KEY (`id`),
   ADD KEY `id_usuario` (`id_usuario`);
 
 --
--- Indexes for table `medico`
+-- Índices de tabela `medico`
 --
 ALTER TABLE `medico`
   ADD PRIMARY KEY (`id_medico`),
   ADD KEY `id_posto` (`id_posto`);
 
 --
--- Indexes for table `posto`
+-- Índices de tabela `posto`
 --
 ALTER TABLE `posto`
   ADD PRIMARY KEY (`id_posto`);
 
 --
--- Indexes for table `usuario`
+-- Índices de tabela `usuario`
 --
 ALTER TABLE `usuario`
   ADD PRIMARY KEY (`id_usuario`),
   ADD UNIQUE KEY `cpf` (`cpf`);
 
 --
--- Indexes for table `vacina`
+-- Índices de tabela `vacina`
 --
 ALTER TABLE `vacina`
   ADD PRIMARY KEY (`id_vaci`),
   ADD KEY `idx_vaci_calendario` (`id_calendario`);
 
 --
--- Indexes for table `vacina_contraindicada`
+-- Índices de tabela `vacina_contraindicada`
 --
 ALTER TABLE `vacina_contraindicada`
   ADD PRIMARY KEY (`id`),
   ADD KEY `id_calendario` (`id_calendario`);
 
 --
--- AUTO_INCREMENT for dumped tables
+-- AUTO_INCREMENT para tabelas despejadas
 --
 
 --
--- AUTO_INCREMENT for table `aplicacao`
+-- AUTO_INCREMENT de tabela `aplicacao`
 --
 ALTER TABLE `aplicacao`
   MODIFY `id_aplica` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2407;
 
 --
--- AUTO_INCREMENT for table `atestado`
+-- AUTO_INCREMENT de tabela `atestado`
 --
 ALTER TABLE `atestado`
   MODIFY `id_atestado` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
--- AUTO_INCREMENT for table `calendario_vacinal`
+-- AUTO_INCREMENT de tabela `calendario_vacinal`
 --
 ALTER TABLE `calendario_vacinal`
   MODIFY `id_calendario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 
 --
--- AUTO_INCREMENT for table `campanha`
+-- AUTO_INCREMENT de tabela `campanha`
 --
 ALTER TABLE `campanha`
   MODIFY `id_campanha` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
--- AUTO_INCREMENT for table `grupo_especial`
+-- AUTO_INCREMENT de tabela `grupo_especial`
 --
 ALTER TABLE `grupo_especial`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
--- AUTO_INCREMENT for table `medico`
+-- AUTO_INCREMENT de tabela `medico`
 --
 ALTER TABLE `medico`
   MODIFY `id_medico` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
--- AUTO_INCREMENT for table `posto`
+-- AUTO_INCREMENT de tabela `posto`
 --
 ALTER TABLE `posto`
   MODIFY `id_posto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
--- AUTO_INCREMENT for table `usuario`
+-- AUTO_INCREMENT de tabela `usuario`
 --
 ALTER TABLE `usuario`
   MODIFY `id_usuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
--- AUTO_INCREMENT for table `vacina`
+-- AUTO_INCREMENT de tabela `vacina`
 --
 ALTER TABLE `vacina`
-  MODIFY `id_vaci` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=63;
+  MODIFY `id_vaci` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=65;
 
 --
--- AUTO_INCREMENT for table `vacina_contraindicada`
+-- AUTO_INCREMENT de tabela `vacina_contraindicada`
 --
 ALTER TABLE `vacina_contraindicada`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
--- Constraints for dumped tables
+-- Restrições para tabelas despejadas
 --
 
 --
--- Constraints for table `aplicacao`
+-- Restrições para tabelas `aplicacao`
 --
 ALTER TABLE `aplicacao`
   ADD CONSTRAINT `aplicacao_ibfk_1` FOREIGN KEY (`id_usuario`) REFERENCES `usuario` (`id_usuario`) ON DELETE CASCADE ON UPDATE CASCADE,
@@ -504,32 +498,32 @@ ALTER TABLE `aplicacao`
   ADD CONSTRAINT `aplicacao_ibfk_4` FOREIGN KEY (`id_vaci`) REFERENCES `vacina` (`id_vaci`);
 
 --
--- Constraints for table `atestado`
+-- Restrições para tabelas `atestado`
 --
 ALTER TABLE `atestado`
   ADD CONSTRAINT `atestado_ibfk_1` FOREIGN KEY (`id_paci`) REFERENCES `usuario` (`id_usuario`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `atestado_ibfk_2` FOREIGN KEY (`id_medico`) REFERENCES `medico` (`id_medico`);
 
 --
--- Constraints for table `grupo_especial`
+-- Restrições para tabelas `grupo_especial`
 --
 ALTER TABLE `grupo_especial`
   ADD CONSTRAINT `grupo_especial_ibfk_1` FOREIGN KEY (`id_usuario`) REFERENCES `usuario` (`id_usuario`) ON DELETE CASCADE;
 
 --
--- Constraints for table `medico`
+-- Restrições para tabelas `medico`
 --
 ALTER TABLE `medico`
   ADD CONSTRAINT `medico_ibfk_1` FOREIGN KEY (`id_posto`) REFERENCES `posto` (`id_posto`);
 
 --
--- Constraints for table `vacina`
+-- Restrições para tabelas `vacina`
 --
 ALTER TABLE `vacina`
   ADD CONSTRAINT `fk_vaci_calendario` FOREIGN KEY (`id_calendario`) REFERENCES `calendario_vacinal` (`id_calendario`);
 
 --
--- Constraints for table `vacina_contraindicada`
+-- Restrições para tabelas `vacina_contraindicada`
 --
 ALTER TABLE `vacina_contraindicada`
   ADD CONSTRAINT `vacina_contraindicada_ibfk_1` FOREIGN KEY (`id_calendario`) REFERENCES `calendario_vacinal` (`id_calendario`);
