@@ -16,7 +16,7 @@ if (isset($_GET['nome_vacina'])) {
 
 // Monta a consulta SQL com filtro por nome da vacina, se fornecido
 if (!empty($nome_vacina)) {
-    $sql = "SELECT id_vaci, nome_vaci, fabri_vaci, lote_vaci, idade_aplica, via_adimicao, n_dose, intervalo_dose, estoque, idade_meses_reco, idade_anos_reco 
+    $sql = "SELECT id_vaci, nome_vaci, fabri_vaci, lote_vaci, via_adimicao, n_dose, intervalo_dose, estoque, idade_meses_reco, idade_anos_reco 
             FROM vacina WHERE nome_vaci LIKE ?";
     $stmt = $conn->prepare($sql);
     $like_param = '%' . $nome_vacina . '%';
@@ -24,7 +24,7 @@ if (!empty($nome_vacina)) {
     $stmt->execute();
     $result = $stmt->get_result();
 } else {
-    $sql = "SELECT id_vaci, nome_vaci, fabri_vaci, lote_vaci, idade_aplica, via_adimicao, n_dose, intervalo_dose, estoque, idade_meses_reco, idade_anos_reco 
+    $sql = "SELECT id_vaci, nome_vaci, fabri_vaci, lote_vaci, via_adimicao, n_dose, intervalo_dose, estoque, idade_meses_reco, idade_anos_reco 
             FROM vacina";
     $result = $conn->query($sql);
 }
@@ -123,7 +123,7 @@ usort($vacinas, function($a, $b) {
                         <i class="bi bi-clipboard2-plus-fill"></i> Cadastrar Atestado
                     </a>
                     <a class="nav-link active fs-6 fw-bold" href="atestado_medico.php">
-                        <i class="bi bi-clipboard-heart-fill"></i> Meus Atestados
+                        <i class="bi bi-clipboard-heart"></i> Meus Atestados
                     </a>
                 </div>
                 <ul class="navbar-nav ms-auto">
@@ -181,16 +181,21 @@ usort($vacinas, function($a, $b) {
                             <td><?php echo htmlspecialchars($row['lote_vaci']); ?></td>
                             <td>
                                 <?php
-                                    // Exibe "Ao nascer" para as duas primeiras vacinas (id_vaci 22 e 23)
-                                    if ($row['id_vaci'] == 22 || $row['id_vaci'] == 23) {
-                                        echo "Ao nascer";
+                                    // Exibe "A qualquer momento" para vacinas específicas
+                                    $nomes_a_qualquer_momento = [
+                                        'Vacinas de viajantes (tifóide, encefalite, etc.)',
+                                        'Raiva (pré-exposição)',
+                                        'dTpa (adulto/gestante)'
+                                    ];
+                                    if (in_array($row['nome_vaci'], $nomes_a_qualquer_momento)) {
+                                        echo "A qualquer momento";
                                     } else {
                                         $idade_meses = isset($row['idade_meses_reco']) ? intval($row['idade_meses_reco']) : 0;
                                         $idade_anos = isset($row['idade_anos_reco']) ? intval($row['idade_anos_reco']) : 0;
                                         $partes = [];
                                         if ($idade_anos > 0) $partes[] = $idade_anos . " anos";
                                         if ($idade_meses > 0) $partes[] = $idade_meses . " meses";
-                                        if (empty($partes)) $partes[] = "-";
+                                        if (empty($partes)) $partes[] = "Ao nascer";
                                         echo htmlspecialchars(implode(" / ", $partes));
                                     }
                                 ?>
