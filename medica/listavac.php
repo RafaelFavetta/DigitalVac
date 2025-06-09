@@ -39,9 +39,19 @@ while ($row = $result->fetch_assoc()) {
     // Calcule idade total em meses para ordenação
     $idade_meses = (isset($row['idade_anos_reco']) ? intval($row['idade_anos_reco']) : 0) * 12 +
                    (isset($row['idade_meses_reco']) ? intval($row['idade_meses_reco']) : 0);
-    // Para "Ao nascer", garanta que fique no início
-    if (($row['id_vaci'] == 22 || $row['id_vaci'] == 23) || ($idade_meses === 0)) {
-        $idade_meses = -1;
+
+    // Lista de vacinas que devem aparecer como "A qualquer momento" e no topo
+    $nomes_a_qualquer_momento = [
+        'Vacinas de viajantes (tifóide, encefalite, etc.)',
+        'Raiva (pré-exposição)',
+        'dTpa (adulto/gestante)'
+    ];
+
+    // Para "A qualquer momento", garanta que fique no início
+    if (in_array($row['nome_vaci'], $nomes_a_qualquer_momento)) {
+        $idade_meses = -2; // -2 para garantir que todas fiquem antes de "Ao nascer"
+    } elseif (($row['id_vaci'] == 22 || $row['id_vaci'] == 23) || ($idade_meses === 0)) {
+        $idade_meses = -1; // "Ao nascer"
     }
     $row['idade_total_meses'] = $idade_meses;
     $vacinas[] = $row;
