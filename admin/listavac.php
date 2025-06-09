@@ -11,7 +11,7 @@ if (isset($_GET['nome_vacina'])) {
 
 // Monta a consulta SQL com filtro por nome da vacina, se fornecido
 if (!empty($nome_vacina)) {
-    $sql = "SELECT id_vaci, nome_vaci, fabri_vaci, lote_vaci, idade_aplica, via_adimicao, n_dose, intervalo_dose, estoque, idade_meses_reco, idade_anos_reco 
+    $sql = "SELECT id_vaci, nome_vaci, fabri_vaci, lote_vaci, via_adimicao, n_dose, intervalo_dose, estoque, idade_meses_reco, idade_anos_reco 
             FROM vacina WHERE nome_vaci LIKE ?";
     $stmt = $conn->prepare($sql);
     $like_param = '%' . $nome_vacina . '%';
@@ -19,7 +19,7 @@ if (!empty($nome_vacina)) {
     $stmt->execute();
     $result = $stmt->get_result();
 } else {
-    $sql = "SELECT id_vaci, nome_vaci, fabri_vaci, lote_vaci, idade_aplica, via_adimicao, n_dose, intervalo_dose, estoque, idade_meses_reco, idade_anos_reco 
+    $sql = "SELECT id_vaci, nome_vaci, fabri_vaci, lote_vaci, via_adimicao, n_dose, intervalo_dose, estoque, idade_meses_reco, idade_anos_reco 
             FROM vacina";
     $result = $conn->query($sql);
 }
@@ -34,9 +34,19 @@ while ($row = $result->fetch_assoc()) {
     // Calcule idade total em meses para ordenação
     $idade_meses = (isset($row['idade_anos_reco']) ? intval($row['idade_anos_reco']) : 0) * 12 +
         (isset($row['idade_meses_reco']) ? intval($row['idade_meses_reco']) : 0);
-    // Para "Ao nascer", garanta que fique no início
-    if (($row['id_vaci'] == 22 || $row['id_vaci'] == 23) || ($idade_meses === 0)) {
-        $idade_meses = -1;
+
+    // Lista de vacinas que devem aparecer como "A qualquer momento" e no topo
+    $nomes_a_qualquer_momento = [
+        'Vacinas de viajantes (tifóide, encefalite, etc.)',
+        'Raiva (pré-exposição)',
+        'dTpa (adulto/gestante)'
+    ];
+
+    // Para "A qualquer momento", garanta que fique no início
+    if (in_array($row['nome_vaci'], $nomes_a_qualquer_momento)) {
+        $idade_meses = -2; // -2 para garantir que todas fiquem antes de "Ao nascer"
+    } elseif (($row['id_vaci'] == 22 || $row['id_vaci'] == 23) || ($idade_meses === 0)) {
+        $idade_meses = -1; // "Ao nascer"
     }
     $row['idade_total_meses'] = $idade_meses;
     $vacinas[] = $row;
@@ -185,9 +195,14 @@ usort($vacinas, function ($a, $b) {
                             <td><?php echo htmlspecialchars($row['lote_vaci']); ?></td>
                             <td>
                                 <?php
-                                // Exibe "Ao nascer" para as duas primeiras vacinas (id_vaci 22 e 23)
-                                if ($row['id_vaci'] == 22 || $row['id_vaci'] == 23) {
-                                    echo "Ao nascer";
+                                // Exibe "A qualquer momento" para vacinas específicas
+                                $nomes_a_qualquer_momento = [
+                                    'Vacinas de viajantes (tifóide, encefalite, etc.)',
+                                    'Raiva (pré-exposição)',
+                                    'dTpa (adulto/gestante)'
+                                ];
+                                if (in_array($row['nome_vaci'], $nomes_a_qualquer_momento)) {
+                                    echo "A qualquer momento";
                                 } else {
                                     $idade_meses = isset($row['idade_meses_reco']) ? intval($row['idade_meses_reco']) : 0;
                                     $idade_anos = isset($row['idade_anos_reco']) ? intval($row['idade_anos_reco']) : 0;
@@ -197,7 +212,7 @@ usort($vacinas, function ($a, $b) {
                                     if ($idade_meses > 0)
                                         $partes[] = $idade_meses . " meses";
                                     if (empty($partes))
-                                        $partes[] = "-";
+                                        $partes[] = "Ao nascer";
                                     echo htmlspecialchars(implode(" / ", $partes));
                                 }
                                 ?>
