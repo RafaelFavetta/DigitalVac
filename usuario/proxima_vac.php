@@ -2,6 +2,57 @@
 session_start();
 require_once '../outros/db_connect.php'; // Ajuste o caminho para o arquivo de conexão com o banco
 
+// Função para calcular próxima dose e atraso corretamente, mostrando idade recomendada em meses (<16) ou anos (>=16)
+function calcular_proxima_dose($vacina, $aplicada, $idade_meses_usuario, $data_nascimento) {
+    $n_obrig = isset($vacina['n_dose']) ? intval($vacina['n_dose']) : 0;
+    $doses_tomadas = $aplicada && isset($aplicada['doses_tomadas']) ? intval($aplicada['doses_tomadas']) : 0;
+    $prox_dose = $doses_tomadas + 1;
+
+    $idade_anos_reco = isset($vacina['idade_anos_reco']) ? intval($vacina['idade_anos_reco']) : 0;
+    $idade_meses_reco = isset($vacina['idade_meses_reco']) ? intval($vacina['idade_meses_reco']) : 0;
+    $idade_recomendada_meses = $idade_anos_reco * 12 + $idade_meses_reco;
+
+    // Função para calcular a data correta somando anos e meses separadamente
+    $calcularData = function($data_nascimento, $anos, $meses) {
+        $dt = new DateTime($data_nascimento);
+        if ($anos > 0) $dt->add(new DateInterval('P' . $anos . 'Y'));
+        if ($meses > 0) $dt->add(new DateInterval('P' . $meses . 'M'));
+        return $dt->format('d/m/Y');
+    };
+
+    // Se nunca tomou nenhuma dose
+    if ($doses_tomadas == 0) {
+        if ($idade_anos_reco === 0 && $idade_meses_reco === 0) {
+            if ($idade_meses_usuario > 0) {
+                return ['Atrasada', true];
+            }
+            return ['Ao nascer', false];
+        }
+        if ($idade_meses_usuario >= $idade_recomendada_meses) {
+            $data_prevista = $calcularData($data_nascimento, $idade_anos_reco, $idade_meses_reco);
+            return [$data_prevista . ' (Atrasada)', true];
+        } else {
+            $data_prevista = $calcularData($data_nascimento, $idade_anos_reco, $idade_meses_reco);
+            return [$data_prevista, false];
+        }
+    } else {
+        // Próxima dose: intervalo a partir da última aplicação
+        $intervalo = isset($vacina['intervalo_dose']) ? intval($vacina['intervalo_dose']) : 0;
+        if ($intervalo > 0 && !empty($aplicada['ultima_data'])) {
+            $dt = new DateTime($aplicada['ultima_data']);
+            $dt->add(new DateInterval('P' . $intervalo . 'M'));
+            $data_proxima = $dt->format('d/m/Y');
+            $hoje = date('Y-m-d');
+            if ($dt < new DateTime($hoje)) {
+                return [$data_proxima . ' (Atrasada)', true];
+            }
+            return [$data_proxima, false];
+        }
+        return ['-', false];
+    }
+}
+
+
 // Verifica se o usuário está logado
 if (!isset($_SESSION['id_usuario'])) {
     header("Location: login.php");
@@ -109,56 +160,6 @@ if ($user_data) {
     }
 }
 
-// Função para calcular próxima dose e atraso corretamente, mostrando idade recomendada em meses (<16) ou anos (>=16)
-function calcular_proxima_dose($vacina, $aplicada, $idade_meses_usuario, $data_nascimento) {
-    $n_obrig = isset($vacina['n_dose']) ? intval($vacina['n_dose']) : 0;
-    $doses_tomadas = $aplicada && isset($aplicada['doses_tomadas']) ? intval($aplicada['doses_tomadas']) : 0;
-    $prox_dose = $doses_tomadas + 1;
-
-    $idade_anos_reco = isset($vacina['idade_anos_reco']) ? intval($vacina['idade_anos_reco']) : 0;
-    $idade_meses_reco = isset($vacina['idade_meses_reco']) ? intval($vacina['idade_meses_reco']) : 0;
-    $idade_recomendada_meses = $idade_anos_reco * 12 + $idade_meses_reco;
-
-    // Função para calcular a data correta somando anos e meses separadamente
-    $calcularData = function($data_nascimento, $anos, $meses) {
-        $dt = new DateTime($data_nascimento);
-        if ($anos > 0) $dt->add(new DateInterval('P' . $anos . 'Y'));
-        if ($meses > 0) $dt->add(new DateInterval('P' . $meses . 'M'));
-        return $dt->format('d/m/Y');
-    };
-
-    // Se nunca tomou nenhuma dose
-    if ($doses_tomadas == 0) {
-        if ($idade_anos_reco === 0 && $idade_meses_reco === 0) {
-            if ($idade_meses_usuario > 0) {
-                return ['Atrasada', true];
-            }
-            return ['Ao nascer', false];
-        }
-        if ($idade_meses_usuario >= $idade_recomendada_meses) {
-            $data_prevista = $calcularData($data_nascimento, $idade_anos_reco, $idade_meses_reco);
-            return [$data_prevista . ' (Atrasada)', true];
-        } else {
-            $data_prevista = $calcularData($data_nascimento, $idade_anos_reco, $idade_meses_reco);
-            return [$data_prevista, false];
-        }
-    } else {
-        // Próxima dose: intervalo a partir da última aplicação
-        $intervalo = isset($vacina['intervalo_dose']) ? intval($vacina['intervalo_dose']) : 0;
-        if ($intervalo > 0 && !empty($aplicada['ultima_data'])) {
-            $dt = new DateTime($aplicada['ultima_data']);
-            $dt->add(new DateInterval('P' . $intervalo . 'M'));
-            $data_proxima = $dt->format('d/m/Y');
-            $hoje = date('Y-m-d');
-            if ($dt < new DateTime($hoje)) {
-                return [$data_proxima . ' (Atrasada)', true];
-            }
-            return [$data_proxima, false];
-        }
-        return ['-', false];
-    }
-}
-
 // Se for AJAX, retorna só o <tbody>
 if (
     isset($_SERVER['HTTP_X_REQUESTED_WITH']) &&
@@ -207,23 +208,14 @@ if (
                 <td style="vertical-align:middle;"><?= htmlspecialchars($vacina['nome_vacina']) ?></td>
                 <td style="vertical-align:middle; text-align:center;">
                     <?php
-                        // Idade Recomendada
-                        if (
-                            (isset($vacina['idade_meses_reco']) && intval($vacina['idade_meses_reco']) === 0) &&
-                            (isset($vacina['idade_anos_reco']) && intval($vacina['idade_anos_reco']) === 0)
-                        ) {
-                            echo "Ao nascer";
-                        } else {
-                            $idade_meses = isset($vacina['idade_meses_reco']) ? intval($vacina['idade_meses_reco']) : 0;
-                            $idade_anos = isset($vacina['idade_anos_reco']) ? intval($vacina['idade_anos_reco']) : 0;
-                            $total_meses = $idade_anos * 12 + $idade_meses;
-                            if ($total_meses <= 15) {
-                                echo $total_meses . " meses";
-                            } else {
-                                $anos = floor($total_meses / 12);
-                                echo $anos . " anos";
-                            }
-                        }
+                        // Exibe idade recomendada fixa da vacina
+                        $idade_meses = isset($vacina['idade_meses_reco']) ? intval($vacina['idade_meses_reco']) : 0;
+                        $idade_anos = isset($vacina['idade_anos_reco']) ? intval($vacina['idade_anos_reco']) : 0;
+                        $partes = [];
+                        if ($idade_anos > 0) $partes[] = $idade_anos . " anos";
+                        if ($idade_meses > 0) $partes[] = $idade_meses . " meses";
+                        if (empty($partes)) $partes[] = "Ao nascer";
+                        echo htmlspecialchars(implode(" / ", $partes));
                     ?>
                 </td>
                 <td style="vertical-align:middle; text-align:center;">
@@ -493,23 +485,14 @@ if (
                                     <td style="vertical-align:middle;"><?= htmlspecialchars($vacina['nome_vacina']) ?></td>
                                     <td style="vertical-align:middle; text-align:center;">
                                         <?php
-                                            // Idade Recomendada
-                                            if (
-                                                (isset($vacina['idade_meses_reco']) && intval($vacina['idade_meses_reco']) === 0) &&
-                                                (isset($vacina['idade_anos_reco']) && intval($vacina['idade_anos_reco']) === 0)
-                                            ) {
-                                                echo "Ao nascer";
-                                            } else {
-                                                $idade_meses = isset($vacina['idade_meses_reco']) ? intval($vacina['idade_meses_reco']) : 0;
-                                                $idade_anos = isset($vacina['idade_anos_reco']) ? intval($vacina['idade_anos_reco']) : 0;
-                                                $total_meses = $idade_anos * 12 + $idade_meses;
-                                                if ($total_meses <= 15) {
-                                                    echo $total_meses . " meses";
-                                                } else {
-                                                    $anos = floor($total_meses / 12);
-                                                    echo $anos . " anos";
-                                                }
-                                            }
+                                            // Exibe idade recomendada fixa da vacina
+                                            $idade_meses = isset($vacina['idade_meses_reco']) ? intval($vacina['idade_meses_reco']) : 0;
+                                            $idade_anos = isset($vacina['idade_anos_reco']) ? intval($vacina['idade_anos_reco']) : 0;
+                                            $partes = [];
+                                            if ($idade_anos > 0) $partes[] = $idade_anos . " anos";
+                                            if ($idade_meses > 0) $partes[] = $idade_meses . " meses";
+                                            if (empty($partes)) $partes[] = "Ao nascer";
+                                            echo htmlspecialchars(implode(" / ", $partes));
                                         ?>
                                     </td>
                                     <td style="vertical-align:middle; text-align:center;">
@@ -554,22 +537,14 @@ if (
                                     <td style="vertical-align:middle;"><?= htmlspecialchars($vacina['nome_vacina']) ?></td>
                                     <td style="vertical-align:middle; text-align:center;">
                                         <?php
-                                            if (
-                                                (isset($vacina['idade_meses_reco']) && intval($vacina['idade_meses_reco']) === 0) &&
-                                                (isset($vacina['idade_anos_reco']) && intval($vacina['idade_anos_reco']) === 0)
-                                            ) {
-                                                echo "Ao nascer";
-                                            } else {
-                                                $idade_meses = isset($vacina['idade_meses_reco']) ? intval($vacina['idade_meses_reco']) : 0;
-                                                $idade_anos = isset($vacina['idade_anos_reco']) ? intval($vacina['idade_anos_reco']) : 0;
-                                                $total_meses = $idade_anos * 12 + $idade_meses;
-                                                if ($total_meses <= 15) {
-                                                    echo $total_meses . " meses";
-                                                } else {
-                                                    $anos = floor($total_meses / 12);
-                                                    echo $anos . " anos";
-                                                }
-                                            }
+                                            // Exibe idade recomendada fixa da vacina
+                                            $idade_meses = isset($vacina['idade_meses_reco']) ? intval($vacina['idade_meses_reco']) : 0;
+                                            $idade_anos = isset($vacina['idade_anos_reco']) ? intval($vacina['idade_anos_reco']) : 0;
+                                            $partes = [];
+                                            if ($idade_anos > 0) $partes[] = $idade_anos . " anos";
+                                            if ($idade_meses > 0) $partes[] = $idade_meses . " meses";
+                                            if (empty($partes)) $partes[] = "Ao nascer";
+                                            echo htmlspecialchars(implode(" / ", $partes));
                                         ?>
                                     </td>
                                     <td style="vertical-align:middle; text-align:center;">-</td>
