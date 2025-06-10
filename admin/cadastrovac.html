@@ -150,6 +150,18 @@
 
         <div class="row g-2 mt-2">
           <div class="col-md-6">
+            <label for="sus" class="form-label fw-bold">Pertence ao calendário do SUS?</label>
+            <select id="sus" name="sus" class="form-select" required>
+              <option value="">Selecione...</option>
+              <option value="1">Sim</option>
+              <option value="0">Não</option>
+            </select>
+          </div>
+          <div class="col-md-6"></div>
+        </div>
+
+        <div class="row g-2 mt-2">
+          <div class="col-md-6">
             <label for="idade-aplica" class="form-label fw-bold">Idade de aplicação</label>
             <input type="number" id="idade-aplica" name="idade_aplica" class="form-control" placeholder="Idade mínima"
               required>

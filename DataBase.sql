@@ -55,54 +55,9 @@ CREATE TABLE `atestado` (
 -- --------------------------------------------------------
 
 --
--- Estrutura para tabela `calendario_vacinal`
 --
 
-CREATE TABLE `calendario_vacinal` (
-  `id_calendario` int(11) NOT NULL,
-  `nome_vacina` varchar(100) NOT NULL,
-  `doses_obrigatorias` varchar(255) NOT NULL,
-  `doses_recomendadas` varchar(255) DEFAULT NULL,
-  `sus` tinyint(1) NOT NULL DEFAULT 0,
-  `grupo_indicado` varchar(100) DEFAULT 'Geral'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Despejando dados para a tabela `calendario_vacinal`
---
-
-INSERT INTO `calendario_vacinal` (`id_calendario`, `nome_vacina`, `doses_obrigatorias`, `doses_recomendadas`, `sus`, `grupo_indicado`) VALUES
-(1, 'BCG', '1 dose (ao nascer)', '', 1, 'Geral'),
-(2, 'Hepatite B', '3 doses (0-1-6 meses)', '', 1, 'Trabalhador da saúde'),
-(3, 'Penta (DTP/Hib/Hepatite B)', '3 doses (2-4-6 meses)', '', 1, 'Geral'),
-(4, 'Poliomielite inativada (VIP)', '4 doses (2-4-6 meses + reforço aos 15 meses)', '', 1, 'Geral'),
-(5, 'Poliomielite oral bivalente (VOPb)', '— (substituída pela VIP)', '', 0, 'Geral'),
-(6, 'Pneumocócica 10-valente', '3 doses (2-4-6 meses)', '4ª dose opcional em 12 meses', 1, 'Geral'),
-(7, 'Pneumocócica 23-valente', '1 dose (≥ 60 anos)', '', 1, 'Doença crônica'),
-(8, 'Meningocócica C (conjugada)', '2 doses (3–12 meses) + reforço em 5 anos', 'ACWY aos 11–12 anos', 1, 'Geral'),
-(9, 'Meningocócica ACWY', '—', '1 dose aos 11–12 anos', 0, 'Geral'),
-(10, 'Rotavírus humano', '2 doses (2-4 meses)', '', 1, 'Geral'),
-(11, 'Febre amarela', '1 dose (9 meses) + reforço 4 anos em áreas de risco', '', 1, 'Viajante'),
-(12, 'Tríplice viral (SCR)', '2 doses (12-15 meses)', 'SCRV como 2ª dose', 1, 'Geral'),
-(13, 'Tetraviral (SCRV)', '—', '1 dose aos 15 meses', 1, 'Geral'),
-(14, 'Varicela', '1 dose (15 meses)', '2 doses (15 meses + reforço 4 anos)', 1, 'Trabalhador da saúde'),
-(15, 'Hepatite A', '1 dose (15 meses)', '2 doses em regiões endêmicas', 1, 'Viajante'),
-(16, 'dTpa (adulto/gestante)', '1 dose gestante cada gestação', '3 doses adulto não vacinado (0-1-6 meses)', 1, 'Trabalhador da saúde'),
-(17, 'dT (adulto)', 'reforço a cada 10 anos', '', 1, 'Geral'),
-(18, 'Hepatite B (adulto)', '3 doses (0-1-6 meses)', '', 1, 'Geral'),
-(19, 'HPV (quadrivalente/9-valente)', '1 dose (9-14 anos no PNI)', '2-3 doses conforme idade', 1, 'Geral'),
-(20, 'Influenza', '1 dose anual (grupos prioritários)', '1 dose anual ≥6 meses', 1, 'Trabalhador da saúde'),
-(21, 'Covid-19', 'varia conforme campanha', 'reforços anuais ou conforme risco', 1, 'Trabalhador da saúde'),
-(22, 'Herpes-zóster (RZV)', '—', '2 doses ≥50 anos', 0, 'Idoso'),
-(23, 'Dengue (Qdenga®)', '—', '3 doses 9-16 anos em área endêmica', 0, 'Geral'),
-(24, 'VSR (Respiratório)', '—', '1 dose sazonal ≥60 anos e gestantes', 0, 'Geral'),
-(25, 'Raiva (pré-exposição)', '—', '3 doses pré-exposição', 0, 'Viajante'),
-(26, 'Vacinas de viajantes (tifóide, encefalite, etc.)', '—', 'esquemas conforme risco', 0, 'Viajante');
-
--- --------------------------------------------------------
-
---
--- Estrutura para tabela `campanha`
 --
 
 CREATE TABLE `campanha` (
@@ -124,40 +79,6 @@ INSERT INTO `campanha` (`id_campanha`, `nome_campanha`, `data_inicio`, `data_fim
 (3, 'Campanha C', '2025-06-19', '2025-09-18', 'uploads/campanhas/campanha_68422518518599.94111440.jpg', 'sl só teste');
 
 -- --------------------------------------------------------
-
---
--- Estrutura para tabela `grupo_especial`
---
-
-CREATE TABLE `grupo_especial` (
-  `id` int(11) NOT NULL,
-  `id_usuario` int(11) NOT NULL,
-  `grupo` varchar(50) NOT NULL,
-  `data_resposta` datetime DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Despejando dados para a tabela `grupo_especial`
---
-
-INSERT INTO `grupo_especial` (`id`, `id_usuario`, `grupo`, `data_resposta`) VALUES
-(7, 3, 'Nenhum', '2025-06-09 21:49:33');
-
---
--- Acionadores `grupo_especial`
---
-DELIMITER $$
-CREATE TRIGGER `trg_update_usuario_grupo_especial` AFTER INSERT ON `grupo_especial` FOR EACH ROW BEGIN
-  UPDATE usuario SET grupo_especial = NEW.grupo WHERE id_usuario = NEW.id_usuario;
-END
-$$
-DELIMITER ;
-DELIMITER $$
-CREATE TRIGGER `trg_update_usuario_grupo_especial_update` AFTER UPDATE ON `grupo_especial` FOR EACH ROW BEGIN
-  UPDATE usuario SET grupo_especial = NEW.grupo WHERE id_usuario = NEW.id_usuario;
-END
-$$
-DELIMITER ;
 
 -- --------------------------------------------------------
 
@@ -242,17 +163,16 @@ CREATE TABLE `usuario` (
   `endereco` varchar(255) NOT NULL,
   `cidade` varchar(255) NOT NULL,
   `nc_usuario` int(10) NOT NULL,
-  `senha` varchar(100) NOT NULL,
-  `grupo_especial` varchar(50) DEFAULT NULL
+  `senha` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Despejando dados para a tabela `usuario`
 --
 
-INSERT INTO `usuario` (`id_usuario`, `nome_usuario`, `cpf`, `email_usuario`, `tel_usuario`, `genero_usuario`, `naci_usuario`, `peso_usuario`, `tipo_sang_usuario`, `med_usuario`, `doen_usuario`, `ale_usuario`, `cep_usuario`, `endereco`, `cidade`, `nc_usuario`, `senha`, `grupo_especial`) VALUES
-(2, 'Miguel Di-Tanno Viganó', '51382943857', 'miguelzin@gmail.com', '19999999999', 'M', '2007-02-20', 80.00, 'O+', '', '', '', '12600074', '', '', 211, '$2y$10$MRpGXV.HXK9B0X17qY6drONp1wnHMGZPJn4mNO8ce0MwB8IssYTS2', NULL),
-(3, 'Rafael Favetta', '45260925840', 'rafaelfavetta@gmail.com', '19981084437', 'M', '2007-09-06', 77.00, 'A+', '', '', '', '13607030', 'Rua Professor Vicente Casale Padovani, Jardim Nossa Senhora de Fátima, Araras - SP', 'Araras', 231, '$2y$10$ArQhH63CSZ4IGYqZK9/.bu8fBKVwLYTTWEI9rNQAfue78k7qHHw2q', 'Nenhum');
+INSERT INTO `usuario` (`id_usuario`, `nome_usuario`, `cpf`, `email_usuario`, `tel_usuario`, `genero_usuario`, `naci_usuario`, `peso_usuario`, `tipo_sang_usuario`, `med_usuario`, `doen_usuario`, `ale_usuario`, `cep_usuario`, `endereco`, `cidade`, `nc_usuario`, `senha`) VALUES
+(2, 'Miguel Di-Tanno Viganó', '51382943857', 'miguelzin@gmail.com', '19999999999', 'M', '2007-02-20', 80.00, 'O+', '', '', '', '12600074', '', '', 211, '$2y$10$MRpGXV.HXK9B0X17qY6drONp1wnHMGZPJn4mNO8ce0MwB8IssYTS2'),
+(3, 'Rafael Favetta', '45260925840', 'rafaelfavetta@gmail.com', '19981084437', 'M', '2007-09-06', 77.00, 'A+', '', '', '', '13607030', 'Rua Professor Vicente Casale Padovani, Jardim Nossa Senhora de Fátima, Araras - SP', 'Araras', 231, '$2y$10$ArQhH63CSZ4IGYqZK9/.bu8fBKVwLYTTWEI9rNQAfue78k7qHHw2q');
 
 -- --------------------------------------------------------
 
@@ -271,67 +191,45 @@ CREATE TABLE `vacina` (
   `idade_meses_reco` smallint(6) DEFAULT NULL,
   `idade_anos_reco` smallint(6) DEFAULT NULL,
   `estoque` int(11) NOT NULL,
-  `id_calendario` int(11) DEFAULT NULL
+  `sus` tinyint(1) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Despejando dados para a tabela `vacina`
 --
 
-INSERT INTO `vacina` (`id_vaci`, `nome_vaci`, `fabri_vaci`, `lote_vaci`, `via_adimicao`, `n_dose`, `intervalo_dose`, `idade_meses_reco`, `idade_anos_reco`, `estoque`, `id_calendario`) VALUES
+INSERT INTO `vacina` (`id_vaci`, `nome_vaci`, `fabri_vaci`, `lote_vaci`, `via_adimicao`, `n_dose`, `intervalo_dose`, `idade_meses_reco`, `idade_anos_reco`, `estoque`, `sus`) VALUES
 (22, 'BCG', 'Instituto Butantan', 'BCG2025A', 'Intradérmica', 1, 0, 0, 0, 10000, 1),
-(24, 'Penta (DTP/Hib/Hepatite B)', 'Fiocruz', 'PENTA2025', 'Intramuscular', 3, 2, 2, 0, 10000, 3),
-(25, 'Poliomielite inativada (VIP)', 'Sanofi', 'VIP2025L01', 'Intramuscular', 4, 2, 2, 0, 10000, 4),
-(27, 'Pneumocócica 10-valente', 'GSK', 'PN10V2025', 'Intramuscular', 3, 2, 2, 0, 10000, 6),
-(28, 'Meningocócica C (conjugada)', 'Fiocruz', 'MENCC2025', 'Intramuscular', 2, 11, 3, 0, 10000, 8),
-(29, 'Rotavírus humano', 'GSK', 'RTH2025', 'Oral', 2, 2, 2, 0, 10000, 10),
-(30, 'Febre amarela', 'Bio-Manguinhos', 'FA2025', 'Subcutânea', 1, 0, 60, 5, 10000, 11),
-(31, 'Tríplice viral (SCR)', 'MSD', 'SCR2025', 'Subcutânea', 2, 3, 12, 1, 10000, 12),
-(33, 'Hepatite A', 'Fiocruz', 'HEPA2025', 'Intramuscular', 2, 6, 12, 1, 10000, 15),
-(34, 'Varicela', 'MSD', 'VARIC2025', 'Subcutânea', 2, 36, 12, 1, 10000, 14),
-(35, 'HPV (quadrivalente/9-valente)', 'MSD', 'HPVQ2025', 'Intramuscular', 2, 6, 108, 9, 10000, 19),
-(37, 'Meningocócica ACWY', 'Fiocruz', 'ACWY2025', 'Intramuscular', 3, 2, 3, 0, 10000, 9),
-(39, 'Hepatite B (adulto)', 'Fiocruz', 'HEPBAD2025', 'Intramuscular', 3, 2, 216, 18, 10000, 18),
-(40, 'Influenza', 'Instituto Butantan', 'INF2025', 'Intramuscular', 1, 0, 108, 9, 10000, 20),
-(41, 'Pneumocócica 23-valente', 'MSD', 'PN23V2025', 'Intramuscular', 1, 0, 60, 5, 10000, 7),
-(42, 'Hepatite B', 'Fiocruz', 'HEPB2025', 'Intramuscular', 3, 1, 0, 0, 10000, 2),
-(44, 'Influenza', 'Instituto Butantan', 'INF2025', 'Intramuscular', 1, 12, 6, 0, 10000, 20),
-(49, 'Poliomielite oral bivalente (VOPb)', 'Instituto Butantan', 'VOP2025B', 'Oral', 0, 0, 3, 0, 10000, 5),
-(50, 'Tetraviral (SCRV)', 'MSD', 'SCRV2025', 'Subcutânea', 2, 3, 12, 1, 10000, 13),
-(51, 'dTpa (adulto/gestante)', 'Sanofi', 'DTPA2025', 'Intramuscular', 1, 0, 216, 18, 10000, 16),
-(53, 'HPV (quadrivalente/9-valente)', 'MSD', 'HPVQ2025', 'Intramuscular', 1, 0, 108, 9, 10000, 19),
-(55, 'Herpes-zóster (RZV)', 'GSK', 'HZ2025', 'Intramuscular', 2, 2, 600, 50, 10000, 22),
-(56, 'Dengue (Qdenga®)', 'Takeda', 'DENG2025', 'Intramuscular', 2, 3, 120, 10, 10000, 23),
-(57, 'VSR (Respiratório)', 'Pfizer', 'VSR2025', 'Intramuscular', 1, 0, 216, 18, 10000, 24),
-(58, 'Raiva (pré-exposição)', 'Bio-Manguinhos', 'RAIVA2025', 'Intramuscular', 0, 1, NULL, NULL, 10000, 25),
-(59, 'Vacinas de viajantes (tifóide, encefalite, etc.)', '—', '—', 'Variável', 0, 0, NULL, NULL, 10000, 26),
-(63, 'Meningocócica C (conjugada)', 'Fiocruz', 'MENCC2025', 'Intramuscular', 2, 2, 3, 0, 10000, 8),
-(64, 'dT (adulto)', 'Fiocruz', 'DT2025F', 'Intramuscular', 10, 120, 84, 7, 10000, 17);
+(24, 'Penta (DTP/Hib/Hepatite B)', 'Fiocruz', 'PENTA2025', 'Intramuscular', 3, 2, 2, 0, 10000, 1),
+(25, 'Poliomielite inativada (VIP)', 'Sanofi', 'VIP2025L01', 'Intramuscular', 4, 2, 2, 0, 10000, 1),
+(27, 'Pneumocócica 10-valente', 'GSK', 'PN10V2025', 'Intramuscular', 3, 2, 2, 0, 10000, 1),
+(28, 'Meningocócica C (conjugada)', 'Fiocruz', 'MENCC2025', 'Intramuscular', 2, 11, 3, 0, 10000, 1),
+(29, 'Rotavírus humano', 'GSK', 'RTH2025', 'Oral', 2, 2, 2, 0, 10000, 1),
+(30, 'Febre amarela', 'Bio-Manguinhos', 'FA2025', 'Subcutânea', 1, 0, 60, 5, 10000, 1),
+(31, 'Tríplice viral (SCR)', 'MSD', 'SCR2025', 'Subcutânea', 2, 3, 12, 1, 10000, 1),
+(33, 'Hepatite A', 'Fiocruz', 'HEPA2025', 'Intramuscular', 2, 6, 12, 1, 10000, 1),
+(34, 'Varicela', 'MSD', 'VARIC2025', 'Subcutânea', 2, 36, 12, 1, 10000, 1),
+(35, 'HPV (quadrivalente/9-valente)', 'MSD', 'HPVQ2025', 'Intramuscular', 2, 6, 108, 9, 10000, 1),
+(37, 'Meningocócica ACWY', 'Fiocruz', 'ACWY2025', 'Intramuscular', 3, 2, 3, 0, 10000, 1),
+(39, 'Hepatite B (adulto)', 'Fiocruz', 'HEPBAD2025', 'Intramuscular', 3, 2, 216, 18, 10000, 1),
+(40, 'Influenza', 'Instituto Butantan', 'INF2025', 'Intramuscular', 1, 0, 108, 9, 10000, 1),
+(41, 'Pneumocócica 23-valente', 'MSD', 'PN23V2025', 'Intramuscular', 1, 0, 60, 5, 10000, 1),
+(42, 'Hepatite B', 'Fiocruz', 'HEPB2025', 'Intramuscular', 3, 1, 0, 0, 10000, 1),
+(44, 'Influenza', 'Instituto Butantan', 'INF2025', 'Intramuscular', 1, 12, 6, 0, 10000, 1),
+(49, 'Poliomielite oral bivalente (VOPb)', 'Instituto Butantan', 'VOP2025B', 'Oral', 0, 0, 3, 0, 10000, 1),
+(50, 'Tetraviral (SCRV)', 'MSD', 'SCRV2025', 'Subcutânea', 2, 3, 12, 1, 10000, 1),
+(51, 'dTpa (adulto/gestante)', 'Sanofi', 'DTPA2025', 'Intramuscular', 1, 0, 216, 18, 10000, 1),
+(53, 'HPV (quadrivalente/9-valente)', 'MSD', 'HPVQ2025', 'Intramuscular', 1, 0, 108, 9, 10000, 1),
+(55, 'Herpes-zóster (RZV)', 'GSK', 'HZ2025', 'Intramuscular', 2, 2, 600, 50, 10000, 1),
+(56, 'Dengue (Qdenga®)', 'Takeda', 'DENG2025', 'Intramuscular', 2, 3, 120, 10, 10000, 0),
+(57, 'VSR (Respiratório)', 'Pfizer', 'VSR2025', 'Intramuscular', 1, 0, 216, 18, 10000, 0),
+(58, 'Raiva (pré-exposição)', 'Bio-Manguinhos', 'RAIVA2025', 'Intramuscular', 0, 1, NULL, NULL, 10000, 0),
+(59, 'Vacinas de viajantes (tifóide, encefalite, etc.)', '—', '—', 'Variável', 0, 0, NULL, NULL, 10000, 0),
+(63, 'Meningocócica C (conjugada)', 'Fiocruz', 'MENCC2025', 'Intramuscular', 2, 2, 3, 0, 10000, 1),
+(64, 'dT (adulto)', 'Fiocruz', 'DT2025F', 'Intramuscular', 10, 120, 84, 7, 10000, 1);
 
 -- --------------------------------------------------------
 
---
--- Estrutura para tabela `vacina_contraindicada`
---
-
-CREATE TABLE `vacina_contraindicada` (
-  `id` int(11) NOT NULL,
-  `grupo_especial` varchar(100) NOT NULL,
-  `id_calendario` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Despejando dados para a tabela `vacina_contraindicada`
---
-
-INSERT INTO `vacina_contraindicada` (`id`, `grupo_especial`, `id_calendario`) VALUES
-(1, 'Imunodeprimido', 11),
-(2, 'Gestante', 12),
-(3, 'Imunodeprimido', 12),
-(4, 'Gestante', 14),
-(5, 'Imunodeprimido', 14),
-(6, 'Gestante', 13),
-(7, 'Imunodeprimido', 13);
 
 --
 -- Índices para tabelas despejadas
@@ -355,11 +253,7 @@ ALTER TABLE `atestado`
   ADD KEY `id_paci` (`id_paci`),
   ADD KEY `id_medico` (`id_medico`);
 
---
--- Índices de tabela `calendario_vacinal`
---
-ALTER TABLE `calendario_vacinal`
-  ADD PRIMARY KEY (`id_calendario`);
+
 
 --
 -- Índices de tabela `campanha`
@@ -367,12 +261,6 @@ ALTER TABLE `calendario_vacinal`
 ALTER TABLE `campanha`
   ADD PRIMARY KEY (`id_campanha`);
 
---
--- Índices de tabela `grupo_especial`
---
-ALTER TABLE `grupo_especial`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `id_usuario` (`id_usuario`);
 
 --
 -- Índices de tabela `medico`
@@ -398,15 +286,8 @@ ALTER TABLE `usuario`
 -- Índices de tabela `vacina`
 --
 ALTER TABLE `vacina`
-  ADD PRIMARY KEY (`id_vaci`),
-  ADD KEY `idx_vaci_calendario` (`id_calendario`);
+  ADD PRIMARY KEY (`id_vaci`);
 
---
--- Índices de tabela `vacina_contraindicada`
---
-ALTER TABLE `vacina_contraindicada`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `id_calendario` (`id_calendario`);
 
 --
 -- AUTO_INCREMENT para tabelas despejadas
@@ -422,13 +303,7 @@ ALTER TABLE `aplicacao`
 -- AUTO_INCREMENT de tabela `atestado`
 --
 ALTER TABLE `atestado`
-  MODIFY `id_atestado` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
-
---
--- AUTO_INCREMENT de tabela `calendario_vacinal`
---
-ALTER TABLE `calendario_vacinal`
-  MODIFY `id_calendario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+  MODIFY `id_atestado` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;--
 
 --
 -- AUTO_INCREMENT de tabela `campanha`
@@ -437,10 +312,7 @@ ALTER TABLE `campanha`
   MODIFY `id_campanha` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
--- AUTO_INCREMENT de tabela `grupo_especial`
---
-ALTER TABLE `grupo_especial`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+
 
 --
 -- AUTO_INCREMENT de tabela `medico`
@@ -466,11 +338,6 @@ ALTER TABLE `usuario`
 ALTER TABLE `vacina`
   MODIFY `id_vaci` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=65;
 
---
--- AUTO_INCREMENT de tabela `vacina_contraindicada`
---
-ALTER TABLE `vacina_contraindicada`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- Restrições para tabelas despejadas
@@ -493,10 +360,6 @@ ALTER TABLE `atestado`
   ADD CONSTRAINT `atestado_ibfk_2` FOREIGN KEY (`id_medico`) REFERENCES `medico` (`id_medico`);
 
 --
--- Restrições para tabelas `grupo_especial`
---
-ALTER TABLE `grupo_especial`
-  ADD CONSTRAINT `grupo_especial_ibfk_1` FOREIGN KEY (`id_usuario`) REFERENCES `usuario` (`id_usuario`) ON DELETE CASCADE;
 
 --
 -- Restrições para tabelas `medico`
@@ -504,19 +367,9 @@ ALTER TABLE `grupo_especial`
 ALTER TABLE `medico`
   ADD CONSTRAINT `medico_ibfk_1` FOREIGN KEY (`id_posto`) REFERENCES `posto` (`id_posto`);
 
---
--- Restrições para tabelas `vacina`
---
-ALTER TABLE `vacina`
-  ADD CONSTRAINT `fk_vaci_calendario` FOREIGN KEY (`id_calendario`) REFERENCES `calendario_vacinal` (`id_calendario`);
-
---
--- Restrições para tabelas `vacina_contraindicada`
---
-ALTER TABLE `vacina_contraindicada`
-  ADD CONSTRAINT `vacina_contraindicada_ibfk_1` FOREIGN KEY (`id_calendario`) REFERENCES `calendario_vacinal` (`id_calendario`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+-- Não crie as tabelas calendario_vacinal ou grupo_especial

@@ -1,41 +1,45 @@
 <?php
 header('Content-Type: application/json');
-include(__DIR__ . '/../outros/db_connect.php');
+include('../outros/db_connect.php');
 
-$mensagem = '';
+// Recebe dados do POST
+$lote = $_POST['lote'] ?? '';
+$nome = $_POST['nome'] ?? '';
+$fabricante = $_POST['fabricante'] ?? '';
+$doses = $_POST['doses'] ?? '';
+$via = $_POST['via'] ?? '';
+$intervalo = $_POST['intervalo'] ?? '';
+$idade_aplica = $_POST['idade_aplica'] ?? '';
+$estoque = $_POST['estoque'] ?? '';
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $nome_vacina = $_POST["nome"];
-    $fabricante = $_POST["fabricante"];
-    $lote = $_POST["lote"];
-    $idade_aplica = $_POST["idade_aplica"];
-    $idade_meses_reco = isset($_POST['idade_meses_reco']) && $_POST['idade_meses_reco'] !== '' ? intval($_POST['idade_meses_reco']) : 0;
-    $idade_anos_reco = isset($_POST['idade_anos_reco']) && $_POST['idade_anos_reco'] !== '' ? intval($_POST['idade_anos_reco']) : 0;
-    $via = $_POST["via"];
-    $doses = $_POST["doses"];
-    $intervalo = isset($_POST['intervalo']) ? preg_replace('/\D/', '', $_POST['intervalo']) : '';
-    $estoque = $_POST['estoque'];
-    $origem = isset($_POST['origem']) ? htmlspecialchars($_POST['origem']) : 'admin';
-
-    if (empty($nome_vacina) || empty($fabricante) || empty($lote) || empty($idade_aplica) || empty($via) || empty($doses) || empty($intervalo) || empty($estoque)) {
-        http_response_code(400);
-        echo json_encode(['success' => false, 'message' => "Por favor, preencha todos os campos obrigatórios."]);
-        exit;
-    }
-
-    $sql = "INSERT INTO vacina (nome_vaci, lote_vaci, fabri_vaci, idade_aplica, via_adimicao, n_dose, intervalo_dose, estoque, idade_meses_reco, idade_anos_reco) 
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("sssisiisii", $nome_vacina, $lote, $fabricante, $idade_aplica, $via, $doses, $intervalo, $estoque, $idade_meses_reco, $idade_anos_reco);
-
-    if ($stmt->execute()) {
-        echo json_encode(['success' => true, 'message' => "Cadastro de vacina realizado com sucesso!"]);
-    } else {
-        http_response_code(500);
-        echo json_encode(['success' => false, 'message' => "Erro ao cadastrar vacina: " . $stmt->error]);
-    }
+// Validação básica
+if (!$lote || !$nome || !$fabricante || $doses === '' || !$via || $intervalo === '' || $idade_aplica === '' || $estoque === '') {
+    echo json_encode(['success' => false, 'message' => 'Preencha todos os campos obrigatórios.']);
     exit;
 }
-echo json_encode(['success' => false, 'message' => "Método inválido."]);
-exit;
+
+// Exemplo: supondo que idade_aplica seja em anos
+$idade_anos_reco = intval($idade_aplica);
+$idade_meses_reco = 0;
+
+// Ajuste conforme sua tabela, por exemplo, se id_calendario for obrigatório:
+// $id_calendario = null; // ou obtenha pelo nome da vacina, se necessário
+
+$sql = "INSERT INTO vacina (lote_vaci, nome_vaci, fabri_vaci, n_dose, via_adimicao, intervalo_dose, idade_anos_reco, idade_meses_reco, estoque)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+$stmt = $conn->prepare($sql);
+if (!$stmt) {
+    echo json_encode(['success' => false, 'message' => 'Erro no prepare: ' . $conn->error]);
+    exit;
+}
+$stmt->bind_param("sssisiiii", $lote, $nome, $fabricante, $doses, $via, $intervalo, $idade_anos_reco, $idade_meses_reco, $estoque);
+
+if ($stmt->execute()) {
+    echo json_encode(['success' => true, 'message' => 'Vacina cadastrada com sucesso!']);
+} else {
+    echo json_encode(['success' => false, 'message' => 'Erro ao cadastrar: ' . $stmt->error]);
+}
+$stmt->close();
+$conn->close();
 ?>
