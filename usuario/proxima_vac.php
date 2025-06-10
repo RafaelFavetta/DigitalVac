@@ -82,26 +82,17 @@ if ($user_data) {
     $idade_meses_usuario = $dt_hoje->diff($dt_nasc)->y * 12 + $dt_hoje->diff($dt_nasc)->m;
     $idade = $idade_anos;
 
-    // 1. Buscar vacinas obrigatórias do calendário para a idade do usuário (SUS = 1)
-    $sql_calendario = "SELECT * FROM calendario_vacinal WHERE sus = 1";
-    $result_calendario = $conn->query($sql_calendario);
-    $calendario = [];
-    while ($row = $result_calendario->fetch_assoc()) {
-        $row['idade_min'] = 0; // Não usado, mas mantido para compatibilidade
-        $calendario[$row['id_calendario']] = $row;
-    }
-
-    // 2. Buscar vacinas físicas disponíveis (tabela vacina) e associar ao calendário
-    $sql_vacinas = "SELECT v.*, c.sus, c.nome_vacina, c.doses_obrigatorias, c.doses_recomendadas
-                    FROM vacina v
-                    LEFT JOIN calendario_vacinal c ON v.id_calendario = c.id_calendario";
+    // Buscar vacinas disponíveis (tabela vacina)
+    $sql_vacinas = "SELECT * FROM vacina";
     $result_vacinas = $conn->query($sql_vacinas);
     $vacinas_fisicas = [];
     while ($row = $result_vacinas->fetch_assoc()) {
+        $row['sus'] = isset($row['sus']) ? intval($row['sus']) : 0;
+        $row['nome_vacina'] = $row['nome_vaci'];
         $vacinas_fisicas[$row['id_vaci']] = $row;
     }
 
-    // 3. Buscar vacinas já aplicadas ao usuário (inclui datas)
+    // Buscar vacinas já aplicadas ao usuário (inclui datas)
     $sql_aplicadas = "SELECT id_vaci, COUNT(*) as doses_tomadas, MAX(data_aplica) as ultima_data FROM aplicacao WHERE id_usuario = ? GROUP BY id_vaci";
     $stmt_aplicadas = $conn->prepare($sql_aplicadas);
     $stmt_aplicadas->bind_param("i", $user_id);
@@ -128,11 +119,9 @@ if ($user_data) {
     // Verifica vacinas obrigatórias com doses pendentes
     foreach ($vacinas_fisicas as $id_vaci => $vacina) {
         if ($vacina['sus'] != 1) continue;
-        // Doses obrigatórias (campo da vacina)
         $n_obrig = isset($vacina['n_dose']) ? intval($vacina['n_dose']) : 0;
         if ($n_obrig <= 0) continue;
 
-        // Filtro por gênero para vacinas de gestante
         if (stripos($vacina['nome_vacina'], 'gestante') !== false && $genero_usuario !== 'F') continue;
 
         $doses_tomadas = isset($vacinas_aplicadas[$id_vaci]) ? $vacinas_aplicadas[$id_vaci]['doses_tomadas'] : 0;
@@ -145,12 +134,9 @@ if ($user_data) {
         }
     }
 
-    // 6. Vacinas opcionais (SUS=0) que o usuário nunca tomou
+    // Vacinas opcionais (SUS=0) que o usuário nunca tomou
     foreach ($vacinas_fisicas as $id_vaci => $vacina) {
         if ($vacina['sus'] != 0) continue;
-        // Remova o filtro de $n_obrig <= 0 para mostrar todas as vacinas opcionais
-        // $n_obrig = isset($vacina['n_dose']) ? intval($vacina['n_dose']) : 0;
-        // if ($n_obrig <= 0) continue;
         if (stripos($vacina['nome_vacina'], 'gestante') !== false && $genero_usuario !== 'F') continue;
         if (empty($vacinas_aplicadas[$id_vaci])) {
             if ($pesquisa === '' || stripos($vacina['nome_vacina'], $pesquisa) !== false) {
@@ -291,12 +277,13 @@ if (
             } else {
                 $idade_anos = isset($vacina['idade_anos_reco']) ? intval($vacina['idade_anos_reco']) : 0;
                 $idade_meses = isset($vacina['idade_meses_reco']) ? intval($vacina['idade_meses_reco']) : 0;
+                // Exibe idade apenas se houver valor, senão mostra "-"
                 if ($idade_anos > 0) {
                     $idade_label = $idade_anos . " anos";
                 } elseif ($idade_meses > 0) {
                     $idade_label = $idade_meses . " meses";
                 } else {
-                    $idade_label = "Ao nascer";
+                    $idade_label = "-";
                 }
             }
             ?>
@@ -601,12 +588,13 @@ if (
                                 } else {
                                     $idade_anos = isset($vacina['idade_anos_reco']) ? intval($vacina['idade_anos_reco']) : 0;
                                     $idade_meses = isset($vacina['idade_meses_reco']) ? intval($vacina['idade_meses_reco']) : 0;
+                                    // Exibe idade apenas se houver valor, senão mostra "-"
                                     if ($idade_anos > 0) {
                                         $idade_label = $idade_anos . " anos";
                                     } elseif ($idade_meses > 0) {
                                         $idade_label = $idade_meses . " meses";
                                     } else {
-                                        $idade_label = "Ao nascer";
+                                        $idade_label = "-";
                                     }
                                 }
                                 ?>
