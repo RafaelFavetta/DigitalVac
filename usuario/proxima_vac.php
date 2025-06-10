@@ -159,69 +159,28 @@ if (
             <?php endif; ?>
         </tr>
         <?php
-        // Ordena as vacinas obrigatórias pendentes igual à medica/listavac.php (ordenação por prioridade especial)
-        usort($vacinas_obrigatorias_pendentes, function($a, $b) {
-            $nomeA = isset($a['nome_vacina']) ? $a['nome_vacina'] : '';
-            $nomeB = isset($b['nome_vacina']) ? $b['nome_vacina'] : '';
+        // Adicione este bloco antes do foreach das vacinas obrigatórias pendentes
+        // Ordena as vacinas obrigatórias pendentes pela data da próxima dose (idade recomendada)
+        usort($vacinas_obrigatorias_pendentes, function($a, $b) use ($vacinas_aplicadas, $idade_meses_usuario, $data_nascimento) {
+            $aplicadaA = isset($vacinas_aplicadas[$a['id_vaci']]) ? $vacinas_aplicadas[$a['id_vaci']] : null;
+            $aplicadaB = isset($vacinas_aplicadas[$b['id_vaci']]) ? $vacinas_aplicadas[$b['id_vaci']] : null;
+            list($dataA, ) = calcular_proxima_dose($a, $aplicadaA, $idade_meses_usuario, $data_nascimento);
+            list($dataB, ) = calcular_proxima_dose($b, $aplicadaB, $idade_meses_usuario, $data_nascimento);
 
-            $idadeA = (isset($a['idade_anos_reco']) ? intval($a['idade_anos_reco']) : 0) * 12 +
-                      (isset($a['idade_meses_reco']) ? intval($a['idade_meses_reco']) : 0);
-            $idadeB = (isset($b['idade_anos_reco']) ? intval($b['idade_anos_reco']) : 0) * 12 +
-                      (isset($b['idade_meses_reco']) ? intval($b['idade_meses_reco']) : 0);
+            // Extrai a data (pode vir com " (Atrasada)")
+            $dataA = preg_replace('/ \(Atrasada\)$/', '', $dataA);
+            $dataB = preg_replace('/ \(Atrasada\)$/', '', $dataB);
 
-            // Critério de ordenação especial igual à medica/listavac.php
-            $idade_ordenacaoA = $idadeA;
-            $idade_ordenacaoB = $idadeB;
+            // Datas "Ao nascer" ou "-" vão para o início
+            if ($dataA === 'Ao nascer') return -1;
+            if ($dataB === 'Ao nascer') return 1;
+            if ($dataA === '-') return 1;
+            if ($dataB === '-') return -1;
 
-            if (
-                stripos($nomeA, 'VSR') !== false ||
-                stripos($nomeA, 'Raiva') !== false ||
-                stripos($nomeA, 'viajantes') !== false
-            ) {
-                $idade_ordenacaoA = -2;
-            } elseif (
-                (isset($a['id_vaci']) && ($a['id_vaci'] == 22 || $a['id_vaci'] == 23)) || $idadeA === 0
-            ) {
-                $idade_ordenacaoA = -1;
-            } elseif (stripos($nomeA, 'Herpes-zóster') !== false || stripos($nomeA, 'RZV') !== false) {
-                $idade_ordenacaoA = 50 * 12;
-            } elseif (stripos($nomeA, 'Dengue') !== false || stripos($nomeA, 'Qdenga') !== false) {
-                $idade_ordenacaoA = 10 * 12;
-            } elseif (stripos($nomeA, 'HPV') !== false) {
-                $idade_ordenacaoA = 9 * 12;
-            } elseif (stripos($nomeA, 'Influenza') !== false) {
-                $idade_ordenacaoA = 9 * 12;
-            } elseif (stripos($nomeA, 'dTpa (adulto/gestante)') !== false) {
-                $idade_ordenacaoA = 18 * 12;
-            } elseif (stripos($nomeA, 'Hepatite B') !== false && stripos($nomeA, 'adulto') !== false) {
-                $idade_ordenacaoA = 18 * 12;
-            }
-
-            if (
-                stripos($nomeB, 'VSR') !== false ||
-                stripos($nomeB, 'Raiva') !== false ||
-                stripos($nomeB, 'viajantes') !== false
-            ) {
-                $idade_ordenacaoB = -2;
-            } elseif (
-                (isset($b['id_vaci']) && ($b['id_vaci'] == 22 || $b['id_vaci'] == 23)) || $idadeB === 0
-            ) {
-                $idade_ordenacaoB = -1;
-            } elseif (stripos($nomeB, 'Herpes-zóster') !== false || stripos($nomeB, 'RZV') !== false) {
-                $idade_ordenacaoB = 50 * 12;
-            } elseif (stripos($nomeB, 'Dengue') !== false || stripos($nomeB, 'Qdenga') !== false) {
-                $idade_ordenacaoB = 10 * 12;
-            } elseif (stripos($nomeB, 'HPV') !== false) {
-                $idade_ordenacaoB = 9 * 12;
-            } elseif (stripos($nomeB, 'Influenza') !== false) {
-                $idade_ordenacaoB = 9 * 12;
-            } elseif (stripos($nomeB, 'dTpa (adulto/gestante)') !== false) {
-                $idade_ordenacaoB = 18 * 12;
-            } elseif (stripos($nomeB, 'Hepatite B') !== false && stripos($nomeB, 'adulto') !== false) {
-                $idade_ordenacaoB = 18 * 12;
-            }
-
-            return $idade_ordenacaoA <=> $idade_ordenacaoB;
+            // Converte para timestamp para comparar
+            $tsA = strtotime(str_replace('/', '-', $dataA));
+            $tsB = strtotime(str_replace('/', '-', $dataB));
+            return $tsA <=> $tsB;
         });
 
         $rowIndex = 0;
@@ -238,48 +197,14 @@ if (
                         // Exibe idade recomendada fixa da vacina
                         $idade_meses = isset($vacina['idade_meses_reco']) ? intval($vacina['idade_meses_reco']) : 0;
                         $idade_anos = isset($vacina['idade_anos_reco']) ? intval($vacina['idade_anos_reco']) : 0;
-                        $nome = isset($vacina['nome_vacina']) ? $vacina['nome_vacina'] : '';
-                        // Correção das idades especiais
-                        if (
-                            stripos($nome, 'Herpes-zóster') !== false || stripos($nome, 'RZV') !== false
-                        ) {
-                            echo "50 anos";
-                        } elseif (
-                            stripos($nome, 'Dengue') !== false || stripos($nome, 'Qdenga') !== false
-                        ) {
-                            echo "10 anos";
-                        } elseif (
-                            stripos($nome, 'HPV') !== false
-                        ) {
-                            echo "9 anos";
-                        } elseif (
-                            stripos($nome, 'Influenza') !== false
-                        ) {
-                            echo "9 anos";
-                        } elseif (
-                            stripos($nome, 'Hepatite B (adulto)') !== false
-                        ) {
-                            echo "18 anos";
-                        } elseif (
-                            stripos($nome, 'Hepatite B') !== false && stripos($nome, 'adulto') !== false
-                        ) {
-                            echo "18 anos";
-                        } elseif (
-                            stripos($nome, 'VSR') !== false ||
-                            stripos($nome, 'Raiva') !== false ||
-                            stripos($nome, 'viajantes') !== false
-                        ) {
-                            echo "A qualquer momento";
+                        $total_meses = $idade_anos * 12 + $idade_meses;
+                        if ($total_meses === 0) {
+                            echo "Ao nascer";
+                        } elseif ($total_meses < 24) {
+                            echo $total_meses . " meses";
                         } else {
-                            $total_meses = $idade_anos * 12 + $idade_meses;
-                            if ($total_meses === 0) {
-                                echo "Ao nascer";
-                            } elseif ($total_meses < 24) {
-                                echo $total_meses . " meses";
-                            } else {
-                                $anos = floor($total_meses / 12);
-                                echo $anos . " anos";
-                            }
+                            $anos = floor($total_meses / 12);
+                            echo $anos . " anos";
                         }
                     ?>
                 </td>
@@ -314,48 +239,6 @@ if (
             <?php endif; ?>
         </tr>
         <?php
-        // Ordena as vacinas opcionais igual à medica/listavac.php
-        usort($vacinas_opcionais_nao_tomadas, function($a, $b) {
-            $nomeA = isset($a['nome_vacina']) ? $a['nome_vacina'] : '';
-            $nomeB = isset($b['nome_vacina']) ? $b['nome_vacina'] : '';
-
-            $idadeA = (isset($a['idade_anos_reco']) ? intval($a['idade_anos_reco']) : 0) * 12 +
-                      (isset($a['idade_meses_reco']) ? intval($a['idade_meses_reco']) : 0);
-            $idadeB = (isset($b['idade_anos_reco']) ? intval($b['idade_anos_reco']) : 0) * 12 +
-                      (isset($b['idade_meses_reco']) ? intval($b['idade_meses_reco']) : 0);
-
-            $idade_ordenacaoA = $idadeA;
-            $idade_ordenacaoB = $idadeB;
-
-            if (
-                stripos($nomeA, 'VSR') !== false ||
-                stripos($nomeA, 'Raiva') !== false ||
-                stripos($nomeA, 'viajantes') !== false
-            ) $idade_ordenacaoA = -2;
-            elseif ($idadeA === 0) $idade_ordenacaoA = -1;
-            elseif (stripos($nomeA, 'Herpes-zóster') !== false || stripos($nomeA, 'RZV') !== false) $idade_ordenacaoA = 50*12;
-            elseif (stripos($nomeA, 'Dengue') !== false || stripos($nomeA, 'Qdenga') !== false) $idade_ordenacaoA = 10*12;
-            elseif (stripos($nomeA, 'HPV') !== false) $idade_ordenacaoA = 9*12;
-            elseif (stripos($nomeA, 'Influenza') !== false) $idade_ordenacaoA = 9*12;
-            elseif (stripos($nomeA, 'dTpa (adulto/gestante)') !== false) $idade_ordenacaoA = 18*12;
-            elseif (stripos($nomeA, 'Hepatite B') !== false && stripos($nomeA, 'adulto') !== false) $idade_ordenacaoA = 18*12;
-
-            if (
-                stripos($nomeB, 'VSR') !== false ||
-                stripos($nomeB, 'Raiva') !== false ||
-                stripos($nomeB, 'viajantes') !== false
-            ) $idade_ordenacaoB = -2;
-            elseif ($idadeB === 0) $idade_ordenacaoB = -1;
-            elseif (stripos($nomeB, 'Herpes-zóster') !== false || stripos($nomeB, 'RZV') !== false) $idade_ordenacaoB = 50*12;
-            elseif (stripos($nomeB, 'Dengue') !== false || stripos($nomeB, 'Qdenga') !== false) $idade_ordenacaoB = 10*12;
-            elseif (stripos($nomeB, 'HPV') !== false) $idade_ordenacaoB = 9*12;
-            elseif (stripos($nomeB, 'Influenza') !== false) $idade_ordenacaoB = 9*12;
-            elseif (stripos($nomeB, 'dTpa (adulto/gestante)') !== false) $idade_ordenacaoB = 18*12;
-            elseif (stripos($nomeB, 'Hepatite B') !== false && stripos($nomeB, 'adulto') !== false) $idade_ordenacaoB = 18*12;
-
-            return $idade_ordenacaoA <=> $idade_ordenacaoB;
-        });
-
         $rowIndex = 0;
         foreach ($vacinas_opcionais_nao_tomadas as $vacina):
             $rowClass = ($rowIndex === 0) ? 'bg-white' : (($rowIndex % 2 === 1) ? 'table-secondary' : 'bg-white');
@@ -622,48 +505,14 @@ if (
                                             // Exibe idade recomendada fixa da vacina
                                             $idade_meses = isset($vacina['idade_meses_reco']) ? intval($vacina['idade_meses_reco']) : 0;
                                             $idade_anos = isset($vacina['idade_anos_reco']) ? intval($vacina['idade_anos_reco']) : 0;
-                                            $nome = isset($vacina['nome_vacina']) ? $vacina['nome_vacina'] : '';
-                                            // Correção das idades especiais
-                                            if (
-                                                stripos($nome, 'Herpes-zóster') !== false || stripos($nome, 'RZV') !== false
-                                            ) {
-                                                echo "50 anos";
-                                            } elseif (
-                                                stripos($nome, 'Dengue') !== false || stripos($nome, 'Qdenga') !== false
-                                            ) {
-                                                echo "10 anos";
-                                            } elseif (
-                                                stripos($nome, 'HPV') !== false
-                                            ) {
-                                                echo "9 anos";
-                                            } elseif (
-                                                stripos($nome, 'Influenza') !== false
-                                            ) {
-                                                echo "9 anos";
-                                            } elseif (
-                                                stripos($nome, 'Hepatite B (adulto)') !== false
-                                            ) {
-                                                echo "18 anos";
-                                            } elseif (
-                                                stripos($nome, 'Hepatite B') !== false && stripos($nome, 'adulto') !== false
-                                            ) {
-                                                echo "18 anos";
-                                            } elseif (
-                                                stripos($nome, 'VSR') !== false ||
-                                                stripos($nome, 'Raiva') !== false ||
-                                                stripos($nome, 'viajantes') !== false
-                                            ) {
-                                                echo "A qualquer momento";
+                                            $total_meses = $idade_anos * 12 + $idade_meses;
+                                            if ($total_meses === 0) {
+                                                echo "Ao nascer";
+                                            } elseif ($total_meses < 24) {
+                                                echo $total_meses . " meses";
                                             } else {
-                                                $total_meses = $idade_anos * 12 + $idade_meses;
-                                                if ($total_meses === 0) {
-                                                    echo "Ao nascer";
-                                                } elseif ($total_meses < 24) {
-                                                    echo $total_meses . " meses";
-                                                } else {
-                                                    $anos = floor($total_meses / 12);
-                                                    echo $anos . " anos";
-                                                }
+                                                $anos = floor($total_meses / 12);
+                                                echo $anos . " anos";
                                             }
                                         ?>
                                     </td>
