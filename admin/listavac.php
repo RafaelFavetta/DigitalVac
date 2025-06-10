@@ -252,6 +252,10 @@ usort($vacinas_opcionais, function($a, $b) {
                                 ) {
                                     echo "9 anos";
                                 } elseif (
+                                    stripos($nome, 'dTpa (adulto/gestante)') !== false
+                                ) {
+                                    echo "18 anos";
+                                } elseif (
                                     stripos($nome, 'Hepatite B') !== false && stripos($nome, 'adulto') !== false
                                 ) {
                                     echo "18 anos";
@@ -325,6 +329,10 @@ usort($vacinas_opcionais, function($a, $b) {
                                     stripos($nome, 'Influenza') !== false
                                 ) {
                                     echo "9 anos";
+                                } elseif (
+                                    stripos($nome, 'dTpa (adulto/gestante)') !== false
+                                ) {
+                                    echo "18 anos";
                                 } elseif (
                                     stripos($nome, 'Hepatite B') !== false && stripos($nome, 'adulto') !== false
                                 ) {
