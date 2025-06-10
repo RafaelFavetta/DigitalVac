@@ -96,16 +96,45 @@ $conn->close();
                 <li class="list-group-item">
                     <strong>Idade de Aplicação Recomendada:</strong>
                     <?php
-                        $idade_meses = isset($row['idade_meses_reco']) ? intval($row['idade_meses_reco']) : 0;
-                        $idade_anos = isset($row['idade_anos_reco']) ? intval($row['idade_anos_reco']) : 0;
-                        $total_meses = $idade_anos * 12 + $idade_meses;
-                        if ($total_meses === 0) {
-                            echo "Ao nascer";
-                        } elseif ($total_meses < 24) {
-                            echo $total_meses . " meses";
+                        $nome = $row['nome_vaci'];
+                        if (
+                            stripos($nome, 'Herpes-zóster') !== false || stripos($nome, 'RZV') !== false
+                        ) {
+                            echo "50 anos";
+                        } elseif (
+                            stripos($nome, 'Dengue') !== false || stripos($nome, 'Qdenga') !== false
+                        ) {
+                            echo "10 anos";
+                        } elseif (
+                            stripos($nome, 'HPV') !== false
+                        ) {
+                            echo "9 anos";
+                        } elseif (
+                            stripos($nome, 'Influenza') !== false
+                        ) {
+                            echo "9 anos";
+                        } elseif (
+                            stripos($nome, 'Hepatite B') !== false && stripos($nome, 'adulto') !== false
+                        ) {
+                            echo "18 anos";
+                        } elseif (
+                            stripos($nome, 'VSR') !== false ||
+                            stripos($nome, 'Raiva') !== false ||
+                            stripos($nome, 'viajantes') !== false
+                        ) {
+                            echo "A qualquer momento";
                         } else {
-                            $anos = floor($total_meses / 12);
-                            echo $anos . " anos";
+                            $idade_meses = isset($row['idade_meses_reco']) ? intval($row['idade_meses_reco']) : 0;
+                            $idade_anos = isset($row['idade_anos_reco']) ? intval($row['idade_anos_reco']) : 0;
+                            $total_meses = $idade_anos * 12 + $idade_meses;
+                            if ($total_meses === 0) {
+                                echo "Ao nascer";
+                            } elseif ($total_meses < 24) {
+                                echo $total_meses . " meses";
+                            } else {
+                                $anos = floor($total_meses / 12);
+                                echo $anos . " anos";
+                            }
                         }
                     ?>
                 </li>

@@ -51,7 +51,7 @@ while ($row = $result->fetch_assoc()) {
     $row['idade_total_meses'] = $idade_meses;
     $vacinas[] = $row;
 }
-// Ordena pelo campo idade_total_meses
+// Ordena pelo campo idade_total_meses (idade de aplicação)
 usort($vacinas, function ($a, $b) {
     return $a['idade_total_meses'] <=> $b['idade_total_meses'];
 });
@@ -195,13 +195,33 @@ usort($vacinas, function ($a, $b) {
                             <td><?php echo htmlspecialchars($row['lote_vaci']); ?></td>
                             <td>
                                 <?php
-                                // Exibe "A qualquer momento" para vacinas específicas
-                                $nomes_a_qualquer_momento = [
-                                    'Vacinas de viajantes (tifóide, encefalite, etc.)',
-                                    'Raiva (pré-exposição)',
-                                    'dTpa (adulto/gestante)'
-                                ];
-                                if (in_array($row['nome_vaci'], $nomes_a_qualquer_momento)) {
+                                // Exibe "A qualquer momento" ou idade especial para vacinas específicas
+                                $nome = $row['nome_vaci'];
+                                if (
+                                    stripos($nome, 'Herpes-zóster') !== false || stripos($nome, 'RZV') !== false
+                                ) {
+                                    echo "50 anos";
+                                } elseif (
+                                    stripos($nome, 'Dengue') !== false || stripos($nome, 'Qdenga') !== false
+                                ) {
+                                    echo "10 anos";
+                                } elseif (
+                                    stripos($nome, 'HPV') !== false
+                                ) {
+                                    echo "9 anos";
+                                } elseif (
+                                    stripos($nome, 'Influenza') !== false
+                                ) {
+                                    echo "9 anos";
+                                } elseif (
+                                    stripos($nome, 'Hepatite B') !== false && stripos($nome, 'adulto') !== false
+                                ) {
+                                    echo "18 anos";
+                                } elseif (
+                                    stripos($nome, 'VSR') !== false ||
+                                    stripos($nome, 'Raiva') !== false ||
+                                    stripos($nome, 'viajantes') !== false
+                                ) {
                                     echo "A qualquer momento";
                                 } else {
                                     $idade_meses = isset($row['idade_meses_reco']) ? intval($row['idade_meses_reco']) : 0;
