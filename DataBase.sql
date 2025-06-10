@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 10/06/2025 às 01:47
+-- Tempo de geração: 10/06/2025 às 02:50
 -- Versão do servidor: 10.4.32-MariaDB
 -- Versão do PHP: 8.0.30
 
@@ -51,15 +51,6 @@ CREATE TABLE `atestado` (
   `data_fim` date NOT NULL,
   `justificativa` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Despejando dados para a tabela `atestado`
---
-
-INSERT INTO `atestado` (`id_atestado`, `id_paci`, `id_medico`, `data_inicio`, `data_fim`, `justificativa`) VALUES
-(1, 1, 1, '2025-05-01', '2025-05-07', 'Repouso por febre.'),
-(2, 1, 2, '2025-05-08', '2025-05-14', 'Repouso por dor muscular.'),
-(3, 1, 3, '2025-05-15', '2025-05-21', 'Repouso por recuperação pós-vacina.');
 
 -- --------------------------------------------------------
 
@@ -150,11 +141,7 @@ CREATE TABLE `grupo_especial` (
 --
 
 INSERT INTO `grupo_especial` (`id`, `id_usuario`, `grupo`, `data_resposta`) VALUES
-(1, 1, 'Nenhum', '2025-06-07 01:40:45'),
-(2, 1, 'Nenhum', '2025-06-07 01:41:52'),
-(3, 1, 'Nenhum', '2025-06-07 01:47:22'),
-(4, 1, 'Gestante', '2025-06-07 01:51:04'),
-(5, 1, 'Nenhum', '2025-06-07 01:51:17');
+(7, 3, 'Nenhum', '2025-06-09 21:49:33');
 
 --
 -- Acionadores `grupo_especial`
@@ -252,6 +239,8 @@ CREATE TABLE `usuario` (
   `doen_usuario` varchar(255) NOT NULL,
   `ale_usuario` varchar(255) NOT NULL,
   `cep_usuario` varchar(8) NOT NULL,
+  `endereco` varchar(255) NOT NULL,
+  `cidade` varchar(255) NOT NULL,
   `nc_usuario` int(10) NOT NULL,
   `senha` varchar(100) NOT NULL,
   `grupo_especial` varchar(50) DEFAULT NULL
@@ -261,9 +250,9 @@ CREATE TABLE `usuario` (
 -- Despejando dados para a tabela `usuario`
 --
 
-INSERT INTO `usuario` (`id_usuario`, `nome_usuario`, `cpf`, `email_usuario`, `tel_usuario`, `genero_usuario`, `naci_usuario`, `peso_usuario`, `tipo_sang_usuario`, `med_usuario`, `doen_usuario`, `ale_usuario`, `cep_usuario`, `nc_usuario`, `senha`, `grupo_especial`) VALUES
-(1, 'Rafael Favetta', '45260925840', 'rafaelfavetta@gmail.com', '19981084437', 'M', '2007-09-06', 77.00, 'A+', '', '', '', '13607030', 231, '$2y$10$7AgFK/3Cj6LkYeq2sB3OmeWAr0s7uys9zIL5C/kuPtykLhxT2bBXi', 'Nenhum'),
-(2, 'Miguel Di-Tanno Viganó', '51382943857', 'miguelzin@gmail.com', '19999999999', 'M', '2007-02-20', 80.00, 'O+', '', '', '', '12600074', 211, '$2y$10$MRpGXV.HXK9B0X17qY6drONp1wnHMGZPJn4mNO8ce0MwB8IssYTS2', NULL);
+INSERT INTO `usuario` (`id_usuario`, `nome_usuario`, `cpf`, `email_usuario`, `tel_usuario`, `genero_usuario`, `naci_usuario`, `peso_usuario`, `tipo_sang_usuario`, `med_usuario`, `doen_usuario`, `ale_usuario`, `cep_usuario`, `endereco`, `cidade`, `nc_usuario`, `senha`, `grupo_especial`) VALUES
+(2, 'Miguel Di-Tanno Viganó', '51382943857', 'miguelzin@gmail.com', '19999999999', 'M', '2007-02-20', 80.00, 'O+', '', '', '', '12600074', '', '', 211, '$2y$10$MRpGXV.HXK9B0X17qY6drONp1wnHMGZPJn4mNO8ce0MwB8IssYTS2', NULL),
+(3, 'Rafael Favetta', '45260925840', 'rafaelfavetta@gmail.com', '19981084437', 'M', '2007-09-06', 77.00, 'A+', '', '', '', '13607030', 'Rua Professor Vicente Casale Padovani, Jardim Nossa Senhora de Fátima, Araras - SP', 'Araras', 231, '$2y$10$ArQhH63CSZ4IGYqZK9/.bu8fBKVwLYTTWEI9rNQAfue78k7qHHw2q', 'Nenhum');
 
 -- --------------------------------------------------------
 
@@ -451,7 +440,7 @@ ALTER TABLE `campanha`
 -- AUTO_INCREMENT de tabela `grupo_especial`
 --
 ALTER TABLE `grupo_especial`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT de tabela `medico`
@@ -469,7 +458,7 @@ ALTER TABLE `posto`
 -- AUTO_INCREMENT de tabela `usuario`
 --
 ALTER TABLE `usuario`
-  MODIFY `id_usuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id_usuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de tabela `vacina`
