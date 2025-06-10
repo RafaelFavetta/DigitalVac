@@ -33,9 +33,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $idade_meses_reco = isset($_POST['idade_meses_reco']) && $_POST['idade_meses_reco'] !== '' ? intval($_POST['idade_meses_reco']) : 0;
     $idade_anos_reco = isset($_POST['idade_anos_reco']) && $_POST['idade_anos_reco'] !== '' ? intval($_POST['idade_anos_reco']) : 0;
 
+    // Corrija a ordem dos tipos do bind_param para corresponder aos tipos dos campos
     $stmt = $conn->prepare("UPDATE vacina SET nome_vaci=?, fabri_vaci=?, lote_vaci=?, idade_aplica=?, via_adimicao=?, n_dose=?, intervalo_dose=?, estoque=?, idade_meses_reco=?, idade_anos_reco=? WHERE id_vaci=?");
     $stmt->bind_param(
-        'sssssisiiii',
+        'sssisiiiiii', // nome_vaci(s), fabri_vaci(s), lote_vaci(s), idade_aplica(i), via_adimicao(s), n_dose(i), intervalo_dose(i), estoque(i), idade_meses_reco(i), idade_anos_reco(i), id_vaci(i)
         $nome_vaci,
         $fabri_vaci,
         $lote_vaci,
@@ -196,11 +197,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             </div>
                         </div>
                         <div class="row mb-2">
-                            <div class="col-md-6">
-                                <label class="form-label fw-bold">Idade Aplicação (meses)</label>
-                                <input type="number" name="idade_aplica" class="form-control" min="0" required
-                                    value="<?php echo htmlspecialchars($vacina['idade_aplica']); ?>">
-                            </div>
                             <div class="col-md-6">
                                 <label class="form-label fw-bold">Número de Doses</label>
                                 <input type="number" name="n_dose" class="form-control" min="0" required
