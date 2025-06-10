@@ -106,7 +106,7 @@ if ($user_data) {
         ];
     }
 
-    // 4. Filtro por pesquisa (AJAX)
+   //Filtro por pesquisa (AJAX)
     $pesquisa = '';
     if (
         isset($_SERVER['HTTP_X_REQUESTED_WITH']) &&
