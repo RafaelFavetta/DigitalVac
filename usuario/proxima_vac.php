@@ -256,28 +256,54 @@ if (
         $rowIndex = 0;
         foreach ($vacinas_opcionais_nao_tomadas as $vacina):
             $rowClass = ($rowIndex === 0) ? 'bg-white' : (($rowIndex % 2 === 1) ? 'table-secondary' : 'bg-white');
+            $nome = isset($vacina['nome_vacina']) ? $vacina['nome_vacina'] : '';
+            $idade_label = '';
+            if (
+                stripos($nome, 'Herpes-zóster') !== false || stripos($nome, 'RZV') !== false
+            ) {
+                $idade_label = "50 anos";
+            } elseif (
+                stripos($nome, 'Dengue') !== false || stripos($nome, 'Qdenga') !== false
+            ) {
+                $idade_label = "10 anos";
+            } elseif (
+                stripos($nome, 'HPV') !== false
+            ) {
+                $idade_label = "9 anos";
+            } elseif (
+                stripos($nome, 'Influenza') !== false
+            ) {
+                $idade_label = "18 anos";
+            } elseif (
+                stripos($nome, 'Hepatite B (adulto)') !== false
+            ) {
+                $idade_label = "18 anos";
+            } elseif (
+                stripos($nome, 'Hepatite B') !== false && stripos($nome, 'adulto') !== false
+            ) {
+                $idade_label = "18 anos";
+            } elseif (
+                stripos($nome, 'VSR') !== false ||
+                stripos($nome, 'Raiva') !== false ||
+                stripos($nome, 'viajantes') !== false
+            ) {
+                $idade_label = "A qualquer momento";
+            } else {
+                $idade_anos = isset($vacina['idade_anos_reco']) ? intval($vacina['idade_anos_reco']) : 0;
+                $idade_meses = isset($vacina['idade_meses_reco']) ? intval($vacina['idade_meses_reco']) : 0;
+                if ($idade_anos > 0) {
+                    $idade_label = $idade_anos . " anos";
+                } elseif ($idade_meses > 0) {
+                    $idade_label = $idade_meses . " meses";
+                } else {
+                    $idade_label = "Ao nascer";
+                }
+            }
             ?>
             <tr class="<?php echo $rowClass; ?>" style="height:38px;">
                 <td style="vertical-align:middle;"><?= htmlspecialchars($vacina['nome_vacina']) ?></td>
                 <td style="vertical-align:middle; text-align:center;">
-                    <?php
-                        if (
-                            (isset($vacina['idade_meses_reco']) && intval($vacina['idade_meses_reco']) === 0) &&
-                            (isset($vacina['idade_anos_reco']) && intval($vacina['idade_anos_reco']) === 0)
-                        ) {
-                            echo "Ao nascer";
-                        } else {
-                            $idade_meses = isset($vacina['idade_meses_reco']) ? intval($vacina['idade_meses_reco']) : 0;
-                            $idade_anos = isset($vacina['idade_anos_reco']) ? intval($vacina['idade_anos_reco']) : 0;
-                            $total_meses = $idade_anos * 12 + $idade_meses;
-                            if ($total_meses < 24) {
-                                echo $total_meses . " meses";
-                            } else {
-                                $anos = floor($total_meses / 12);
-                                echo $anos . " anos";
-                            }
-                        }
-                    ?>
+                    <?= $idade_label ?>
                 </td>
                 <td style="vertical-align:middle; text-align:center;">-</td>
                 <td style="vertical-align:middle; text-align:center;">
@@ -540,22 +566,54 @@ if (
                             $rowIndex = 0;
                             foreach ($vacinas_opcionais_nao_tomadas as $vacina):
                                 $rowClass = ($rowIndex === 0) ? 'bg-white' : (($rowIndex % 2 === 1) ? 'table-secondary' : 'bg-white');
+                                $nome = isset($vacina['nome_vacina']) ? $vacina['nome_vacina'] : '';
+                                $idade_label = '';
+                                if (
+                                    stripos($nome, 'Herpes-zóster') !== false || stripos($nome, 'RZV') !== false
+                                ) {
+                                    $idade_label = "50 anos";
+                                } elseif (
+                                    stripos($nome, 'Dengue') !== false || stripos($nome, 'Qdenga') !== false
+                                ) {
+                                    $idade_label = "10 anos";
+                                } elseif (
+                                    stripos($nome, 'HPV') !== false
+                                ) {
+                                    $idade_label = "9 anos";
+                                } elseif (
+                                    stripos($nome, 'Influenza') !== false
+                                ) {
+                                    $idade_label = "18 anos";
+                                } elseif (
+                                    stripos($nome, 'Hepatite B (adulto)') !== false
+                                ) {
+                                    $idade_label = "18 anos";
+                                } elseif (
+                                    stripos($nome, 'Hepatite B') !== false && stripos($nome, 'adulto') !== false
+                                ) {
+                                    $idade_label = "18 anos";
+                                } elseif (
+                                    stripos($nome, 'VSR') !== false ||
+                                    stripos($nome, 'Raiva') !== false ||
+                                    stripos($nome, 'viajantes') !== false
+                                ) {
+                                    $idade_label = "A qualquer momento";
+                                } else {
+                                    $idade_anos = isset($vacina['idade_anos_reco']) ? intval($vacina['idade_anos_reco']) : 0;
+                                    $idade_meses = isset($vacina['idade_meses_reco']) ? intval($vacina['idade_meses_reco']) : 0;
+                                    if ($idade_anos > 0) {
+                                        $idade_label = $idade_anos . " anos";
+                                    } elseif ($idade_meses > 0) {
+                                        $idade_label = $idade_meses . " meses";
+                                    } else {
+                                        $idade_label = "Ao nascer";
+                                    }
+                                }
                                 ?>
                                 <tr class="<?php echo $rowClass; ?>" style="height:38px;">
                                     <td style="vertical-align:middle;"><?= htmlspecialchars($vacina['nome_vacina']) ?></td>
                                     <td style="vertical-align:middle; text-align:center;">
-                                        <?php
-                                            // Exibe idade recomendada fixa da vacina
-                                            $idade_meses = isset($vacina['idade_meses_reco']) ? intval($vacina['idade_meses_reco']) : 0;
-                                            $idade_anos = isset($vacina['idade_anos_reco']) ? intval($vacina['idade_anos_reco']) : 0;
-                                            $total_meses = $idade_anos * 12 + $idade_meses;
-                                            if ($total_meses < 24) {
-                                                echo $total_meses . " meses";
-                                            } else {
-                                                $anos = floor($total_meses / 12);
-                                                echo $anos . " anos";
-                                            }
-                                        ?>
+                                        <?= $idade_label ?>
                                     </td>
                                     <td style="vertical-align:middle; text-align:center;">-</td>
                                     <td style="vertical-align:middle; text-align:center;">
