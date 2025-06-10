@@ -30,8 +30,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $n_dose = intval($_POST['n_dose']);
     $intervalo_dose = intval($_POST['intervalo_dose']);
     $estoque = intval($_POST['estoque']);
-    $idade_meses_reco = isset($_POST['idade_meses_reco']) ? intval($_POST['idade_meses_reco']) : null;
-    $idade_anos_reco = isset($_POST['idade_anos_reco']) ? intval($_POST['idade_anos_reco']) : null;
+    $idade_meses_reco = isset($_POST['idade_meses_reco']) && $_POST['idade_meses_reco'] !== '' ? intval($_POST['idade_meses_reco']) : 0;
+    $idade_anos_reco = isset($_POST['idade_anos_reco']) && $_POST['idade_anos_reco'] !== '' ? intval($_POST['idade_anos_reco']) : 0;
 
     $stmt = $conn->prepare("UPDATE vacina SET nome_vaci=?, fabri_vaci=?, lote_vaci=?, idade_aplica=?, via_adimicao=?, n_dose=?, intervalo_dose=?, estoque=?, idade_meses_reco=?, idade_anos_reco=? WHERE id_vaci=?");
     $stmt->bind_param(

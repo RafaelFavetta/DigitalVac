@@ -96,13 +96,17 @@ $conn->close();
                 <li class="list-group-item">
                     <strong>Idade de Aplicação Recomendada:</strong>
                     <?php
-                        $idade_meses = isset($row['idade_meses_reco']) ? intval($row['idade_meses_reco']) : null;
-                        $idade_anos = isset($row['idade_anos_reco']) ? intval($row['idade_anos_reco']) : null;
-                        $partes = [];
-                        if ($idade_meses !== null && $idade_meses > 0) $partes[] = $idade_meses . " meses";
-                        if ($idade_anos !== null && $idade_anos > 0) $partes[] = $idade_anos . " anos";
-                        if (empty($partes)) $partes[] = "Não especificado";
-                        echo htmlspecialchars(implode(" / ", $partes));
+                        $idade_meses = isset($row['idade_meses_reco']) ? intval($row['idade_meses_reco']) : 0;
+                        $idade_anos = isset($row['idade_anos_reco']) ? intval($row['idade_anos_reco']) : 0;
+                        $total_meses = $idade_anos * 12 + $idade_meses;
+                        if ($total_meses === 0) {
+                            echo "Ao nascer";
+                        } elseif ($total_meses < 24) {
+                            echo $total_meses . " meses";
+                        } else {
+                            $anos = floor($total_meses / 12);
+                            echo $anos . " anos";
+                        }
                     ?>
                 </li>
                 <li class="list-group-item"><strong>Via de Administração:</strong> <?php echo htmlspecialchars($row['via_adimicao']); ?></li>

@@ -9,8 +9,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $fabricante = $_POST["fabricante"];
     $lote = $_POST["lote"];
     $idade_aplica = $_POST["idade_aplica"];
-    $idade_meses_reco = isset($_POST['idade_meses_reco']) ? intval($_POST['idade_meses_reco']) : null;
-    $idade_anos_reco = isset($_POST['idade_anos_reco']) ? intval($_POST['idade_anos_reco']) : null;
+    $idade_meses_reco = isset($_POST['idade_meses_reco']) && $_POST['idade_meses_reco'] !== '' ? intval($_POST['idade_meses_reco']) : 0;
+    $idade_anos_reco = isset($_POST['idade_anos_reco']) && $_POST['idade_anos_reco'] !== '' ? intval($_POST['idade_anos_reco']) : 0;
     $via = $_POST["via"];
     $doses = $_POST["doses"];
     $intervalo = isset($_POST['intervalo']) ? preg_replace('/\D/', '', $_POST['intervalo']) : '';

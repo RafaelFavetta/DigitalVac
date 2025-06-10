@@ -211,11 +211,15 @@ if (
                         // Exibe idade recomendada fixa da vacina
                         $idade_meses = isset($vacina['idade_meses_reco']) ? intval($vacina['idade_meses_reco']) : 0;
                         $idade_anos = isset($vacina['idade_anos_reco']) ? intval($vacina['idade_anos_reco']) : 0;
-                        $partes = [];
-                        if ($idade_anos > 0) $partes[] = $idade_anos . " anos";
-                        if ($idade_meses > 0) $partes[] = $idade_meses . " meses";
-                        if (empty($partes)) $partes[] = "Ao nascer";
-                        echo htmlspecialchars(implode(" / ", $partes));
+                        $total_meses = $idade_anos * 12 + $idade_meses;
+                        if ($total_meses === 0) {
+                            echo "Ao nascer";
+                        } elseif ($total_meses < 24) {
+                            echo $total_meses . " meses";
+                        } else {
+                            $anos = floor($total_meses / 12);
+                            echo $anos . " anos";
+                        }
                     ?>
                 </td>
                 <td style="vertical-align:middle; text-align:center;">
@@ -266,7 +270,7 @@ if (
                             $idade_meses = isset($vacina['idade_meses_reco']) ? intval($vacina['idade_meses_reco']) : 0;
                             $idade_anos = isset($vacina['idade_anos_reco']) ? intval($vacina['idade_anos_reco']) : 0;
                             $total_meses = $idade_anos * 12 + $idade_meses;
-                            if ($total_meses <= 15) {
+                            if ($total_meses < 24) {
                                 echo $total_meses . " meses";
                             } else {
                                 $anos = floor($total_meses / 12);
@@ -488,11 +492,15 @@ if (
                                             // Exibe idade recomendada fixa da vacina
                                             $idade_meses = isset($vacina['idade_meses_reco']) ? intval($vacina['idade_meses_reco']) : 0;
                                             $idade_anos = isset($vacina['idade_anos_reco']) ? intval($vacina['idade_anos_reco']) : 0;
-                                            $partes = [];
-                                            if ($idade_anos > 0) $partes[] = $idade_anos . " anos";
-                                            if ($idade_meses > 0) $partes[] = $idade_meses . " meses";
-                                            if (empty($partes)) $partes[] = "Ao nascer";
-                                            echo htmlspecialchars(implode(" / ", $partes));
+                                            $total_meses = $idade_anos * 12 + $idade_meses;
+                                            if ($total_meses === 0) {
+                                                echo "Ao nascer";
+                                            } elseif ($total_meses < 24) {
+                                                echo $total_meses . " meses";
+                                            } else {
+                                                $anos = floor($total_meses / 12);
+                                                echo $anos . " anos";
+                                            }
                                         ?>
                                     </td>
                                     <td style="vertical-align:middle; text-align:center;">
@@ -540,11 +548,13 @@ if (
                                             // Exibe idade recomendada fixa da vacina
                                             $idade_meses = isset($vacina['idade_meses_reco']) ? intval($vacina['idade_meses_reco']) : 0;
                                             $idade_anos = isset($vacina['idade_anos_reco']) ? intval($vacina['idade_anos_reco']) : 0;
-                                            $partes = [];
-                                            if ($idade_anos > 0) $partes[] = $idade_anos . " anos";
-                                            if ($idade_meses > 0) $partes[] = $idade_meses . " meses";
-                                            if (empty($partes)) $partes[] = "Ao nascer";
-                                            echo htmlspecialchars(implode(" / ", $partes));
+                                            $total_meses = $idade_anos * 12 + $idade_meses;
+                                            if ($total_meses < 24) {
+                                                echo $total_meses . " meses";
+                                            } else {
+                                                $anos = floor($total_meses / 12);
+                                                echo $anos . " anos";
+                                            }
                                         ?>
                                     </td>
                                     <td style="vertical-align:middle; text-align:center;">-</td>
