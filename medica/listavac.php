@@ -105,12 +105,8 @@ usort($vacinas_opcionais, function($a, $b) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DigitalVac</title>
     <link rel="icon" href="../img/logo.png" type="image/png">
-    <!-- Bootstrap CSS (CDN) -->
-    <link rel="stylesheet" href="../bootstrap/bootstrap-5.3.6-dist/css/bootstrap.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Bootstrap CSS (Local) -->
-    <link rel="stylesheet" href="../bootstrap/bootstrap-5.3.6-dist/css/bootstrap.min.css">
     <style>
         body {
             background-color: #f8f9fa;
@@ -409,9 +405,6 @@ usort($vacinas_opcionais, function($a, $b) {
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <!-- Bootstrap JS (Local) -->
-    <script src="../bootstrap/bootstrap-5.3.6-dist/js/bootstrap.bundle.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/cleave.js"></script>
     <script>
         // Pesquisa automática AJAX
         document.getElementById('input-nome-vacina').addEventListener('input', function () {
