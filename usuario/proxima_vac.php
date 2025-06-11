@@ -155,12 +155,12 @@ if (
     <tbody>
         <tr>
             <?php if (!empty($vacinas_obrigatorias_pendentes)): ?>
-                <th colspan="5" class="table-primary text-center">Vacinas Obrigatórias Pendentes</th>
+                <th colspan="5" class="table-primary text-center">Vacinas Obrigatórias (SUS)</th>
             <?php endif; ?>
         </tr>
         <?php
-        // Adicione este bloco antes do foreach das vacinas obrigatórias pendentes
-        // Ordena as vacinas obrigatórias pendentes pela data da próxima dose (idade recomendada)
+        // Adicione este bloco antes do foreach das Vacinas Obrigatórias (SUS)
+        // Ordena as Vacinas Obrigatórias (SUS) pela data da próxima dose (idade recomendada)
         usort($vacinas_obrigatorias_pendentes, function($a, $b) use ($vacinas_aplicadas, $idade_meses_usuario, $data_nascimento) {
             $aplicadaA = isset($vacinas_aplicadas[$a['id_vaci']]) ? $vacinas_aplicadas[$a['id_vaci']] : null;
             $aplicadaB = isset($vacinas_aplicadas[$b['id_vaci']]) ? $vacinas_aplicadas[$b['id_vaci']] : null;
@@ -292,7 +292,7 @@ if (
             <?php $rowIndex++; endforeach; ?>
         <tr>
             <?php if (!empty($vacinas_opcionais_nao_tomadas)): ?>
-                <th colspan="5" class="table-warning text-center">Vacinas Opcionais Disponíveis</th>
+                <th colspan="5" class="table-warning text-center">Vacinas Opcionais</th>
             <?php endif; ?>
         </tr>
         <?php
@@ -536,12 +536,12 @@ if (
                     </thead>
                     <tbody>
                         <tr>
-                            <th colspan="5" class="table-primary text-center">Vacinas Obrigatórias Pendentes</th>
+                            <th colspan="5" class="table-primary text-center">Vacinas Obrigatórias (SUS)</th>
                         </tr>
                         <?php if (!empty($vacinas_obrigatorias_pendentes)): ?>
                             <?php
-                            // Adicione este bloco antes do foreach das vacinas obrigatórias pendentes
-                            // Ordena as vacinas obrigatórias pendentes pela data da próxima dose (idade recomendada)
+                            // Adicione este bloco antes do foreach das Vacinas Obrigatórias (SUS)
+                            // Ordena as Vacinas Obrigatórias (SUS) pela data da próxima dose (idade recomendada)
                             usort($vacinas_obrigatorias_pendentes, function($a, $b) use ($vacinas_aplicadas, $idade_meses_usuario, $data_nascimento) {
                                 $aplicadaA = isset($vacinas_aplicadas[$a['id_vaci']]) ? $vacinas_aplicadas[$a['id_vaci']] : null;
                                 $aplicadaB = isset($vacinas_aplicadas[$b['id_vaci']]) ? $vacinas_aplicadas[$b['id_vaci']] : null;
@@ -676,7 +676,7 @@ if (
                                 <?php $rowIndex++; endforeach; ?>
                         <?php endif; ?>
                         <tr>
-                            <th colspan="5" class="table-warning text-center">Vacinas Opcionais Disponíveis</th>
+                            <th colspan="5" class="table-warning text-center">Vacinas Opcionais</th>
                         </tr>
                         <?php if (!empty($vacinas_opcionais_nao_tomadas)): ?>
                             <?php
