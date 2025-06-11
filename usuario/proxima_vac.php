@@ -180,6 +180,13 @@ if (
             // Converte para timestamp para comparar
             $tsA = strtotime(str_replace('/', '-', $dataA));
             $tsB = strtotime(str_replace('/', '-', $dataB));
+
+            // Adicional: se datas iguais, ordena por idade recomendada
+            if ($dataA === $dataB) {
+                $idadeA = (isset($a['idade_anos_reco']) ? intval($a['idade_anos_reco']) : 0) * 12 + (isset($a['idade_meses_reco']) ? intval($a['idade_meses_reco']) : 0);
+                $idadeB = (isset($b['idade_anos_reco']) ? intval($b['idade_anos_reco']) : 0) * 12 + (isset($b['idade_meses_reco']) ? intval($b['idade_meses_reco']) : 0);
+                return $idadeA <=> $idadeB;
+            }
             return $tsA <=> $tsB;
         });
 
@@ -554,6 +561,13 @@ if (
                                 // Converte para timestamp para comparar
                                 $tsA = strtotime(str_replace('/', '-', $dataA));
                                 $tsB = strtotime(str_replace('/', '-', $dataB));
+
+                                // Adicional: se datas iguais, ordena por idade recomendada
+                                if ($dataA === $dataB) {
+                                    $idadeA = (isset($a['idade_anos_reco']) ? intval($a['idade_anos_reco']) : 0) * 12 + (isset($a['idade_meses_reco']) ? intval($a['idade_meses_reco']) : 0);
+                                    $idadeB = (isset($b['idade_anos_reco']) ? intval($b['idade_anos_reco']) : 0) * 12 + (isset($b['idade_meses_reco']) ? intval($b['idade_meses_reco']) : 0);
+                                    return $idadeA <=> $idadeB;
+                                }
                                 return $tsA <=> $tsB;
                             });
 
@@ -666,6 +680,13 @@ if (
                         </tr>
                         <?php if (!empty($vacinas_opcionais_nao_tomadas)): ?>
                             <?php
+                            // Ordena as vacinas opcionais não tomadas pela idade recomendada (menor para maior)
+                            usort($vacinas_opcionais_nao_tomadas, function($a, $b) {
+                                $idadeA = (isset($a['idade_anos_reco']) ? intval($a['idade_anos_reco']) : 0) * 12 + (isset($a['idade_meses_reco']) ? intval($a['idade_meses_reco']) : 0);
+                                $idadeB = (isset($b['idade_anos_reco']) ? intval($b['idade_anos_reco']) : 0) * 12 + (isset($b['idade_meses_reco']) ? intval($b['idade_meses_reco']) : 0);
+                                return $idadeA <=> $idadeB;
+                            });
+
                             $rowIndex = 0;
                             foreach ($vacinas_opcionais_nao_tomadas as $vacina):
                                 $rowClass = ($rowIndex === 0) ? 'bg-white' : (($rowIndex % 2 === 1) ? 'table-secondary' : 'bg-white');

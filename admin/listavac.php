@@ -33,8 +33,9 @@ $vacinas_obrigatorias = [];
 $vacinas_opcionais = [];
 while ($row = $result->fetch_assoc()) {
     // Calcule idade total em meses para ordenação
-    $idade_meses = (isset($row['idade_anos_reco']) ? intval($row['idade_anos_reco']) : 0) * 12 +
-        (isset($row['idade_meses_reco']) ? intval($row['idade_meses_reco']) : 0);
+    $idade_anos = isset($row['idade_anos_reco']) ? intval($row['idade_anos_reco']) : 0;
+    $idade_meses = isset($row['idade_meses_reco']) ? intval($row['idade_meses_reco']) : 0;
+    $idade_meses_total = $idade_anos * 12 + $idade_meses;
 
     $nome = $row['nome_vaci'];
     if (
@@ -44,7 +45,7 @@ while ($row = $result->fetch_assoc()) {
     ) {
         $idade_ordenacao = -2; // "A qualquer momento"
     } elseif (
-        ($row['id_vaci'] == 22 || $row['id_vaci'] == 23) || ($idade_meses === 0)
+        ($row['id_vaci'] == 22 || $row['id_vaci'] == 23) || ($idade_meses_total === 0)
     ) {
         $idade_ordenacao = -1; // "Ao nascer"
     } elseif (
@@ -72,7 +73,7 @@ while ($row = $result->fetch_assoc()) {
     ) {
         $idade_ordenacao = 18 * 12; // 18 anos
     } else {
-        $idade_ordenacao = $idade_meses;
+        $idade_ordenacao = $idade_meses_total;
     }
     $row['idade_ordenacao'] = $idade_ordenacao;
 
@@ -83,7 +84,8 @@ while ($row = $result->fetch_assoc()) {
         $vacinas_opcionais[] = $row;
     }
 }
-// Ordena cada grupo por idade_ordenacao
+
+// Ordena cada grupo por idade_ordenacao (menor para maior)
 usort($vacinas_obrigatorias, function($a, $b) {
     return $a['idade_ordenacao'] <=> $b['idade_ordenacao'];
 });
@@ -220,11 +222,9 @@ usort($vacinas_opcionais, function($a, $b) {
                     <?php
                     $rowIndex = 0;
                     foreach ($vacinas_obrigatorias as $row):
-                        if ($rowIndex === 0) {
-                            $rowClass = 'bg-white';
-                        } else {
-                            $rowClass = ($rowIndex % 2 === 1) ? 'table-secondary' : 'bg-white';
-                        }
+                        $rowClass = ($rowIndex === 0) ? 'bg-white' : (($rowIndex % 2 === 1) ? 'table-secondary' : 'bg-white');
+                        $idade_anos = isset($row['idade_anos_reco']) ? intval($row['idade_anos_reco']) : 0;
+                        $idade_meses = isset($row['idade_meses_reco']) ? intval($row['idade_meses_reco']) : 0;
                         ?>
                         <tr class="<?php echo $rowClass; ?>">
                             <!-- <td><?php echo htmlspecialchars($row['id_vaci']); ?></td> -->
@@ -233,10 +233,7 @@ usort($vacinas_opcionais, function($a, $b) {
                             <td><?php echo htmlspecialchars($row['lote_vaci']); ?></td>
                             <td>
                                 <?php
-                                // Exibe "A qualquer momento" ou idade especial para vacinas específicas
                                 $nome = $row['nome_vaci'];
-                                $idade_anos = isset($row['idade_anos_reco']) ? intval($row['idade_anos_reco']) : 0;
-                                $idade_meses = isset($row['idade_meses_reco']) ? intval($row['idade_meses_reco']) : 0;
                                 if (
                                     stripos($nome, 'Herpes-zóster') !== false || stripos($nome, 'RZV') !== false
                                 ) {
@@ -284,7 +281,6 @@ usort($vacinas_opcionais, function($a, $b) {
                                 ) {
                                     echo "A qualquer momento";
                                 } else {
-                                    // Exibe idade recomendada da vacina, sem cálculos extras
                                     if ($idade_anos > 0) {
                                         echo $idade_anos . " anos";
                                     } elseif ($idade_meses > 0) {
@@ -313,11 +309,9 @@ usort($vacinas_opcionais, function($a, $b) {
                     <?php
                     $rowIndex = 0;
                     foreach ($vacinas_opcionais as $row):
-                        if ($rowIndex === 0) {
-                            $rowClass = 'bg-white';
-                        } else {
-                            $rowClass = ($rowIndex % 2 === 1) ? 'table-secondary' : 'bg-white';
-                        }
+                        $rowClass = ($rowIndex === 0) ? 'bg-white' : (($rowIndex % 2 === 1) ? 'table-secondary' : 'bg-white');
+                        $idade_anos = isset($row['idade_anos_reco']) ? intval($row['idade_anos_reco']) : 0;
+                        $idade_meses = isset($row['idade_meses_reco']) ? intval($row['idade_meses_reco']) : 0;
                         ?>
                         <tr class="<?php echo $rowClass; ?>">
                             <!-- <td><?php echo htmlspecialchars($row['id_vaci']); ?></td> -->
@@ -326,7 +320,6 @@ usort($vacinas_opcionais, function($a, $b) {
                             <td><?php echo htmlspecialchars($row['lote_vaci']); ?></td>
                             <td>
                                 <?php
-                                // Exibe "A qualquer momento" ou idade especial para vacinas específicas
                                 $nome = $row['nome_vaci'];
                                 if (
                                     stripos($nome, 'Herpes-zóster') !== false || stripos($nome, 'RZV') !== false

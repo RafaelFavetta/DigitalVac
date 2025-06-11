@@ -215,13 +215,15 @@ usort($vacinas_opcionais, function($a, $b) {
                         <th colspan="9" class="table-primary text-center">Vacinas Obrigatórias (SUS)</th>
                     </tr>
                     <?php
+                    // Ordena por idade recomendada (menor para maior)
+                    usort($vacinas_obrigatorias, function($a, $b) {
+                        return $a['idade_ordenacao'] <=> $b['idade_ordenacao'];
+                    });
                     $rowIndex = 0;
                     foreach ($vacinas_obrigatorias as $row):
-                        if ($rowIndex === 0) {
-                            $rowClass = 'bg-white';
-                        } else {
-                            $rowClass = ($rowIndex % 2 === 1) ? 'table-secondary' : 'bg-white';
-                        }
+                        $rowClass = ($rowIndex === 0) ? 'bg-white' : (($rowIndex % 2 === 1) ? 'table-secondary' : 'bg-white');
+                        $idade_anos = isset($row['idade_anos_reco']) ? intval($row['idade_anos_reco']) : 0;
+                        $idade_meses = isset($row['idade_meses_reco']) ? intval($row['idade_meses_reco']) : 0;
                         ?>
                         <tr class="<?php echo $rowClass; ?>">
                             <!-- <td><?php echo htmlspecialchars($row['id_vaci']); ?></td> -->
@@ -308,13 +310,15 @@ usort($vacinas_opcionais, function($a, $b) {
                         <th colspan="9" class="table-warning text-center">Vacinas Opcionais</th>
                     </tr>
                     <?php
+                    // Ordena por idade recomendada (menor para maior)
+                    usort($vacinas_opcionais, function($a, $b) {
+                        return $a['idade_ordenacao'] <=> $b['idade_ordenacao'];
+                    });
                     $rowIndex = 0;
                     foreach ($vacinas_opcionais as $row):
-                        if ($rowIndex === 0) {
-                            $rowClass = 'bg-white';
-                        } else {
-                            $rowClass = ($rowIndex % 2 === 1) ? 'table-secondary' : 'bg-white';
-                        }
+                        $rowClass = ($rowIndex === 0) ? 'bg-white' : (($rowIndex % 2 === 1) ? 'table-secondary' : 'bg-white');
+                        $idade_anos = isset($row['idade_anos_reco']) ? intval($row['idade_anos_reco']) : 0;
+                        $idade_meses = isset($row['idade_meses_reco']) ? intval($row['idade_meses_reco']) : 0;
                         ?>
                         <tr class="<?php echo $rowClass; ?>">
                             <!-- <td><?php echo htmlspecialchars($row['id_vaci']); ?></td> -->
