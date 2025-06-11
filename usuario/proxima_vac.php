@@ -3,7 +3,8 @@ session_start();
 require_once '../outros/db_connect.php'; // Ajuste o caminho para o arquivo de conexão com o banco
 
 // Função para calcular próxima dose e atraso corretamente, mostrando idade recomendada em meses (<16) ou anos (>=16)
-function calcular_proxima_dose($vacina, $aplicada, $idade_meses_usuario, $data_nascimento) {
+function calcular_proxima_dose($vacina, $aplicada, $idade_meses_usuario, $data_nascimento)
+{
     $n_obrig = isset($vacina['n_dose']) ? intval($vacina['n_dose']) : 0;
     $doses_tomadas = $aplicada && isset($aplicada['doses_tomadas']) ? intval($aplicada['doses_tomadas']) : 0;
     $prox_dose = $doses_tomadas + 1;
@@ -13,10 +14,12 @@ function calcular_proxima_dose($vacina, $aplicada, $idade_meses_usuario, $data_n
     $idade_recomendada_meses = $idade_anos_reco * 12 + $idade_meses_reco;
 
     // Função para calcular a data correta somando anos e meses separadamente
-    $calcularData = function($data_nascimento, $anos, $meses) {
+    $calcularData = function ($data_nascimento, $anos, $meses) {
         $dt = new DateTime($data_nascimento);
-        if ($anos > 0) $dt->add(new DateInterval('P' . $anos . 'Y'));
-        if ($meses > 0) $dt->add(new DateInterval('P' . $meses . 'M'));
+        if ($anos > 0)
+            $dt->add(new DateInterval('P' . $anos . 'Y'));
+        if ($meses > 0)
+            $dt->add(new DateInterval('P' . $meses . 'M'));
         return $dt->format('d/m/Y');
     };
 
@@ -106,7 +109,7 @@ if ($user_data) {
         ];
     }
 
-   //Filtro por pesquisa (AJAX)
+    //Filtro por pesquisa (AJAX)
     $pesquisa = '';
     if (
         isset($_SERVER['HTTP_X_REQUESTED_WITH']) &&
@@ -118,11 +121,14 @@ if ($user_data) {
 
     // Verifica vacinas obrigatórias com doses pendentes
     foreach ($vacinas_fisicas as $id_vaci => $vacina) {
-        if ($vacina['sus'] != 1) continue;
+        if ($vacina['sus'] != 1)
+            continue;
         $n_obrig = isset($vacina['n_dose']) ? intval($vacina['n_dose']) : 0;
-        if ($n_obrig <= 0) continue;
+        if ($n_obrig <= 0)
+            continue;
 
-        if (stripos($vacina['nome_vacina'], 'gestante') !== false && $genero_usuario !== 'F') continue;
+        if (stripos($vacina['nome_vacina'], 'gestante') !== false && $genero_usuario !== 'F')
+            continue;
 
         $doses_tomadas = isset($vacinas_aplicadas[$id_vaci]) ? $vacinas_aplicadas[$id_vaci]['doses_tomadas'] : 0;
         if ($doses_tomadas < $n_obrig) {
@@ -136,8 +142,10 @@ if ($user_data) {
 
     // Vacinas opcionais (SUS=0) que o usuário nunca tomou
     foreach ($vacinas_fisicas as $id_vaci => $vacina) {
-        if ($vacina['sus'] != 0) continue;
-        if (stripos($vacina['nome_vacina'], 'gestante') !== false && $genero_usuario !== 'F') continue;
+        if ($vacina['sus'] != 0)
+            continue;
+        if (stripos($vacina['nome_vacina'], 'gestante') !== false && $genero_usuario !== 'F')
+            continue;
         if (empty($vacinas_aplicadas[$id_vaci])) {
             if ($pesquisa === '' || stripos($vacina['nome_vacina'], $pesquisa) !== false) {
                 $vacinas_opcionais_nao_tomadas[] = $vacina;
@@ -161,7 +169,7 @@ if (
         <?php
         // Adicione este bloco antes do foreach das Vacinas Obrigatórias (SUS)
         // Ordena as Vacinas Obrigatórias (SUS) pela data da próxima dose (idade recomendada)
-        usort($vacinas_obrigatorias_pendentes, function($a, $b) use ($vacinas_aplicadas, $idade_meses_usuario, $data_nascimento) {
+        usort($vacinas_obrigatorias_pendentes, function ($a, $b) use ($vacinas_aplicadas, $idade_meses_usuario, $data_nascimento) {
             $aplicadaA = isset($vacinas_aplicadas[$a['id_vaci']]) ? $vacinas_aplicadas[$a['id_vaci']] : null;
             $aplicadaB = isset($vacinas_aplicadas[$b['id_vaci']]) ? $vacinas_aplicadas[$b['id_vaci']] : null;
             list($dataA, ) = calcular_proxima_dose($a, $aplicadaA, $idade_meses_usuario, $data_nascimento);
@@ -172,10 +180,14 @@ if (
             $dataB = preg_replace('/ \(Atrasada\)$/', '', $dataB);
 
             // Datas "Ao nascer" ou "-" vão para o início
-            if ($dataA === 'Ao nascer') return -1;
-            if ($dataB === 'Ao nascer') return 1;
-            if ($dataA === '-') return 1;
-            if ($dataB === '-') return -1;
+            if ($dataA === 'Ao nascer')
+                return -1;
+            if ($dataB === 'Ao nascer')
+                return 1;
+            if ($dataA === '-')
+                return 1;
+            if ($dataB === '-')
+                return -1;
 
             // Converte para timestamp para comparar
             $tsA = strtotime(str_replace('/', '-', $dataA));
@@ -201,68 +213,68 @@ if (
                 <td style="vertical-align:middle;"><?= htmlspecialchars($vacina['nome_vacina']) ?></td>
                 <td style="vertical-align:middle; text-align:center;">
                     <?php
-                        $idade_meses = isset($vacina['idade_meses_reco']) ? intval($vacina['idade_meses_reco']) : 0;
-                        $idade_anos = isset($vacina['idade_anos_reco']) ? intval($vacina['idade_anos_reco']) : 0;
-                        $nome = isset($vacina['nome_vacina']) ? $vacina['nome_vacina'] : '';
-                        // Correção das idades especiais
-                        if (
-                            stripos($nome, 'Herpes-zóster') !== false || stripos($nome, 'RZV') !== false
-                        ) {
-                            echo "50 anos";
-                        } elseif (
-                            stripos($nome, 'Dengue') !== false || stripos($nome, 'Qdenga') !== false
-                        ) {
-                            echo "10 anos";
-                        } elseif (
-                            stripos($nome, 'HPV') !== false
-                        ) {
-                            echo "9 anos";
-                        } elseif (
-                            stripos($nome, 'Influenza') !== false
-                        ) {
-                            echo "9 anos";
-                        } elseif (
-                            stripos($nome, 'Hepatite B (adulto)') !== false
-                        ) {
-                            echo "18 anos";
-                        } elseif (
-                            stripos($nome, 'Hepatite B') !== false && stripos($nome, 'adulto') !== false
-                        ) {
-                            echo "18 anos";
-                        } elseif (
-                            stripos($nome, 'Febre amarela') !== false
-                        ) {
-                            echo "5 anos";
-                        } elseif (
-                            stripos($nome, 'Pneumocócica 23-valente') !== false
-                        ) {
-                            echo "5 anos";
-                        } elseif (
-                            stripos($nome, 'Penta (DTP/Hib/Hepatite B)') !== false
-                        ) {
-                            echo "2 meses";
-                        } elseif (
-                            stripos($nome, 'dT') !== false
-                        ) {
-                            echo "7 anos";
-                        } elseif (
-                            stripos($nome, 'VSR') !== false ||
-                            stripos($nome, 'Raiva') !== false ||
-                            stripos($nome, 'viajantes') !== false
-                        ) {
-                            echo "A qualquer momento";
+                    $idade_meses = isset($vacina['idade_meses_reco']) ? intval($vacina['idade_meses_reco']) : 0;
+                    $idade_anos = isset($vacina['idade_anos_reco']) ? intval($vacina['idade_anos_reco']) : 0;
+                    $nome = isset($vacina['nome_vacina']) ? $vacina['nome_vacina'] : '';
+                    // Correção das idades especiais
+                    if (
+                        stripos($nome, 'Herpes-zóster') !== false || stripos($nome, 'RZV') !== false
+                    ) {
+                        echo "50 anos";
+                    } elseif (
+                        stripos($nome, 'Dengue') !== false || stripos($nome, 'Qdenga') !== false
+                    ) {
+                        echo "10 anos";
+                    } elseif (
+                        stripos($nome, 'HPV') !== false
+                    ) {
+                        echo "9 anos";
+                    } elseif (
+                        stripos($nome, 'Influenza') !== false
+                    ) {
+                        echo "9 anos";
+                    } elseif (
+                        stripos($nome, 'Hepatite B (adulto)') !== false
+                    ) {
+                        echo "18 anos";
+                    } elseif (
+                        stripos($nome, 'Hepatite B') !== false && stripos($nome, 'adulto') !== false
+                    ) {
+                        echo "18 anos";
+                    } elseif (
+                        stripos($nome, 'Febre amarela') !== false
+                    ) {
+                        echo "5 anos";
+                    } elseif (
+                        stripos($nome, 'Pneumocócica 23-valente') !== false
+                    ) {
+                        echo "5 anos";
+                    } elseif (
+                        stripos($nome, 'Penta (DTP/Hib/Hepatite B)') !== false
+                    ) {
+                        echo "2 meses";
+                    } elseif (
+                        stripos($nome, 'dT') !== false
+                    ) {
+                        echo "7 anos";
+                    } elseif (
+                        stripos($nome, 'VSR') !== false ||
+                        stripos($nome, 'Raiva') !== false ||
+                        stripos($nome, 'viajantes') !== false
+                    ) {
+                        echo "A qualquer momento";
+                    } else {
+                        // Exibe idade recomendada da vacina, sem cálculos extras
+                        if ($idade_anos > 0 && $idade_meses == 0) {
+                            echo $idade_anos . " anos";
+                        } elseif ($idade_anos > 0 && $idade_meses > 0) {
+                            echo $idade_anos . " anos";
+                        } elseif ($idade_meses > 0) {
+                            echo $idade_meses . " meses";
                         } else {
-                            // Exibe idade recomendada da vacina, sem cálculos extras
-                            if ($idade_anos > 0 && $idade_meses == 0) {
-                                echo $idade_anos . " anos";
-                            } elseif ($idade_anos > 0 && $idade_meses > 0) {
-                                echo $idade_anos . " anos";
-                            } elseif ($idade_meses > 0) {
-                                echo $idade_meses . " meses";
-                            } else {
-                                echo "Ao nascer";
-                            }
+                            echo "Ao nascer";
                         }
+                    }
                     ?>
                 </td>
                 <td style="vertical-align:middle; text-align:center;">
@@ -275,7 +287,8 @@ if (
                     <?php endif; ?>
                 </td>
                 <td style="vertical-align:middle; text-align:center;">
-                    <div style="display:flex; flex-direction:row; align-items:center; justify-content:center; gap:8px; height:100%;">
+                    <div
+                        style="display:flex; flex-direction:row; align-items:center; justify-content:center; gap:8px; height:100%;">
                         <span style="font-size:1.02em;"><?= $vacina['doses_tomadas'] . "/" . $vacina['n_obrig'] ?></span>
                         <span class="badge bg-primary" style="font-size:0.90em; min-width:80px; padding:4px 6px;">
                             Próxima: Dose <?= $proxima_dose ?>
@@ -283,8 +296,8 @@ if (
                     </div>
                 </td>
                 <td style="vertical-align:middle; text-align:center; padding-top:4px; padding-bottom:4px;">
-                    <a href="ver_vacinaU.php?id_vaci=<?= urlencode($vacina['id_vaci']) ?>"
-                        class="btn btn-primary btn-sm" style="padding:2px 8px; font-size:0.95em;">
+                    <a href="ver_vacinaU.php?id_vaci=<?= urlencode($vacina['id_vaci']) ?>" class="btn btn-primary btn-sm"
+                        style="padding:2px 8px; font-size:0.95em;">
                         <i class="bi bi-info-circle"></i> Sobre a vacina
                     </a>
                 </td>
@@ -372,8 +385,8 @@ if (
                     </span>
                 </td>
                 <td style="vertical-align:middle; text-align:center; padding-top:4px; padding-bottom:4px;">
-                    <a href="ver_vacinaU.php?id_vaci=<?= urlencode($vacina['id_vaci']) ?>"
-                        class="btn btn-primary btn-sm" style="padding:2px 8px; font-size:0.95em;">
+                    <a href="ver_vacinaU.php?id_vaci=<?= urlencode($vacina['id_vaci']) ?>" class="btn btn-primary btn-sm"
+                        style="padding:2px 8px; font-size:0.95em;">
                         <i class="bi bi-info-circle"></i> Sobre a vacina
                     </a>
                 </td>
@@ -397,10 +410,39 @@ if (
     <meta charset="UTF-8">
     <title>DigitalVac</title>
     <link rel="icon" href="../img/logo.png" type="image/png">
+    <link rel="stylesheet" href="../bootstrap/bootstrap-5.3.6-dist/css/bootstrap.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
 
     <style>
+        .custom-vac-link {
+            display: inline-block;
+            padding: 5px 14px;
+            border-radius: 20px;
+            background: #0d6efd;
+            color: #fff !important;
+            font-weight: 500;
+            font-size: 0.98rem;
+            text-decoration: none;
+            box-shadow: 0 2px 8px rgba(0, 110, 253, 0.08);
+            transition: background 0.2s, box-shadow 0.2s, color 0.2s;
+            margin-top: 0;
+        }
+
+        .custom-vac-link:hover,
+        .custom-vac-link:focus {
+            background: #084298;
+            color: #fff !important;
+            text-decoration: none;
+            box-shadow: 0 4px 12px rgba(0, 110, 253, 0.15);
+            outline: none;
+        }
+
+        .custom-vac-link i {
+            font-size: 1.1em;
+            vertical-align: middle;
+        }
+
         .navbar-brand {
             font-size: 1.5rem !important;
             font-weight: bold !important;
@@ -542,7 +584,7 @@ if (
                             <?php
                             // Adicione este bloco antes do foreach das Vacinas Obrigatórias (SUS)
                             // Ordena as Vacinas Obrigatórias (SUS) pela data da próxima dose (idade recomendada)
-                            usort($vacinas_obrigatorias_pendentes, function($a, $b) use ($vacinas_aplicadas, $idade_meses_usuario, $data_nascimento) {
+                            usort($vacinas_obrigatorias_pendentes, function ($a, $b) use ($vacinas_aplicadas, $idade_meses_usuario, $data_nascimento) {
                                 $aplicadaA = isset($vacinas_aplicadas[$a['id_vaci']]) ? $vacinas_aplicadas[$a['id_vaci']] : null;
                                 $aplicadaB = isset($vacinas_aplicadas[$b['id_vaci']]) ? $vacinas_aplicadas[$b['id_vaci']] : null;
                                 list($dataA, ) = calcular_proxima_dose($a, $aplicadaA, $idade_meses_usuario, $data_nascimento);
@@ -553,10 +595,14 @@ if (
                                 $dataB = preg_replace('/ \(Atrasada\)$/', '', $dataB);
 
                                 // Datas "Ao nascer" ou "-" vão para o início
-                                if ($dataA === 'Ao nascer') return -1;
-                                if ($dataB === 'Ao nascer') return 1;
-                                if ($dataA === '-') return 1;
-                                if ($dataB === '-') return -1;
+                                if ($dataA === 'Ao nascer')
+                                    return -1;
+                                if ($dataB === 'Ao nascer')
+                                    return 1;
+                                if ($dataA === '-')
+                                    return 1;
+                                if ($dataB === '-')
+                                    return -1;
 
                                 // Converte para timestamp para comparar
                                 $tsA = strtotime(str_replace('/', '-', $dataA));
@@ -582,68 +628,68 @@ if (
                                     <td style="vertical-align:middle;"><?= htmlspecialchars($vacina['nome_vacina']) ?></td>
                                     <td style="vertical-align:middle; text-align:center;">
                                         <?php
-                                            $idade_meses = isset($vacina['idade_meses_reco']) ? intval($vacina['idade_meses_reco']) : 0;
-                                            $idade_anos = isset($vacina['idade_anos_reco']) ? intval($vacina['idade_anos_reco']) : 0;
-                                            $nome = isset($vacina['nome_vacina']) ? $vacina['nome_vacina'] : '';
-                                            // Correção das idades especiais
-                                            if (
-                                                stripos($nome, 'Herpes-zóster') !== false || stripos($nome, 'RZV') !== false
-                                            ) {
-                                                echo "50 anos";
-                                            } elseif (
-                                                stripos($nome, 'Dengue') !== false || stripos($nome, 'Qdenga') !== false
-                                            ) {
-                                                echo "10 anos";
-                                            } elseif (
-                                                stripos($nome, 'HPV') !== false
-                                            ) {
-                                                echo "9 anos";
-                                            } elseif (
-                                                stripos($nome, 'Influenza') !== false
-                                            ) {
-                                                echo "9 anos";
-                                            } elseif (
-                                                stripos($nome, 'Hepatite B (adulto)') !== false
-                                            ) {
-                                                echo "18 anos";
-                                            } elseif (
-                                                stripos($nome, 'Hepatite B') !== false && stripos($nome, 'adulto') !== false
-                                            ) {
-                                                echo "18 anos";
-                                            } elseif (
-                                                stripos($nome, 'Febre amarela') !== false
-                                            ) {
-                                                echo "5 anos";
-                                            } elseif (
-                                                stripos($nome, 'Pneumocócica 23-valente') !== false
-                                            ) {
-                                                echo "5 anos";
-                                            } elseif (
-                                                stripos($nome, 'Penta (DTP/Hib/Hepatite B)') !== false
-                                            ) {
-                                                echo "2 meses";
-                                            } elseif (
-                                                stripos($nome, 'dT') !== false
-                                            ) {
-                                                echo "7 anos";
-                                            } elseif (
-                                                stripos($nome, 'VSR') !== false ||
-                                                stripos($nome, 'Raiva') !== false ||
-                                                stripos($nome, 'viajantes') !== false
-                                            ) {
-                                                echo "A qualquer momento";
+                                        $idade_meses = isset($vacina['idade_meses_reco']) ? intval($vacina['idade_meses_reco']) : 0;
+                                        $idade_anos = isset($vacina['idade_anos_reco']) ? intval($vacina['idade_anos_reco']) : 0;
+                                        $nome = isset($vacina['nome_vacina']) ? $vacina['nome_vacina'] : '';
+                                        // Correção das idades especiais
+                                        if (
+                                            stripos($nome, 'Herpes-zóster') !== false || stripos($nome, 'RZV') !== false
+                                        ) {
+                                            echo "50 anos";
+                                        } elseif (
+                                            stripos($nome, 'Dengue') !== false || stripos($nome, 'Qdenga') !== false
+                                        ) {
+                                            echo "10 anos";
+                                        } elseif (
+                                            stripos($nome, 'HPV') !== false
+                                        ) {
+                                            echo "9 anos";
+                                        } elseif (
+                                            stripos($nome, 'Influenza') !== false
+                                        ) {
+                                            echo "9 anos";
+                                        } elseif (
+                                            stripos($nome, 'Hepatite B (adulto)') !== false
+                                        ) {
+                                            echo "18 anos";
+                                        } elseif (
+                                            stripos($nome, 'Hepatite B') !== false && stripos($nome, 'adulto') !== false
+                                        ) {
+                                            echo "18 anos";
+                                        } elseif (
+                                            stripos($nome, 'Febre amarela') !== false
+                                        ) {
+                                            echo "5 anos";
+                                        } elseif (
+                                            stripos($nome, 'Pneumocócica 23-valente') !== false
+                                        ) {
+                                            echo "5 anos";
+                                        } elseif (
+                                            stripos($nome, 'Penta (DTP/Hib/Hepatite B)') !== false
+                                        ) {
+                                            echo "2 meses";
+                                        } elseif (
+                                            stripos($nome, 'dT') !== false
+                                        ) {
+                                            echo "7 anos";
+                                        } elseif (
+                                            stripos($nome, 'VSR') !== false ||
+                                            stripos($nome, 'Raiva') !== false ||
+                                            stripos($nome, 'viajantes') !== false
+                                        ) {
+                                            echo "A qualquer momento";
+                                        } else {
+                                            // Exibe idade recomendada da vacina, sem cálculos extras
+                                            if ($idade_anos > 0 && $idade_meses == 0) {
+                                                echo $idade_anos . " anos";
+                                            } elseif ($idade_anos > 0 && $idade_meses > 0) {
+                                                echo $idade_anos . " anos";
+                                            } elseif ($idade_meses > 0) {
+                                                echo $idade_meses . " meses";
                                             } else {
-                                                // Exibe idade recomendada da vacina, sem cálculos extras
-                                                if ($idade_anos > 0 && $idade_meses == 0) {
-                                                    echo $idade_anos . " anos";
-                                                } elseif ($idade_anos > 0 && $idade_meses > 0) {
-                                                    echo $idade_anos . " anos";
-                                                } elseif ($idade_meses > 0) {
-                                                    echo $idade_meses . " meses";
-                                                } else {
-                                                    echo "Ao nascer";
-                                                }
+                                                echo "Ao nascer";
                                             }
+                                        }
                                         ?>
                                     </td>
                                     <td style="vertical-align:middle; text-align:center;">
@@ -681,7 +727,7 @@ if (
                         <?php if (!empty($vacinas_opcionais_nao_tomadas)): ?>
                             <?php
                             // Ordena as vacinas opcionais não tomadas pela idade recomendada (menor para maior)
-                            usort($vacinas_opcionais_nao_tomadas, function($a, $b) {
+                            usort($vacinas_opcionais_nao_tomadas, function ($a, $b) {
                                 $idadeA = (isset($a['idade_anos_reco']) ? intval($a['idade_anos_reco']) : 0) * 12 + (isset($a['idade_meses_reco']) ? intval($a['idade_meses_reco']) : 0);
                                 $idadeB = (isset($b['idade_anos_reco']) ? intval($b['idade_anos_reco']) : 0) * 12 + (isset($b['idade_meses_reco']) ? intval($b['idade_meses_reco']) : 0);
                                 return $idadeA <=> $idadeB;
@@ -758,7 +804,8 @@ if (
                                     </td>
                                     <td style="vertical-align:middle; text-align:center;">-</td>
                                     <td style="vertical-align:middle; text-align:center;">
-                                        <span class="badge bg-warning text-dark" style="font-size:0.95em; min-width:80px; padding:4px 6px;">
+                                        <span class="badge bg-warning text-dark"
+                                            style="font-size:0.95em; min-width:80px; padding:4px 6px;">
                                             Opcional
                                         </span>
                                     </td>
@@ -784,6 +831,7 @@ if (
     </div>
 </body>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="bootstrap/bootstrap-5.3.6-dist/js/bootstrap.bundle.min.js"></script>
 <script>
     // Pesquisa automática AJAX para vacinas a serem aplicadas
     document.getElementById('pesquisa-proxima-vacina').addEventListener('input', function () {
@@ -801,34 +849,5 @@ if (
             });
     });
 </script>
-<style>
-    .custom-vac-link {
-        display: inline-block;
-        padding: 5px 14px;
-        border-radius: 20px;
-        background: #0d6efd;
-        color: #fff !important;
-        font-weight: 500;
-        font-size: 0.98rem;
-        text-decoration: none;
-        box-shadow: 0 2px 8px rgba(0, 110, 253, 0.08);
-        transition: background 0.2s, box-shadow 0.2s, color 0.2s;
-        margin-top: 0;
-    }
-
-    .custom-vac-link:hover,
-    .custom-vac-link:focus {
-        background: #084298;
-        color: #fff !important;
-        text-decoration: none;
-        box-shadow: 0 4px 12px rgba(0, 110, 253, 0.15);
-        outline: none;
-    }
-
-    .custom-vac-link i {
-        font-size: 1.1em;
-        vertical-align: middle;
-    }
-</style>
 
 </html>

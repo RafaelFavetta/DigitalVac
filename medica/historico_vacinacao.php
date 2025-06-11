@@ -43,6 +43,7 @@ $result = $stmt2->get_result();
     <meta charset="UTF-8">
     <title>DigitalVac</title>
     <link rel="icon" href="../img/logo.png" type="image/png">
+    <link rel="stylesheet" href="../bootstrap/bootstrap-5.3.6-dist/css/bootstrap.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
     <style>
@@ -171,6 +172,10 @@ $result = $stmt2->get_result();
         <?php endif; ?>
         <a href="pesquisa_paciente.php" class="btn btn-secondary">Voltar</a>
     </div>
+    <script src="../bootstrap/bootstrap-5.3.6-dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/cleave.js"></script>
+    
 </body>
 
 </html>
