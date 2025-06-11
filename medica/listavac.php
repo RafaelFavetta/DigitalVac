@@ -232,6 +232,8 @@ usort($vacinas_opcionais, function($a, $b) {
                                 <?php
                                     // Exibe "A qualquer momento" ou idade especial para vacinas específicas
                                     $nome = $row['nome_vaci'];
+                                    $idade_anos = isset($row['idade_anos_reco']) ? intval($row['idade_anos_reco']) : 0;
+                                    $idade_meses = isset($row['idade_meses_reco']) ? intval($row['idade_meses_reco']) : 0;
                                     if (
                                         stripos($nome, 'Herpes-zóster') !== false || stripos($nome, 'RZV') !== false
                                     ) {
@@ -249,7 +251,7 @@ usort($vacinas_opcionais, function($a, $b) {
                                     ) {
                                         echo "9 anos";
                                     } elseif (
-                                        stripos($nome, 'dTpa (adulto/gestante)') !== false
+                                        stripos($nome, 'Hepatite B (adulto)') !== false
                                     ) {
                                         echo "18 anos";
                                     } elseif (
@@ -257,22 +259,35 @@ usort($vacinas_opcionais, function($a, $b) {
                                     ) {
                                         echo "18 anos";
                                     } elseif (
+                                        stripos($nome, 'Febre amarela') !== false
+                                    ) {
+                                        echo "5 anos";
+                                    } elseif (
+                                        stripos($nome, 'Pneumocócica 23-valente') !== false
+                                    ) {
+                                        echo "5 anos";
+                                    } elseif (
+                                        stripos($nome, 'Penta (DTP/Hib/Hepatite B)') !== false
+                                    ) {
+                                        echo "2 meses";
+                                    } elseif (
+                                        stripos($nome, 'dT') !== false
+                                    ) {
+                                        echo "7 anos";
+                                    } elseif (
                                         stripos($nome, 'VSR') !== false ||
                                         stripos($nome, 'Raiva') !== false ||
                                         stripos($nome, 'viajantes') !== false
                                     ) {
                                         echo "A qualquer momento";
                                     } else {
-                                        $idade_meses = isset($row['idade_meses_reco']) ? intval($row['idade_meses_reco']) : 0;
-                                        $idade_anos = isset($row['idade_anos_reco']) ? intval($row['idade_anos_reco']) : 0;
-                                        $total_meses = $idade_anos * 12 + $idade_meses;
-                                        if ($total_meses === 0) {
-                                            echo "Ao nascer";
-                                        } elseif ($total_meses < 24) {
-                                            echo $total_meses . " meses";
+                                        // Exibe idade recomendada da vacina, sem cálculos extras
+                                        if ($idade_anos > 0) {
+                                            echo $idade_anos . " anos";
+                                        } elseif ($idade_meses > 0) {
+                                            echo $idade_meses . " meses";
                                         } else {
-                                            $anos = floor($total_meses / 12);
-                                            echo $anos . " anos";
+                                            echo "Ao nascer";
                                         }
                                     }
                                 ?>
@@ -327,7 +342,7 @@ usort($vacinas_opcionais, function($a, $b) {
                                     ) {
                                         echo "9 anos";
                                     } elseif (
-                                        stripos($nome, 'dTpa (adulto/gestante)') !== false
+                                        stripos($nome, 'Hepatite B (adulto)') !== false
                                     ) {
                                         echo "18 anos";
                                     } elseif (
@@ -335,22 +350,35 @@ usort($vacinas_opcionais, function($a, $b) {
                                     ) {
                                         echo "18 anos";
                                     } elseif (
+                                        stripos($nome, 'Febre amarela') !== false
+                                    ) {
+                                        echo "5 anos";
+                                    } elseif (
+                                        stripos($nome, 'Pneumocócica 23-valente') !== false
+                                    ) {
+                                        echo "5 anos";
+                                    } elseif (
+                                        stripos($nome, 'Penta (DTP/Hib/Hepatite B)') !== false
+                                    ) {
+                                        echo "2 meses";
+                                    } elseif (
+                                        stripos($nome, 'dT') !== false
+                                    ) {
+                                        echo "7 anos";
+                                    } elseif (
                                         stripos($nome, 'VSR') !== false ||
                                         stripos($nome, 'Raiva') !== false ||
                                         stripos($nome, 'viajantes') !== false
                                     ) {
                                         echo "A qualquer momento";
                                     } else {
-                                        $idade_meses = isset($row['idade_meses_reco']) ? intval($row['idade_meses_reco']) : 0;
-                                        $idade_anos = isset($row['idade_anos_reco']) ? intval($row['idade_anos_reco']) : 0;
-                                        $total_meses = $idade_anos * 12 + $idade_meses;
-                                        if ($total_meses === 0) {
-                                            echo "Ao nascer";
-                                        } elseif ($total_meses < 24) {
-                                            echo $total_meses . " meses";
+                                        // Exibe idade recomendada da vacina, sem cálculos extras
+                                        if ($idade_anos > 0) {
+                                            echo $idade_anos . " anos";
+                                        } elseif ($idade_meses > 0) {
+                                            echo $idade_meses . " meses";
                                         } else {
-                                            $anos = floor($total_meses / 12);
-                                            echo $anos . " anos";
+                                            echo "Ao nascer";
                                         }
                                     }
                                 ?>
