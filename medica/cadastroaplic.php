@@ -245,12 +245,56 @@ if (isset($_SESSION['id_medico'])) {
             numericOnly: true
         });
 
-        // Máscara para COREN/CRM
-        new Cleave('#coren-crm', {
-            delimiters: ['-', ' '],
-            blocks: [6, 2, 6],
-            uppercase: true,
-            numericOnly: false
+        // Máscara dinâmica para COREN/CRM
+        const corenCrmInput = document.getElementById('coren-crm');
+        corenCrmInput.addEventListener('input', function (e) {
+            let value = corenCrmInput.value.replace(/\s+/g, '').toUpperCase();
+            let formatted = '';
+            if (value.startsWith('CRM')) {
+                // CRM-UF 000000
+                let match = value.match(/^CRM([A-Z]{2})?(\d{0,6})$/);
+                if (match) {
+                    formatted = 'CRM';
+                    if (match[1]) {
+                        formatted += '-' + match[1];
+                    } else if (value.length > 3) {
+                        formatted += '-';
+                    }
+                    if (match[2]) {
+                        formatted += ' ' + match[2];
+                    }
+                } else {
+                    // Tenta formatar parcialmente
+                    formatted = value.replace(/^CRM/, 'CRM-');
+                    if (formatted.length > 6) {
+                        formatted = formatted.slice(0, 6) + ' ' + formatted.slice(6, 12);
+                    }
+                }
+            } else if (value.startsWith('COREN')) {
+                // COREN-UF 000000
+                let match = value.match(/^COREN([A-Z]{2})?(\d{0,6})$/);
+                if (match) {
+                    formatted = 'COREN';
+                    if (match[1]) {
+                        formatted += '-' + match[1];
+                    } else if (value.length > 5) {
+                        formatted += '-';
+                    }
+                    if (match[2]) {
+                        formatted += ' ' + match[2];
+                    }
+                } else {
+                    // Tenta formatar parcialmente
+                    formatted = value.replace(/^COREN/, 'COREN-');
+                    if (formatted.length > 8) {
+                        formatted = formatted.slice(0, 8) + ' ' + formatted.slice(8, 14);
+                    }
+                }
+            } else {
+                // fallback: mantém o valor original
+                formatted = corenCrmInput.value;
+            }
+            corenCrmInput.value = formatted.trim();
         });
 
         // Toast Bootstrap
