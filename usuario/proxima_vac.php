@@ -254,7 +254,7 @@ if (
         </div>
     </nav>
     <div class="container mt-4">
-        <h2 class="text-primary fw-bold mb-4">Próximas Vacinas</h2>
+        <h2 class="text-primary fw-bold mb-4 text-center">Próximas Vacinas</h2>
         <!-- Campo de pesquisa AJAX -->
         <div class="w-100 d-flex justify-content-center mb-3">
             <form class="d-flex position-relative" role="search" id="form-pesquisa-vacina" style="max-width:600px; width:100%;">
