@@ -167,7 +167,7 @@
           </div>
           <div class="col-md-6">
             <label for="dose" class="form-label fw-bold">Dose</label>
-            <input type="number" class="form-control" name="dose_aplicad" id="dose" placeholder="Quantidade de doses"
+            <input type="number" class="form-control" name="dose_aplicad" id="dose" placeholder="Número da dose"
               min="1" required />
           </div>
         </div>
