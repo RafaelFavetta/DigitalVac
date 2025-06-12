@@ -206,6 +206,7 @@ usort($vacinas_opcionais, function($a, $b) {
         <br>
         <div id="tabela-vacinas" class="d-flex justify-content-center">
             <div class="w-100">
+                <?php if (count($vacinas_obrigatorias) > 0): ?>
                 <div class="border border-primary rounded-3 mb-4 p-2 shadow-sm" style="background-color: #eaf4ff;">
                     <h5 class="text-primary text-center mb-2 fw-bold">
                         <i class="bi bi-shield-check"></i> Vacinas Obrigatórias (SUS)
@@ -213,7 +214,6 @@ usort($vacinas_opcionais, function($a, $b) {
                     <table class="table table-bordered text-center mx-auto">
                         <thead>
                             <tr>
-                                <!-- <th>ID</th> -->
                                 <th>Nome</th>
                                 <th>Fabricante</th>
                                 <th>Lote</th>
@@ -227,90 +227,166 @@ usort($vacinas_opcionais, function($a, $b) {
                         </thead>
                         <tbody>
                             <?php
+                            usort($vacinas_obrigatorias, function($a, $b) {
+                                return $a['idade_ordenacao'] <=> $b['idade_ordenacao'];
+                            });
                             $rowIndex = 0;
                             foreach ($vacinas_obrigatorias as $row):
                                 $rowClass = ($rowIndex === 0) ? 'bg-white' : (($rowIndex % 2 === 1) ? 'table-secondary' : 'bg-white');
-                                $idade_reco = isset($row['idade_reco']) ? trim($row['idade_reco']) : '';
-                                ?>
-                                <tr class="<?php echo $rowClass; ?>">
-                                    <!-- <td><?php echo htmlspecialchars($row['id_vaci']); ?></td> -->
-                                    <td><?php echo htmlspecialchars($row['nome_vaci']); ?></td>
-                                    <td><?php echo htmlspecialchars($row['fabri_vaci']); ?></td>
-                                    <td><?php echo htmlspecialchars($row['lote_vaci']); ?></td>
-                                    <td>
-                                        <?php
-                                        $nome = $row['nome_vaci'];
-                                        $idade_reco = isset($row['idade_reco']) ? trim($row['idade_reco']) : '';
-                                        if (
-                                            stripos($nome, 'Herpes-zóster') !== false || stripos($nome, 'RZV') !== false
-                                        ) {
-                                            echo "50 anos";
-                                        } elseif (
-                                            stripos($nome, 'Dengue') !== false || stripos($nome, 'Qdenga') !== false
-                                        ) {
-                                            echo "10 anos";
-                                        } elseif (
-                                            stripos($nome, 'HPV') !== false
-                                        ) {
-                                            echo "9 anos";
-                                        } elseif (
-                                            stripos($nome, 'Influenza') !== false
-                                        ) {
-                                            echo "9 anos";
-                                        } elseif (
-                                            stripos($nome, 'Hepatite B (adulto)') !== false
-                                        ) {
-                                            echo "18 anos";
-                                        } elseif (
-                                            stripos($nome, 'Hepatite B') !== false && stripos($nome, 'adulto') !== false
-                                        ) {
-                                            echo "18 anos";
-                                        } elseif (
-                                            stripos($nome, 'Febre amarela') !== false
-                                        ) {
-                                            echo "5 anos";
-                                        } elseif (
-                                            stripos($nome, 'Pneumocócica 23-valente') !== false
-                                        ) {
-                                            echo "5 anos";
-                                        } elseif (
-                                            stripos($nome, 'Penta (DTP/Hib/Hepatite B)') !== false
-                                        ) {
-                                            echo "2 meses";
-                                        } elseif (
-                                            stripos($nome, 'dT') !== false
-                                        ) {
-                                            echo "7 anos";
-                                        } elseif (
-                                            stripos($nome, 'VSR') !== false ||
-                                            stripos($nome, 'Raiva') !== false ||
-                                            stripos($nome, 'viajantes') !== false
-                                        ) {
-                                            echo "A qualquer momento";
-                                        } else {
-                                            // Exibe idade_reco direto
-                                            echo htmlspecialchars($idade_reco !== '' ? $idade_reco : "Ao nascer");
-                                        }
-                                        ?>
-                                    </td>
-                                    <td><?php echo htmlspecialchars($row['via_adimicao']); ?></td>
-                                    <td><?php echo htmlspecialchars($row['n_dose']); ?></td>
-                                    <td><?php echo htmlspecialchars($row['intervalo_dose']); ?></td>
-                                    <td><?php echo htmlspecialchars($row['estoque']); ?></td>
-                                    <td>
-                                        <a href="editar_vacina.php?id_vaci=<?php echo urlencode($row['id_vaci']); ?>"
-                                            class="btn btn-info btn-sm">
-                                            <i class="bi bi-pencil-square"></i>
-                                        </a>
-                                    </td>
-                                </tr>
-                                <?php $rowIndex++; endforeach; ?>
-                            <?php if (count($vacinas_obrigatorias) === 0): ?>
-                                <tr><td colspan="9">Nenhuma vacina encontrada.</td></tr>
-                            <?php endif; ?>
+                                $modalId = "modalVacina" . $row['id_vaci'];
+                            ?>
+                            <tr class="<?php echo $rowClass; ?>">
+                                <td><?php echo htmlspecialchars($row['nome_vaci']); ?></td>
+                                <td><?php echo htmlspecialchars($row['fabri_vaci']); ?></td>
+                                <td><?php echo htmlspecialchars($row['lote_vaci']); ?></td>
+                                <td>
+                                    <?php
+                                    $nome = $row['nome_vaci'];
+                                    $idade_reco = isset($row['idade_reco']) ? trim($row['idade_reco']) : '';
+                                    if (
+                                        stripos($nome, 'Herpes-zóster') !== false || stripos($nome, 'RZV') !== false
+                                    ) {
+                                        echo "50 anos";
+                                    } elseif (
+                                        stripos($nome, 'Dengue') !== false || stripos($nome, 'Qdenga') !== false
+                                    ) {
+                                        echo "10 anos";
+                                    } elseif (
+                                        stripos($nome, 'HPV') !== false
+                                    ) {
+                                        echo "9 anos";
+                                    } elseif (
+                                        stripos($nome, 'Influenza') !== false
+                                    ) {
+                                        echo "9 anos";
+                                    } elseif (
+                                        stripos($nome, 'Hepatite B (adulto)') !== false
+                                    ) {
+                                        echo "18 anos";
+                                    } elseif (
+                                        stripos($nome, 'Hepatite B') !== false && stripos($nome, 'adulto') !== false
+                                    ) {
+                                        echo "18 anos";
+                                    } elseif (
+                                        stripos($nome, 'Febre amarela') !== false
+                                    ) {
+                                        echo "5 anos";
+                                    } elseif (
+                                        stripos($nome, 'Pneumocócica 23-valente') !== false
+                                    ) {
+                                        echo "5 anos";
+                                    } elseif (
+                                        stripos($nome, 'Penta (DTP/Hib/Hepatite B)') !== false
+                                    ) {
+                                        echo "2 meses";
+                                    } elseif (
+                                        stripos($nome, 'dT') !== false
+                                    ) {
+                                        echo "7 anos";
+                                    } elseif (
+                                        stripos($nome, 'VSR') !== false ||
+                                        stripos($nome, 'Raiva') !== false ||
+                                        stripos($nome, 'viajantes') !== false
+                                    ) {
+                                        echo "A qualquer momento";
+                                    } else {
+                                        // Exibe idade_reco direto
+                                        echo htmlspecialchars($idade_reco !== '' ? $idade_reco : "Ao nascer");
+                                    }
+                                    ?>
+                                </td>
+                                <td><?php echo htmlspecialchars($row['via_adimicao']); ?></td>
+                                <td><?php echo htmlspecialchars($row['n_dose']); ?></td>
+                                <td><?php echo htmlspecialchars($row['intervalo_dose']); ?></td>
+                                <td><?php echo htmlspecialchars($row['estoque']); ?></td>
+                                <td>
+                                    <button class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#<?php echo $modalId; ?>">
+                                        <i class="bi bi-info-circle"></i>
+                                    </button>
+                                    <!-- Modal -->
+                                    <div class="modal fade" id="<?php echo $modalId; ?>" tabindex="-1" aria-labelledby="label<?php echo $modalId; ?>" aria-hidden="true">
+                                      <div class="modal-dialog modal-dialog-centered">
+                                        <div class="modal-content">
+                                          <div class="modal-header bg-primary text-white">
+                                            <h5 class="modal-title" id="label<?php echo $modalId; ?>">Informações da Vacina</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                                          </div>
+                                          <div class="modal-body text-start">
+                                            <strong>Nome:</strong> <?php echo htmlspecialchars($row['nome_vaci']); ?><br>
+                                            <strong>Fabricante:</strong> <?php echo htmlspecialchars($row['fabri_vaci']); ?><br>
+                                            <strong>Lote:</strong> <?php echo htmlspecialchars($row['lote_vaci']); ?><br>
+                                            <strong>Idade Aplicação:</strong> <?php
+                                                $nome = $row['nome_vaci'];
+                                                $idade_reco = isset($row['idade_reco']) ? trim($row['idade_reco']) : '';
+                                                if (
+                                                    stripos($nome, 'Herpes-zóster') !== false || stripos($nome, 'RZV') !== false
+                                                ) {
+                                                    echo "50 anos";
+                                                } elseif (
+                                                    stripos($nome, 'Dengue') !== false || stripos($nome, 'Qdenga') !== false
+                                                ) {
+                                                    echo "10 anos";
+                                                } elseif (
+                                                    stripos($nome, 'HPV') !== false
+                                                ) {
+                                                    echo "9 anos";
+                                                } elseif (
+                                                    stripos($nome, 'Influenza') !== false
+                                                ) {
+                                                    echo "9 anos";
+                                                } elseif (
+                                                    stripos($nome, 'Hepatite B (adulto)') !== false
+                                                ) {
+                                                    echo "18 anos";
+                                                } elseif (
+                                                    stripos($nome, 'Hepatite B') !== false && stripos($nome, 'adulto') !== false
+                                                ) {
+                                                    echo "18 anos";
+                                                } elseif (
+                                                    stripos($nome, 'Febre amarela') !== false
+                                                ) {
+                                                    echo "5 anos";
+                                                } elseif (
+                                                    stripos($nome, 'Pneumocócica 23-valente') !== false
+                                                ) {
+                                                    echo "5 anos";
+                                                } elseif (
+                                                    stripos($nome, 'Penta (DTP/Hib/Hepatite B)') !== false
+                                                ) {
+                                                    echo "2 meses";
+                                                } elseif (
+                                                    stripos($nome, 'dT') !== false
+                                                ) {
+                                                    echo "7 anos";
+                                                } elseif (
+                                                    stripos($nome, 'VSR') !== false ||
+                                                    stripos($nome, 'Raiva') !== false ||
+                                                    stripos($nome, 'viajantes') !== false
+                                                ) {
+                                                    echo "A qualquer momento";
+                                                } else {
+                                                    // Exibe idade_reco direto
+                                                    echo htmlspecialchars($idade_reco !== '' ? $idade_reco : "Ao nascer");
+                                                }
+                                            ?><br>
+                                            <strong>Via de Administração:</strong> <?php echo htmlspecialchars($row['via_adimicao']); ?><br>
+                                            <strong>Número de Doses:</strong> <?php echo htmlspecialchars($row['n_dose']); ?><br>
+                                            <strong>Intervalo entre Doses:</strong> <?php echo htmlspecialchars($row['intervalo_dose']); ?> meses<br>
+                                            <strong>Estoque:</strong> <?php echo htmlspecialchars($row['estoque']); ?><br>
+                                            <strong>Obrigatória SUS:</strong> Sim
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <?php $rowIndex++; endforeach; ?>
                         </tbody>
                     </table>
                 </div>
+                <?php endif; ?>
+
+                <?php if (count($vacinas_opcionais) > 0): ?>
                 <div class="border border-warning rounded-3 mb-4 p-2 shadow-sm" style="background-color: #fffbe6;">
                     <h5 class="text-primary text-center mb-2 mt-4 fw-bold">
                         <i class="bi bi-patch-question"></i> Vacinas Opcionais
@@ -318,7 +394,6 @@ usort($vacinas_opcionais, function($a, $b) {
                     <table class="table table-bordered text-center mx-auto">
                         <thead>
                             <tr>
-                                <!-- <th>ID</th> -->
                                 <th>Nome</th>
                                 <th>Fabricante</th>
                                 <th>Lote</th>
@@ -332,74 +407,148 @@ usort($vacinas_opcionais, function($a, $b) {
                         </thead>
                         <tbody>
                             <?php
+                            usort($vacinas_opcionais, function($a, $b) {
+                                return $a['idade_ordenacao'] <=> $b['idade_ordenacao'];
+                            });
                             $rowIndex = 0;
                             foreach ($vacinas_opcionais as $row):
                                 $rowClass = ($rowIndex === 0) ? 'bg-white' : (($rowIndex % 2 === 1) ? 'table-secondary' : 'bg-white');
-                                $idade_reco = isset($row['idade_reco']) ? trim($row['idade_reco']) : '';
-                                ?>
-                                <tr class="<?php echo $rowClass; ?>">
-                                    <!-- <td><?php echo htmlspecialchars($row['id_vaci']); ?></td> -->
-                                    <td><?php echo htmlspecialchars($row['nome_vaci']); ?></td>
-                                    <td><?php echo htmlspecialchars($row['fabri_vaci']); ?></td>
-                                    <td><?php echo htmlspecialchars($row['lote_vaci']); ?></td>
-                                    <td>
-                                        <?php
-                                        $nome = $row['nome_vaci'];
-                                        $idade_reco = isset($row['idade_reco']) ? trim($row['idade_reco']) : '';
-                                        if (
-                                            stripos($nome, 'Herpes-zóster') !== false || stripos($nome, 'RZV') !== false
-                                        ) {
-                                            echo "50 anos";
-                                        } elseif (
-                                            stripos($nome, 'Dengue') !== false || stripos($nome, 'Qdenga') !== false
-                                        ) {
-                                            echo "10 anos";
-                                        } elseif (
-                                            stripos($nome, 'HPV') !== false
-                                        ) {
-                                            echo "9 anos";
-                                        } elseif (
-                                            stripos($nome, 'Influenza') !== false
-                                        ) {
-                                            echo "9 anos";
-                                        } elseif (
-                                            stripos($nome, 'dTpa (adulto/gestante)') !== false
-                                        ) {
-                                            echo "18 anos";
-                                        } elseif (
-                                            stripos($nome, 'Hepatite B') !== false && stripos($nome, 'adulto') !== false
-                                        ) {
-                                            echo "18 anos";
-                                        } elseif (
-                                            stripos($nome, 'VSR') !== false ||
-                                            stripos($nome, 'Raiva') !== false ||
-                                            stripos($nome, 'viajantes') !== false
-                                        ) {
-                                            echo "A qualquer momento";
-                                        } else {
-                                            // Exibe idade_reco direto
-                                            echo htmlspecialchars($idade_reco !== '' ? $idade_reco : "Ao nascer");
-                                        }
-                                        ?>
-                                    </td>
-                                    <td><?php echo htmlspecialchars($row['via_adimicao']); ?></td>
-                                    <td><?php echo htmlspecialchars($row['n_dose']); ?></td>
-                                    <td><?php echo htmlspecialchars($row['intervalo_dose']); ?></td>
-                                    <td><?php echo htmlspecialchars($row['estoque']); ?></td>
-                                    <td>
-                                        <a href="editar_vacina.php?id_vaci=<?php echo urlencode($row['id_vaci']); ?>"
-                                            class="btn btn-info btn-sm">
-                                            <i class="bi bi-pencil-square"></i>
-                                        </a>
-                                    </td>
-                                </tr>
-                                <?php $rowIndex++; endforeach; ?>
-                            <?php if (count($vacinas_opcionais) === 0): ?>
-                                <tr><td colspan="9">Nenhuma vacina encontrada.</td></tr>
-                            <?php endif; ?>
+                                $modalId = "modalVacina" . $row['id_vaci'];
+                            ?>
+                            <tr class="<?php echo $rowClass; ?>">
+                                <td><?php echo htmlspecialchars($row['nome_vaci']); ?></td>
+                                <td><?php echo htmlspecialchars($row['fabri_vaci']); ?></td>
+                                <td><?php echo htmlspecialchars($row['lote_vaci']); ?></td>
+                                <td>
+                                    <?php
+                                    $nome = $row['nome_vaci'];
+                                    $idade_reco = isset($row['idade_reco']) ? trim($row['idade_reco']) : '';
+                                    if (
+                                        stripos($nome, 'Herpes-zóster') !== false || stripos($nome, 'RZV') !== false
+                                    ) {
+                                        echo "50 anos";
+                                    } elseif (
+                                        stripos($nome, 'Dengue') !== false || stripos($nome, 'Qdenga') !== false
+                                    ) {
+                                        echo "10 anos";
+                                    } elseif (
+                                        stripos($nome, 'HPV') !== false
+                                    ) {
+                                        echo "9 anos";
+                                    } elseif (
+                                        stripos($nome, 'Influenza') !== false
+                                    ) {
+                                        echo "9 anos";
+                                    } elseif (
+                                        stripos($nome, 'dTpa (adulto/gestante)') !== false
+                                    ) {
+                                        echo "18 anos";
+                                    } elseif (
+                                        stripos($nome, 'Hepatite B') !== false && stripos($nome, 'adulto') !== false
+                                    ) {
+                                        echo "18 anos";
+                                    } elseif (
+                                        stripos($nome, 'VSR') !== false ||
+                                        stripos($nome, 'Raiva') !== false ||
+                                        stripos($nome, 'viajantes') !== false
+                                    ) {
+                                        echo "A qualquer momento";
+                                    } else {
+                                        // Exibe idade_reco direto
+                                        echo htmlspecialchars($idade_reco !== '' ? $idade_reco : "Ao nascer");
+                                    }
+                                    ?>
+                                </td>
+                                <td><?php echo htmlspecialchars($row['via_adimicao']); ?></td>
+                                <td><?php echo htmlspecialchars($row['n_dose']); ?></td>
+                                <td><?php echo htmlspecialchars($row['intervalo_dose']); ?></td>
+                                <td><?php echo htmlspecialchars($row['estoque']); ?></td>
+                                <td>
+                                    <button class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#<?php echo $modalId; ?>">
+                                        <i class="bi bi-info-circle"></i>
+                                    </button>
+                                    <!-- Modal -->
+                                    <div class="modal fade" id="<?php echo $modalId; ?>" tabindex="-1" aria-labelledby="label<?php echo $modalId; ?>" aria-hidden="true">
+                                      <div class="modal-dialog modal-dialog-centered">
+                                        <div class="modal-content">
+                                          <div class="modal-header bg-primary text-white">
+                                            <h5 class="modal-title" id="label<?php echo $modalId; ?>">Informações da Vacina</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                                          </div>
+                                          <div class="modal-body text-start">
+                                            <strong>Nome:</strong> <?php echo htmlspecialchars($row['nome_vaci']); ?><br>
+                                            <strong>Fabricante:</strong> <?php echo htmlspecialchars($row['fabri_vaci']); ?><br>
+                                            <strong>Lote:</strong> <?php echo htmlspecialchars($row['lote_vaci']); ?><br>
+                                            <strong>Idade Aplicação:</strong> <?php
+                                                $nome = $row['nome_vaci'];
+                                                $idade_reco = isset($row['idade_reco']) ? trim($row['idade_reco']) : '';
+                                                if (
+                                                    stripos($nome, 'Herpes-zóster') !== false || stripos($nome, 'RZV') !== false
+                                                ) {
+                                                    echo "50 anos";
+                                                } elseif (
+                                                    stripos($nome, 'Dengue') !== false || stripos($nome, 'Qdenga') !== false
+                                                ) {
+                                                    echo "10 anos";
+                                                } elseif (
+                                                    stripos($nome, 'HPV') !== false
+                                                ) {
+                                                    echo "9 anos";
+                                                } elseif (
+                                                    stripos($nome, 'Influenza') !== false
+                                                ) {
+                                                    echo "9 anos";
+                                                } elseif (
+                                                    stripos($nome, 'Hepatite B (adulto)') !== false
+                                                ) {
+                                                    echo "18 anos";
+                                                } elseif (
+                                                    stripos($nome, 'Hepatite B') !== false && stripos($nome, 'adulto') !== false
+                                                ) {
+                                                    echo "18 anos";
+                                                } elseif (
+                                                    stripos($nome, 'Febre amarela') !== false
+                                                ) {
+                                                    echo "5 anos";
+                                                } elseif (
+                                                    stripos($nome, 'Pneumocócica 23-valente') !== false
+                                                ) {
+                                                    echo "5 anos";
+                                                } elseif (
+                                                    stripos($nome, 'Penta (DTP/Hib/Hepatite B)') !== false
+                                                ) {
+                                                    echo "2 meses";
+                                                } elseif (
+                                                    stripos($nome, 'dT') !== false
+                                                ) {
+                                                    echo "7 anos";
+                                                } elseif (
+                                                    stripos($nome, 'VSR') !== false ||
+                                                    stripos($nome, 'Raiva') !== false ||
+                                                    stripos($nome, 'viajantes') !== false
+                                                ) {
+                                                    echo "A qualquer momento";
+                                                } else {
+                                                    // Exibe idade_reco direto
+                                                    echo htmlspecialchars($idade_reco !== '' ? $idade_reco : "Ao nascer");
+                                                }
+                                            ?><br>
+                                            <strong>Via de Administração:</strong> <?php echo htmlspecialchars($row['via_adimicao']); ?><br>
+                                            <strong>Número de Doses:</strong> <?php echo htmlspecialchars($row['n_dose']); ?><br>
+                                            <strong>Intervalo entre Doses:</strong> <?php echo htmlspecialchars($row['intervalo_dose']); ?> meses<br>
+                                            <strong>Estoque:</strong> <?php echo htmlspecialchars($row['estoque']); ?><br>
+                                            <strong>Obrigatória SUS:</strong> Não
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <?php $rowIndex++; endforeach; ?>
                         </tbody>
                     </table>
                 </div>
+                <?php endif; ?>
             </div>
         </div>
     </div>
