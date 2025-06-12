@@ -90,6 +90,94 @@ function formatarIdade($idade_reco) {
         return $idade_reco;
     }
 }
+
+// AJAX: retorna só a tabela se for requisição AJAX
+if (
+    isset($_SERVER['HTTP_X_REQUESTED_WITH']) &&
+    strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest'
+) {
+    $pesquisa = isset($_GET['pesquisa']) ? trim($_GET['pesquisa']) : '';
+    // Filtra vacinas pelo nome se pesquisa for enviada
+    $vacinas_filtradas = [];
+    foreach ($vacinas as $vacina) {
+        if ($pesquisa === '' || stripos($vacina['nome_vaci'], $pesquisa) !== false) {
+            $vacinas_filtradas[] = $vacina;
+        }
+    }
+    ?>
+    <div id="tabela-proximas-vacinas">
+        <table class="table table-bordered text-center mx-auto">
+            <thead>
+                <tr>
+                    <th>Vacina</th>
+                    <th>Idade Recomendada</th>
+                    <th>Próxima Dose</th>
+                    <th>Doses</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($vacinas_filtradas as $vacina):
+                    $id_vaci = $vacina['id_vaci'];
+                    $aplic = $aplicacoes[$id_vaci] ?? null;
+                    $proxima_dose = calcularProximaDose($vacina, $aplic, $naci_usuario);
+                    $doses_tomadas = $aplic ? intval($aplic['total_doses']) : 0;
+                    $n_dose = intval($vacina['n_dose']);
+                    ?>
+                    <tr>
+                        <td><?= htmlspecialchars($vacina['nome_vaci']) ?></td>
+                        <td><?= htmlspecialchars(formatarIdade($vacina['idade_reco'])) ?></td>
+                        <td>
+                            <?php
+                            if ($proxima_dose === "Esquema completo" || $proxima_dose === "Consultar profissional") {
+                                echo $proxima_dose;
+                            } else {
+                                echo date('d/m/Y', strtotime($proxima_dose));
+                            }
+                            ?>
+                        </td>
+                        <td><?= $doses_tomadas . " / " . $n_dose ?></td>
+                        <td>
+                            <button class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#modalVacina<?= $id_vaci ?>">
+                                <i class="bi bi-info-circle"></i>
+                            </button>
+                            <!-- Modal -->
+                            <div class="modal fade" id="modalVacina<?= $id_vaci ?>" tabindex="-1" aria-labelledby="modalLabel<?= $id_vaci ?>" aria-hidden="true">
+                              <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                  <div class="modal-header">
+                                    <h5 class="modal-title" id="modalLabel<?= $id_vaci ?>">Informações da Vacina</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                                  </div>
+                                  <div class="modal-body text-start">
+                                    <strong>Vacina:</strong> <?= htmlspecialchars($vacina['nome_vaci']) ?><br>
+                                    <strong>Idade Recomendada:</strong> <?= htmlspecialchars(formatarIdade($vacina['idade_reco'])) ?><br>
+                                    <strong>Doses do Esquema:</strong> <?= $n_dose ?><br>
+                                    <strong>Intervalo entre doses:</strong> <?= intval($vacina['intervalo_dose']) ?> meses<br>
+                                    <?php if ($aplic): ?>
+                                        <hr>
+                                        <strong>Última aplicação:</strong> <?= date('d/m/Y', strtotime($aplic['ultima_data'])) ?><br>
+                                        <strong>Dose aplicada:</strong> <?= intval($aplic['ultima_dose']) ?><br>
+                                    <?php else: ?>
+                                        <hr>
+                                        <em>Nenhuma dose aplicada ainda.</em>
+                                    <?php endif; ?>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+                <?php if (count($vacinas_filtradas) === 0): ?>
+                    <tr><td colspan="5">Nenhuma vacina encontrada.</td></tr>
+                <?php endif; ?>
+            </tbody>
+        </table>
+    </div>
+    <?php
+    exit;
+}
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -167,7 +255,16 @@ function formatarIdade($idade_reco) {
     </nav>
     <div class="container mt-4">
         <h2 class="text-primary fw-bold mb-4">Próximas Vacinas</h2>
-        <div class="table-responsive">
+        <!-- Campo de pesquisa AJAX -->
+        <div class="w-100 d-flex justify-content-center mb-3">
+            <form class="d-flex position-relative" role="search" id="form-pesquisa-vacina" style="max-width:600px; width:100%;">
+                <input class="form-control me-2 border border-primary" type="search" placeholder="Nome da vacina"
+                    aria-label="Pesquisar" id="pesquisa-vacina" autocomplete="off" maxlength="50"
+                    pattern="[A-Za-zÀ-ÿ\s]+">
+            </form>
+        </div>
+        <div id="tabela-proximas-vacinas">
+            <!-- tabela original aqui -->
             <table class="table table-bordered text-center mx-auto">
                 <thead>
                     <tr>
@@ -236,6 +333,30 @@ function formatarIdade($idade_reco) {
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-</body>
+    <script>
+        // Permite apenas letras e espaços no campo de pesquisa
+        document.getElementById('pesquisa-vacina').addEventListener('input', function () {
+            this.value = this.value.replace(/[^A-Za-zÀ-ÿ\s]/g, '').slice(0, 50);
+        });
 
+        // AJAX para atualizar tabela conforme digita
+        const inputVacina = document.getElementById('pesquisa-vacina');
+        const tabela = document.getElementById('tabela-proximas-vacinas');
+        function atualizarTabelaProximasVacinas() {
+            const termo = inputVacina.value;
+            fetch('proxima_vac.php?pesquisa=' + encodeURIComponent(termo), { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
+                .then(res => res.text())
+                .then(html => {
+                    const temp = document.createElement('div');
+                    temp.innerHTML = html;
+                    const novaTabela = temp.querySelector('#tabela-proximas-vacinas');
+                    if (novaTabela) tabela.innerHTML = novaTabela.innerHTML;
+                });
+        }
+        inputVacina.addEventListener('input', atualizarTabelaProximasVacinas);
+        inputVacina.addEventListener('focus', function () {
+            if (!this.value) atualizarTabelaProximasVacinas();
+        });
+    </script>
+</body>
 </html>
