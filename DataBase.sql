@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 12, 2025 at 05:32 AM
+-- Generation Time: Jun 12, 2025 at 07:03 AM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 8.1.6
 
@@ -36,6 +36,16 @@ CREATE TABLE `aplicacao` (
   `data_aplica` date NOT NULL,
   `dose_aplicad` int(1) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `aplicacao`
+--
+
+INSERT INTO `aplicacao` (`id_aplica`, `id_usuario`, `id_posto`, `id_medico`, `id_vaci`, `data_aplica`, `dose_aplicad`) VALUES
+(2407, 3, 5, 3, 22, '2007-09-06', 1),
+(2408, 3, 2, 1, 37, '2007-09-06', 1),
+(2409, 3, 3, 3, 37, '2007-11-06', 2),
+(2410, 3, 3, 3, 37, '2008-01-06', 3);
 
 -- --------------------------------------------------------
 
@@ -194,34 +204,31 @@ CREATE TABLE `vacina` (
 --
 
 INSERT INTO `vacina` (`id_vaci`, `nome_vaci`, `fabri_vaci`, `lote_vaci`, `via_adimicao`, `n_dose`, `intervalo_dose`, `idade_reco`, `estoque`, `sus`) VALUES
-(22, 'BCG', 'Instituto Butantan', 'BCG2025A', 'Intradérmica', 1, 0, '0 meses', 10000, 1),
+(22, 'BCG', 'Instituto Butantan', 'BCG2025A', 'Intradérmica', 1, 0, '0 meses', 9999, 1),
 (24, 'Penta (DTP/Hib/Hepatite B)', 'Fiocruz', 'PENTA2025', 'Intramuscular', 3, 2, '2 meses', 10000, 1),
 (25, 'Poliomielite inativada (VIP)', 'Sanofi', 'VIP2025L01', 'Intramuscular', 4, 2, '2 meses', 10000, 1),
 (27, 'Pneumocócica 10-valente', 'GSK', 'PN10V2025', 'Intramuscular', 3, 2, '2 meses', 10000, 1),
-(28, 'Meningocócica C (conjugada)', 'Fiocruz', 'MENCC2025', 'Intramuscular', 2, 11, '3 meses', 10000, 1),
 (29, 'Rotavírus humano', 'GSK', 'RTH2025', 'Oral', 2, 2, '2 meses', 10000, 1),
 (30, 'Febre amarela', 'Bio-Manguinhos', 'FA2025', 'Subcutânea', 1, 0, '5 anos', 10000, 1),
 (31, 'Tríplice viral (SCR)', 'MSD', 'SCR2025', 'Subcutânea', 2, 3, '1 ano', 10000, 1),
 (33, 'Hepatite A', 'Fiocruz', 'HEPA2025', 'Intramuscular', 2, 6, '1 ano', 10000, 1),
 (34, 'Varicela', 'MSD', 'VARIC2025', 'Subcutânea', 2, 36, '1 ano', 10000, 1),
 (35, 'HPV (quadrivalente/9-valente)', 'MSD', 'HPVQ2025', 'Intramuscular', 2, 6, '9 anos', 10000, 1),
-(37, 'Meningocócica ACWY', 'Fiocruz', 'ACWY2025', 'Intramuscular', 3, 2, '0 meses', 10000, 1),
+(37, 'Meningocócica ACWY', 'Fiocruz', 'ACWY2025', 'Intramuscular', 3, 2, '0 meses', 9997, 1),
 (39, 'Hepatite B (adulto)', 'Fiocruz', 'HEPBAD2025', 'Intramuscular', 3, 2, '18 anos', 10000, 1),
 (40, 'Influenza', 'Instituto Butantan', 'INF2025', 'Intramuscular', 1, 0, '9 anos', 10000, 1),
 (41, 'Pneumocócica 23-valente', 'MSD', 'PN23V2025', 'Intramuscular', 1, 0, '5 anos', 10000, 1),
 (42, 'Hepatite B', 'Fiocruz', 'HEPB2025', 'Intramuscular', 3, 1, '0 meses', 10000, 1),
-(44, 'Influenza', 'Instituto Butantan', 'INF2025', 'Intramuscular', 1, 12, '6 meses', 10000, 1),
 (49, 'Poliomielite oral bivalente (VOPb)', 'Instituto Butantan', 'VOP2025B', 'Oral', 0, 0, '0 meses', 10000, 1),
 (50, 'Tetraviral (SCRV)', 'MSD', 'SCRV2025', 'Subcutânea', 2, 3, '1 ano', 10000, 1),
 (51, 'dTpa (adulto/gestante)', 'Sanofi', 'DTPA2025', 'Intramuscular', 1, 0, '18 anos', 10000, 1),
-(53, 'HPV (quadrivalente/9-valente)', 'MSD', 'HPVQ2025', 'Intramuscular', 1, 0, '9 anos', 10000, 1),
 (55, 'Herpes-zóster (RZV)', 'GSK', 'HZ2025', 'Intramuscular', 2, 2, '50 anos', 10000, 1),
 (56, 'Dengue (Qdenga®)', 'Takeda', 'DENG2025', 'Intramuscular', 2, 3, '10 anos', 10000, 0),
 (57, 'VSR (Respiratório)', 'Pfizer', 'VSR2025', 'Intramuscular', 1, 0, 'A qualquer momento', 10000, 0),
 (58, 'Raiva (pré-exposição)', 'Bio-Manguinhos', 'RAIVA2025', 'Intramuscular', 1, 0, 'A qualquer momento', 10000, 0),
-(59, 'Vacinas de viajantes (tifóide, encefalite, etc.)', '—', '—', 'Variável', 0, 0, 'A qualquer momento', 10000, 0),
+(59, 'Vacinas de viajantes (tifóide, encefalite, etc.)', '—', '—', 'Variável', 1, 0, 'A qualquer momento', 10000, 0),
 (63, 'Meningocócica C (conjugada)', 'Fiocruz', 'MENCC2025', 'Intramuscular', 2, 2, '3 meses', 10000, 1),
-(64, 'dT (adulto)', 'Fiocruz', 'DT2025F', 'Intramuscular', 10, 120, '7 anos', 10000, 1);
+(64, 'dT', 'Fiocruz', 'DT2025F', 'Intramuscular', 10, 120, '7 anos', 10000, 1);
 
 --
 -- Indexes for dumped tables
@@ -285,7 +292,7 @@ ALTER TABLE `vacina`
 -- AUTO_INCREMENT for table `aplicacao`
 --
 ALTER TABLE `aplicacao`
-  MODIFY `id_aplica` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2407;
+  MODIFY `id_aplica` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2411;
 
 --
 -- AUTO_INCREMENT for table `atestado`
