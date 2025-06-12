@@ -19,8 +19,8 @@ $stmt->close();
 
 $naci_usuario = $naci_usuario ?? date('Y-m-d');
 
-// Busca todas as vacinas
-$sql = "SELECT id_vaci, nome_vaci, idade_reco, n_dose, intervalo_dose FROM vacina";
+// Busca todas as vacinas (agora incluindo o campo 'sus')
+$sql = "SELECT id_vaci, nome_vaci, idade_reco, n_dose, intervalo_dose, sus FROM vacina";
 $result = $conn->query($sql);
 
 $vacinas = [];
@@ -135,76 +135,169 @@ if (
     }
     // Ordena as vacinas filtradas
     usort($vacinas_filtradas, 'ordenarIdadeRecomendada');
+    // Separa vacinas obrigatórias (SUS) e opcionais
+    $vacinas_obrigatorias = [];
+    $vacinas_opcionais = [];
+    foreach ($vacinas_filtradas as $vacina) {
+        if (isset($vacina['sus']) && intval($vacina['sus']) === 1) {
+            $vacinas_obrigatorias[] = $vacina;
+        } else {
+            $vacinas_opcionais[] = $vacina;
+        }
+    }
     ?>
     <div id="tabela-proximas-vacinas">
-        <table class="table table-bordered text-center mx-auto">
-            <thead>
-                <tr>
-                    <th>Vacina</th>
-                    <th>Idade Recomendada</th>
-                    <th>Próxima Dose</th>
-                    <th>Doses</th>
-                    <th>Ações</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php foreach ($vacinas_filtradas as $vacina):
-                    $id_vaci = $vacina['id_vaci'];
-                    $aplic = $aplicacoes[$id_vaci] ?? null;
-                    $proxima_dose = calcularProximaDose($vacina, $aplic, $naci_usuario);
-                    $doses_tomadas = $aplic ? intval($aplic['total_doses']) : 0;
-                    $n_dose = intval($vacina['n_dose']);
-                    ?>
+        <?php if (count($vacinas_obrigatorias) > 0): ?>
+        <div class="border border-primary rounded-3 mb-4 p-2 shadow-sm" style="background-color: #eaf4ff;">
+            <h5 class="text-primary text-center mb-2 fw-bold">
+                <i class="bi bi-shield-check"></i> Vacinas Obrigatórias (SUS)
+            </h5>
+            <table class="table table-bordered text-center mx-auto">
+                <thead>
                     <tr>
-                        <td><?= htmlspecialchars($vacina['nome_vaci']) ?></td>
-                        <td><?= htmlspecialchars(formatarIdade($vacina['idade_reco'])) ?></td>
-                        <td>
-                            <?php
-                            if ($proxima_dose === "Esquema completo" || $proxima_dose === "Consultar profissional") {
-                                echo $proxima_dose;
-                            } else {
-                                echo date('d/m/Y', strtotime($proxima_dose));
-                            }
-                            ?>
-                        </td>
-                        <td><?= $doses_tomadas . " / " . $n_dose ?></td>
-                        <td>
-                            <button class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#modalVacina<?= $id_vaci ?>">
-                                <i class="bi bi-info-circle"></i>
-                            </button>
-                            <!-- Modal -->
-                            <div class="modal fade" id="modalVacina<?= $id_vaci ?>" tabindex="-1" aria-labelledby="modalLabel<?= $id_vaci ?>" aria-hidden="true">
-                              <div class="modal-dialog modal-dialog-centered">
-                                <div class="modal-content">
-                                  <div class="modal-header">
-                                    <h5 class="modal-title" id="modalLabel<?= $id_vaci ?>">Informações da Vacina</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
-                                  </div>
-                                  <div class="modal-body text-start">
-                                    <strong>Vacina:</strong> <?= htmlspecialchars($vacina['nome_vaci']) ?><br>
-                                    <strong>Idade Recomendada:</strong> <?= htmlspecialchars(formatarIdade($vacina['idade_reco'])) ?><br>
-                                    <strong>Doses do Esquema:</strong> <?= $n_dose ?><br>
-                                    <strong>Intervalo entre doses:</strong> <?= intval($vacina['intervalo_dose']) ?> meses<br>
-                                    <?php if ($aplic): ?>
-                                        <hr>
-                                        <strong>Última aplicação:</strong> <?= date('d/m/Y', strtotime($aplic['ultima_data'])) ?><br>
-                                        <strong>Dose aplicada:</strong> <?= intval($aplic['ultima_dose']) ?><br>
-                                    <?php else: ?>
-                                        <hr>
-                                        <em>Nenhuma dose aplicada ainda.</em>
-                                    <?php endif; ?>
+                        <th>Vacina</th>
+                        <th>Idade Recomendada</th>
+                        <th>Próxima Dose</th>
+                        <th>Doses</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($vacinas_obrigatorias as $vacina):
+                        $id_vaci = $vacina['id_vaci'];
+                        $aplic = $aplicacoes[$id_vaci] ?? null;
+                        $proxima_dose = calcularProximaDose($vacina, $aplic, $naci_usuario);
+                        $doses_tomadas = $aplic ? intval($aplic['total_doses']) : 0;
+                        $n_dose = intval($vacina['n_dose']);
+                        ?>
+                        <tr>
+                            <td><?= htmlspecialchars($vacina['nome_vaci']) ?></td>
+                            <td><?= htmlspecialchars(formatarIdade($vacina['idade_reco'])) ?></td>
+                            <td>
+                                <?php
+                                if ($proxima_dose === "Esquema completo" || $proxima_dose === "Consultar profissional") {
+                                    echo $proxima_dose;
+                                } else {
+                                    echo date('d/m/Y', strtotime($proxima_dose));
+                                }
+                                ?>
+                            </td>
+                            <td><?= $doses_tomadas . " / " . $n_dose ?></td>
+                            <td>
+                                <button class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#modalVacina<?= $id_vaci ?>">
+                                    <i class="bi bi-info-circle"></i>
+                                </button>
+                                <!-- Modal -->
+                                <div class="modal fade" id="modalVacina<?= $id_vaci ?>" tabindex="-1" aria-labelledby="modalLabel<?= $id_vaci ?>" aria-hidden="true">
+                                  <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content">
+                                      <div class="modal-header">
+                                        <h5 class="modal-title" id="modalLabel<?= $id_vaci ?>">Informações da Vacina</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                                      </div>
+                                      <div class="modal-body text-start">
+                                        <strong>Vacina:</strong> <?= htmlspecialchars($vacina['nome_vaci']) ?><br>
+                                        <strong>Idade Recomendada:</strong> <?= htmlspecialchars(formatarIdade($vacina['idade_reco'])) ?><br>
+                                        <strong>Doses do Esquema:</strong> <?= $n_dose ?><br>
+                                        <strong>Intervalo entre doses:</strong> <?= intval($vacina['intervalo_dose']) ?> meses<br>
+                                        <?php if ($aplic): ?>
+                                            <hr>
+                                            <strong>Última aplicação:</strong> <?= date('d/m/Y', strtotime($aplic['ultima_data'])) ?><br>
+                                            <strong>Dose aplicada:</strong> <?= intval($aplic['ultima_dose']) ?><br>
+                                        <?php else: ?>
+                                            <hr>
+                                            <em>Nenhuma dose aplicada ainda.</em>
+                                        <?php endif; ?>
+                                      </div>
+                                    </div>
                                   </div>
                                 </div>
-                              </div>
-                            </div>
-                        </td>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                    <?php if (count($vacinas_obrigatorias) === 0): ?>
+                        <tr><td colspan="5">Nenhuma vacina encontrada.</td></tr>
+                    <?php endif; ?>
+                </tbody>
+            </table>
+        </div>
+        <?php endif; ?>
+
+        <?php if (count($vacinas_opcionais) > 0): ?>
+        <div class="border border-warning rounded-3 mb-4 p-2 shadow-sm" style="background-color: #fffbe6;">
+            <h5 class="text-primary text-center mb-2 mt-4 fw-bold">
+                <i class="bi bi-patch-question"></i> Vacinas Opcionais
+            </h5>
+            <table class="table table-bordered text-center mx-auto">
+                <thead>
+                    <tr>
+                        <th>Vacina</th>
+                        <th>Idade Recomendada</th>
+                        <th>Próxima Dose</th>
+                        <th>Doses</th>
+                        <th>Ações</th>
                     </tr>
-                <?php endforeach; ?>
-                <?php if (count($vacinas_filtradas) === 0): ?>
-                    <tr><td colspan="5">Nenhuma vacina encontrada.</td></tr>
-                <?php endif; ?>
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    <?php foreach ($vacinas_opcionais as $vacina):
+                        $id_vaci = $vacina['id_vaci'];
+                        $aplic = $aplicacoes[$id_vaci] ?? null;
+                        $proxima_dose = calcularProximaDose($vacina, $aplic, $naci_usuario);
+                        $doses_tomadas = $aplic ? intval($aplic['total_doses']) : 0;
+                        $n_dose = intval($vacina['n_dose']);
+                        ?>
+                        <tr>
+                            <td><?= htmlspecialchars($vacina['nome_vaci']) ?></td>
+                            <td><?= htmlspecialchars(formatarIdade($vacina['idade_reco'])) ?></td>
+                            <td>
+                                <?php
+                                if ($proxima_dose === "Esquema completo" || $proxima_dose === "Consultar profissional") {
+                                    echo $proxima_dose;
+                                } else {
+                                    echo date('d/m/Y', strtotime($proxima_dose));
+                                }
+                                ?>
+                            </td>
+                            <td><?= $doses_tomadas . " / " . $n_dose ?></td>
+                            <td>
+                                <button class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#modalVacina<?= $id_vaci ?>">
+                                    <i class="bi bi-info-circle"></i>
+                                </button>
+                                <!-- Modal -->
+                                <div class="modal fade" id="modalVacina<?= $id_vaci ?>" tabindex="-1" aria-labelledby="modalLabel<?= $id_vaci ?>" aria-hidden="true">
+                                  <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content">
+                                      <div class="modal-header">
+                                        <h5 class="modal-title" id="modalLabel<?= $id_vaci ?>">Informações da Vacina</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                                      </div>
+                                      <div class="modal-body text-start">
+                                        <strong>Vacina:</strong> <?= htmlspecialchars($vacina['nome_vaci']) ?><br>
+                                        <strong>Idade Recomendada:</strong> <?= htmlspecialchars(formatarIdade($vacina['idade_reco'])) ?><br>
+                                        <strong>Doses do Esquema:</strong> <?= $n_dose ?><br>
+                                        <strong>Intervalo entre doses:</strong> <?= intval($vacina['intervalo_dose']) ?> meses<br>
+                                        <?php if ($aplic): ?>
+                                            <hr>
+                                            <strong>Última aplicação:</strong> <?= date('d/m/Y', strtotime($aplic['ultima_data'])) ?><br>
+                                            <strong>Dose aplicada:</strong> <?= intval($aplic['ultima_dose']) ?><br>
+                                        <?php else: ?>
+                                            <hr>
+                                            <em>Nenhuma dose aplicada ainda.</em>
+                                        <?php endif; ?>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                    <?php if (count($vacinas_opcionais) === 0): ?>
+                        <tr><td colspan="5">Nenhuma vacina encontrada.</td></tr>
+                    <?php endif; ?>
+                </tbody>
+            </table>
+        </div>
+        <?php endif; ?>
     </div>
     <?php
     exit;
@@ -212,6 +305,16 @@ if (
 
 // Ordena as vacinas para exibição inicial
 usort($vacinas, 'ordenarIdadeRecomendada');
+// Separa vacinas obrigatórias (SUS) e opcionais para exibição inicial
+$vacinas_obrigatorias = [];
+$vacinas_opcionais = [];
+foreach ($vacinas as $vacina) {
+    if (isset($vacina['sus']) && intval($vacina['sus']) === 1) {
+        $vacinas_obrigatorias[] = $vacina;
+    } else {
+        $vacinas_opcionais[] = $vacina;
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -298,72 +401,157 @@ usort($vacinas, 'ordenarIdadeRecomendada');
             </form>
         </div>
         <div id="tabela-proximas-vacinas">
-            <!-- tabela original aqui -->
-            <table class="table table-bordered text-center mx-auto">
-                <thead>
-                    <tr>
-                        <th>Vacina</th>
-                        <th>Idade Recomendada</th>
-                        <th>Próxima Dose</th>
-                        <th>Doses</th>
-                        <th>Ações</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php foreach ($vacinas as $vacina):
-                        $id_vaci = $vacina['id_vaci'];
-                        $aplic = $aplicacoes[$id_vaci] ?? null;
-                        $proxima_dose = calcularProximaDose($vacina, $aplic, $naci_usuario);
-                        $doses_tomadas = $aplic ? intval($aplic['total_doses']) : 0;
-                        $n_dose = intval($vacina['n_dose']);
-                        ?>
+            <?php if (count($vacinas_obrigatorias) > 0): ?>
+            <div class="border border-primary rounded-3 mb-4 p-2 shadow-sm" style="background-color: #eaf4ff;">
+                <h5 class="text-primary text-center mb-2 fw-bold">
+                    <i class="bi bi-shield-check"></i> Vacinas Obrigatórias (SUS)
+                </h5>
+                <table class="table table-bordered text-center mx-auto">
+                    <thead>
                         <tr>
-                            <td><?= htmlspecialchars($vacina['nome_vaci']) ?></td>
-                            <td><?= htmlspecialchars(formatarIdade($vacina['idade_reco'])) ?></td>
-                            <td>
-                                <?php
-                                if ($proxima_dose === "Esquema completo" || $proxima_dose === "Consultar profissional") {
-                                    echo $proxima_dose;
-                                } else {
-                                    echo date('d/m/Y', strtotime($proxima_dose));
-                                }
-                                ?>
-                            </td>
-                            <td><?= $doses_tomadas . " / " . $n_dose ?></td>
-                            <td>
-                                <button class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#modalVacina<?= $id_vaci ?>">
-                                    <i class="bi bi-info-circle"></i>
-                                </button>
-                                <!-- Modal -->
-                                <div class="modal fade" id="modalVacina<?= $id_vaci ?>" tabindex="-1" aria-labelledby="modalLabel<?= $id_vaci ?>" aria-hidden="true">
-                                  <div class="modal-dialog modal-dialog-centered">
-                                    <div class="modal-content">
-                                      <div class="modal-header">
-                                        <h5 class="modal-title" id="modalLabel<?= $id_vaci ?>">Informações da Vacina</h5>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
-                                      </div>
-                                      <div class="modal-body text-start">
-                                        <strong>Vacina:</strong> <?= htmlspecialchars($vacina['nome_vaci']) ?><br>
-                                        <strong>Idade Recomendada:</strong> <?= htmlspecialchars(formatarIdade($vacina['idade_reco'])) ?><br>
-                                        <strong>Doses do Esquema:</strong> <?= $n_dose ?><br>
-                                        <strong>Intervalo entre doses:</strong> <?= intval($vacina['intervalo_dose']) ?> meses<br>
-                                        <?php if ($aplic): ?>
-                                            <hr>
-                                            <strong>Última aplicação:</strong> <?= date('d/m/Y', strtotime($aplic['ultima_data'])) ?><br>
-                                            <strong>Dose aplicada:</strong> <?= intval($aplic['ultima_dose']) ?><br>
-                                        <?php else: ?>
-                                            <hr>
-                                            <em>Nenhuma dose aplicada ainda.</em>
-                                        <?php endif; ?>
+                            <th>Vacina</th>
+                            <th>Idade Recomendada</th>
+                            <th>Próxima Dose</th>
+                            <th>Doses</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($vacinas_obrigatorias as $vacina):
+                            $id_vaci = $vacina['id_vaci'];
+                            $aplic = $aplicacoes[$id_vaci] ?? null;
+                            $proxima_dose = calcularProximaDose($vacina, $aplic, $naci_usuario);
+                            $doses_tomadas = $aplic ? intval($aplic['total_doses']) : 0;
+                            $n_dose = intval($vacina['n_dose']);
+                            ?>
+                            <tr>
+                                <td><?= htmlspecialchars($vacina['nome_vaci']) ?></td>
+                                <td><?= htmlspecialchars(formatarIdade($vacina['idade_reco'])) ?></td>
+                                <td>
+                                    <?php
+                                    if ($proxima_dose === "Esquema completo" || $proxima_dose === "Consultar profissional") {
+                                        echo $proxima_dose;
+                                    } else {
+                                        echo date('d/m/Y', strtotime($proxima_dose));
+                                    }
+                                    ?>
+                                </td>
+                                <td><?= $doses_tomadas . " / " . $n_dose ?></td>
+                                <td>
+                                    <button class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#modalVacina<?= $id_vaci ?>">
+                                        <i class="bi bi-info-circle"></i>
+                                    </button>
+                                    <!-- Modal -->
+                                    <div class="modal fade" id="modalVacina<?= $id_vaci ?>" tabindex="-1" aria-labelledby="modalLabel<?= $id_vaci ?>" aria-hidden="true">
+                                      <div class="modal-dialog modal-dialog-centered">
+                                        <div class="modal-content">
+                                          <div class="modal-header">
+                                            <h5 class="modal-title" id="modalLabel<?= $id_vaci ?>">Informações da Vacina</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                                          </div>
+                                          <div class="modal-body text-start">
+                                            <strong>Vacina:</strong> <?= htmlspecialchars($vacina['nome_vaci']) ?><br>
+                                            <strong>Idade Recomendada:</strong> <?= htmlspecialchars(formatarIdade($vacina['idade_reco'])) ?><br>
+                                            <strong>Doses do Esquema:</strong> <?= $n_dose ?><br>
+                                            <strong>Intervalo entre doses:</strong> <?= intval($vacina['intervalo_dose']) ?> meses<br>
+                                            <?php if ($aplic): ?>
+                                                <hr>
+                                                <strong>Última aplicação:</strong> <?= date('d/m/Y', strtotime($aplic['ultima_data'])) ?><br>
+                                                <strong>Dose aplicada:</strong> <?= intval($aplic['ultima_dose']) ?><br>
+                                            <?php else: ?>
+                                                <hr>
+                                                <em>Nenhuma dose aplicada ainda.</em>
+                                            <?php endif; ?>
+                                          </div>
+                                        </div>
                                       </div>
                                     </div>
-                                  </div>
-                                </div>
-                            </td>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                        <?php if (count($vacinas_obrigatorias) === 0): ?>
+                            <tr><td colspan="5">Nenhuma vacina encontrada.</td></tr>
+                        <?php endif; ?>
+                    </tbody>
+                </table>
+            </div>
+            <?php endif; ?>
+
+            <?php if (count($vacinas_opcionais) > 0): ?>
+            <div class="border border-warning rounded-3 mb-4 p-2 shadow-sm" style="background-color: #fffbe6;">
+                <h5 class="text-primary text-center mb-2 mt-4 fw-bold">
+                    <i class="bi bi-patch-question"></i> Vacinas Opcionais
+                </h5>
+                <table class="table table-bordered text-center mx-auto">
+                    <thead>
+                        <tr>
+                            <th>Vacina</th>
+                            <th>Idade Recomendada</th>
+                            <th>Próxima Dose</th>
+                            <th>Doses</th>
+                            <th>Ações</th>
                         </tr>
-                    <?php endforeach; ?>
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($vacinas_opcionais as $vacina):
+                            $id_vaci = $vacina['id_vaci'];
+                            $aplic = $aplicacoes[$id_vaci] ?? null;
+                            $proxima_dose = calcularProximaDose($vacina, $aplic, $naci_usuario);
+                            $doses_tomadas = $aplic ? intval($aplic['total_doses']) : 0;
+                            $n_dose = intval($vacina['n_dose']);
+                            ?>
+                            <tr>
+                                <td><?= htmlspecialchars($vacina['nome_vaci']) ?></td>
+                                <td><?= htmlspecialchars(formatarIdade($vacina['idade_reco'])) ?></td>
+                                <td>
+                                    <?php
+                                    if ($proxima_dose === "Esquema completo" || $proxima_dose === "Consultar profissional") {
+                                        echo $proxima_dose;
+                                    } else {
+                                        echo date('d/m/Y', strtotime($proxima_dose));
+                                    }
+                                    ?>
+                                </td>
+                                <td><?= $doses_tomadas . " / " . $n_dose ?></td>
+                                <td>
+                                    <button class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#modalVacina<?= $id_vaci ?>">
+                                        <i class="bi bi-info-circle"></i>
+                                    </button>
+                                    <!-- Modal -->
+                                    <div class="modal fade" id="modalVacina<?= $id_vaci ?>" tabindex="-1" aria-labelledby="modalLabel<?= $id_vaci ?>" aria-hidden="true">
+                                      <div class="modal-dialog modal-dialog-centered">
+                                        <div class="modal-content">
+                                          <div class="modal-header">
+                                            <h5 class="modal-title" id="modalLabel<?= $id_vaci ?>">Informações da Vacina</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                                          </div>
+                                          <div class="modal-body text-start">
+                                            <strong>Vacina:</strong> <?= htmlspecialchars($vacina['nome_vaci']) ?><br>
+                                            <strong>Idade Recomendada:</strong> <?= htmlspecialchars(formatarIdade($vacina['idade_reco'])) ?><br>
+                                            <strong>Doses do Esquema:</strong> <?= $n_dose ?><br>
+                                            <strong>Intervalo entre doses:</strong> <?= intval($vacina['intervalo_dose']) ?> meses<br>
+                                            <?php if ($aplic): ?>
+                                                <hr>
+                                                <strong>Última aplicação:</strong> <?= date('d/m/Y', strtotime($aplic['ultima_data'])) ?><br>
+                                                <strong>Dose aplicada:</strong> <?= intval($aplic['ultima_dose']) ?><br>
+                                            <?php else: ?>
+                                                <hr>
+                                                <em>Nenhuma dose aplicada ainda.</em>
+                                            <?php endif; ?>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                        <?php if (count($vacinas_opcionais) === 0): ?>
+                            <tr><td colspan="5">Nenhuma vacina encontrada.</td></tr>
+                        <?php endif; ?>
+                    </tbody>
+                </table>
+            </div>
+            <?php endif; ?>
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
