@@ -83,12 +83,41 @@ function calcularProximaDose($vacina, $aplicacao, $naci_usuario) {
 
 function formatarIdade($idade_reco) {
     if (preg_match('/(\d+)\s*mes/i', $idade_reco, $m)) {
+        // Se for 0 meses, exibe "Ao nascer"
+        if (intval($m[1]) === 0) {
+            return "Ao nascer";
+        }
         return $m[1] . " meses";
     } elseif (preg_match('/(\d+)\s*ano/i', $idade_reco, $m)) {
         return $m[1] . " anos";
     } else {
         return $idade_reco;
     }
+}
+
+// Função de ordenação personalizada para idade recomendada
+function ordenarIdadeRecomendada($a, $b) {
+    $getOrder = function($idade) {
+        $idade = trim(mb_strtolower($idade));
+        if ($idade === 'a qualquer momento') {
+            return [0, 0];
+        }
+        if ($idade === 'ao nascer' || $idade === '0 meses' || $idade === '0 mes') {
+            return [1, 0];
+        }
+        if (preg_match('/(\d+)\s*mes/i', $idade, $m)) {
+            return [2, intval($m[1])];
+        }
+        if (preg_match('/(\d+)\s*ano/i', $idade, $m)) {
+            return [3, intval($m[1])];
+        }
+        // Caso não reconheça, joga para o final
+        return [4, 999];
+    };
+    $ordA = $getOrder($a['idade_reco']);
+    $ordB = $getOrder($b['idade_reco']);
+    if ($ordA[0] !== $ordB[0]) return $ordA[0] - $ordB[0];
+    return $ordA[1] - $ordB[1];
 }
 
 // AJAX: retorna só a tabela se for requisição AJAX
@@ -104,6 +133,8 @@ if (
             $vacinas_filtradas[] = $vacina;
         }
     }
+    // Ordena as vacinas filtradas
+    usort($vacinas_filtradas, 'ordenarIdadeRecomendada');
     ?>
     <div id="tabela-proximas-vacinas">
         <table class="table table-bordered text-center mx-auto">
@@ -178,6 +209,9 @@ if (
     <?php
     exit;
 }
+
+// Ordena as vacinas para exibição inicial
+usort($vacinas, 'ordenarIdadeRecomendada');
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
