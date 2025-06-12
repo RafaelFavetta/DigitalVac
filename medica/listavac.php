@@ -16,7 +16,7 @@ if (isset($_GET['nome_vacina'])) {
 
 // Monta a consulta SQL com filtro por nome da vacina, se fornecido
 if (!empty($nome_vacina)) {
-    $sql = "SELECT id_vaci, nome_vaci, fabri_vaci, lote_vaci, via_adimicao, n_dose, intervalo_dose, estoque, idade_meses_reco, idade_anos_reco, sus 
+    $sql = "SELECT id_vaci, nome_vaci, fabri_vaci, lote_vaci, via_adimicao, n_dose, intervalo_dose, estoque, idade_reco, sus 
             FROM vacina WHERE nome_vaci LIKE ?";
     $stmt = $conn->prepare($sql);
     $like_param = '%' . $nome_vacina . '%';
@@ -24,7 +24,7 @@ if (!empty($nome_vacina)) {
     $stmt->execute();
     $result = $stmt->get_result();
 } else {
-    $sql = "SELECT id_vaci, nome_vaci, fabri_vaci, lote_vaci, via_adimicao, n_dose, intervalo_dose, estoque, idade_meses_reco, idade_anos_reco, sus 
+    $sql = "SELECT id_vaci, nome_vaci, fabri_vaci, lote_vaci, via_adimicao, n_dose, intervalo_dose, estoque, idade_reco, sus 
             FROM vacina";
     $result = $conn->query($sql);
 }
@@ -37,40 +37,37 @@ if (!$result) {
 $vacinas_obrigatorias = [];
 $vacinas_opcionais = [];
 while ($row = $result->fetch_assoc()) {
-    // Calcule idade total em meses para ordenação
-    $idade_meses = (isset($row['idade_anos_reco']) ? intval($row['idade_anos_reco']) : 0) * 12 +
-                   (isset($row['idade_meses_reco']) ? intval($row['idade_meses_reco']) : 0);
-
-    // Critério de ordenação especial
     $nome = $row['nome_vaci'];
+    $idade_reco = isset($row['idade_reco']) ? mb_strtolower(trim($row['idade_reco'])) : '';
     if (
         stripos($nome, 'VSR') !== false ||
         stripos($nome, 'Raiva') !== false ||
-        stripos($nome, 'viajantes') !== false
+        stripos($nome, 'viajantes') !== false ||
+        $idade_reco === 'a qualquer momento'
     ) {
         $idade_ordenacao = -2; // "A qualquer momento"
     } elseif (
-        ($row['id_vaci'] == 22 || $row['id_vaci'] == 23) || ($idade_meses === 0)
+        ($row['id_vaci'] == 22 || $row['id_vaci'] == 23) || $idade_reco === 'ao nascer' || $idade_reco === '0 meses'
     ) {
         $idade_ordenacao = -1; // "Ao nascer"
     } elseif (
-        stripos($nome, 'Herpes-zóster') !== false || stripos($nome, 'RZV') !== false
+        stripos($nome, 'Herpes-zóster') !== false || stripos($nome, 'RZV') !== false || $idade_reco === '50 anos'
     ) {
         $idade_ordenacao = 50 * 12; // 50 anos
     } elseif (
-        stripos($nome, 'Dengue') !== false || stripos($nome, 'Qdenga') !== false
+        stripos($nome, 'Dengue') !== false || stripos($nome, 'Qdenga') !== false || $idade_reco === '10 anos'
     ) {
         $idade_ordenacao = 10 * 12; // 10 anos
     } elseif (
-        stripos($nome, 'HPV') !== false
+        stripos($nome, 'HPV') !== false || $idade_reco === '9 anos'
     ) {
         $idade_ordenacao = 9 * 12; // 9 anos
     } elseif (
-        stripos($nome, 'Influenza') !== false
+        stripos($nome, 'Influenza') !== false || $idade_reco === '9 anos'
     ) {
         $idade_ordenacao = 9 * 12; // 9 anos
     } elseif (
-        stripos($nome, 'dTpa (adulto/gestante)') !== false
+        stripos($nome, 'dTpa (adulto/gestante)') !== false || $idade_reco === '18 anos'
     ) {
         $idade_ordenacao = 18 * 12; // 18 anos
     } elseif (
@@ -78,7 +75,13 @@ while ($row = $result->fetch_assoc()) {
     ) {
         $idade_ordenacao = 18 * 12; // 18 anos
     } else {
-        $idade_ordenacao = $idade_meses;
+        if (preg_match('/(\d+)\s*mes/i', $idade_reco, $m)) {
+            $idade_ordenacao = intval($m[1]);
+        } elseif (preg_match('/(\d+)\s*ano/i', $idade_reco, $m)) {
+            $idade_ordenacao = intval($m[1]) * 12;
+        } else {
+            $idade_ordenacao = 9999;
+        }
     }
     $row['idade_ordenacao'] = $idade_ordenacao;
 
@@ -234,8 +237,7 @@ usort($vacinas_opcionais, function($a, $b) {
                                 <?php
                                     // Exibe "A qualquer momento" ou idade especial para vacinas específicas
                                     $nome = $row['nome_vaci'];
-                                    $idade_anos = isset($row['idade_anos_reco']) ? intval($row['idade_anos_reco']) : 0;
-                                    $idade_meses = isset($row['idade_meses_reco']) ? intval($row['idade_meses_reco']) : 0;
+                                    $idade_reco = isset($row['idade_reco']) ? trim($row['idade_reco']) : '';
                                     if (
                                         stripos($nome, 'Herpes-zóster') !== false || stripos($nome, 'RZV') !== false
                                     ) {
@@ -284,13 +286,7 @@ usort($vacinas_opcionais, function($a, $b) {
                                         echo "A qualquer momento";
                                     } else {
                                         // Exibe idade recomendada da vacina, sem cálculos extras
-                                        if ($idade_anos > 0) {
-                                            echo $idade_anos . " anos";
-                                        } elseif ($idade_meses > 0) {
-                                            echo $idade_meses . " meses";
-                                        } else {
-                                            echo "Ao nascer";
-                                        }
+                                        echo htmlspecialchars($idade_reco !== '' ? $idade_reco : "Ao nascer");
                                     }
                                 ?>
                             </td>
@@ -329,6 +325,7 @@ usort($vacinas_opcionais, function($a, $b) {
                                 <?php
                                     // Exibe "A qualquer momento" ou idade especial para vacinas específicas
                                     $nome = $row['nome_vaci'];
+                                    $idade_reco = isset($row['idade_reco']) ? trim($row['idade_reco']) : '';
                                     if (
                                         stripos($nome, 'Herpes-zóster') !== false || stripos($nome, 'RZV') !== false
                                     ) {
@@ -377,13 +374,7 @@ usort($vacinas_opcionais, function($a, $b) {
                                         echo "A qualquer momento";
                                     } else {
                                         // Exibe idade recomendada da vacina, sem cálculos extras
-                                        if ($idade_anos > 0) {
-                                            echo $idade_anos . " anos";
-                                        } elseif ($idade_meses > 0) {
-                                            echo $idade_meses . " meses";
-                                        } else {
-                                            echo "Ao nascer";
-                                        }
+                                        echo htmlspecialchars($idade_reco !== '' ? $idade_reco : "Ao nascer");
                                     }
                                 ?>
                             </td>

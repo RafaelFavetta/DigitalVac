@@ -12,10 +12,6 @@ $intervalo = $_POST['intervalo'] ?? '';
 $estoque = $_POST['estoque'] ?? '';
 $sus = $_POST['sus'] ?? '';
 
-// Corrigido: Recebe corretamente os campos de idade
-$idade_anos_reco = isset($_POST['idade_anos_reco']) ? intval($_POST['idade_anos_reco']) : 0;
-$idade_meses_reco = isset($_POST['idade_meses_reco']) ? intval($_POST['idade_meses_reco']) : 0;
-
 // Recebe idade_reco_final (ex: "7 anos" ou "18 meses")
 $idade_reco = isset($_POST['idade_reco_final']) ? trim($_POST['idade_reco_final']) : '';
 

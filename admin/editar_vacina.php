@@ -25,28 +25,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $nome_vaci = trim($_POST['nome_vaci']);
     $fabri_vaci = trim($_POST['fabri_vaci']);
     $lote_vaci = trim($_POST['lote_vaci']);
-    $idade_aplica = intval($_POST['idade_aplica']);
+    $idade_reco = trim($_POST['idade_reco']);
     $via_adimicao = trim($_POST['via_adimicao']);
     $n_dose = intval($_POST['n_dose']);
     $intervalo_dose = intval($_POST['intervalo_dose']);
     $estoque = intval($_POST['estoque']);
-    $idade_meses_reco = isset($_POST['idade_meses_reco']) && $_POST['idade_meses_reco'] !== '' ? intval($_POST['idade_meses_reco']) : 0;
-    $idade_anos_reco = isset($_POST['idade_anos_reco']) && $_POST['idade_anos_reco'] !== '' ? intval($_POST['idade_anos_reco']) : 0;
 
-    // Corrija a ordem dos tipos do bind_param para corresponder aos tipos dos campos
-    $stmt = $conn->prepare("UPDATE vacina SET nome_vaci=?, fabri_vaci=?, lote_vaci=?, idade_aplica=?, via_adimicao=?, n_dose=?, intervalo_dose=?, estoque=?, idade_meses_reco=?, idade_anos_reco=? WHERE id_vaci=?");
+    $stmt = $conn->prepare("UPDATE vacina SET nome_vaci=?, fabri_vaci=?, lote_vaci=?, idade_reco=?, via_adimicao=?, n_dose=?, intervalo_dose=?, estoque=? WHERE id_vaci=?");
     $stmt->bind_param(
-        'sssisiiiiii', // nome_vaci(s), fabri_vaci(s), lote_vaci(s), idade_aplica(i), via_adimicao(s), n_dose(i), intervalo_dose(i), estoque(i), idade_meses_reco(i), idade_anos_reco(i), id_vaci(i)
+        'ssssiiiii',
         $nome_vaci,
         $fabri_vaci,
         $lote_vaci,
-        $idade_aplica,
+        $idade_reco,
         $via_adimicao,
         $n_dose,
         $intervalo_dose,
         $estoque,
-        $idade_meses_reco,
-        $idade_anos_reco,
         $id_vaci
     );
     if ($stmt->execute()) {
@@ -56,13 +51,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'nome_vaci' => $nome_vaci,
             'fabri_vaci' => $fabri_vaci,
             'lote_vaci' => $lote_vaci,
-            'idade_aplica' => $idade_aplica,
+            'idade_reco' => $idade_reco,
             'via_adimicao' => $via_adimicao,
             'n_dose' => $n_dose,
             'intervalo_dose' => $intervalo_dose,
-            'estoque' => $estoque,
-            'idade_meses_reco' => $idade_meses_reco,
-            'idade_anos_reco' => $idade_anos_reco
+            'estoque' => $estoque
         ];
     } else {
         $erro = "Erro ao atualizar vacina: " . $conn->error;
@@ -217,15 +210,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             </div>
                         </div>
                         <div class="row mb-2">
-                            <div class="col-md-6">
-                                <label class="form-label fw-bold">Idade Recomendada (meses)</label>
-                                <input type="number" name="idade_meses_reco" class="form-control" min="0"
-                                    value="<?php echo htmlspecialchars($vacina['idade_meses_reco']); ?>">
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label fw-bold">Idade Recomendada (anos)</label>
-                                <input type="number" name="idade_anos_reco" class="form-control" min="0"
-                                    value="<?php echo htmlspecialchars($vacina['idade_anos_reco']); ?>">
+                            <div class="col-md-12">
+                                <label class="form-label fw-bold">Idade Recomendada (ex: "2 meses", "1 ano", "Ao nascer")</label>
+                                <input type="text" name="idade_reco" class="form-control" required
+                                    value="<?php echo htmlspecialchars($vacina['idade_reco'] ?? ''); ?>">
                             </div>
                         </div>
                         <div class="text-end mt-3">
