@@ -175,8 +175,19 @@ if (
                             <td><?= htmlspecialchars(formatarIdade($vacina['idade_reco'])) ?></td>
                             <td>
                                 <?php
-                                if ($proxima_dose === "Esquema completo" || $proxima_dose === "Consultar profissional") {
-                                    echo $proxima_dose;
+                                $isAQualquerMomento = (mb_strtolower(trim($vacina['idade_reco'])) === 'a qualquer momento');
+                                $isSemNumero = !preg_match('/\d+/', $vacina['idade_reco'] ?? '');
+
+                                if (isset($vacina['sus']) && intval($vacina['sus']) === 0 && ($isAQualquerMomento || $isSemNumero)) {
+                                    // Vacina opcional e "a qualquer momento" ou sem número: não mostra nada
+                                    echo '';
+                                } elseif ($proxima_dose === "Esquema completo") {
+                                    echo '<span class="badge bg-success"><i class="bi bi-check-circle"></i> Esquema completo</span>';
+                                } elseif ($proxima_dose === "Consultar profissional") {
+                                    echo '<span class="badge bg-warning text-dark"><i class="bi bi-exclamation-triangle"></i> Consultar profissional</span>';
+                                } elseif (strtotime($proxima_dose) < strtotime(date('Y-m-d'))) {
+                                    echo '<span class="badge bg-danger"><i class="bi bi-exclamation-octagon"></i> Atrasada</span> ';
+                                    echo date('d/m/Y', strtotime($proxima_dose));
                                 } else {
                                     echo date('d/m/Y', strtotime($proxima_dose));
                                 }
@@ -251,8 +262,19 @@ if (
                             <td><?= htmlspecialchars(formatarIdade($vacina['idade_reco'])) ?></td>
                             <td>
                                 <?php
-                                if ($proxima_dose === "Esquema completo" || $proxima_dose === "Consultar profissional") {
-                                    echo $proxima_dose;
+                                $isAQualquerMomento = (mb_strtolower(trim($vacina['idade_reco'])) === 'a qualquer momento');
+                                $isSemNumero = !preg_match('/\d+/', $vacina['idade_reco'] ?? '');
+
+                                if (isset($vacina['sus']) && intval($vacina['sus']) === 0 && ($isAQualquerMomento || $isSemNumero)) {
+                                    // Vacina opcional e "a qualquer momento" ou sem número: não mostra nada
+                                    echo '';
+                                } elseif ($proxima_dose === "Esquema completo") {
+                                    echo '<span class="badge bg-success"><i class="bi bi-check-circle"></i> Esquema completo</span>';
+                                } elseif ($proxima_dose === "Consultar profissional") {
+                                    echo '<span class="badge bg-warning text-dark"><i class="bi bi-exclamation-triangle"></i> Consultar profissional</span>';
+                                } elseif (strtotime($proxima_dose) < strtotime(date('Y-m-d'))) {
+                                    echo '<span class="badge bg-danger"><i class="bi bi-exclamation-octagon"></i> Atrasada</span> ';
+                                    echo date('d/m/Y', strtotime($proxima_dose));
                                 } else {
                                     echo date('d/m/Y', strtotime($proxima_dose));
                                 }
@@ -429,8 +451,19 @@ foreach ($vacinas as $vacina) {
                                 <td><?= htmlspecialchars(formatarIdade($vacina['idade_reco'])) ?></td>
                                 <td>
                                     <?php
-                                    if ($proxima_dose === "Esquema completo" || $proxima_dose === "Consultar profissional") {
-                                        echo $proxima_dose;
+                                    $isAQualquerMomento = (mb_strtolower(trim($vacina['idade_reco'])) === 'a qualquer momento');
+                                    $isSemNumero = !preg_match('/\d+/', $vacina['idade_reco'] ?? '');
+
+                                    if (isset($vacina['sus']) && intval($vacina['sus']) === 0 && ($isAQualquerMomento || $isSemNumero)) {
+                                        // Vacina opcional e "a qualquer momento" ou sem número: não mostra nada
+                                        echo '';
+                                    } elseif ($proxima_dose === "Esquema completo") {
+                                        echo '<span class="badge bg-success"><i class="bi bi-check-circle"></i> Esquema completo</span>';
+                                    } elseif ($proxima_dose === "Consultar profissional") {
+                                        echo '<span class="badge bg-warning text-dark"><i class="bi bi-exclamation-triangle"></i> Consultar profissional</span>';
+                                    } elseif (strtotime($proxima_dose) < strtotime(date('Y-m-d'))) {
+                                        echo '<span class="badge bg-danger"><i class="bi bi-exclamation-octagon"></i> Atrasada</span> ';
+                                        echo date('d/m/Y', strtotime($proxima_dose));
                                     } else {
                                         echo date('d/m/Y', strtotime($proxima_dose));
                                     }
@@ -505,8 +538,19 @@ foreach ($vacinas as $vacina) {
                                 <td><?= htmlspecialchars(formatarIdade($vacina['idade_reco'])) ?></td>
                                 <td>
                                     <?php
-                                    if ($proxima_dose === "Esquema completo" || $proxima_dose === "Consultar profissional") {
-                                        echo $proxima_dose;
+                                    $isAQualquerMomento = (mb_strtolower(trim($vacina['idade_reco'])) === 'a qualquer momento');
+                                    $isSemNumero = !preg_match('/\d+/', $vacina['idade_reco'] ?? '');
+
+                                    if (isset($vacina['sus']) && intval($vacina['sus']) === 0 && ($isAQualquerMomento || $isSemNumero)) {
+                                        // Vacina opcional e "a qualquer momento" ou sem número: não mostra nada
+                                        echo '';
+                                    } elseif ($proxima_dose === "Esquema completo") {
+                                        echo '<span class="badge bg-success"><i class="bi bi-check-circle"></i> Esquema completo</span>';
+                                    } elseif ($proxima_dose === "Consultar profissional") {
+                                        echo '<span class="badge bg-warning text-dark"><i class="bi bi-exclamation-triangle"></i> Consultar profissional</span>';
+                                    } elseif (strtotime($proxima_dose) < strtotime(date('Y-m-d'))) {
+                                        echo '<span class="badge bg-danger"><i class="bi bi-exclamation-octagon"></i> Atrasada</span> ';
+                                        echo date('d/m/Y', strtotime($proxima_dose));
                                     } else {
                                         echo date('d/m/Y', strtotime($proxima_dose));
                                     }
