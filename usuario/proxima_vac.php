@@ -129,12 +129,39 @@ function formatarIdade($idade_reco) {
 <body>
     <nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">
         <div class="container-fluid">
+            <div class="d-flex align-items-center">
+                <img src="../img/logo_vetor.png" alt="Logo DigitalVac" width="55" height="55" class="me-3">
+            </div>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
+                aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
             <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                 <div class="navbar-nav">
+                    <a class="nav-link active fs-6 fw-bold" href="telainicioU.php">
+                        <i class="bi bi-house-fill"></i> Início
+                    </a>
+                    <a class="nav-link active fs-6 fw-bold" href="perfilU.php">
+                        <i class="bi bi-person-fill"></i> Perfil
+                    </a>
                     <a class="nav-link active fs-6 fw-bold" href="carteira_vac.php">
                         <i class="bi bi-postcard-heart-fill"></i> Carteira de Vacinas
                     </a>
+                    <a class="nav-link disabled fs-6 fw-bold" aria-disabled="true" href="proxima_vac.php">
+                        <i class="bi bi-calendar2-week-fill"></i> Próximas Vacinas
+                    </a>
+                    <a class="nav-link active fs-6 fw-bold" href="atestado_medico.php">
+                        <i class="bi bi-clipboard-heart-fill"></i> Atestados
+                    </a>
                 </div>
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="btn btn-danger fw-bold px-2 py-1" style="font-size: 15px; min-width: 70px;"
+                            href="../outros/sair.php">
+                            <i class="bi bi-box-arrow-right" style="font-size: 18px;"></i> Sair
+                        </a>
+                    </li>
+                </ul>
             </div>
         </div>
     </nav>
