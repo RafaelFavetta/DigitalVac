@@ -110,6 +110,38 @@ $result = $stmt2->get_result();
         .btn-info {
             min-width: 40px;
         }
+
+        @media (max-width: 991.98px) {
+            .modal-lg {
+                max-width: 98vw;
+                margin: 0.5rem;
+            }
+
+            .modal-content {
+                padding-left: 0 !important;
+                padding-right: 0 !important;
+            }
+
+            .modal-body .row> [class^="col-"] {
+                margin-bottom: 0.75rem;
+            }
+        }
+
+        @media (max-width: 767.98px) {
+            .modal-lg {
+                max-width: 100vw;
+                margin: 0;
+            }
+
+            .modal-content {
+                border-radius: 0 !important;
+            }
+
+            .modal-body {
+                padding-left: 0.5rem !important;
+                padding-right: 0.5rem !important;
+            }
+        }
     </style>
 </head>
 
@@ -159,8 +191,9 @@ $result = $stmt2->get_result();
         </div>
     </nav>
     <div class="container mt-4">
-        <h2 class="text-primary fw-bold mb-4" style="text-align: center;">Histórico de Vacinação de
-            <?php echo htmlspecialchars($usuario['nome_usuario']); ?></h2>
+        <h2 class="text-primary fw-bold mb-4" style="text-align: center;">
+            Histórico de Vacinação de <?php echo htmlspecialchars($usuario['nome_usuario']); ?>
+        </h2>
         <?php if ($result->num_rows > 0): ?>
             <div class="table-responsive">
                 <table class="table table-bordered text-center mx-auto">
@@ -203,9 +236,9 @@ $result = $stmt2->get_result();
                                             </h5>
                                             <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
                                           </div>
-                                          <div class="modal-body px-4 py-3">
-                                            <div class="row g-4">
-                                                <div class="col-md-6">
+                                          <div class="modal-body px-2 px-md-4 py-3">
+                                            <div class="row g-3 g-md-4">
+                                                <div class="col-12 col-md-4">
                                                     <div class="mb-3 pb-2 border-bottom border-2 border-primary-subtle">
                                                         <span class="fw-semibold text-primary-emphasis"><i class="bi bi-capsule"></i> Nome:</span><br>
                                                         <span class="fs-6"><?php echo htmlspecialchars($vacinas_info[$id_vaci]['nome_vaci']); ?></span>
@@ -218,7 +251,9 @@ $result = $stmt2->get_result();
                                                         <span class="fw-semibold text-primary-emphasis"><i class="bi bi-123"></i> Lote:</span><br>
                                                         <span class="fs-6"><?php echo htmlspecialchars($vacinas_info[$id_vaci]['lote_vaci']); ?></span>
                                                     </div>
-                                                    <div class="mb-3">
+                                                </div>
+                                                <div class="col-12 col-md-4">
+                                                    <div class="mb-3 pb-2 border-bottom border-2 border-primary-subtle">
                                                         <span class="fw-semibold text-primary-emphasis"><i class="bi bi-hourglass-split"></i> Idade Aplicação:</span><br>
                                                         <span class="fs-6">
                                                         <?php
@@ -256,8 +291,6 @@ $result = $stmt2->get_result();
                                                         ?>
                                                         </span>
                                                     </div>
-                                                </div>
-                                                <div class="col-md-6">
                                                     <div class="mb-3 pb-2 border-bottom border-2 border-primary-subtle">
                                                         <span class="fw-semibold text-primary-emphasis"><i class="bi bi-diagram-3"></i> Via de Administração:</span><br>
                                                         <span class="fs-6"><?php echo htmlspecialchars($vacinas_info[$id_vaci]['via_adimicao']); ?></span>
@@ -266,6 +299,8 @@ $result = $stmt2->get_result();
                                                         <span class="fw-semibold text-primary-emphasis"><i class="bi bi-collection"></i> Número de Doses:</span><br>
                                                         <span class="fs-6"><?php echo htmlspecialchars($vacinas_info[$id_vaci]['n_dose']); ?></span>
                                                     </div>
+                                                </div>
+                                                <div class="col-12 col-md-4">
                                                     <div class="mb-3 pb-2 border-bottom border-2 border-primary-subtle">
                                                         <span class="fw-semibold text-primary-emphasis"><i class="bi bi-arrow-repeat"></i> Intervalo entre Doses:</span><br>
                                                         <span class="fs-6"><?php echo htmlspecialchars($vacinas_info[$id_vaci]['intervalo_dose']); ?> meses</span>
@@ -274,7 +309,7 @@ $result = $stmt2->get_result();
                                                         <span class="fw-semibold text-primary-emphasis"><i class="bi bi-box-seam"></i> Estoque:</span><br>
                                                         <span class="fs-6"><?php echo htmlspecialchars($vacinas_info[$id_vaci]['estoque']); ?></span>
                                                     </div>
-                                                    <div class="mb-3">
+                                                    <div class="mb-3 pb-2 border-bottom border-2 border-primary-subtle">
                                                         <span class="fw-semibold text-primary-emphasis"><i class="bi bi-shield-check"></i> Obrigatória SUS:</span><br>
                                                         <span class="fs-6"><?php echo ($vacinas_info[$id_vaci]['sus'] == 1) ? '<span class="badge bg-success">Sim</span>' : '<span class="badge bg-secondary">Não</span>'; ?></span>
                                                     </div>
@@ -285,7 +320,7 @@ $result = $stmt2->get_result();
                                             <div class="table-responsive">
                                                 <table class="table table-bordered text-center mx-auto mb-0">
                                                     <thead>
-                                                        <tr>
+                                                        <tr style="background: #0d6efd; color: #fff;">
                                                             <th>Dose</th>
                                                             <th>Data de Aplicação</th>
                                                             <th>Posto</th>
@@ -293,18 +328,25 @@ $result = $stmt2->get_result();
                                                     </thead>
                                                     <tbody>
                                                         <?php
+                                                        $aplicIndex = 0;
                                                         foreach ($aplicacoes_por_vacina[$id_vaci] as $aplic) {
                                                             echo '<tr>';
-                                                            echo '<td>' . htmlspecialchars($aplic['dose_aplicad']) . '</td>';
-                                                            echo '<td>' . htmlspecialchars(date('d/m/Y', strtotime($aplic['data_aplica']))) . '</td>';
-                                                            echo '<td>' . htmlspecialchars($aplic['nome_posto']) . '</td>';
+                                                            // Dose
+                                                            $cellStyle = ($aplicIndex % 2 === 1) ? 'background-color:rgb(129, 129, 129);' : '';
+                                                            echo '<td style="' . $cellStyle . '">' . htmlspecialchars($aplic['dose_aplicad']) . '</td>';
+                                                            // Data de Aplicação
+                                                            $cellStyle = ($aplicIndex % 2 === 1) ? 'background-color: rgb(129, 129, 129);' : '';
+                                                            echo '<td style="' . $cellStyle . '">' . htmlspecialchars(date('d/m/Y', strtotime($aplic['data_aplica']))) . '</td>';
+                                                            // Posto
+                                                            $cellStyle = ($aplicIndex % 2 === 1) ? 'background-color: rgb(129, 129, 129);' : '';
+                                                            echo '<td style="' . $cellStyle . '">' . htmlspecialchars($aplic['nome_posto']) . '</td>';
                                                             echo '</tr>';
+                                                            $aplicIndex++;
                                                         }
                                                         ?>
                                                     </tbody>
                                                 </table>
                                             </div>
-                                          </div>
                                         </div>
                                       </div>
                                     </div>
