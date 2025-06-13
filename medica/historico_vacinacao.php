@@ -332,13 +332,13 @@ $result = $stmt2->get_result();
                                                         foreach ($aplicacoes_por_vacina[$id_vaci] as $aplic) {
                                                             echo '<tr>';
                                                             // Dose
-                                                            $cellStyle = ($aplicIndex % 2 === 1) ? 'background-color:rgb(129, 129, 129);' : '';
+                                                            $cellStyle = ($aplicIndex % 2 === 1) ? 'background-color:rgb(204, 202, 202);' : '';
                                                             echo '<td style="' . $cellStyle . '">' . htmlspecialchars($aplic['dose_aplicad']) . '</td>';
                                                             // Data de Aplicação
-                                                            $cellStyle = ($aplicIndex % 2 === 1) ? 'background-color: rgb(129, 129, 129);' : '';
+                                                            $cellStyle = ($aplicIndex % 2 === 1) ? 'background-color: rgb(204, 202, 202);' : '';
                                                             echo '<td style="' . $cellStyle . '">' . htmlspecialchars(date('d/m/Y', strtotime($aplic['data_aplica']))) . '</td>';
                                                             // Posto
-                                                            $cellStyle = ($aplicIndex % 2 === 1) ? 'background-color: rgb(129, 129, 129);' : '';
+                                                            $cellStyle = ($aplicIndex % 2 === 1) ? 'background-color: rgb(204, 202, 202);' : '';
                                                             echo '<td style="' . $cellStyle . '">' . htmlspecialchars($aplic['nome_posto']) . '</td>';
                                                             echo '</tr>';
                                                             $aplicIndex++;
