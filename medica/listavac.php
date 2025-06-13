@@ -173,7 +173,7 @@ usort($vacinas_opcionais, function($a, $b) {
                         <i class="bi bi-clipboard2-plus-fill"></i> Cadastrar Atestado
                     </a>
                     <a class="nav-link active fs-6 fw-bold" href="atestado_medico.php">
-                        <i class="bi bi-clipboard-heart"></i> Meus Atestados
+                        <i class="bi bi-clipboard-heart-fill"></i> Meus Atestados
                     </a>
                 </div>
                 <ul class="navbar-nav ms-auto">

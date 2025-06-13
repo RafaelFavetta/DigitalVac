@@ -163,14 +163,17 @@ if (
                     </tr>
                 </thead>
                 <tbody>
-                    <?php foreach ($vacinas_obrigatorias as $vacina):
+                    <?php
+                    $rowIndex = 0;
+                    foreach ($vacinas_obrigatorias as $vacina):
                         $id_vaci = $vacina['id_vaci'];
                         $aplic = $aplicacoes[$id_vaci] ?? null;
                         $proxima_dose = calcularProximaDose($vacina, $aplic, $naci_usuario);
                         $doses_tomadas = $aplic ? intval($aplic['total_doses']) : 0;
                         $n_dose = intval($vacina['n_dose']);
-                        ?>
-                        <tr>
+                        $rowClass = ($rowIndex % 2 === 0) ? 'bg-white' : 'table-primary';
+                    ?>
+                        <tr class="<?= $rowClass ?>">
                             <td><?= htmlspecialchars($vacina['nome_vaci']) ?></td>
                             <td><?= htmlspecialchars(formatarIdade($vacina['idade_reco'])) ?></td>
                             <td>
@@ -225,7 +228,7 @@ if (
                                 </div>
                             </td>
                         </tr>
-                    <?php endforeach; ?>
+                    <?php $rowIndex++; endforeach; ?>
                     <?php if (count($vacinas_obrigatorias) === 0): ?>
                         <tr><td colspan="5">Nenhuma vacina encontrada.</td></tr>
                     <?php endif; ?>
@@ -250,14 +253,17 @@ if (
                     </tr>
                 </thead>
                 <tbody>
-                    <?php foreach ($vacinas_opcionais as $vacina):
+                    <?php
+                    $rowIndex = 0;
+                    foreach ($vacinas_opcionais as $vacina):
                         $id_vaci = $vacina['id_vaci'];
                         $aplic = $aplicacoes[$id_vaci] ?? null;
                         $proxima_dose = calcularProximaDose($vacina, $aplic, $naci_usuario);
                         $doses_tomadas = $aplic ? intval($aplic['total_doses']) : 0;
                         $n_dose = intval($vacina['n_dose']);
-                        ?>
-                        <tr>
+                        $rowClass = ($rowIndex % 2 === 0) ? 'bg-white' : 'table-primary';
+                    ?>
+                        <tr class="<?= $rowClass ?>">
                             <td><?= htmlspecialchars($vacina['nome_vaci']) ?></td>
                             <td><?= htmlspecialchars(formatarIdade($vacina['idade_reco'])) ?></td>
                             <td>
@@ -312,7 +318,7 @@ if (
                                 </div>
                             </td>
                         </tr>
-                    <?php endforeach; ?>
+                    <?php $rowIndex++; endforeach; ?>
                     <?php if (count($vacinas_opcionais) === 0): ?>
                         <tr><td colspan="5">Nenhuma vacina encontrada.</td></tr>
                     <?php endif; ?>
@@ -347,12 +353,6 @@ foreach ($vacinas as $vacina) {
     <link rel="icon" href="../img/logo.png" type="image/png">
     <link rel="stylesheet" href="../bootstrap/bootstrap-5.3.6-dist/css/bootstrap.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
-    <style>
-        body {
-            background-color: #f8f9fa;
-        }
-
         .table {
             background: white;
             border-radius: 10px;
