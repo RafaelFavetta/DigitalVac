@@ -111,7 +111,12 @@ function renderTabelaCarteiraVac($vacinas)
                     ?>
                     <tr class="<?php echo $rowClass; ?>">
                         <td><?php echo htmlspecialchars($vacina['nome_vaci']); ?></td>
-                        <td><?php echo $doses_tomadas . "/" . $n_dose; ?></td>
+                        <td>
+                            <?php echo htmlspecialchars("$doses_tomadas/$n_dose"); ?>
+                            <?php if ($doses_tomadas >= $n_dose): ?>
+                                <span class="badge bg-success">Esquema Completo</span>
+                            <?php endif; ?>
+                        </td>
                         <td><?php echo implode('<br>', $datas); ?></td>
                         <td><?php echo implode('<br>', $postos); ?></td>
                         <td><?php echo implode('<br>', $medicos); ?></td>
