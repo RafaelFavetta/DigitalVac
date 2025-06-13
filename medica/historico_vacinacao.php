@@ -159,7 +159,7 @@ $result = $stmt2->get_result();
         </div>
     </nav>
     <div class="container mt-4">
-        <h2 class="text-primary fw-bold mb-4">Histórico de Vacinação de
+        <h2 class="text-primary fw-bold mb-4" style="text-align: center;">Histórico de Vacinação de
             <?php echo htmlspecialchars($usuario['nome_usuario']); ?></h2>
         <?php if ($result->num_rows > 0): ?>
             <div class="table-responsive">
