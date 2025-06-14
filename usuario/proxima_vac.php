@@ -353,7 +353,8 @@ foreach ($vacinas as $vacina) {
     <link rel="icon" href="../img/logo.png" type="image/png">
     <link rel="stylesheet" href="../bootstrap/bootstrap-5.3.6-dist/css/bootstrap.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-
+    <!-- Adicione esta linha para os ícones do Bootstrap -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
     <style>
         .table {
             background: white;
@@ -471,7 +472,9 @@ foreach ($vacinas as $vacina) {
                                     }
                                     ?>
                                 </td>
-                                <td><?= $doses_tomadas . " / " . $n_dose ?></td>
+                                <td>
+                                    <?= $doses_tomadas . " / " . $n_dose ?>
+                                </td>
                                 <td>
                                     <button class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#modalVacina<?= $id_vaci ?>">
                                         <i class="bi bi-info-circle"></i>
@@ -558,7 +561,9 @@ foreach ($vacinas as $vacina) {
                                     }
                                     ?>
                                 </td>
-                                <td><?= $doses_tomadas . " / " . $n_dose ?></td>
+                                <td>
+                                    <?= $doses_tomadas . " / " . $n_dose ?>
+                                </td>
                                 <td>
                                     <button class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#modalVacina<?= $id_vaci ?>">
                                         <i class="bi bi-info-circle"></i>
