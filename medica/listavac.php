@@ -155,25 +155,25 @@ usort($vacinas_opcionais, function($a, $b) {
             <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                 <div class="navbar-nav">
                     <a class="nav-link active fs-6 fw-bold" href="telainicio.php">
-                        <i class="bi bi-house-fill"></i> Início
+                        <i class="bi bi-house-fill" style="font-size: 20px"></i> Início
                     </a>
                     <a class="nav-link active fs-6 fw-bold" href="cadastroaplic.php">
-                        <i class="bi bi-clipboard2-heart-fill"></i> Aplicação de Vacinas
+                        <i class="bi bi-clipboard2-heart-fill" style="font-size: 20px"></i> Aplicação de Vacinas
                     </a>
                     <a class="nav-link active fs-6 fw-bold" href="cadastropac.html">
-                        <i class="bi bi-person-plus-fill"></i> Cadastrar Pacientes
+                        <i class="bi bi-person-plus-fill" style="font-size: 20px"></i> Cadastrar Pacientes
                     </a>
                     <a class="nav-link disabled fs-6 fw-bold" aria-disabled="true" href="listavac.php">
-                        <i class="bi bi-list"></i> Lista de Vacinas
+                        <i class="bi bi-list" style="font-size: 20px"></i> Lista de Vacinas
                     </a>
                     <a class="nav-link active fs-6 fw-bold" href="pesquisa_paciente.php">
-                        <i class="bi bi-person-lines-fill"></i> Pesquisar Pacientes
+                        <i class="bi bi-person-lines-fill" style="font-size: 20px"></i> Pesquisar Pacientes
                     </a>
                     <a class="nav-link active fs-6 fw-bold" href="cadastroatestado.php">
-                        <i class="bi bi-clipboard2-plus-fill"></i> Cadastrar Atestado
+                        <i class="bi bi-clipboard2-plus-fill" style="font-size: 20px"></i> Cadastrar Atestado
                     </a>
                     <a class="nav-link active fs-6 fw-bold" href="atestado_medico.php">
-                        <i class="bi bi-clipboard-heart-fill"></i> Meus Atestados
+                        <i class="bi bi-clipboard-heart-fill" style="font-size: 20px"></i> Meus Atestados
                     </a>
                 </div>
                 <ul class="navbar-nav ms-auto">
