@@ -234,8 +234,25 @@ if (
                                               <span class="fs-6"><?= htmlspecialchars(formatarIdade($vacina['idade_reco'])) ?></span>
                                             </div>
                                             <div class="mb-3 pb-2 border-bottom border-2 border-primary-subtle">
-                                              <span class="fw-semibold text-primary-emphasis"><i class="bi bi-shield-check"></i> SUS:</span><br>
-                                              <span class="fs-6"><?= (isset($vacina['sus']) && intval($vacina['sus']) === 1) ? '<span class="badge bg-success">Sim</span>' : '<span class="badge bg-secondary">Não</span>' ?></span>
+                                              <span class="fw-semibold text-primary-emphasis"><i class="bi bi-calendar2-week"></i> Próxima Dose:</span><br>
+                                              <span class="fs-6">
+                                                <?php
+                                                if ($proxima_dose === "Esquema completo") {
+                                                  echo '<span class="badge bg-success"><i class="bi bi-check-circle"></i> Esquema completo</span>';
+                                                } elseif ($proxima_dose === "Consultar profissional") {
+                                                  echo '<span class="badge bg-warning text-dark"><i class="bi bi-exclamation-triangle"></i> Consultar profissional</span>';
+                                                } elseif (strtotime($proxima_dose) < strtotime(date('Y-m-d'))) {
+                                                  echo '<span class="badge bg-danger"><i class="bi bi-exclamation-octagon"></i> Atrasada</span> ';
+                                                  echo date('d/m/Y', strtotime($proxima_dose));
+                                                } else {
+                                                  echo date('d/m/Y', strtotime($proxima_dose));
+                                                }
+                                                ?>
+                                              </span>
+                                            </div>
+                                            <div class="mb-3 pb-2 border-bottom border-2 border-primary-subtle">
+                                              <span class="fw-semibold text-primary-emphasis"><i class="bi bi-clipboard-check"></i> Doses Aplicadas:</span><br>
+                                              <span class="fs-6"><?= $doses_tomadas . " / " . $n_dose ?></span>
                                             </div>
                                           </div>
                                           <div class="col-12 col-md-4">
@@ -250,13 +267,13 @@ if (
                                               </div>
                                             <?php else: ?>
                                               <div class="mb-3 pb-2 border-bottom border-2 border-primary-subtle">
-                                                <span class="fw-semibold text-primary-emphasis"><i class="bi bi-calendar-x"></i> Última aplicação:</span><br>
+                                                <span class="fw-semibold text-primary-emphasis"><i class="bi bi-info-circle"></i> Situação:</span><br>
                                                 <span class="fs-6"><em>Nenhuma dose aplicada ainda.</em></span>
                                               </div>
                                             <?php endif; ?>
                                             <div class="mb-3 pb-2 border-bottom border-2 border-primary-subtle">
-                                              <span class="fw-semibold text-primary-emphasis"><i class="bi bi-collection"></i> Doses tomadas:</span><br>
-                                              <span class="fs-6"><?= $doses_tomadas . " / " . $n_dose ?></span>
+                                              <span class="fw-semibold text-primary-emphasis"><i class="bi bi-shield-check"></i> Obrigatória SUS:</span><br>
+                                              <span class="fs-6"><?= (isset($vacina['sus']) && intval($vacina['sus']) === 1) ? '<span class="badge bg-success">Sim</span>' : '<span class="badge bg-secondary">Não</span>'; ?></span>
                                             </div>
                                           </div>
                                         </div>
@@ -362,8 +379,25 @@ if (
                                               <span class="fs-6"><?= htmlspecialchars(formatarIdade($vacina['idade_reco'])) ?></span>
                                             </div>
                                             <div class="mb-3 pb-2 border-bottom border-2 border-primary-subtle">
-                                              <span class="fw-semibold text-primary-emphasis"><i class="bi bi-shield-check"></i> SUS:</span><br>
-                                              <span class="fs-6"><?= (isset($vacina['sus']) && intval($vacina['sus']) === 1) ? '<span class="badge bg-success">Sim</span>' : '<span class="badge bg-secondary">Não</span>' ?></span>
+                                              <span class="fw-semibold text-primary-emphasis"><i class="bi bi-calendar2-week"></i> Próxima Dose:</span><br>
+                                              <span class="fs-6">
+                                                <?php
+                                                if ($proxima_dose === "Esquema completo") {
+                                                  echo '<span class="badge bg-success"><i class="bi bi-check-circle"></i> Esquema completo</span>';
+                                                } elseif ($proxima_dose === "Consultar profissional") {
+                                                  echo '<span class="badge bg-warning text-dark"><i class="bi bi-exclamation-triangle"></i> Consultar profissional</span>';
+                                                } elseif (strtotime($proxima_dose) < strtotime(date('Y-m-d'))) {
+                                                  echo '<span class="badge bg-danger"><i class="bi bi-exclamation-octagon"></i> Atrasada</span> ';
+                                                  echo date('d/m/Y', strtotime($proxima_dose));
+                                                } else {
+                                                  echo date('d/m/Y', strtotime($proxima_dose));
+                                                }
+                                                ?>
+                                              </span>
+                                            </div>
+                                            <div class="mb-3 pb-2 border-bottom border-2 border-primary-subtle">
+                                              <span class="fw-semibold text-primary-emphasis"><i class="bi bi-clipboard-check"></i> Doses Aplicadas:</span><br>
+                                              <span class="fs-6"><?= $doses_tomadas . " / " . $n_dose ?></span>
                                             </div>
                                           </div>
                                           <div class="col-12 col-md-4">
@@ -372,19 +406,19 @@ if (
                                                 <span class="fw-semibold text-primary-emphasis"><i class="bi bi-calendar-check"></i> Última aplicação:</span><br>
                                                 <span class="fs-6"><?= date('d/m/Y', strtotime($aplic['ultima_data'])) ?></span>
                                               </div>
-                                              <div class="mb-3 pb-2 border-bottom border-2 border-primary_subtle">
+                                              <div class="mb-3 pb-2 border-bottom border-2 border-primary-subtle">
                                                 <span class="fw-semibold text-primary-emphasis"><i class="bi bi-123"></i> Dose aplicada:</span><br>
                                                 <span class="fs-6"><?= intval($aplic['ultima_dose']) ?></span>
                                               </div>
                                             <?php else: ?>
                                               <div class="mb-3 pb-2 border-bottom border-2 border-primary-subtle">
-                                                <span class="fw-semibold text-primary-emphasis"><i class="bi bi-calendar-x"></i> Última aplicação:</span><br>
+                                                <span class="fw-semibold text-primary-emphasis"><i class="bi bi-info-circle"></i> Situação:</span><br>
                                                 <span class="fs-6"><em>Nenhuma dose aplicada ainda.</em></span>
                                               </div>
                                             <?php endif; ?>
                                             <div class="mb-3 pb-2 border-bottom border-2 border-primary-subtle">
-                                              <span class="fw-semibold text-primary-emphasis"><i class="bi bi-collection"></i> Doses tomadas:</span><br>
-                                              <span class="fs-6"><?= $doses_tomadas . " / " . $n_dose ?></span>
+                                              <span class="fw-semibold text-primary-emphasis"><i class="bi bi-shield-check"></i> Obrigatória SUS:</span><br>
+                                              <span class="fs-6"><?= (isset($vacina['sus']) && intval($vacina['sus']) === 1) ? '<span class="badge bg-success">Sim</span>' : '<span class="badge bg-secondary">Não</span>'; ?></span>
                                             </div>
                                           </div>
                                         </div>
@@ -588,8 +622,25 @@ foreach ($vacinas as $vacina) {
                                                   <span class="fs-6"><?= htmlspecialchars(formatarIdade($vacina['idade_reco'])) ?></span>
                                                 </div>
                                                 <div class="mb-3 pb-2 border-bottom border-2 border-primary-subtle">
-                                                  <span class="fw-semibold text-primary-emphasis"><i class="bi bi-shield-check"></i> SUS:</span><br>
-                                                  <span class="fs-6"><?= (isset($vacina['sus']) && intval($vacina['sus']) === 1) ? '<span class="badge bg-success">Sim</span>' : '<span class="badge bg-secondary">Não</span>' ?></span>
+                                                  <span class="fw-semibold text-primary-emphasis"><i class="bi bi-calendar2-week"></i> Próxima Dose:</span><br>
+                                                  <span class="fs-6">
+                                                    <?php
+                                                    if ($proxima_dose === "Esquema completo") {
+                                                      echo '<span class="badge bg-success"><i class="bi bi-check-circle"></i> Esquema completo</span>';
+                                                    } elseif ($proxima_dose === "Consultar profissional") {
+                                                      echo '<span class="badge bg-warning text-dark"><i class="bi bi-exclamation-triangle"></i> Consultar profissional</span>';
+                                                    } elseif (strtotime($proxima_dose) < strtotime(date('Y-m-d'))) {
+                                                      echo '<span class="badge bg-danger"><i class="bi bi-exclamation-octagon"></i> Atrasada</span> ';
+                                                      echo date('d/m/Y', strtotime($proxima_dose));
+                                                    } else {
+                                                      echo date('d/m/Y', strtotime($proxima_dose));
+                                                    }
+                                                    ?>
+                                                  </span>
+                                                </div>
+                                                <div class="mb-3 pb-2 border-bottom border-2 border-primary-subtle">
+                                                  <span class="fw-semibold text-primary-emphasis"><i class="bi bi-clipboard-check"></i> Doses Aplicadas:</span><br>
+                                                  <span class="fs-6"><?= $doses_tomadas . " / " . $n_dose ?></span>
                                                 </div>
                                               </div>
                                               <div class="col-12 col-md-4">
@@ -598,19 +649,19 @@ foreach ($vacinas as $vacina) {
                                                     <span class="fw-semibold text-primary-emphasis"><i class="bi bi-calendar-check"></i> Última aplicação:</span><br>
                                                     <span class="fs-6"><?= date('d/m/Y', strtotime($aplic['ultima_data'])) ?></span>
                                                   </div>
-                                                  <div class="mb-3 pb-2 border-bottom border-2 border-primary_subtle">
+                                                  <div class="mb-3 pb-2 border-bottom border-2 border-primary-subtle">
                                                     <span class="fw-semibold text-primary-emphasis"><i class="bi bi-123"></i> Dose aplicada:</span><br>
                                                     <span class="fs-6"><?= intval($aplic['ultima_dose']) ?></span>
                                                   </div>
                                                 <?php else: ?>
                                                   <div class="mb-3 pb-2 border-bottom border-2 border-primary-subtle">
-                                                    <span class="fw-semibold text-primary-emphasis"><i class="bi bi-calendar-x"></i> Última aplicação:</span><br>
+                                                    <span class="fw-semibold text-primary-emphasis"><i class="bi bi-info-circle"></i> Situação:</span><br>
                                                     <span class="fs-6"><em>Nenhuma dose aplicada ainda.</em></span>
                                                   </div>
                                                 <?php endif; ?>
                                                 <div class="mb-3 pb-2 border-bottom border-2 border-primary-subtle">
-                                                  <span class="fw-semibold text-primary-emphasis"><i class="bi bi-collection"></i> Doses tomadas:</span><br>
-                                                  <span class="fs-6"><?= $doses_tomadas . " / " . $n_dose ?></span>
+                                                  <span class="fw-semibold text-primary-emphasis"><i class="bi bi-shield-check"></i> Obrigatória SUS:</span><br>
+                                                  <span class="fs-6"><?= (isset($vacina['sus']) && intval($vacina['sus']) === 1) ? '<span class="badge bg-success">Sim</span>' : '<span class="badge bg-secondary">Não</span>'; ?></span>
                                                 </div>
                                               </div>
                                             </div>
@@ -647,17 +698,14 @@ foreach ($vacinas as $vacina) {
                     </tr>
                 </thead>
                 <tbody>
-                    <?php
-                    $rowIndex = 0;
-                    foreach ($vacinas_opcionais as $vacina):
+                    <?php foreach ($vacinas_opcionais as $vacina):
                         $id_vaci = $vacina['id_vaci'];
                         $aplic = $aplicacoes[$id_vaci] ?? null;
                         $proxima_dose = calcularProximaDose($vacina, $aplic, $naci_usuario);
                         $doses_tomadas = $aplic ? intval($aplic['total_doses']) : 0;
                         $n_dose = intval($vacina['n_dose']);
-                        $rowClass = ($rowIndex % 2 === 0) ? 'bg-white' : 'table-primary';
-                    ?>
-                        <tr class="<?= $rowClass ?>">
+                        ?>
+                        <tr>
                             <td><?= htmlspecialchars($vacina['nome_vaci']) ?></td>
                             <td><?= htmlspecialchars(formatarIdade($vacina['idade_reco'])) ?></td>
                             <td>
@@ -718,8 +766,25 @@ foreach ($vacinas as $vacina) {
                                               <span class="fs-6"><?= htmlspecialchars(formatarIdade($vacina['idade_reco'])) ?></span>
                                             </div>
                                             <div class="mb-3 pb-2 border-bottom border-2 border-primary-subtle">
-                                              <span class="fw-semibold text-primary-emphasis"><i class="bi bi-shield-check"></i> SUS:</span><br>
-                                              <span class="fs-6"><?= (isset($vacina['sus']) && intval($vacina['sus']) === 1) ? '<span class="badge bg-success">Sim</span>' : '<span class="badge bg-secondary">Não</span>' ?></span>
+                                              <span class="fw-semibold text-primary-emphasis"><i class="bi bi-calendar2-week"></i> Próxima Dose:</span><br>
+                                              <span class="fs-6">
+                                                <?php
+                                                if ($proxima_dose === "Esquema completo") {
+                                                  echo '<span class="badge bg-success"><i class="bi bi-check-circle"></i> Esquema completo</span>';
+                                                } elseif ($proxima_dose === "Consultar profissional") {
+                                                  echo '<span class="badge bg-warning text-dark"><i class="bi bi-exclamation-triangle"></i> Consultar profissional</span>';
+                                                } elseif (strtotime($proxima_dose) < strtotime(date('Y-m-d'))) {
+                                                  echo '<span class="badge bg-danger"><i class="bi bi-exclamation-octagon"></i> Atrasada</span> ';
+                                                  echo date('d/m/Y', strtotime($proxima_dose));
+                                                } else {
+                                                  echo date('d/m/Y', strtotime($proxima_dose));
+                                                }
+                                                ?>
+                                              </span>
+                                            </div>
+                                            <div class="mb-3 pb-2 border-bottom border-2 border-primary-subtle">
+                                              <span class="fw-semibold text-primary-emphasis"><i class="bi bi-clipboard-check"></i> Doses Aplicadas:</span><br>
+                                              <span class="fs-6"><?= $doses_tomadas . " / " . $n_dose ?></span>
                                             </div>
                                           </div>
                                           <div class="col-12 col-md-4">
@@ -728,19 +793,19 @@ foreach ($vacinas as $vacina) {
                                                 <span class="fw-semibold text-primary-emphasis"><i class="bi bi-calendar-check"></i> Última aplicação:</span><br>
                                                 <span class="fs-6"><?= date('d/m/Y', strtotime($aplic['ultima_data'])) ?></span>
                                               </div>
-                                              <div class="mb-3 pb-2 border-bottom border-2 border-primary_subtle">
+                                              <div class="mb-3 pb-2 border-bottom border-2 border-primary-subtle">
                                                 <span class="fw-semibold text-primary-emphasis"><i class="bi bi-123"></i> Dose aplicada:</span><br>
                                                 <span class="fs-6"><?= intval($aplic['ultima_dose']) ?></span>
                                               </div>
                                             <?php else: ?>
                                               <div class="mb-3 pb-2 border-bottom border-2 border-primary-subtle">
-                                                <span class="fw-semibold text-primary-emphasis"><i class="bi bi-calendar-x"></i> Última aplicação:</span><br>
+                                                <span class="fw-semibold text-primary-emphasis"><i class="bi bi-info-circle"></i> Situação:</span><br>
                                                 <span class="fs-6"><em>Nenhuma dose aplicada ainda.</em></span>
                                               </div>
                                             <?php endif; ?>
                                             <div class="mb-3 pb-2 border-bottom border-2 border-primary-subtle">
-                                              <span class="fw-semibold text-primary-emphasis"><i class="bi bi-collection"></i> Doses tomadas:</span><br>
-                                              <span class="fs-6"><?= $doses_tomadas . " / " . $n_dose ?></span>
+                                              <span class="fw-semibold text-primary-emphasis"><i class="bi bi-shield-check"></i> Obrigatória SUS:</span><br>
+                                              <span class="fs-6"><?= (isset($vacina['sus']) && intval($vacina['sus']) === 1) ? '<span class="badge bg-success">Sim</span>' : '<span class="badge bg-secondary">Não</span>'; ?></span>
                                             </div>
                                           </div>
                                         </div>
@@ -750,7 +815,7 @@ foreach ($vacinas as $vacina) {
                                 </div>
                             </td>
                         </tr>
-                    <?php $rowIndex++; endforeach; ?>
+                    <?php endforeach; ?>
                     <?php if (count($vacinas_opcionais) === 0): ?>
                         <tr><td colspan="5">Nenhuma vacina encontrada.</td></tr>
                     <?php endif; ?>
