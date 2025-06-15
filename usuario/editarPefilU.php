@@ -36,6 +36,11 @@ $email = $user['email_usuario'];
     <link rel="stylesheet" href="../bootstrap/bootstrap-5.3.6-dist/css/bootstrap.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        .card.shadow-lg {
+            background: #FDFDFD;
+        }
+    </style>
 </head>
 
 <body>

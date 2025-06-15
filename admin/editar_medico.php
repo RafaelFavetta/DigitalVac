@@ -118,6 +118,9 @@ while ($row = $res->fetch_assoc()) {
             font-weight: bold !important;
             margin-left: 0.5rem !important;
         }
+        body {
+            background: #FDFDFD !important;
+        }
     </style>
 </head>
 

@@ -35,7 +35,7 @@ if (isset($_SESSION['id_medico'])) {
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
     <style>
         .form-container {
-            background: white;
+            background: #FDFDFD;
             padding: 30px;
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);

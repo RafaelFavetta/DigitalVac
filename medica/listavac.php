@@ -127,7 +127,7 @@ usort($vacinas_opcionais, function($a, $b) {
         }
 
         .table {
-            background: white;
+            background: #FDFDFD;
             border-radius: 10px;
             overflow: hidden;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
@@ -135,9 +135,12 @@ usort($vacinas_opcionais, function($a, $b) {
 
         .table thead th {
             background-color: #0d6efd !important;
-            color: white !important;
+            color: #FDFDFD !important;
             font-weight: bold;
         }
+
+        .bg-fdfdfd { background-color: #FDFDFD !important; }
+        .table-secondary { background-color: #f3f4f6 !important; }
     </style>
 </head>
 
@@ -226,7 +229,7 @@ usort($vacinas_opcionais, function($a, $b) {
                             });
                             $rowIndex = 0;
                             foreach ($vacinas_obrigatorias as $row):
-                                $rowClass = ($rowIndex === 0) ? 'bg-white' : (($rowIndex % 2 === 1) ? 'table-secondary' : 'bg-white');
+                                $rowClass = ($rowIndex % 2 === 0) ? 'bg-fdfdfd' : 'table-secondary';
                                 $modalId = "modalVacina" . $row['id_vaci'];
                             ?>
                             <tr class="<?php echo $rowClass; ?>">
@@ -586,7 +589,7 @@ usort($vacinas_opcionais, function($a, $b) {
                             });
                             $rowIndex = 0;
                             foreach ($vacinas_opcionais as $row):
-                                $rowClass = ($rowIndex === 0) ? 'bg-white' : (($rowIndex % 2 === 1) ? 'table-secondary' : 'bg-white');
+                                $rowClass = ($rowIndex % 2 === 0) ? 'bg-fdfdfd' : 'table-secondary';
                                 $modalId = "modalVacina" . $row['id_vaci'];
                             ?>
                             <tr class="<?php echo $rowClass; ?>">

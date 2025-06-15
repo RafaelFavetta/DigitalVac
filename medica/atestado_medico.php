@@ -55,6 +55,10 @@ $result = $stmt->get_result();
             margin-left: 0.5rem !important;
         }
 
+        body {
+            background: #FDFDFD !important;
+        }
+
         .container {
             max-width: 95%;
         }

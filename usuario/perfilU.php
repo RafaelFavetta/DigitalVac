@@ -123,6 +123,10 @@ $conn->close();
             font-size: 1rem;
             min-width: 140px;
         }
+
+        body {
+            background: #FDFDFD !important;
+        }
     </style>
 </head>
 

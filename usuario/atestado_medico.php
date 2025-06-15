@@ -65,6 +65,7 @@ $result = $stmt->get_result();
             border-radius: 10px;
             margin-bottom: 20px;
             padding: 16px 20px !important;
+            background: #FDFDFD;
         }
 
         @media (min-width: 576px) {
@@ -118,6 +119,10 @@ $result = $stmt->get_result();
             justify-content: flex-end;
             align-items: center;
             margin-bottom: 0;
+        }
+
+        body {
+            background: #FDFDFD !important;
         }
     </style>
 </head>

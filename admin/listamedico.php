@@ -169,6 +169,10 @@ if (
             color: white;
             font-weight: bold;
         }
+
+        body {
+            background-color: #FDFDFD;
+        }
     </style>
 </head>
 

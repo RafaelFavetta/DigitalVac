@@ -17,7 +17,7 @@
     }
 
     .form-container {
-      background: white;
+      background: #FDFDFD;
       padding: 30px;
       border-radius: 10px;
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
@@ -38,7 +38,7 @@
       position: absolute;
       z-index: 1000;
       width: 100%;
-      background: #fff;
+      background: #FDFDFD;
       border: 1px solid #d1d5db;
       border-radius: 0 0 0.5rem 0.5rem;
       max-height: 220px;
@@ -53,7 +53,7 @@
       cursor: pointer;
       font-size: 1rem;
       color: #212529;
-      background: #fff;
+      background: #FDFDFD;
       border-bottom: 1px solid #f1f1f1;
       transition: background 0.15s;
     }
@@ -81,6 +81,10 @@
     /* Negrito para parte digitada */
     .autocomplete-bold {
       font-weight: bold;
+    }
+
+    body {
+      background: #FDFDFD;
     }
   </style>
 </head>

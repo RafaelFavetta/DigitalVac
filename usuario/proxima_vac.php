@@ -139,11 +139,11 @@ if (
                 <table class="table table-bordered text-center mx-auto">
                     <thead>
                         <tr>
-                            <th style="background-color: #0d6efd; color: white;">Vacina</th>
-                            <th style="background-color: #0d6efd; color: white;">Idade Recomendada</th>
-                            <th style="background-color: #0d6efd; color: white;">Próxima Dose</th>
-                            <th style="background-color: #0d6efd; color: white;">Doses</th>
-                            <th style="background-color: #0d6efd; color: white;">Ações</th>
+                            <th style="background-color: #0d6efd; color: #FDFDFD;">Vacina</th>
+                            <th style="background-color: #0d6efd; color: #FDFDFD;">Idade Recomendada</th>
+                            <th style="background-color: #0d6efd; color: #FDFDFD;">Próxima Dose</th>
+                            <th style="background-color: #0d6efd; color: #FDFDFD;">Doses</th>
+                            <th style="background-color: #0d6efd; color: #FDFDFD;">Ações</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -153,7 +153,7 @@ if (
                             $proxima_dose = calcularProximaDose($vacina, $aplic, $naci_usuario);
                             $doses_tomadas = $aplic ? intval($aplic['total_doses']) : 0;
                             $n_dose = intval($vacina['n_dose']);
-                            $rowClass = ($rowIndex % 2 === 0) ? 'bg-white' : 'table-secondary';
+                            $rowClass = ($rowIndex % 2 === 0) ? 'bg-fdfdfd' : 'table-secondary';
                             $modalId = "modalVacina" . $id_vaci;
                         ?>
                         <tr class="<?= $rowClass ?>">
@@ -182,7 +182,7 @@ if (
                                 <div class="modal fade" id="<?= $modalId ?>" tabindex="-1" aria-labelledby="label<?= $modalId ?>" aria-hidden="true">
                                   <div class="modal-dialog modal-dialog-centered modal-lg">
                                     <div class="modal-content" style="border-radius: 18px; background: linear-gradient(135deg, #e3f0ff 0%, #f8fbff 100%); box-shadow: 0 8px 32px rgba(0,0,0,0.15);">
-                                      <div class="modal-header" style="background: linear-gradient(90deg, #3b82f6 60%, #60a5fa 100%); color: #fff; border-top-left-radius: 18px; border-top-right-radius: 18px;">
+                                      <div class="modal-header" style="background: linear-gradient(90deg, #3b82f6 60%, #60a5fa 100%); color: #FDFDFD; border-top-left-radius: 18px; border-top-right-radius: 18px;">
                                         <h5 class="modal-title fw-bold" id="label<?= $modalId ?>">
                                             <i class="bi bi-info-circle" style="color: #fffbe6; font-size: 1.5rem;"></i>
                                             <span class="ms-2">Informações da Vacina</span>
@@ -285,20 +285,22 @@ if (
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
     <style>
         .table {
-            background: white;
+            background: #FDFDFD;
             border-radius: 10px;
             overflow: hidden;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
         .table thead th {
             background-color: #0d6efd !important;
-            color: white !important;
+            color: #FDFDFD !important;
             font-weight: bold;
         }
         .modal-header {
             background: #0d6efd;
-            color: #fff;
+            color: #FDFDFD;
         }
+        .bg-fdfdfd { background-color: #FDFDFD !important; }
+        .table-secondary { background-color: #f3f4f6 !important; }
     </style>
 </head>
 <body>
@@ -379,11 +381,11 @@ if (
                     <table class="table table-bordered text-center mx-auto">
                         <thead>
                             <tr>
-                                <th style="background-color: #0d6efd; color: white;">Vacina</th>
-                                <th style="background-color: #0d6efd; color: white;">Idade Recomendada</th>
-                                <th style="background-color: #0d6efd; color: white;">Próxima Dose</th>
-                                <th style="background-color: #0d6efd; color: white;">Doses</th>
-                                <th style="background-color: #0d6efd; color: white;">Ações</th>
+                                <th style="background-color: #0d6efd; color: #FDFDFD;">Vacina</th>
+                                <th style="background-color: #0d6efd; color: #FDFDFD;">Idade Recomendada</th>
+                                <th style="background-color: #0d6efd; color: #FDFDFD;">Próxima Dose</th>
+                                <th style="background-color: #0d6efd; color: #FDFDFD;">Doses</th>
+                                <th style="background-color: #0d6efd; color: #FDFDFD;">Ações</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -393,7 +395,7 @@ if (
                                 $proxima_dose = calcularProximaDose($vacina, $aplic, $naci_usuario);
                                 $doses_tomadas = $aplic ? intval($aplic['total_doses']) : 0;
                                 $n_dose = intval($vacina['n_dose']);
-                                $rowClass = ($rowIndex % 2 === 0) ? 'bg-white' : 'table-secondary';
+                                $rowClass = ($rowIndex % 2 === 0) ? 'bg-fdfdfd' : 'table-secondary';
                                 $modalId = "modalVacina" . $id_vaci;
                             ?>
                             <tr class="<?= $rowClass ?>">
@@ -422,7 +424,7 @@ if (
                                     <div class="modal fade" id="<?= $modalId ?>" tabindex="-1" aria-labelledby="label<?= $modalId ?>" aria-hidden="true">
                                       <div class="modal-dialog modal-dialog-centered modal-lg">
                                         <div class="modal-content" style="border-radius: 18px; background: linear-gradient(135deg, #e3f0ff 0%, #f8fbff 100%); box-shadow: 0 8px 32px rgba(0,0,0,0.15);">
-                                          <div class="modal-header" style="background: linear-gradient(90deg, #3b82f6 60%, #60a5fa 100%); color: #fff; border-top-left-radius: 18px; border-top-right-radius: 18px;">
+                                          <div class="modal-header" style="background: linear-gradient(90deg, #3b82f6 60%, #60a5fa 100%); color: #FDFDFD; border-top-left-radius: 18px; border-top-right-radius: 18px;">
                                             <h5 class="modal-title fw-bold" id="label<?= $modalId ?>">
                                                 <i class="bi bi-info-circle" style="color: #fffbe6; font-size: 1.5rem;"></i>
                                                 <span class="ms-2">Informações da Vacina</span>

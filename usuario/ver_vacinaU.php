@@ -38,7 +38,7 @@ $conn->close();
     <style>
         body { background-color: #f8f9fa; }
         .card {
-            background: white;
+            background: #FDFDFD;
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0,0,0,0.2);
             padding: 32px;
