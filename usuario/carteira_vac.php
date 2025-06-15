@@ -250,21 +250,22 @@ if (
         </div>
     </nav>
 
-    <div class="container mt-4">
-        <h2 class="text-center text-primary fw-bold">Aplicações de Vacina</h2>
-        <div class="w-100 d-flex justify-content-center">
-            <form class="d-flex position-relative" role="search" id="form-pesquisa-vacina"
-                style="max-width:600px; width:100%;">
+    <div class="container min-vh-100 d-flex flex-column align-items-center justify-content-start pt-4">
+        <h2 class="text-primary fw-bold mb-4 text-center w-100" style="max-width:600px;">
+            Aplicações de Vacina
+        </h2>
+        <div class="w-100 d-flex justify-content-center mb-4" style="max-width:600px;">
+            <form class="d-flex position-relative w-100" role="search" id="form-pesquisa-vacina">
                 <input class="form-control me-2 border border-primary" type="search" placeholder="Nome da vacina"
                     aria-label="Pesquisar" id="pesquisa-vacina" autocomplete="off" maxlength="50"
                     pattern="[A-Za-zÀ-ÿ\s]+">
             </form>
         </div>
-        <div class="d-flex justify-content-end align-items-center mb-2" style="width:100%;">
+        <div class="d-flex justify-content-end align-items-center mb-2 w-100" style="max-width:1200px;">
             <!-- Removido o dropdown de ordenação -->
         </div>
-        <div id="tabela-carteira-vac">
-            <div style="width: 100%;">
+        <div id="tabela-carteira-vac" class="flex-grow-1 w-100 d-flex flex-column align-items-center" style="max-width:1200px;">
+            <div class="w-100">
                 <?php echo renderTabelaCarteiraVac($vacinas); ?>
             </div>
         </div>
