@@ -284,6 +284,10 @@ usort($vacinas_opcionais, function($a, $b) {
                                             stripos($nome, 'viajantes') !== false
                                         ) {
                                             echo "A qualquer momento";
+                                        } elseif (
+                                            mb_strtolower($idade_reco) === '0 meses'
+                                        ) {
+                                            echo "Ao nascer";
                                         } else {
                                             // Exibe idade recomendada da vacina, sem cálculos extras
                                             echo htmlspecialchars($idade_reco !== '' ? $idade_reco : "Ao nascer");
@@ -383,6 +387,10 @@ usort($vacinas_opcionais, function($a, $b) {
                                                           stripos($nome, 'viajantes') !== false
                                                       ) {
                                                           echo "A qualquer momento";
+                                                      } elseif (
+                                                          mb_strtolower($idade_reco) === '0 meses'
+                                                      ) {
+                                                          echo "Ao nascer";
                                                       } else {
                                                           echo htmlspecialchars($idade_reco !== '' ? $idade_reco : "Ao nascer");
                                                       }
@@ -501,6 +509,10 @@ usort($vacinas_opcionais, function($a, $b) {
                                                                         stripos($nome, 'viajantes') !== false
                                                                     ) {
                                                                         echo "A qualquer momento";
+                                                                    } elseif (
+                                                                        mb_strtolower($idade_reco) === '0 meses'
+                                                                    ) {
+                                                                        echo "Ao nascer";
                                                                     } else {
                                                                         echo htmlspecialchars($idade_reco !== '' ? $idade_reco : "Ao nascer");
                                                                     }
@@ -632,6 +644,10 @@ usort($vacinas_opcionais, function($a, $b) {
                                             stripos($nome, 'viajantes') !== false
                                         ) {
                                             echo "A qualquer momento";
+                                        } elseif (
+                                            mb_strtolower($idade_reco) === '0 meses'
+                                        ) {
+                                            echo "Ao nascer";
                                         } else {
                                             // Exibe idade recomendada da vacina, sem cálculos extras
                                             echo htmlspecialchars($idade_reco !== '' ? $idade_reco : "Ao nascer");
@@ -731,6 +747,10 @@ usort($vacinas_opcionais, function($a, $b) {
                                                           stripos($nome, 'viajantes') !== false
                                                       ) {
                                                           echo "A qualquer momento";
+                                                      } elseif (
+                                                          mb_strtolower($idade_reco) === '0 meses'
+                                                      ) {
+                                                          echo "Ao nascer";
                                                       } else {
                                                           echo htmlspecialchars($idade_reco !== '' ? $idade_reco : "Ao nascer");
                                                       }
@@ -849,6 +869,10 @@ usort($vacinas_opcionais, function($a, $b) {
                                                                         stripos($nome, 'viajantes') !== false
                                                                     ) {
                                                                         echo "A qualquer momento";
+                                                                    } elseif (
+                                                                        mb_strtolower($idade_reco) === '0 meses'
+                                                                    ) {
+                                                                        echo "Ao nascer";
                                                                     } else {
                                                                         echo htmlspecialchars($idade_reco !== '' ? $idade_reco : "Ao nascer");
                                                                     }
