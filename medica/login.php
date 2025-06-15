@@ -114,7 +114,27 @@ $conn->close();
                     <a href="../outros/esquecisenha.php" class="text-decoration-none">Redefinir senha</a>
                 </div>
             </form>
+            <div class="text-center mt-2">
+                <a href="#" class="small text-muted" data-bs-toggle="modal" data-bs-target="#termosModal">Termos e Condições</a>
+            </div>
         </div>
+    </div>
+    <!-- Modal Termos e Condições -->
+    <div class="modal fade" id="termosModal" tabindex="-1" aria-labelledby="termosModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="termosModalLabel">Termos e Condições</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+          </div>
+          <div class="modal-body">
+            Estes são os termos e condições fictícios do DigitalVac. Ao utilizar este sistema, você concorda com as regras e políticas estabelecidas. Este texto é apenas um exemplo.
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+          </div>
+        </div>
+      </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
