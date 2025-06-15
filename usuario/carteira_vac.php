@@ -261,27 +261,7 @@ if (
             </form>
         </div>
         <div class="d-flex justify-content-end align-items-center mb-2" style="width:100%;">
-            <div class="dropdown">
-                <button class="btn btn-outline-primary dropdown-toggle dropdown-sort" type="button"
-                    id="dropdownOrdenarPor" data-bs-toggle="dropdown" aria-expanded="false">
-                    <i class="bi bi-funnel"></i> Ordenar por: <span id="ordenar-label">
-                        <?php
-                        if ($ordenar_por === 'nome')
-                            echo 'Nome';
-                        elseif ($ordenar_por === 'doses')
-                            echo 'Doses Tomadas';
-                        else
-                            echo 'Data de Aplicação';
-                        ?>
-                    </span>
-                </button>
-                <ul class="dropdown-menu" aria-labelledby="dropdownOrdenarPor">
-                    <li><a class="dropdown-item ordenar-opcao" data-value="data_aplica" href="#">Data de Aplicação</a>
-                    </li>
-                    <li><a class="dropdown-item ordenar-opcao" data-value="nome" href="#">Nome</a></li>
-                    <li><a class="dropdown-item ordenar-opcao" data-value="doses" href="#">Doses Tomadas</a></li>
-                </ul>
-            </div>
+            <!-- Removido o dropdown de ordenação -->
         </div>
         <div id="tabela-carteira-vac">
             <div style="width: 100%;">
@@ -306,11 +286,11 @@ if (
         // Pesquisa automática AJAX igual às tabelas da pasta medica
         const inputVacina = document.getElementById('pesquisa-vacina');
         const tabela = document.getElementById('tabela-carteira-vac');
-        let ordenarPor = "<?php echo $ordenar_por; ?>";
 
         function atualizarTabelaCarteiraVac() {
             const termo = inputVacina.value;
-            fetch('carteira_vac.php?pesquisa=' + encodeURIComponent(termo) + '&ordenar_por=' + encodeURIComponent(ordenarPor), { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
+            // Sempre usa o padrão 'data_aplica'
+            fetch('carteira_vac.php?pesquisa=' + encodeURIComponent(termo), { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
                 .then(res => res.text())
                 .then(html => {
                     const temp = document.createElement('div');
@@ -325,16 +305,6 @@ if (
         // Mostra todas as vacinas ao focar se o campo estiver vazio
         inputVacina.addEventListener('focus', function () {
             if (!this.value) atualizarTabelaCarteiraVac();
-        });
-
-        // Dropdown de ordenação
-        document.querySelectorAll('.ordenar-opcao').forEach(function (el) {
-            el.addEventListener('click', function (e) {
-                e.preventDefault();
-                ordenarPor = this.getAttribute('data-value');
-                document.getElementById('ordenar-label').textContent = this.textContent;
-                atualizarTabelaCarteiraVac();
-            });
         });
     </script>
 </body>
