@@ -28,7 +28,7 @@ if (isset($_SESSION['id_medico'])) {
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
     <style>
         .form-container {
-            background: white;
+            background: #FDFDFD;
             padding: 30px;
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
@@ -196,19 +196,14 @@ if (isset($_SESSION['id_medico'])) {
                         <div id="autocomplete-nome-vacina" class="autocomplete-suggestions"></div>
                     </div>
                     <div class="col-md-6">
-                        <label for="dose" class="form-label fw-bold">Dose</label>
-                        <input type="number" class="form-control" name="dose_aplicad" id="dose"
-                            placeholder="Quantidade de doses" min="1" required>
-                    </div>
-                </div>
-                <div class="row g-2 mt-2">
-                    <div class="col-md-6">
                         <label for="data-aplica" class="form-label fw-bold">Data Aplicação</label>
                         <input type="date" class="form-control" name="data_aplica" id="data-aplica" required>
                     </div>
+                </div>
+                <div class="row g-2 mt-2">
                     <div class="col-md-12">
                         <label for="cpf-paciente" class="form-label fw-bold">CPF do Paciente</label>
-                        <input type="text" class="form-control" name="cpf_paciente" id="cpf-paciente" autocomplete="off"
+                        <input type="search" class="form-control" name="cpf_paciente" id="cpf-paciente" autocomplete="off"
                             autocapitalize="off" spellcheck="false" required placeholder="Digite o CPF do paciente">
                         <div id="autocomplete-cpf-paciente" class="autocomplete-suggestions"></div>
                     </div>
@@ -240,12 +235,12 @@ if (isset($_SESSION['id_medico'])) {
     <script src="https://cdn.jsdelivr.net/npm/cleave.js"></script>
     <script src="../bootstrap/bootstrap-5.3.6-dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // Máscara para CPF
-        new Cleave('#cpf-paciente', {
-            delimiters: ['.', '.', '-'],
-            blocks: [3, 3, 3, 2],
-            numericOnly: true
-        });
+        // Removido: Máscara para CPF
+        // new Cleave('#cpf-paciente', {
+        //     delimiters: ['.', '.', '-'],
+        //     blocks: [3, 3, 3, 2],
+        //     numericOnly: true
+        // });
 
         // Máscara dinâmica para COREN/CRM
         const corenCrmInput = document.getElementById('coren-crm');
@@ -392,6 +387,12 @@ if (isset($_SESSION['id_medico'])) {
             }
 
             function fetchSuggestions(query = '') {
+                // Só busca se tiver pelo menos 3 caracteres
+                if (query.length < 3) {
+                    container.innerHTML = '';
+                    container.style.display = 'none';
+                    return;
+                }
                 fetch(endpoint + '?q=' + encodeURIComponent(query))
                     .then(res => res.json())
                     .then(data => {
@@ -428,11 +429,6 @@ if (isset($_SESSION['id_medico'])) {
             input.addEventListener('input', function () {
                 selectedIndex = -1;
                 fetchSuggestions(this.value);
-            });
-
-            input.addEventListener('focus', function () {
-                selectedIndex = -1;
-                fetchSuggestions(''); // Mostra todas as sugestões ordenadas ao focar
             });
 
             input.addEventListener('keydown', function (e) {

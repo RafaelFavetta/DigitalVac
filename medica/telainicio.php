@@ -51,7 +51,7 @@ if (!isset($_SESSION['id_medico'])) {
 
         .navbar-hr-left,
         .navbar-hr-right {
-            border-top: 2px solid #fff;
+            border-top: 2px solid #FDFDFD;
             opacity: 0.5;
             height: 0;
             flex: 1 1 0%;

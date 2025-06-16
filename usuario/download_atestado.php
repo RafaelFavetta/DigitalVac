@@ -136,3 +136,8 @@ $pdf->Output('D', 'atestado_' . $id_atestado . '.pdf');
 
 $conn->close();
 ?>
+<style>
+    body {
+        background: #FDFDFD !important;
+    }
+</style>

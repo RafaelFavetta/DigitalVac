@@ -6,12 +6,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DigitalVac</title>
     <link rel="icon" href="img/logo.png" type="image/png">
-    <link rel="stylesheet" href="../bootstrap/bootstrap-5.3.6-dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="bootstrap/bootstrap-5.3.6-dist/css/bootstrap.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-
+    <style>
+        body {
+            background: #FDFDFD !important;
+        }
+    </style>
 </head>
 
-<body class="bg-light">
+<body>
     <div class="container d-flex justify-content-center align-items-center vh-100">
         <div class="card p-4 shadow-sm text-center" style="width: 400px;">
             <img src="img/logo.png" alt="Logo" class="mx-auto d-block mb-4" style="width: 100px;">

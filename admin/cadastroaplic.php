@@ -17,12 +17,14 @@
     }
 
     .form-container {
-      background: white;
+      background: #FDFDFD;
       padding: 30px;
       border-radius: 10px;
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
       max-width: 500px;
       margin: auto;
+      margin-top: 32px;
+      /* Adicionado para afastar da navbar */
     }
 
     /* Remover linha azul dos inputs ao focar */
@@ -38,7 +40,7 @@
       position: absolute;
       z-index: 1000;
       width: 100%;
-      background: #fff;
+      background: #FDFDFD;
       border: 1px solid #d1d5db;
       border-radius: 0 0 0.5rem 0.5rem;
       max-height: 220px;
@@ -53,7 +55,7 @@
       cursor: pointer;
       font-size: 1rem;
       color: #212529;
-      background: #fff;
+      background: #FDFDFD;
       border-bottom: 1px solid #f1f1f1;
       transition: background 0.15s;
     }
@@ -81,6 +83,10 @@
     /* Negrito para parte digitada */
     .autocomplete-bold {
       font-weight: bold;
+    }
+
+    body {
+      background: #FDFDFD;
     }
   </style>
 </head>
@@ -166,16 +172,11 @@
             <div id="autocomplete-nome-vacina" class="autocomplete-suggestions"></div>
           </div>
           <div class="col-md-6">
-            <label for="dose" class="form-label fw-bold">Dose</label>
-            <input type="number" class="form-control" name="dose_aplicad" id="dose" placeholder="Quantidade de doses"
-              min="1" required />
-          </div>
-        </div>
-        <div class="row g-2 mt-2">
-          <div class="col-md-6">
             <label for="data-aplica" class="form-label fw-bold">Data de Aplicação</label>
             <input type="date" class="form-control" name="data_aplica" id="data-aplica" required />
           </div>
+        </div>
+        <div class="row g-2 mt-2">
           <div class="col-md-12">
             <label for="cpf-paciente" class="form-label fw-bold">CPF do Paciente</label>
             <input type="search" class="form-control" name="cpf_paciente" id="cpf-paciente"
@@ -212,12 +213,12 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/cleave.js"></script>
   <script>
-    // Máscara para CPF
-    new Cleave('#cpf-paciente', {
-      delimiters: ['.', '.', '-'],
-      blocks: [3, 3, 3, 2],
-      numericOnly: true
-    });
+    // Removido: Máscara para CPF
+    // new Cleave('#cpf-paciente', {
+    //   delimiters: ['.', '.', '-'],
+    //   blocks: [3, 3, 3, 2],
+    //   numericOnly: true
+    // });
 
     // Máscara para COREN/CRM
     new Cleave('#coren-crm', {
@@ -304,6 +305,12 @@
       }
 
       function fetchSuggestions(query = '') {
+        // Só busca se tiver pelo menos 3 caracteres
+        if (inputId === 'cpf-paciente' && query.length < 3) {
+          container.innerHTML = '';
+          container.style.display = 'none';
+          return;
+        }
         fetch(endpoint + '?q=' + encodeURIComponent(query))
           .then(res => res.json())
           .then(data => {
@@ -342,10 +349,13 @@
         fetchSuggestions(this.value);
       });
 
-      input.addEventListener('focus', function () {
-        selectedIndex = -1;
-        fetchSuggestions(''); // Mostra todas as sugestões ordenadas ao focar
-      });
+      // Remova o fetchSuggestions do evento de focus para CPF
+      if (inputId !== 'cpf-paciente') {
+        input.addEventListener('focus', function () {
+          selectedIndex = -1;
+          fetchSuggestions('');
+        });
+      }
 
       input.addEventListener('keydown', function (e) {
         if (container.style.display !== 'block') return;

@@ -9,23 +9,23 @@ $fabricante = $_POST['fabricante'] ?? '';
 $doses = $_POST['doses'] ?? '';
 $via = $_POST['via'] ?? '';
 $intervalo = $_POST['intervalo'] ?? '';
-$idade_aplica = $_POST['idade_aplica'] ?? '';
 $estoque = $_POST['estoque'] ?? '';
+$sus = $_POST['sus'] ?? '';
 
-// Validação básica
-if (!$lote || !$nome || !$fabricante || $doses === '' || !$via || $intervalo === '' || $idade_aplica === '' || $estoque === '') {
+// Recebe idade_reco_final (ex: "7 anos" ou "18 meses")
+$idade_reco = isset($_POST['idade_reco_final']) ? trim($_POST['idade_reco_final']) : '';
+
+// Validação básica (agora valida os campos corretos)
+if (
+    !$lote || !$nome || !$fabricante || $doses === '' || !$via || $intervalo === '' ||
+    $idade_reco === '' || $estoque === '' || $sus === ''
+) {
     echo json_encode(['success' => false, 'message' => 'Preencha todos os campos obrigatórios.']);
     exit;
 }
 
-// Exemplo: supondo que idade_aplica seja em anos
-$idade_anos_reco = intval($idade_aplica);
-$idade_meses_reco = 0;
-
-// Ajuste conforme sua tabela, por exemplo, se id_calendario for obrigatório:
-// $id_calendario = null; // ou obtenha pelo nome da vacina, se necessário
-
-$sql = "INSERT INTO vacina (lote_vaci, nome_vaci, fabri_vaci, n_dose, via_adimicao, intervalo_dose, idade_anos_reco, idade_meses_reco, estoque)
+// Prepara o SQL com o campo idade_reco (VARCHAR)
+$sql = "INSERT INTO vacina (lote_vaci, nome_vaci, fabri_vaci, n_dose, via_adimicao, intervalo_dose, idade_reco, estoque, sus)
         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
 $stmt = $conn->prepare($sql);
@@ -33,7 +33,18 @@ if (!$stmt) {
     echo json_encode(['success' => false, 'message' => 'Erro no prepare: ' . $conn->error]);
     exit;
 }
-$stmt->bind_param("sssisiiii", $lote, $nome, $fabricante, $doses, $via, $intervalo, $idade_anos_reco, $idade_meses_reco, $estoque);
+$stmt->bind_param(
+    "sssisissi",
+    $lote,
+    $nome,
+    $fabricante,
+    $doses,
+    $via,
+    $intervalo,
+    $idade_reco,
+    $estoque,
+    $sus
+);
 
 if ($stmt->execute()) {
     echo json_encode(['success' => true, 'message' => 'Vacina cadastrada com sucesso!']);

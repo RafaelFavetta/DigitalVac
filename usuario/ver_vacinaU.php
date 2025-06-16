@@ -38,7 +38,7 @@ $conn->close();
     <style>
         body { background-color: #f8f9fa; }
         .card {
-            background: white;
+            background: #FDFDFD;
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0,0,0,0.2);
             padding: 32px;
@@ -125,17 +125,7 @@ $conn->close();
                         ) {
                             echo "A qualquer momento";
                         } else {
-                            $idade_meses = isset($row['idade_meses_reco']) ? intval($row['idade_meses_reco']) : 0;
-                            $idade_anos = isset($row['idade_anos_reco']) ? intval($row['idade_anos_reco']) : 0;
-                            $total_meses = $idade_anos * 12 + $idade_meses;
-                            if ($total_meses === 0) {
-                                echo "Ao nascer";
-                            } elseif ($total_meses < 24) {
-                                echo $total_meses . " meses";
-                            } else {
-                                $anos = floor($total_meses / 12);
-                                echo $anos . " anos";
-                            }
+                            echo htmlspecialchars($row['idade_reco'] ?? "Ao nascer");
                         }
                     ?>
                 </li>

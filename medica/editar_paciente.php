@@ -134,6 +134,9 @@ $cidade = $user['cidade'] ?? '';
             font-weight: bold !important;
             margin-left: 0.5rem !important;
         }
+        body {
+            background: #FDFDFD !important;
+        }
     </style>
 </head>
 

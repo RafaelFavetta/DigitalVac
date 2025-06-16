@@ -58,7 +58,7 @@ $stmt->close();
             min-height: 0;
             margin-top: 0;
             /* Remove o espaçamento extra */
-            background: #fdfdfd;
+            background: #FDFDFD;
             width: 100%;
             height: auto;
         }
@@ -69,7 +69,7 @@ $stmt->close();
         }
 
         .cards-container {
-            background: #fdfdfd;
+            background: #FDFDFD;
             border-radius: 18px;
             box-shadow: 0 4px 24px rgba(0, 0, 0, 0.07);
             padding: 40px 32px 32px 32px;

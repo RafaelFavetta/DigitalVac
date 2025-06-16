@@ -15,7 +15,7 @@
     }
 
     .form-container {
-      background: white;
+      background: #FDFDFD;
       padding: 30px;
       border-radius: 10px;
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
@@ -158,15 +158,6 @@
               <option value="0">Não</option>
             </select>
           </div>
-          <div class="col-md-6"></div>
-        </div>
-
-        <div class="row g-2 mt-2">
-          <div class="col-md-6">
-            <label for="idade-aplica" class="form-label fw-bold">Idade de aplicação</label>
-            <input type="number" id="idade-aplica" name="idade_aplica" class="form-control" placeholder="Idade mínima"
-              required>
-          </div>
           <div class="col-md-6">
             <label for="estoque" class="form-label fw-bold">Estoque</label>
             <input type="number" id="estoque" name="estoque" class="form-control" placeholder="Quantidade em estoque"
@@ -174,6 +165,18 @@
           </div>
         </div>
 
+        <div class="row g-2 mt-2">
+          <div class="col-md-6">
+            <label for="idade_reco" class="form-label fw-bold">Idade de aplicação</label>
+            <div class="input-group">
+              <input type="number" id="idade_reco" name="idade_reco" class="form-control" placeholder="Idade" min="0"
+                required step="1" pattern="\d+">
+              <button type="button" class="btn btn-outline-primary btn-sm" id="btn-anos">Anos</button>
+              <button type="button" class="btn btn-outline-secondary btn-sm" id="btn-meses">Meses</button>
+            </div>
+            <input type="hidden" id="idade_reco_unidade" name="idade_reco_unidade" value="anos">
+          </div>
+        </div>
         <div class="row g-3 mt-3 text-center">
           <div class="col-12">
             <button type="submit" class="btn btn-primary fw-bold">
@@ -204,20 +207,61 @@
       toast.show();
     }
 
+    // Unidade de idade (anos/meses)
+    let unidadeIdade = 'anos';
+    document.getElementById('btn-anos').addEventListener('click', function () {
+      unidadeIdade = 'anos';
+      document.getElementById('btn-anos').classList.add('btn-primary');
+      document.getElementById('btn-anos').classList.remove('btn-outline-primary');
+      document.getElementById('btn-meses').classList.remove('btn-primary');
+      document.getElementById('btn-meses').classList.add('btn-outline-secondary');
+      document.getElementById('idade_reco_unidade').value = 'anos';
+    });
+    document.getElementById('btn-meses').addEventListener('click', function () {
+      unidadeIdade = 'meses';
+      document.getElementById('btn-meses').classList.add('btn-primary');
+      document.getElementById('btn-meses').classList.remove('btn-outline-secondary');
+      document.getElementById('btn-anos').classList.remove('btn-primary');
+      document.getElementById('btn-anos').classList.add('btn-outline-primary');
+      document.getElementById('idade_reco_unidade').value = 'meses';
+    });
+    // Inicializa botão "anos" como selecionado
+    document.getElementById('btn-anos').click();
+
     document.getElementById("cadastroVacinaForm").addEventListener("submit", function (event) {
       event.preventDefault();
-
+      // Monta o campo idade_reco final (ex: "7 anos" ou "18 meses")
+      const idade = document.getElementById('idade_reco').value;
+      const unidade = document.getElementById('idade_reco_unidade').value;
+      if (idade === '' || isNaN(idade) || parseInt(idade) < 0) {
+        showAlert('error', "Informe uma idade válida.");
+        return;
+      }
+      // Cria campo oculto para enviar idade_reco no formato correto
+      let idade_reco_final = idade + ' ' + unidade;
+      // Remove campo antigo se existir
+      let hidden = document.getElementById('idade_reco_final');
+      if (!hidden) {
+        hidden = document.createElement('input');
+        hidden.type = 'hidden';
+        hidden.name = 'idade_reco_final';
+        hidden.id = 'idade_reco_final';
+        this.appendChild(hidden);
+      }
+      hidden.value = idade_reco_final;
+      // Remove campos separados (não existem mais)
+      // Envia o formulário
       const formData = new FormData(this);
-
       fetch(this.action, {
-        method: "POST",
-        body: formData,
-      })
+          method: "POST",
+          body: formData,
+        })
         .then((response) => response.json().catch(() => ({ success: false, message: "Erro inesperado do servidor." })))
         .then((data) => {
           if (data.success) {
             showAlert('success', data.message || "Cadastro realizado com sucesso!");
             this.reset();
+            document.getElementById('btn-anos').click();
           } else {
             showAlert('error', data.message || "Erro ao cadastrar.");
           }
@@ -226,6 +270,22 @@
           console.error("Erro ao cadastrar:", error);
           showAlert('error', "Ocorreu um erro ao cadastrar. Tente novamente.");
         });
+    });
+
+    // Sincroniza idade anos <-> meses (mas só se o campo editado for diferente do outro)
+    document.getElementById('idade_anos_reco').addEventListener('input', function () {
+      const anos = parseInt(this.value) || 0;
+      // Só atualiza meses se o campo anos foi alterado manualmente
+      if (document.activeElement === this) {
+        document.getElementById('idade_meses_reco').value = anos * 12;
+      }
+    });
+    document.getElementById('idade_meses_reco').addEventListener('input', function () {
+      const meses = parseInt(this.value) || 0;
+      // Só atualiza anos se o campo meses foi alterado manualmente
+      if (document.activeElement === this) {
+        document.getElementById('idade_anos_reco').value = Math.floor(meses / 12);
+      }
     });
 
     // Exibe toast se houver mensagem na URL (para redirecionamentos)

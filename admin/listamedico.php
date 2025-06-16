@@ -84,9 +84,9 @@ if (
                         </td>
                         <td>
                             <!-- Ajuste os links de ação conforme necessário -->
-                            <a href="editar_medico.php?id=<?php echo $row['id_medico']; ?>" class="btn btn-sm btn-info mb-1"
+                            <a href="editar_medico.php?id=<?php echo $row['id_medico']; ?>" class="btn btn-sm btn-warning mb-1"
                                 title="Editar Informações">
-                                <i class="bi bi-pencil-square"></i>
+                                <i class="bi bi-pencil"></i>
                             </a>
                         </td>
                     </tr>
@@ -168,6 +168,10 @@ if (
             background-color: #0d6efd;
             color: white;
             font-weight: bold;
+        }
+
+        body {
+            background-color: #FDFDFD;
         }
     </style>
 </head>
@@ -290,8 +294,8 @@ if (
                             </td>
                             <td>
                                 <a href="editar_medico.php?id=<?php echo $row['id_medico']; ?>"
-                                    class="btn btn-sm btn-info mb-1" title="Editar Informações">
-                                    <i class="bi bi-pencil-square"></i>
+                                    class="btn btn-sm btn-warning mb-1" title="Editar Informações">
+                                    <i class="bi bi-pencil"></i>
                                 </a>
                             </td>
                         </tr>
