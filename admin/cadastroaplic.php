@@ -170,16 +170,11 @@
             <div id="autocomplete-nome-vacina" class="autocomplete-suggestions"></div>
           </div>
           <div class="col-md-6">
-            <label for="dose" class="form-label fw-bold">Dose</label>
-            <input type="number" class="form-control" name="dose_aplicad" id="dose" placeholder="Número da dose"
-              min="1" required />
-          </div>
-        </div>
-        <div class="row g-2 mt-2">
-          <div class="col-md-6">
             <label for="data-aplica" class="form-label fw-bold">Data de Aplicação</label>
             <input type="date" class="form-control" name="data_aplica" id="data-aplica" required />
           </div>
+        </div>
+        <div class="row g-2 mt-2">
           <div class="col-md-12">
             <label for="cpf-paciente" class="form-label fw-bold">CPF do Paciente</label>
             <input type="search" class="form-control" name="cpf_paciente" id="cpf-paciente"
