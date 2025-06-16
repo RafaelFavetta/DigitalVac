@@ -203,7 +203,7 @@ if (isset($_SESSION['id_medico'])) {
                 <div class="row g-2 mt-2">
                     <div class="col-md-12">
                         <label for="cpf-paciente" class="form-label fw-bold">CPF do Paciente</label>
-                        <input type="text" class="form-control" name="cpf_paciente" id="cpf-paciente" autocomplete="off"
+                        <input type="search" class="form-control" name="cpf_paciente" id="cpf-paciente" autocomplete="off"
                             autocapitalize="off" spellcheck="false" required placeholder="Digite o CPF do paciente">
                         <div id="autocomplete-cpf-paciente" class="autocomplete-suggestions"></div>
                     </div>
@@ -235,12 +235,12 @@ if (isset($_SESSION['id_medico'])) {
     <script src="https://cdn.jsdelivr.net/npm/cleave.js"></script>
     <script src="../bootstrap/bootstrap-5.3.6-dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // Máscara para CPF
-        new Cleave('#cpf-paciente', {
-            delimiters: ['.', '.', '-'],
-            blocks: [3, 3, 3, 2],
-            numericOnly: true
-        });
+        // Removido: Máscara para CPF
+        // new Cleave('#cpf-paciente', {
+        //     delimiters: ['.', '.', '-'],
+        //     blocks: [3, 3, 3, 2],
+        //     numericOnly: true
+        // });
 
         // Máscara dinâmica para COREN/CRM
         const corenCrmInput = document.getElementById('coren-crm');
@@ -387,6 +387,12 @@ if (isset($_SESSION['id_medico'])) {
             }
 
             function fetchSuggestions(query = '') {
+                // Só busca se tiver pelo menos 3 caracteres
+                if (query.length < 3) {
+                    container.innerHTML = '';
+                    container.style.display = 'none';
+                    return;
+                }
                 fetch(endpoint + '?q=' + encodeURIComponent(query))
                     .then(res => res.json())
                     .then(data => {
@@ -423,11 +429,6 @@ if (isset($_SESSION['id_medico'])) {
             input.addEventListener('input', function () {
                 selectedIndex = -1;
                 fetchSuggestions(this.value);
-            });
-
-            input.addEventListener('focus', function () {
-                selectedIndex = -1;
-                fetchSuggestions(''); // Mostra todas as sugestões ordenadas ao focar
             });
 
             input.addEventListener('keydown', function (e) {

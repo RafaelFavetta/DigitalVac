@@ -213,12 +213,12 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/cleave.js"></script>
   <script>
-    // Máscara para CPF
-    new Cleave('#cpf-paciente', {
-      delimiters: ['.', '.', '-'],
-      blocks: [3, 3, 3, 2],
-      numericOnly: true
-    });
+    // Removido: Máscara para CPF
+    // new Cleave('#cpf-paciente', {
+    //   delimiters: ['.', '.', '-'],
+    //   blocks: [3, 3, 3, 2],
+    //   numericOnly: true
+    // });
 
     // Máscara para COREN/CRM
     new Cleave('#coren-crm', {
@@ -305,6 +305,12 @@
       }
 
       function fetchSuggestions(query = '') {
+        // Só busca se tiver pelo menos 3 caracteres
+        if (inputId === 'cpf-paciente' && query.length < 3) {
+          container.innerHTML = '';
+          container.style.display = 'none';
+          return;
+        }
         fetch(endpoint + '?q=' + encodeURIComponent(query))
           .then(res => res.json())
           .then(data => {
@@ -343,10 +349,13 @@
         fetchSuggestions(this.value);
       });
 
-      input.addEventListener('focus', function () {
-        selectedIndex = -1;
-        fetchSuggestions(''); // Mostra todas as sugestões ordenadas ao focar
-      });
+      // Remova o fetchSuggestions do evento de focus para CPF
+      if (inputId !== 'cpf-paciente') {
+        input.addEventListener('focus', function () {
+          selectedIndex = -1;
+          fetchSuggestions('');
+        });
+      }
 
       input.addEventListener('keydown', function (e) {
         if (container.style.display !== 'block') return;
