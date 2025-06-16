@@ -104,18 +104,80 @@ $conn->close();
     </div>
     <!-- Modal Termos e Condições -->
     <div class="modal fade" id="termosModal" tabindex="-1" aria-labelledby="termosModalLabel" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title" id="termosModalLabel">Termos e Condições</h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
           </div>
-          <div class="modal-body">
-            Estes são os termos e condições fictícios do DigitalVac. Ao utilizar este sistema, você concorda com as regras e políticas estabelecidas. Este texto é apenas um exemplo.
+          <div class="modal-body" style="max-height: 32em; overflow-y: auto;">
+            <strong>Política de Privacidade</strong>
+            <p>
+              A sua privacidade é uma prioridade para a plataforma DigitalVac. Este documento descreve de forma clara e objetiva como as informações dos usuários são coletadas, utilizadas, armazenadas e protegidas.
+            </p>
+            <ol>
+              <li>
+                <strong>Coleta de Dados</strong>
+                <p>
+                  A plataforma DigitalVac coleta apenas os dados essenciais para seu funcionamento. As informações armazenadas incluem:
+                </p>
+                <ul>
+                  <li>Dados de vacinação: Informações registradas por profissionais de saúde, como tipo de vacina, dose, data de aplicação e local de vacinação.</li>
+                  <li>Dados de identificação: Quando necessário para o uso correto do sistema, podem ser armazenados dados como nome completo e CPF para associar corretamente os registros vacinais ao cidadão.</li>
+                </ul>
+                <p><strong>Importante:</strong> Nenhum dado sensível é solicitado diretamente ao usuário sem justificativa funcional no sistema.</p>
+              </li>
+              <li>
+                <strong>Finalidade do Uso das Informações</strong>
+                <p>Os dados coletados são utilizados exclusivamente para:</p>
+                <ul>
+                  <li>Gerenciamento da carteira de vacinação digital: Registrar, organizar e permitir a visualização do histórico vacinal do usuário.</li>
+                  <li>Acesso profissional autorizado: Permitir que profissionais da saúde visualizem e atualizem as informações de vacinação.</li>
+                  <li>Divulgação de campanhas de vacinação: Exibir ao usuário campanhas relevantes com base em seu histórico de imunização.</li>
+                </ul>
+                <p>Não utilizamos as informações para fins comerciais ou publicitários.</p>
+              </li>
+              <li>
+                <strong>Compartilhamento de Dados</strong>
+                <p>A DigitalVac adota uma política restritiva quanto ao compartilhamento de informações:</p>
+                <ul>
+                  <li>Os dados só são acessíveis por profissionais de saúde devidamente autorizados, no contexto de atendimento e atualização do histórico vacinal.</li>
+                  <li>Não há compartilhamento com terceiros, exceto quando exigido por lei ou determinação judicial.</li>
+                </ul>
+              </li>
+              <li>
+                <strong>Armazenamento e Segurança</strong>
+                <p>Medidas de segurança aplicadas:</p>
+                <ul>
+                  <li>Proteção de banco de dados contra acesso não autorizado;</li>
+                  <li>Validação de dados inseridos por profissionais de saúde;</li>
+                  <li>Camadas de autenticação para acesso ao painel administrativo (quando aplicável).</li>
+                </ul>
+                <p>
+                  Embora sejam aplicadas boas práticas de segurança, nenhuma plataforma é 100% imune. Em caso de incidente, serão tomadas medidas rápidas para mitigar impactos e proteger os dados dos usuários.
+                </p>
+              </li>
+              <li>
+                <strong>Direitos do Usuário</strong>
+                <p>O usuário possui pleno controle sobre suas informações e poderá:</p>
+                <ul>
+                  <li>Solicitar atualização ou correção dos dados de identificação, caso estejam incorretos;</li>
+                  <li>Solicitar a exclusão dos dados do sistema, respeitando as obrigações legais e o vínculo com o sistema de saúde;</li>
+                  <li>Consultar integralmente seu histórico vacinal digital, a qualquer momento.</li>
+                </ul>
+                <p>
+                  Para exercer esses direitos, o usuário deverá entrar em contato com a equipe responsável pelo sistema, por meio dos canais disponibilizados na própria plataforma.
+                </p>
+              </li>
+              <li>
+                <strong>Alterações nesta Política</strong>
+                <p>
+                  Esta política pode ser atualizada para refletir eventuais mudanças técnicas ou legais. Em caso de alterações relevantes, os usuários serão informados por meio do próprio site.
+                </p>
+              </li>
+            </ol>
           </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
-          </div>
+          
         </div>
       </div>
     </div>

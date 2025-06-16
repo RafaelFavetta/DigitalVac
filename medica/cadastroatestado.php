@@ -236,7 +236,7 @@ if (isset($_SESSION['id_medico'])) {
                         <label for="justificativa" class="form-label fw-bold">Justificativa</label>
                         <textarea id="justificativa" name="justificativa" class="form-control" rows="3"
                             required></textarea>
-                        <small class="text-muted">* Não coloque ponto final. Ele será adicionado automaticamente no
+                        <small class="text-danger fw-bold">* Não coloque ponto final. Ele será adicionado automaticamente no
                             documento.</small>
                     </div>
                 </div>
