@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 12, 2025 at 07:03 AM
+-- Generation Time: Jun 16, 2025 at 06:57 PM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 8.1.6
 
@@ -45,7 +45,17 @@ INSERT INTO `aplicacao` (`id_aplica`, `id_usuario`, `id_posto`, `id_medico`, `id
 (2407, 3, 5, 3, 22, '2007-09-06', 1),
 (2408, 3, 2, 1, 37, '2007-09-06', 1),
 (2409, 3, 3, 3, 37, '2007-11-06', 2),
-(2410, 3, 3, 3, 37, '2008-01-06', 3);
+(2410, 3, 3, 3, 37, '2008-01-06', 3),
+(2411, 4, 4, 3, 30, '2025-06-16', 1),
+(2412, 4, 3, 3, 56, '2025-06-15', 1),
+(2413, 4, 4, 2, 22, '1978-02-02', 1),
+(2414, 4, 3, 2, 42, '1978-04-05', 1),
+(2415, 4, 7, 2, 42, '1978-05-06', 2),
+(2416, 4, 1, 2, 42, '1978-06-09', 3),
+(2417, 4, 1, 1, 37, '1976-03-02', 1),
+(2418, 4, 6, 2, 37, '1976-03-05', 2),
+(2419, 4, 6, 3, 37, '1976-12-09', 3),
+(2420, 4, 8, 3, 49, '1976-03-02', 1);
 
 -- --------------------------------------------------------
 
@@ -61,6 +71,15 @@ CREATE TABLE `atestado` (
   `data_fim` date NOT NULL,
   `justificativa` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `atestado`
+--
+
+INSERT INTO `atestado` (`id_atestado`, `id_paci`, `id_medico`, `data_inicio`, `data_fim`, `justificativa`) VALUES
+(4, 3, 2, '2025-06-15', '2025-06-28', 'Repouso por dores no músculo posterior da coxa'),
+(5, 3, 2, '2024-04-12', '2024-05-12', 'O paciente foi submetido à uma cirurgia que requer repouso imediato'),
+(6, 4, 3, '2025-06-15', '2025-06-15', 'Tomou a vicina da dengue');
 
 -- --------------------------------------------------------
 
@@ -178,7 +197,8 @@ CREATE TABLE `usuario` (
 
 INSERT INTO `usuario` (`id_usuario`, `nome_usuario`, `cpf`, `email_usuario`, `tel_usuario`, `genero_usuario`, `naci_usuario`, `peso_usuario`, `tipo_sang_usuario`, `med_usuario`, `doen_usuario`, `ale_usuario`, `cep_usuario`, `endereco`, `cidade`, `nc_usuario`, `senha`) VALUES
 (2, 'Miguel Di-Tanno Viganó', '51382943857', 'miguelzin@gmail.com', '19999999999', 'M', '2007-02-20', '80.00', 'O+', '', '', '', '12600074', '', '', 211, '$2y$10$MRpGXV.HXK9B0X17qY6drONp1wnHMGZPJn4mNO8ce0MwB8IssYTS2'),
-(3, 'Rafael Favetta', '45260925840', 'rafaelfavetta@gmail.com', '19981084437', 'M', '2007-09-06', '77.00', 'A+', '', '', '', '13607030', 'Rua Professor Vicente Casale Padovani, Jardim Nossa Senhora de Fátima, Araras - SP', 'Araras', 231, '$2y$10$ArQhH63CSZ4IGYqZK9/.bu8fBKVwLYTTWEI9rNQAfue78k7qHHw2q');
+(3, 'Rafael Favetta', '45260925840', 'rafaelfavetta@gmail.com', '19981084437', 'M', '2007-09-06', '77.00', 'A+', '', '', '', '13607030', 'Rua Professor Vicente Casale Padovani, Jardim Nossa Senhora de Fátima, Araras - SP', 'Araras', 231, '$2y$10$ArQhH63CSZ4IGYqZK9/.bu8fBKVwLYTTWEI9rNQAfue78k7qHHw2q'),
+(4, 'André Favetta', '16061751818', 'andfavetta@gmail.com', '19981291195', 'M', '1976-03-02', '85.00', 'A+', '', '', '', '13607030', 'Rua Professor Vicente Casale Padovani, Jardim Nossa Senhora de Fátima, Araras - SP', 'Araras', 231, '$2y$10$RFeLbAqEJv7i/m4UDFSODOc8xzyS5Hs/fcr884/lDpVjvZj/AAquy');
 
 -- --------------------------------------------------------
 
@@ -204,26 +224,26 @@ CREATE TABLE `vacina` (
 --
 
 INSERT INTO `vacina` (`id_vaci`, `nome_vaci`, `fabri_vaci`, `lote_vaci`, `via_adimicao`, `n_dose`, `intervalo_dose`, `idade_reco`, `estoque`, `sus`) VALUES
-(22, 'BCG', 'Instituto Butantan', 'BCG2025A', 'Intradérmica', 1, 0, '0 meses', 9999, 1),
+(22, 'BCG', 'Instituto Butantan', 'BCG2025A', 'Intradérmica', 1, 0, '0 meses', 9998, 1),
 (24, 'Penta (DTP/Hib/Hepatite B)', 'Fiocruz', 'PENTA2025', 'Intramuscular', 3, 2, '2 meses', 10000, 1),
 (25, 'Poliomielite inativada (VIP)', 'Sanofi', 'VIP2025L01', 'Intramuscular', 4, 2, '2 meses', 10000, 1),
 (27, 'Pneumocócica 10-valente', 'GSK', 'PN10V2025', 'Intramuscular', 3, 2, '2 meses', 10000, 1),
 (29, 'Rotavírus humano', 'GSK', 'RTH2025', 'Oral', 2, 2, '2 meses', 10000, 1),
-(30, 'Febre amarela', 'Bio-Manguinhos', 'FA2025', 'Subcutânea', 1, 0, '5 anos', 10000, 1),
+(30, 'Febre amarela', 'Bio-Manguinhos', 'FA2025', 'Subcutânea', 1, 0, '5 anos', 9999, 1),
 (31, 'Tríplice viral (SCR)', 'MSD', 'SCR2025', 'Subcutânea', 2, 3, '1 ano', 10000, 1),
 (33, 'Hepatite A', 'Fiocruz', 'HEPA2025', 'Intramuscular', 2, 6, '1 ano', 10000, 1),
 (34, 'Varicela', 'MSD', 'VARIC2025', 'Subcutânea', 2, 36, '1 ano', 10000, 1),
 (35, 'HPV (quadrivalente/9-valente)', 'MSD', 'HPVQ2025', 'Intramuscular', 2, 6, '9 anos', 10000, 1),
-(37, 'Meningocócica ACWY', 'Fiocruz', 'ACWY2025', 'Intramuscular', 3, 2, '0 meses', 9997, 1),
+(37, 'Meningocócica ACWY', 'Fiocruz', 'ACWY2025', 'Intramuscular', 3, 2, '0 meses', 9994, 1),
 (39, 'Hepatite B (adulto)', 'Fiocruz', 'HEPBAD2025', 'Intramuscular', 3, 2, '18 anos', 10000, 1),
 (40, 'Influenza', 'Instituto Butantan', 'INF2025', 'Intramuscular', 1, 0, '9 anos', 10000, 1),
 (41, 'Pneumocócica 23-valente', 'MSD', 'PN23V2025', 'Intramuscular', 1, 0, '5 anos', 10000, 1),
-(42, 'Hepatite B', 'Fiocruz', 'HEPB2025', 'Intramuscular', 3, 1, '0 meses', 10000, 1),
-(49, 'Poliomielite oral bivalente (VOPb)', 'Instituto Butantan', 'VOP2025B', 'Oral', 0, 0, '0 meses', 10000, 1),
+(42, 'Hepatite B', 'Fiocruz', 'HEPB2025', 'Intramuscular', 3, 1, '0 meses', 9997, 1),
+(49, 'Poliomielite oral bivalente (VOPb)', 'Instituto Butantan', 'VOP2025B', 'Oral', 1, 0, '0 meses', 9999, 1),
 (50, 'Tetraviral (SCRV)', 'MSD', 'SCRV2025', 'Subcutânea', 2, 3, '1 ano', 10000, 1),
 (51, 'dTpa (adulto/gestante)', 'Sanofi', 'DTPA2025', 'Intramuscular', 1, 0, '18 anos', 10000, 1),
 (55, 'Herpes-zóster (RZV)', 'GSK', 'HZ2025', 'Intramuscular', 2, 2, '50 anos', 10000, 1),
-(56, 'Dengue (Qdenga®)', 'Takeda', 'DENG2025', 'Intramuscular', 2, 3, '10 anos', 10000, 0),
+(56, 'Dengue (Qdenga®)', 'Takeda', 'DENG2025', 'Intramuscular', 2, 3, '10 anos', 9999, 0),
 (57, 'VSR (Respiratório)', 'Pfizer', 'VSR2025', 'Intramuscular', 1, 0, 'A qualquer momento', 10000, 0),
 (58, 'Raiva (pré-exposição)', 'Bio-Manguinhos', 'RAIVA2025', 'Intramuscular', 1, 0, 'A qualquer momento', 10000, 0),
 (59, 'Vacinas de viajantes (tifóide, encefalite, etc.)', '—', '—', 'Variável', 1, 0, 'A qualquer momento', 10000, 0),
@@ -292,13 +312,13 @@ ALTER TABLE `vacina`
 -- AUTO_INCREMENT for table `aplicacao`
 --
 ALTER TABLE `aplicacao`
-  MODIFY `id_aplica` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2411;
+  MODIFY `id_aplica` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2421;
 
 --
 -- AUTO_INCREMENT for table `atestado`
 --
 ALTER TABLE `atestado`
-  MODIFY `id_atestado` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id_atestado` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `campanha`
@@ -322,7 +342,7 @@ ALTER TABLE `posto`
 -- AUTO_INCREMENT for table `usuario`
 --
 ALTER TABLE `usuario`
-  MODIFY `id_usuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id_usuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `vacina`
