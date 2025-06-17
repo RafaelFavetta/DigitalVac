@@ -1,6 +1,6 @@
 <?php
 session_start();
-if (!isset($_SESSION['cpf'])) {
+if (!isset($_SESSION['cargo'])) {
     header("Location: esquecisenha.php");
     exit;
 }
@@ -10,7 +10,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $nova_senha = $_POST['nova_senha'] ?? '';
     $confirmar_senha = $_POST['confirmar_senha'] ?? '';
-    $cpf = $_SESSION['cpf'];
     $cargo = $_SESSION['cargo'];
 
     if (empty($nova_senha) || empty($confirmar_senha)) {
@@ -18,16 +17,37 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } elseif ($nova_senha !== $confirmar_senha) {
         $mensagem = "As senhas não coincidem.";
     } else {
-        $nova_senha_hashed = password_hash($nova_senha, PASSWORD_DEFAULT); // Criptografa a nova senha
-        $update_sql = "UPDATE " . $cargo . " SET senha = ? WHERE cpf = ?";
-        $update_stmt = $conn->prepare($update_sql);
-        $update_stmt->bind_param("ss", $nova_senha_hashed, $cpf);
+        $nova_senha_hashed = password_hash($nova_senha, PASSWORD_DEFAULT);
+
+        if ($cargo === 'usuario' && isset($_SESSION['cpf'])) {
+            $cpf = $_SESSION['cpf'];
+            $update_sql = "UPDATE usuario SET senha = ? WHERE cpf = ?";
+            $update_stmt = $conn->prepare($update_sql);
+            $update_stmt->bind_param("ss", $nova_senha_hashed, $cpf);
+        } elseif ($cargo === 'medico' && isset($_SESSION['coren_crm'])) {
+            $coren_crm = $_SESSION['coren_crm'];
+            $update_sql = "UPDATE medico SET senha = ? WHERE coren_crm = ?";
+            $update_stmt = $conn->prepare($update_sql);
+            $update_stmt->bind_param("ss", $nova_senha_hashed, $coren_crm);
+        } else {
+            $mensagem = "Sessão inválida. Tente novamente.";
+            $conn->close();
+            session_destroy();
+            header("Location: ../index.php");
+            exit;
+        }
+
         $update_stmt->execute();
 
         if ($update_stmt->affected_rows > 0) {
             $mensagem = "Senha redefinida com sucesso!";
-            session_destroy(); // Finaliza a sessão após redefinir a senha
-            header("Location: ../usuario/login.php"); // Redireciona para a página de login
+            $conn->close();
+            session_destroy();
+            if ($cargo === 'medico') {
+                header("Location: ../medica/login.php");
+            } else {
+                header("Location: ../usuario/login.php");
+            }
             exit;
         } else {
             $mensagem = "Erro ao atualizar a senha ou nenhuma mudança feita.";

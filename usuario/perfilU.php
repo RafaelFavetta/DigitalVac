@@ -158,14 +158,7 @@ $conn->close();
                         <i class="bi bi-clipboard-heart-fill"></i> Atestados
                     </a>
                 </div>
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a class="btn btn-danger fw-bold px-2 py-1" style="font-size: 15px; min-width: 70px;"
-                            href="../outros/sair.php">
-                            <i class="bi bi-box-arrow-right" style="font-size: 18px;"></i> Sair
-                        </a>
-                    </li>
-                </ul>
+                
             </div>
         </div>
     </nav>
