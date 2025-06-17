@@ -121,7 +121,7 @@ $pdf->Cell(0, 10, utf8_decode("$cidade_pdf, $data_formatada"), 0, 1, 'L');
 // Frase de validade legal antes da assinatura (mais para o meio da folha)
 $pdf->Ln(35);
 $pdf->SetFont('Arial', 'I', 11);
-$pdf->MultiCell(0, 8, utf8_decode('Este documento é válido para fins de comprovação junto ao empregador ou órgão competente.'), 0, 'C');
+$pdf->MultiCell(0, 8, utf8_decode('Este documento não válido para fins de comprovação junto ao empregador ou órgão competente. Visto que é apenas um modelo de teste.'), 0, 'C');
 
 // Espaço para assinatura do médico centralizada (mais abaixo)
 $pdf->Ln(30);

@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.0
+-- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 16, 2025 at 08:48 PM
--- Server version: 10.4.24-MariaDB
--- PHP Version: 8.1.6
+-- Tempo de geração: 17/06/2025 às 03:26
+-- Versão do servidor: 10.4.32-MariaDB
+-- Versão do PHP: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,13 +18,13 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `vac`
+-- Banco de dados: `vac`
 --
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `aplicacao`
+-- Estrutura para tabela `aplicacao`
 --
 
 CREATE TABLE `aplicacao` (
@@ -35,14 +35,13 @@ CREATE TABLE `aplicacao` (
   `id_vaci` int(11) NOT NULL,
   `data_aplica` date NOT NULL,
   `dose_aplicad` int(1) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `aplicacao`
+-- Despejando dados para a tabela `aplicacao`
 --
 
 INSERT INTO `aplicacao` (`id_aplica`, `id_usuario`, `id_posto`, `id_medico`, `id_vaci`, `data_aplica`, `dose_aplicad`) VALUES
-(2407, 3, 5, 3, 22, '2007-09-06', 1),
 (2408, 3, 2, 1, 37, '2007-09-06', 1),
 (2409, 3, 3, 3, 37, '2007-11-06', 2),
 (2410, 3, 3, 3, 37, '2008-01-06', 3),
@@ -565,7 +564,6 @@ INSERT INTO `aplicacao` (`id_aplica`, `id_usuario`, `id_posto`, `id_medico`, `id
 (3203, 73, 14, 22, 59, '2024-06-01', 1),
 (3204, 73, 14, 22, 63, '1968-10-10', 1),
 (3205, 73, 14, 22, 64, '2024-06-10', 1),
-(3206, 3, 14, 1, 22, '2007-09-07', 1),
 (3207, 3, 14, 2, 24, '2007-11-07', 1),
 (3208, 3, 15, 2, 24, '2008-01-07', 2),
 (3209, 3, 15, 2, 24, '2008-03-07', 3),
@@ -582,9 +580,6 @@ INSERT INTO `aplicacao` (`id_aplica`, `id_usuario`, `id_posto`, `id_medico`, `id
 (3220, 3, 14, 2, 33, '2009-09-06', 2),
 (3221, 3, 14, 3, 35, '2016-09-06', 1),
 (3222, 3, 14, 3, 35, '2017-03-06', 2),
-(3223, 3, 15, 1, 37, '2008-10-01', 1),
-(3224, 3, 15, 1, 37, '2008-12-01', 2),
-(3225, 3, 15, 1, 37, '2009-02-01', 3),
 (3226, 3, 14, 2, 42, '2007-09-06', 1),
 (3227, 3, 14, 2, 42, '2007-11-06', 2),
 (3228, 3, 14, 2, 42, '2008-01-06', 3),
@@ -621,12 +616,13 @@ INSERT INTO `aplicacao` (`id_aplica`, `id_usuario`, `id_posto`, `id_medico`, `id
 (3259, 2, 14, 3, 50, '2009-06-20', 2),
 (3260, 2, 14, 3, 63, '2008-05-01', 1),
 (3261, 2, 14, 3, 63, '2008-07-01', 2),
-(3262, 2, 14, 3, 64, '2023-02-01', 1);
+(3262, 2, 14, 3, 64, '2023-02-01', 1),
+(3263, 2, 1, 23, 64, '2025-06-16', 2);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `atestado`
+-- Estrutura para tabela `atestado`
 --
 
 CREATE TABLE `atestado` (
@@ -636,10 +632,10 @@ CREATE TABLE `atestado` (
   `data_inicio` date NOT NULL,
   `data_fim` date NOT NULL,
   `justificativa` text DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `atestado`
+-- Despejando dados para a tabela `atestado`
 --
 
 INSERT INTO `atestado` (`id_atestado`, `id_paci`, `id_medico`, `data_inicio`, `data_fim`, `justificativa`) VALUES
@@ -686,12 +682,16 @@ INSERT INTO `atestado` (`id_atestado`, `id_paci`, `id_medico`, `data_inicio`, `d
 (44, 30, 22, '2025-02-15', '2025-02-18', 'Dor de cabeça recorrente, repouso recomendado'),
 (45, 45, 22, '2025-03-20', '2025-03-25', 'Exame complementar, retorno em 5 dias'),
 (46, 55, 22, '2025-04-10', '2025-04-14', 'Tratamento dentário, dieta macia'),
-(47, 20, 22, '2025-05-05', '2025-05-08', 'Crise de enxaqueca, ambiente escuro');
+(47, 20, 22, '2025-05-05', '2025-05-08', 'Crise de enxaqueca, ambiente escuro'),
+(48, 2, 23, '2025-06-01', '2025-06-15', 'foda-se, ele e o cr7'),
+(49, 4, 23, '2025-06-16', '2025-06-23', 'Dor de estomago'),
+(50, 78, 23, '2025-06-03', '2025-06-17', 'Teste'),
+(51, 68, 23, '2025-06-01', '2025-06-29', 'Braço quebrado');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `campanha`
+-- Estrutura para tabela `campanha`
 --
 
 CREATE TABLE `campanha` (
@@ -701,10 +701,10 @@ CREATE TABLE `campanha` (
   `data_fim` date NOT NULL,
   `imagem` varchar(255) NOT NULL,
   `descricao` text NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `campanha`
+-- Despejando dados para a tabela `campanha`
 --
 
 INSERT INTO `campanha` (`id_campanha`, `nome_campanha`, `data_inicio`, `data_fim`, `imagem`, `descricao`) VALUES
@@ -715,7 +715,7 @@ INSERT INTO `campanha` (`id_campanha`, `nome_campanha`, `data_inicio`, `data_fim
 -- --------------------------------------------------------
 
 --
--- Table structure for table `medico`
+-- Estrutura para tabela `medico`
 --
 
 CREATE TABLE `medico` (
@@ -729,15 +729,15 @@ CREATE TABLE `medico` (
   `naci_medico` date NOT NULL,
   `id_posto` int(11) NOT NULL,
   `senha` varchar(100) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `medico`
+-- Despejando dados para a tabela `medico`
 --
 
 INSERT INTO `medico` (`id_medico`, `nome_medico`, `cpf`, `email_medico`, `tel_medico`, `coren_crm`, `tipo_medico`, `naci_medico`, `id_posto`, `senha`) VALUES
 (1, 'João Sopara', '12345678909', 'joao.medico@example.com', '11999999999', 'CRM-SP 123456', 'Clínico Geral', '1980-05-10', 11, 'senha123'),
-(2, 'Maria Longetti', '98765432100', 'maria.medica@example.com', '21988888888', 'CRM-RJ 654321', 'Pediatra', '1985-08-15', 12, 'senha123'),
+(2, 'Maria Longetti', '98765432100', 'maria.medica@example.com', '21988888888', 'CRM-RJ 654321', 'Pediatra', '1985-08-15', 12, '$2y$10$ZU11Y0OdTrAHfW8K5ZYuqecyaUPry7cAT6zX4L4EguTIVgtb59UJm'),
 (3, 'Carlos Pierote', '11144477735', 'carlos.medico@example.com', '31977777777', 'COREN-MG 987654', 'Enfermeiro', '1978-12-20', 13, 'senha123'),
 (4, 'Felipe Arantes', '12345678910', 'felipe.arantes@araras.sp.gov.br', '1943822001', 'CRM-SP 123500', 'Clínico Geral', '1975-04-12', 14, 'senha123'),
 (5, 'Larissa Pimenta', '10987654321', 'larissa.pimenta@araras.sp.gov.br', '1943822002', 'CRM-SP 234501', 'Pediatra', '1982-07-30', 15, 'senha123'),
@@ -757,12 +757,13 @@ INSERT INTO `medico` (`id_medico`, `nome_medico`, `cpf`, `email_medico`, `tel_me
 (19, 'Marcelo Barbosa', '42345678902', 'marcelo.barbosa@araras.sp.gov.br', '1943823013', 'CRM-SP 012678', 'Imunologista', '1969-01-15', 14, 'senha123'),
 (20, 'Natália Castro', '43456789013', 'natalia.castro@araras.sp.gov.br', '1943823014', 'CRM-SP 123789', 'Pneumologista', '1987-02-20', 15, 'senha123'),
 (21, 'Otávio Santos', '44567890124', 'otavio.santos@araras.sp.gov.br', '1943823015', 'CRM-SP 234890', 'Clínico Geral', '1971-03-25', 16, 'senha123'),
-(22, 'Luana Licaglio', '45678234590', 'luanalicaglio@araras.sp.gov.br', '1943824011', 'CRM-SP 901234', 'Clínico Geral', '1980-02-02', 14, 'vac');
+(22, 'Luana Licaglio', '45678234590', 'luanalicaglio@araras.sp.gov.br', '1943824011', 'CRM-SP 901234', 'Clínico Geral', '1980-02-02', 14, 'vac'),
+(23, 'Lucas Gabrigay Silva', '63896842820', 'lucas90@gmail.com', '69696969696', 'CRM-SP 123458', 'Clínico Geral', '2100-02-10', 1, '$2y$10$IJ./lxVbPfGobZnG/9sz1u7r2AxuHOZo7IMSupx2.7dAf9ZxUUvWG');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `posto`
+-- Estrutura para tabela `posto`
 --
 
 CREATE TABLE `posto` (
@@ -770,10 +771,10 @@ CREATE TABLE `posto` (
   `nome_posto` varchar(100) NOT NULL,
   `cep_posto` int(8) NOT NULL,
   `n_posto` int(10) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `posto`
+-- Despejando dados para a tabela `posto`
 --
 
 INSERT INTO `posto` (`id_posto`, `nome_posto`, `cep_posto`, `n_posto`) VALUES
@@ -797,7 +798,7 @@ INSERT INTO `posto` (`id_posto`, `nome_posto`, `cep_posto`, `n_posto`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `usuario`
+-- Estrutura para tabela `usuario`
 --
 
 CREATE TABLE `usuario` (
@@ -818,92 +819,94 @@ CREATE TABLE `usuario` (
   `cidade` varchar(255) NOT NULL,
   `nc_usuario` int(10) NOT NULL,
   `senha` varchar(100) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `usuario`
+-- Despejando dados para a tabela `usuario`
 --
 
 INSERT INTO `usuario` (`id_usuario`, `nome_usuario`, `cpf`, `email_usuario`, `tel_usuario`, `genero_usuario`, `naci_usuario`, `peso_usuario`, `tipo_sang_usuario`, `med_usuario`, `doen_usuario`, `ale_usuario`, `cep_usuario`, `endereco`, `cidade`, `nc_usuario`, `senha`) VALUES
-(2, 'Miguel Di-Tanno Viganó', '51382943857', 'miguelzin@gmail.com', '19999999999', 'M', '2007-02-20', '80.00', 'O+', '', '', '', '12600074', '', '', 211, '$2y$10$MRpGXV.HXK9B0X17qY6drONp1wnHMGZPJn4mNO8ce0MwB8IssYTS2'),
-(3, 'Rafael Favetta', '45260925840', 'rafaelfavetta@gmail.com', '19981084437', 'M', '2007-09-06', '77.00', 'A+', '', '', '', '13607030', 'Rua Professor Vicente Casale Padovani, Jardim Nossa Senhora de Fátima, Araras - SP', 'Araras', 231, '$2y$10$ArQhH63CSZ4IGYqZK9/.bu8fBKVwLYTTWEI9rNQAfue78k7qHHw2q'),
-(4, 'André Favetta', '16061751818', 'andfavetta@gmail.com', '19981291195', 'M', '1976-03-02', '85.00', 'A+', '', '', '', '13607030', 'Rua Professor Vicente Casale Padovani, Jardim Nossa Senhora de Fátima, Araras - SP', 'Araras', 231, '$2y$10$RFeLbAqEJv7i/m4UDFSODOc8xzyS5Hs/fcr884/lDpVjvZj/AAquy'),
-(5, 'Fernanda Lima', '12345678901', 'fernanda.lima@example.com', '11991234567', 'F', '1988-03-12', '59.00', 'O-', '', '', '', '01001000', 'Rua da Consolação, 100', 'São Paulo', 217, 'pass123'),
-(6, 'Guilherme Torres', '10987654321', 'guilherme.torres@ex.com', '21992345678', 'M', '1992-08-24', '75.30', 'A+', '', '', '', '20040002', 'Av. Argentina, 200', 'Rio de Janeiro', 218, 'pass123'),
-(7, 'Isabela Rocha', '23456789012', 'isabela.rocha@example.org', '31993456789', 'F', '1975-12-05', '68.40', 'B+', 'Metformina', 'Diabetes', '', '30150100', 'Rua da Bahia, 300', 'Belo Horizonte', 219, 'pass123'),
-(8, 'Júlio César Andrade', '34567890123', 'julio.andrade@ex.net', '41994567890', 'M', '1983-06-18', '82.10', 'AB-', '', '', 'Pólen', '80010000', 'Praça Rui Barbosa, 10', 'Curitiba', 220, 'pass123'),
-(9, 'Karolina Freitas', '45678901234', 'karolina.freitas@gmail.com', '51995678901', 'F', '2002-11-30', '54.60', 'O+', '', '', '', '90010100', 'Rua XV de Novembro, 555', 'Porto Alegre', 221, 'pass123'),
-(10, 'Leonardo Silva', '56789012345', 'leo.silva@example.com', '61996789012', 'M', '1968-01-22', '90.20', 'A-', 'Losartana', 'Hipertensão', '', '60020020', 'Av. Amazonas, 1000', 'Manaus', 222, 'pass123'),
-(11, 'Mariana Castro', '67890123456', 'mariana.castro@ex.org', '71997890123', 'F', '1995-09-14', '63.70', 'B-', '', '', 'Amendoim', '64000000', 'Rua 24 de Outubro, 77', 'Natal', 223, 'pass123'),
-(12, 'Nicolas Pereira', '78901234567', 'nicolas.pereira@ex.net', '81998901234', 'M', '2010-04-02', '25.00', 'AB+', '', '', '', '69005000', 'Av. das Flores, 42', 'Boa Vista', 224, 'pass123'),
-(13, 'Olívia Gomes', '89012345678', 'olivia.gomes@mail.com', '91999012345', 'F', '1980-07-07', '70.90', 'O-', 'Salbutamol', 'Asma', '', '49020010', 'Rua Marechal Deodoro, 123', 'João Pessoa', 225, 'pass123'),
-(14, 'Paulo Henrique Santos', '90123456789', 'paulo.santos@example.org', '11991239876', 'M', '1999-02-17', '78.00', 'A+', '', '', '', '04104001', 'Rua Voluntários da Pátria, 9', 'São Paulo', 226, 'pass123'),
-(15, 'Quésia Almeida', '11223344556', 'quesia.almeida@ex.com', '21992349876', 'F', '1972-05-05', '66.20', 'B+', '', '', 'Latex', '20020030', 'Rua Copacabana, 300', 'Rio de Janeiro', 227, 'pass123'),
-(16, 'Rafael Nunes', '22334455667', 'rafael.nunes@mail.com', '31993450987', 'M', '1985-10-30', '85.50', 'AB-', 'Atenolol', 'Hipertensão', '', '30160110', 'Av. do Contorno, 150', 'Belo Horizonte', 228, 'pass123'),
-(17, 'Sofia Cardoso', '33445566778', 'sofia.cardoso@ex.net', '41994560123', 'F', '2004-12-12', '48.30', 'O+', '', '', '', '80060010', 'Rua das Acácias, 25', 'Curitiba', 229, 'pass123'),
-(18, 'Thiago Martins', '44556677889', 'thiago.martins@example.com', '51995670234', 'M', '1991-03-03', '73.40', 'A-', '', '', '', '90020020', 'Av. Ipiranga, 800', 'Porto Alegre', 230, 'pass123'),
-(19, 'Úrsula Vieira', '55667788990', 'ursula.vieira@mail.com', '61996780345', 'F', '1978-08-08', '60.00', 'B+', '', '', 'Marisco', '69015000', 'Rua Boa Vista, 98', 'Boa Vista', 231, 'pass123'),
-(20, 'Vitor Hugo Rocha', '66778899001', 'vitor.rocha@ex.org', '71997890456', 'M', '1965-11-11', '88.80', 'AB+', '', '', '', '64010020', 'Praça Sete de Setembro, 1', 'Natal', 232, 'pass123'),
-(21, 'Wesley Braga', '77889900112', 'wesley.braga@ex.net', '81998900567', 'M', '2007-06-06', '30.50', 'O-', '', '', '', '49030020', 'Av. Beira Mar, 500', 'João Pessoa', 233, 'pass123'),
-(22, 'Xênia Figueiredo', '88990011223', 'xenia.figueiredo@mail.com', '91999000678', 'F', '1993-01-01', '58.70', 'A+', '', '', '', '60030030', 'Rua Amazonas, 600', 'Manaus', 234, 'pass123'),
-(23, 'Yago Souza', '99001122334', 'yago.souza@example.org', '11991236789', 'M', '1987-09-09', '80.10', 'B-', '', '', '', '04105002', 'Rua Augusta, 400', 'São Paulo', 235, 'pass123'),
-(24, 'Zara Melo', '10111213141', 'zara.melo@ex.com', '21992347891', 'F', '1996-04-04', '62.90', 'AB-', '', '', '', '20030040', 'Av. Lúcio Costa, 2000', 'Rio de Janeiro', 236, 'pass123'),
-(25, 'André Lopes', '12131415161', 'andre.lopes@mail.com', '31993448762', 'M', '1970-10-10', '77.70', 'O+', 'Metformina', 'Diabetes', '', '30170020', 'Rua Guaicuí, 321', 'Belo Horizonte', 237, 'pass123'),
-(26, 'Beatriz Fernandes', '13141516171', 'beatriz.fernandes@ex.net', '41994549873', 'F', '2001-02-02', '55.50', 'A-', '', '', '', '80070020', 'Av. Visconde de Guarapuava, 2', 'Curitiba', 238, 'pass123'),
-(27, 'Caio Albuquerque', '14151617181', 'caio.albuquerque@ex.org', '51995650984', 'M', '1982-07-07', '89.00', 'B+', '', '', 'Glúten', '90030030', 'Rua da Praia, 80', 'Porto Alegre', 239, 'pass123'),
-(28, 'Diana Ribeiro', '15161718191', 'diana.ribeiro@mail.com', '61996761095', 'F', '1998-05-05', '65.20', 'AB+', '', '', '', '69025010', 'Praça da Bandeira, 15', 'Boa Vista', 240, 'pass123'),
-(29, 'Emanuel Costa', '16171819201', 'emanuel.costa@example.com', '71997872106', 'M', '1960-03-03', '92.30', 'O-', 'Losartana', 'Hipertensão', '', '64020030', 'Av. Engenheiro Roberto Freire, 5', 'Natal', 241, 'pass123'),
-(30, 'Fabiana Menezes', '17181920211', 'fabiana.menezes@ex.net', '81998983217', 'F', '2003-11-11', '53.80', 'A+', '', '', '', '49040030', 'Rua das Amoreiras, 22', 'João Pessoa', 242, 'pass123'),
-(31, 'Gabriel Alves', '18192021231', 'gabriel.alves@mail.com', '91999094328', 'M', '1989-02-02', '77.40', 'B-', '', '', '', '60040040', 'Rua José Bonifácio, 44', 'Manaus', 243, 'pass123'),
-(32, 'Helena Barros', '19202122241', 'helena.barros@ex.com', '11991205439', 'F', '1994-08-08', '60.60', 'AB-', '', '', '', '04106003', 'Av. Paulista, 1500', 'São Paulo', 244, 'pass123'),
-(33, 'Igor Pereira', '20212223251', 'igor.pereira@example.org', '21992316540', 'M', '1979-01-01', '83.90', 'O+', '', '', '', '20040050', 'Rua Santa Clara, 99', 'Rio de Janeiro', 245, 'pass123'),
-(34, 'Juliana Dantas', '21222324261', 'juliana.dantas@mail.com', '31993427651', 'F', '2006-06-06', '49.10', 'A-', '', '', '', '30180030', 'Av. Afonso Pena, 500', 'Belo Horizonte', 246, 'pass123'),
-(35, 'Kevyn Moreira', '22232425271', 'kevyn.moreira@ex.net', '41994538762', 'M', '1990-12-12', '72.00', 'B+', '', '', '', '80080040', 'Rua Curitiba, 1234', 'Curitiba', 247, 'pass123'),
-(36, 'Larissa Santos', '23242526281', 'larissa.santos@ex.org', '51995649873', 'F', '1981-03-03', '64.70', 'O-', '', '', '', '90040040', 'Av. Farrapos, 300', 'Porto Alegre', 248, 'pass123'),
-(37, 'Mateus Henrique', '24252627291', 'mateus.henrique@mail.com', '61996750984', 'M', '2005-09-09', '28.30', 'AB+', '', '', 'Lactose', '69030020', 'Rua Cel. Esteves, 7', 'Boa Vista', 249, 'pass123'),
-(38, 'Natália Oliveira', '25262728201', 'natalia.oliveira@example.com', '71997860495', 'F', '1997-07-07', '57.20', 'A+', '', '', '', '64030040', 'Av. Roberto Freire, 77', 'Natal', 250, 'pass123'),
-(39, 'Otávio Lima', '26272829211', 'otavio.lima@ex.net', '81998971506', 'M', '1964-10-10', '85.60', 'B-', 'Atenolol', 'Hipertensão', '', '49050040', 'Rua Vasco da Gama, 500', 'João Pessoa', 251, 'pass123'),
-(40, 'Priscila Fernandes', '27282930221', 'priscila.fernandes@mail.com', '91999082617', 'F', '2000-01-01', '59.90', 'AB-', '', '', '', '60050050', 'Rua Joaquim Nabuco, 30', 'Manaus', 252, 'pass123'),
-(41, 'Adriana Pinto', '30214567899', 'adriana.pinto@mail.com', '19981234567', 'F', '1985-04-20', '58.50', 'O+', 'Metformina', 'Diabetes tipo 2', '', '01001001', 'Rua das Palmeiras, 12', 'São Paulo', 251, 'senha123'),
-(42, 'Bruno Machado', '41325678901', 'bruno.machado@ex.com', '21981234568', 'M', '1990-11-05', '82.00', 'A-', '', '', '', '20020020', 'Av. Atlântica, 200', 'Rio de Janeiro', 252, 'senha123'),
-(43, 'Carla Ferreira', '52436789012', 'carla.ferreira@mail.com', '31981234569', 'F', '1978-07-16', '64.30', 'B+', 'Losartana', 'Hipertensão', '', '30150081', 'Rua dos Tupis, 45', 'Belo Horizonte', 253, 'senha123'),
-(44, 'Daniel Rocha', '63547890123', 'daniel.rocha@ex.org', '41981234570', 'M', '1995-02-22', '76.50', 'AB-', '', '', '', '80060011', 'Praça Rui Barbosa, 9', 'Curitiba', 254, 'senha123'),
-(45, 'Eduarda Almeida', '74658901234', 'eduarda.almeida@mail.com', '51981234571', 'F', '2002-12-30', '52.10', 'O-', '', '', 'Amendoim', '90010011', 'Rua do Comércio, 88', 'Porto Alegre', 255, 'senha123'),
-(46, 'Fábio Santos', '85769012345', 'fabio.santos@ex.net', '61981234572', 'M', '1983-08-09', '88.20', 'A+', '', '', '', '49010011', 'Av. Getúlio Vargas, 123', 'João Pessoa', 256, 'senha123'),
-(47, 'Gabriela Costa', '96870123456', 'gabriela.costa@mail.com', '71981234573', 'F', '1971-03-17', '67.80', 'B-', '', '', 'Glúten', '64000001', 'Rua das Ameixeiras, 7', 'Natal', 257, 'senha123'),
-(48, 'Hugo Ribeiro', '07981234567', 'hugo.ribeiro@ex.com', '81981234574', 'M', '2008-09-09', '30.20', 'AB+', '', '', '', '69005001', 'Av. dos Holandeses, 55', 'Boa Vista', 258, 'senha123'),
-(49, 'Isis Martins', '18092345678', 'isis.martins@mail.com', '91981234575', 'F', '1992-01-01', '59.00', 'O+', '', '', '', '60030031', 'Rua 7 de Setembro, 120', 'Manaus', 259, 'senha123'),
-(50, 'João Paulo Lima', '29103456789', 'joao.lima@ex.org', '11981234576', 'M', '1988-06-25', '79.40', 'A-', '', '', '', '04104002', 'Rua Voluntários, 10', 'São Paulo', 260, 'senha123'),
-(51, 'Kamila Dias', '30214567890', 'kamila.dias@ex.com', '21982345677', 'F', '1974-10-12', '61.20', 'B+', 'Salbutamol', 'Asma', '', '20020031', 'Av. Rio Branco, 300', 'Rio de Janeiro', 261, 'senha123'),
-(52, 'Leandro Souza', '41325678902', 'leandro.souza@mail.com', '31983456788', 'M', '1997-05-05', '83.70', 'AB-', '', '', '', '30150082', 'Rua da Bahia, 210', 'Belo Horizonte', 262, 'senha123'),
-(53, 'Mariana Lopes', '52436789013', 'mariana.lopes@ex.org', '41984567899', 'F', '2000-11-11', '55.40', 'O-', '', '', 'Ovos', '80060012', 'Rua das Flores, 14', 'Curitiba', 263, 'senha123'),
-(54, 'Natan Oliveira', '63547890124', 'natan.oliveira@mail.com', '51985678900', 'M', '1965-12-30', '90.00', 'A+', 'Atenolol', 'Hipertensão', '', '90010012', 'Praça da Sé, 2', 'Porto Alegre', 264, 'senha123'),
-(55, 'Olga Mendes', '74658901235', 'olga.mendes@ex.net', '61986789001', 'F', '1981-03-03', '69.50', 'B-', '', '', 'Marisco', '49010012', 'Av. João XXIII, 7', 'João Pessoa', 265, 'senha123'),
-(56, 'Pedro Carvalho', '85769012346', 'pedro.carvalho@mail.com', '71987890102', 'M', '1994-07-07', '77.10', 'AB+', '', '', '', '64000002', 'Rua das Acácias, 45', 'Natal', 266, 'senha123'),
-(57, 'Querida Santos', '96870123457', 'querida.santos@ex.com', '81988901203', 'F', '2005-04-04', '42.30', 'O+', '', '', '', '69005002', 'Rua das Árvores, 16', 'Boa Vista', 267, 'senha123'),
-(58, 'Rafael Gomes', '07981234568', 'rafael.gomes@ex.org', '91989012304', 'M', '1979-09-09', '82.80', 'A-', '', '', '', '60030032', 'Av. Amazonas, 900', 'Manaus', 268, 'senha123'),
-(59, 'Sabrina Pinto', '18092345679', 'sabrina.pinto@mail.com', '11980123456', 'F', '1993-02-02', '59.90', 'B+', '', '', 'Lactose', '04104003', 'Rua Augusta, 333', 'São Paulo', 269, 'senha123'),
-(60, 'Tiago Ferreira', '29103456780', 'tiago.ferreira@ex.com', '21981230000', 'M', '1986-05-15', '80.30', 'AB-', 'Metformina', 'Diabetes tipo 2', '', '20020032', 'Av. das Américas, 600', 'Rio de Janeiro', 270, 'senha123'),
-(61, 'Úrsula Machado', '30214567891', 'ursula.machado@ex.net', '31981230001', 'F', '1977-08-08', '65.00', 'O-', '', '', 'Pólen', '30150083', 'Rua da Paz, 21', 'Belo Horizonte', 271, 'senha123'),
-(62, 'Vítor Sá', '41325678903', 'vitor.sa@mail.com', '41981230002', 'M', '2003-12-12', '72.50', 'A+', '', '', '', '80060013', 'Praça Santos Dumont, 5', 'Curitiba', 272, 'senha123'),
-(63, 'Wagner Leal', '52436789014', 'wagner.leal@ex.org', '51981230003', 'M', '1962-11-11', '88.90', 'B-', 'Losartana', 'Hipertensão', '', '90010013', 'Av. Ipiranga, 100', 'Porto Alegre', 273, 'senha123'),
-(64, 'Xuxa Moura', '63547890125', 'xuxa.moura@mail.com', '61981230004', 'F', '1989-03-03', '57.30', 'AB+', '', '', '', '49010013', 'Rua Santa Cruz, 30', 'João Pessoa', 274, 'senha123'),
-(65, 'Yuri Costa', '74658901236', 'yuri.costa@ex.net', '71981230005', 'M', '1991-07-07', '79.00', 'O+', '', '', '', '64000003', 'Rua Paraíba, 55', 'Natal', 275, 'senha123'),
-(66, 'Zuleica Almeida', '85769012347', 'zuleica.almeida@mail.com', '81981230006', 'F', '1973-01-01', '62.40', 'A-', '', '', 'Amendoim', '69005003', 'Av. JK, 400', 'Boa Vista', 276, 'senha123'),
-(67, 'Arthur Ribeiro', '96870123458', 'arthur.ribeiro@ex.com', '91981230007', 'M', '1984-06-06', '85.20', 'B+', '', '', '', '60030033', 'Rua Amazonas, 770', 'Manaus', 277, 'senha123'),
-(68, 'Bianca Nunes', '07981234569', 'bianca.nunes@mail.com', '11981230008', 'F', '2006-09-09', '48.80', 'AB-', '', '', '', '04104004', 'Rua da Consolação, 400', 'São Paulo', 278, 'senha123'),
-(69, 'Claudio Paz', '18092345670', 'claudio.paz@ex.org', '21981230009', 'M', '1958-02-02', '92.10', 'O-', 'Atenolol', 'Hipertensão', '', '20020033', 'Av. Brasil, 900', 'Rio de Janeiro', 279, 'senha123'),
-(70, 'Daniela Reis', '29103456781', 'daniela.reis@mail.com', '31981230010', 'F', '1999-10-10', '60.70', 'B-', '', '', 'Lactose', '30150084', 'Rua Goiás, 99', 'Belo Horizonte', 280, 'senha123'),
-(73, 'Carlos Medeiros', '34567129807', 'carlosmedeiros@gmail.com', '1943824010', 'M', '1966-06-16', '80.50', 'O+', '', '', '', '13601000', 'Rua do Idoso, 100', 'Araras', 281, 'pac'),
-(74, 'Carlos Medeiros', '34567129850', 'carlosmedeiros@gmail.com', '1943824010', 'M', '1966-06-16', '80.50', 'O+', '', '', '', '13601000', 'Rua do Idoso, 100', 'Araras', 281, 'pac'),
-(75, 'Carlos Medeiros', '34567129840', 'carlosmedeiros@gmail.com', '1943824010', 'M', '1966-06-16', '80.50', 'O+', '', '', '', '13601000', 'Rua do Idoso, 100', 'Araras', 281, 'pac'),
-(76, 'Carlos Medeiros', '98765432100', 'carlosmedeiros@gmail.com', '1943824010', 'M', '1966-06-16', '80.50', 'O+', '', '', '', '13601000', 'Rua do Idoso, 100', 'Araras', 281, 'pac'),
-(77, 'Carlos Medeiros', '66024540099', 'carlosmedeiros@gmail.com', '1943824010', 'M', '1966-06-16', '80.50', 'O+', '', '', '', '13601000', 'Rua do Idoso, 100', 'Araras', 281, 'pac');
+(2, 'Miguel Di-Tanno Viganó', '51382943857', 'miguelzin@gmail.com', '19999999999', 'M', '2007-02-20', 80.00, 'O+', '', '', '', '12600074', '', '', 211, '$2y$10$JpJB9HwH96wGHBCjbTPhSemdONw/vOOCPq24O2ViaEX4ZFt3JHy1O'),
+(3, 'Rafael Favetta', '45260925840', 'rafaelfavetta@gmail.com', '19981084437', 'M', '2007-09-06', 77.00, 'A+', '', '', '', '13607030', 'Rua Professor Vicente Casale Padovani, Jardim Nossa Senhora de Fátima, Araras - SP', 'Araras', 231, '$2y$10$ArQhH63CSZ4IGYqZK9/.bu8fBKVwLYTTWEI9rNQAfue78k7qHHw2q'),
+(4, 'André Favetta', '16061751818', 'andfavetta@gmail.com', '19981291195', 'M', '1976-03-02', 85.00, 'A+', '', '', '', '13607030', 'Rua Professor Vicente Casale Padovani, Jardim Nossa Senhora de Fátima, Araras - SP', 'Araras', 231, '$2y$10$RFeLbAqEJv7i/m4UDFSODOc8xzyS5Hs/fcr884/lDpVjvZj/AAquy'),
+(5, 'Fernanda Lima', '12345678901', 'fernanda.lima@example.com', '11991234567', 'F', '1988-03-12', 59.00, 'O-', '', '', '', '01001000', 'Rua da Consolação, 100', 'São Paulo', 217, 'pass123'),
+(6, 'Guilherme Torres', '10987654321', 'guilherme.torres@ex.com', '21992345678', 'M', '1992-08-24', 75.30, 'A+', '', '', '', '20040002', 'Av. Argentina, 200', 'Rio de Janeiro', 218, 'pass123'),
+(7, 'Isabela Rocha', '23456789012', 'isabela.rocha@example.org', '31993456789', 'F', '1975-12-05', 68.40, 'B+', 'Metformina', 'Diabetes', '', '30150100', 'Rua da Bahia, 300', 'Belo Horizonte', 219, 'pass123'),
+(8, 'Júlio César Andrade', '34567890123', 'julio.andrade@ex.net', '41994567890', 'M', '1983-06-18', 82.10, 'AB-', '', '', 'Pólen', '80010000', 'Praça Rui Barbosa, 10', 'Curitiba', 220, 'pass123'),
+(9, 'Karolina Freitas', '45678901234', 'karolina.freitas@gmail.com', '51995678901', 'F', '2002-11-30', 54.60, 'O+', '', '', '', '90010100', 'Rua XV de Novembro, 555', 'Porto Alegre', 221, 'pass123'),
+(10, 'Leonardo Silva', '56789012345', 'leo.silva@example.com', '61996789012', 'M', '1968-01-22', 90.20, 'A-', 'Losartana', 'Hipertensão', '', '60020020', 'Av. Amazonas, 1000', 'Manaus', 222, 'pass123'),
+(11, 'Mariana Castro', '67890123456', 'mariana.castro@ex.org', '71997890123', 'F', '1995-09-14', 63.70, 'B-', '', '', 'Amendoim', '64000000', 'Rua 24 de Outubro, 77', 'Natal', 223, 'pass123'),
+(12, 'Nicolas Pereira', '78901234567', 'nicolas.pereira@ex.net', '81998901234', 'M', '2010-04-02', 25.00, 'AB+', '', '', '', '69005000', 'Av. das Flores, 42', 'Boa Vista', 224, 'pass123'),
+(13, 'Olívia Gomes', '89012345678', 'olivia.gomes@mail.com', '91999012345', 'F', '1980-07-07', 70.90, 'O-', 'Salbutamol', 'Asma', '', '49020010', 'Rua Marechal Deodoro, 123', 'João Pessoa', 225, 'pass123'),
+(14, 'Paulo Henrique Santos', '90123456789', 'paulo.santos@example.org', '11991239876', 'M', '1999-02-17', 78.00, 'A+', '', '', '', '04104001', 'Rua Voluntários da Pátria, 9', 'São Paulo', 226, 'pass123'),
+(15, 'Quésia Almeida', '11223344556', 'quesia.almeida@ex.com', '21992349876', 'F', '1972-05-05', 66.20, 'B+', '', '', 'Latex', '20020030', 'Rua Copacabana, 300', 'Rio de Janeiro', 227, 'pass123'),
+(16, 'Rafael Nunes', '22334455667', 'rafael.nunes@mail.com', '31993450987', 'M', '1985-10-30', 85.50, 'AB-', 'Atenolol', 'Hipertensão', '', '30160110', 'Av. do Contorno, 150', 'Belo Horizonte', 228, 'pass123'),
+(17, 'Sofia Cardoso', '33445566778', 'sofia.cardoso@ex.net', '41994560123', 'F', '2004-12-12', 48.30, 'O+', '', '', '', '80060010', 'Rua das Acácias, 25', 'Curitiba', 229, 'pass123'),
+(18, 'Thiago Martins', '44556677889', 'thiago.martins@example.com', '51995670234', 'M', '1991-03-03', 73.40, 'A-', '', '', '', '90020020', 'Av. Ipiranga, 800', 'Porto Alegre', 230, 'pass123'),
+(19, 'Úrsula Vieira', '55667788990', 'ursula.vieira@mail.com', '61996780345', 'F', '1978-08-08', 60.00, 'B+', '', '', 'Marisco', '69015000', 'Rua Boa Vista, 98', 'Boa Vista', 231, 'pass123'),
+(20, 'Vitor Hugo Rocha', '66778899001', 'vitor.rocha@ex.org', '71997890456', 'M', '1965-11-11', 88.80, 'AB+', '', '', '', '64010020', 'Praça Sete de Setembro, 1', 'Natal', 232, 'pass123'),
+(21, 'Wesley Braga', '77889900112', 'wesley.braga@ex.net', '81998900567', 'M', '2007-06-06', 30.50, 'O-', '', '', '', '49030020', 'Av. Beira Mar, 500', 'João Pessoa', 233, 'pass123'),
+(22, 'Xênia Figueiredo', '88990011223', 'xenia.figueiredo@mail.com', '91999000678', 'F', '1993-01-01', 58.70, 'A+', '', '', '', '60030030', 'Rua Amazonas, 600', 'Manaus', 234, 'pass123'),
+(23, 'Yago Souza', '99001122334', 'yago.souza@example.org', '11991236789', 'M', '1987-09-09', 80.10, 'B-', '', '', '', '04105002', 'Rua Augusta, 400', 'São Paulo', 235, 'pass123'),
+(24, 'Zara Melo', '10111213141', 'zara.melo@ex.com', '21992347891', 'F', '1996-04-04', 62.90, 'AB-', '', '', '', '20030040', 'Av. Lúcio Costa, 2000', 'Rio de Janeiro', 236, 'pass123'),
+(25, 'André Lopes', '12131415161', 'andre.lopes@mail.com', '31993448762', 'M', '1970-10-10', 77.70, 'O+', 'Metformina', 'Diabetes', '', '30170020', 'Rua Guaicuí, 321', 'Belo Horizonte', 237, 'pass123'),
+(26, 'Beatriz Fernandes', '13141516171', 'beatriz.fernandes@ex.net', '41994549873', 'F', '2001-02-02', 55.50, 'A-', '', '', '', '80070020', 'Av. Visconde de Guarapuava, 2', 'Curitiba', 238, 'pass123'),
+(27, 'Caio Albuquerque', '14151617181', 'caio.albuquerque@ex.org', '51995650984', 'M', '1982-07-07', 89.00, 'B+', '', '', 'Glúten', '90030030', 'Rua da Praia, 80', 'Porto Alegre', 239, 'pass123'),
+(28, 'Diana Ribeiro', '15161718191', 'diana.ribeiro@mail.com', '61996761095', 'F', '1998-05-05', 65.20, 'AB+', '', '', '', '69025010', 'Praça da Bandeira, 15', 'Boa Vista', 240, 'pass123'),
+(29, 'Emanuel Costa', '16171819201', 'emanuel.costa@example.com', '71997872106', 'M', '1960-03-03', 92.30, 'O-', 'Losartana', 'Hipertensão', '', '64020030', 'Av. Engenheiro Roberto Freire, 5', 'Natal', 241, 'pass123'),
+(30, 'Fabiana Menezes', '17181920211', 'fabiana.menezes@ex.net', '81998983217', 'F', '2003-11-11', 53.80, 'A+', '', '', '', '49040030', 'Rua das Amoreiras, 22', 'João Pessoa', 242, 'pass123'),
+(31, 'Gabriel Alves', '18192021231', 'gabriel.alves@mail.com', '91999094328', 'M', '1989-02-02', 77.40, 'B-', '', '', '', '60040040', 'Rua José Bonifácio, 44', 'Manaus', 243, 'pass123'),
+(32, 'Helena Barros', '19202122241', 'helena.barros@ex.com', '11991205439', 'F', '1994-08-08', 60.60, 'AB-', '', '', '', '04106003', 'Av. Paulista, 1500', 'São Paulo', 244, 'pass123'),
+(33, 'Igor Pereira', '20212223251', 'igor.pereira@example.org', '21992316540', 'M', '1979-01-01', 83.90, 'O+', '', '', '', '20040050', 'Rua Santa Clara, 99', 'Rio de Janeiro', 245, 'pass123'),
+(34, 'Juliana Dantas', '21222324261', 'juliana.dantas@mail.com', '31993427651', 'F', '2006-06-06', 49.10, 'A-', '', '', '', '30180030', 'Av. Afonso Pena, 500', 'Belo Horizonte', 246, 'pass123'),
+(35, 'Kevyn Moreira', '22232425271', 'kevyn.moreira@ex.net', '41994538762', 'M', '1990-12-12', 72.00, 'B+', '', '', '', '80080040', 'Rua Curitiba, 1234', 'Curitiba', 247, 'pass123'),
+(36, 'Larissa Santos', '23242526281', 'larissa.santos@ex.org', '51995649873', 'F', '1981-03-03', 64.70, 'O-', '', '', '', '90040040', 'Av. Farrapos, 300', 'Porto Alegre', 248, 'pass123'),
+(37, 'Mateus Henrique', '24252627291', 'mateus.henrique@mail.com', '61996750984', 'M', '2005-09-09', 28.30, 'AB+', '', '', 'Lactose', '69030020', 'Rua Cel. Esteves, 7', 'Boa Vista', 249, 'pass123'),
+(38, 'Natália Oliveira', '25262728201', 'natalia.oliveira@example.com', '71997860495', 'F', '1997-07-07', 57.20, 'A+', '', '', '', '64030040', 'Av. Roberto Freire, 77', 'Natal', 250, 'pass123'),
+(39, 'Otávio Lima', '26272829211', 'otavio.lima@ex.net', '81998971506', 'M', '1964-10-10', 85.60, 'B-', 'Atenolol', 'Hipertensão', '', '49050040', 'Rua Vasco da Gama, 500', 'João Pessoa', 251, 'pass123'),
+(40, 'Priscila Fernandes', '27282930221', 'priscila.fernandes@mail.com', '91999082617', 'F', '2000-01-01', 59.90, 'AB-', '', '', '', '60050050', 'Rua Joaquim Nabuco, 30', 'Manaus', 252, 'pass123'),
+(41, 'Adriana Pinto', '30214567899', 'adriana.pinto@mail.com', '19981234567', 'F', '1985-04-20', 58.50, 'O+', 'Metformina', 'Diabetes tipo 2', '', '01001001', 'Rua das Palmeiras, 12', 'São Paulo', 251, 'senha123'),
+(42, 'Bruno Machado', '41325678901', 'bruno.machado@ex.com', '21981234568', 'M', '1990-11-05', 82.00, 'A-', '', '', '', '20020020', 'Av. Atlântica, 200', 'Rio de Janeiro', 252, 'senha123'),
+(43, 'Carla Ferreira', '52436789012', 'carla.ferreira@mail.com', '31981234569', 'F', '1978-07-16', 64.30, 'B+', 'Losartana', 'Hipertensão', '', '30150081', 'Rua dos Tupis, 45', 'Belo Horizonte', 253, 'senha123'),
+(44, 'Daniel Rocha', '63547890123', 'daniel.rocha@ex.org', '41981234570', 'M', '1995-02-22', 76.50, 'AB-', '', '', '', '80060011', 'Praça Rui Barbosa, 9', 'Curitiba', 254, 'senha123'),
+(45, 'Eduarda Almeida', '74658901234', 'eduarda.almeida@mail.com', '51981234571', 'F', '2002-12-30', 52.10, 'O-', '', '', 'Amendoim', '90010011', 'Rua do Comércio, 88', 'Porto Alegre', 255, 'senha123'),
+(46, 'Fábio Santos', '85769012345', 'fabio.santos@ex.net', '61981234572', 'M', '1983-08-09', 88.20, 'A+', '', '', '', '49010011', 'Av. Getúlio Vargas, 123', 'João Pessoa', 256, 'senha123'),
+(47, 'Gabriela Costa', '96870123456', 'gabriela.costa@mail.com', '71981234573', 'F', '1971-03-17', 67.80, 'B-', '', '', 'Glúten', '64000001', 'Rua das Ameixeiras, 7', 'Natal', 257, 'senha123'),
+(48, 'Hugo Ribeiro', '07981234567', 'hugo.ribeiro@ex.com', '81981234574', 'M', '2008-09-09', 30.20, 'AB+', '', '', '', '69005001', 'Av. dos Holandeses, 55', 'Boa Vista', 258, 'senha123'),
+(49, 'Isis Martins', '18092345678', 'isis.martins@mail.com', '91981234575', 'F', '1992-01-01', 59.00, 'O+', '', '', '', '60030031', 'Rua 7 de Setembro, 120', 'Manaus', 259, 'senha123'),
+(50, 'João Paulo Lima', '29103456789', 'joao.lima@ex.org', '11981234576', 'M', '1988-06-25', 79.40, 'A-', '', '', '', '04104002', 'Rua Voluntários, 10', 'São Paulo', 260, 'senha123'),
+(51, 'Kamila Dias', '30214567890', 'kamila.dias@ex.com', '21982345677', 'F', '1974-10-12', 61.20, 'B+', 'Salbutamol', 'Asma', '', '20020031', 'Av. Rio Branco, 300', 'Rio de Janeiro', 261, 'senha123'),
+(52, 'Leandro Souza', '41325678902', 'leandro.souza@mail.com', '31983456788', 'M', '1997-05-05', 83.70, 'AB-', '', '', '', '30150082', 'Rua da Bahia, 210', 'Belo Horizonte', 262, 'senha123'),
+(53, 'Mariana Lopes', '52436789013', 'mariana.lopes@ex.org', '41984567899', 'F', '2000-11-11', 55.40, 'O-', '', '', 'Ovos', '80060012', 'Rua das Flores, 14', 'Curitiba', 263, 'senha123'),
+(54, 'Natan Oliveira', '63547890124', 'natan.oliveira@mail.com', '51985678900', 'M', '1965-12-30', 90.00, 'A+', 'Atenolol', 'Hipertensão', '', '90010012', 'Praça da Sé, 2', 'Porto Alegre', 264, 'senha123'),
+(55, 'Olga Mendes', '74658901235', 'olga.mendes@ex.net', '61986789001', 'F', '1981-03-03', 69.50, 'B-', '', '', 'Marisco', '49010012', 'Av. João XXIII, 7', 'João Pessoa', 265, 'senha123'),
+(56, 'Pedro Carvalho', '85769012346', 'pedro.carvalho@mail.com', '71987890102', 'M', '1994-07-07', 77.10, 'AB+', '', '', '', '64000002', 'Rua das Acácias, 45', 'Natal', 266, 'senha123'),
+(57, 'Querida Santos', '96870123457', 'querida.santos@ex.com', '81988901203', 'F', '2005-04-04', 42.30, 'O+', '', '', '', '69005002', 'Rua das Árvores, 16', 'Boa Vista', 267, 'senha123'),
+(58, 'Rafael Gomes', '07981234568', 'rafael.gomes@ex.org', '91989012304', 'M', '1979-09-09', 82.80, 'A-', '', '', '', '60030032', 'Av. Amazonas, 900', 'Manaus', 268, 'senha123'),
+(59, 'Sabrina Pinto', '18092345679', 'sabrina.pinto@mail.com', '11980123456', 'F', '1993-02-02', 59.90, 'B+', '', '', 'Lactose', '04104003', 'Rua Augusta, 333', 'São Paulo', 269, 'senha123'),
+(60, 'Tiago Ferreira', '29103456780', 'tiago.ferreira@ex.com', '21981230000', 'M', '1986-05-15', 80.30, 'AB-', 'Metformina', 'Diabetes tipo 2', '', '20020032', 'Av. das Américas, 600', 'Rio de Janeiro', 270, 'senha123'),
+(61, 'Úrsula Machado', '30214567891', 'ursula.machado@ex.net', '31981230001', 'F', '1977-08-08', 65.00, 'O-', '', '', 'Pólen', '30150083', 'Rua da Paz, 21', 'Belo Horizonte', 271, 'senha123'),
+(62, 'Vítor Sá', '41325678903', 'vitor.sa@mail.com', '41981230002', 'M', '2003-12-12', 72.50, 'A+', '', '', '', '80060013', 'Praça Santos Dumont, 5', 'Curitiba', 272, 'senha123'),
+(63, 'Wagner Leal', '52436789014', 'wagner.leal@ex.org', '51981230003', 'M', '1962-11-11', 88.90, 'B-', 'Losartana', 'Hipertensão', '', '90010013', 'Av. Ipiranga, 100', 'Porto Alegre', 273, 'senha123'),
+(64, 'Xuxa Moura', '63547890125', 'xuxa.moura@mail.com', '61981230004', 'F', '1989-03-03', 57.30, 'AB+', '', '', '', '49010013', 'Rua Santa Cruz, 30', 'João Pessoa', 274, 'senha123'),
+(65, 'Yuri Costa', '74658901236', 'yuri.costa@ex.net', '71981230005', 'M', '1991-07-07', 79.00, 'O+', '', '', '', '64000003', 'Rua Paraíba, 55', 'Natal', 275, 'senha123'),
+(66, 'Zuleica Almeida', '85769012347', 'zuleica.almeida@mail.com', '81981230006', 'F', '1973-01-01', 62.40, 'A-', '', '', 'Amendoim', '69005003', 'Av. JK, 400', 'Boa Vista', 276, 'senha123'),
+(67, 'Arthur Ribeiro', '96870123458', 'arthur.ribeiro@ex.com', '91981230007', 'M', '1984-06-06', 85.20, 'B+', '', '', '', '60030033', 'Rua Amazonas, 770', 'Manaus', 277, 'senha123'),
+(68, 'Bianca Nunes', '07981234569', 'bianca.nunes@mail.com', '11981230008', 'F', '2006-09-09', 48.80, 'AB-', '', '', '', '04104004', 'Rua da Consolação, 400', 'São Paulo', 278, 'senha123'),
+(69, 'Claudio Paz', '18092345670', 'claudio.paz@ex.org', '21981230009', 'M', '1958-02-02', 92.10, 'O-', 'Atenolol', 'Hipertensão', '', '20020033', 'Av. Brasil, 900', 'Rio de Janeiro', 279, 'senha123'),
+(70, 'Daniela Reis', '29103456781', 'daniela.reis@mail.com', '31981230010', 'F', '1999-10-10', 60.70, 'B-', '', '', 'Lactose', '30150084', 'Rua Goiás, 99', 'Belo Horizonte', 280, 'senha123'),
+(73, 'Carlos Medeiros', '34567129807', 'carlosmedeiros@gmail.com', '1943824010', 'M', '1966-06-16', 80.50, 'O+', '', '', '', '13601000', 'Rua do Idoso, 100', 'Araras', 281, 'pac'),
+(74, 'Carlos Medeiros', '34567129850', 'carlosmedeiros@gmail.com', '1943824010', 'M', '1966-06-16', 80.50, 'O+', '', '', '', '13601000', 'Rua do Idoso, 100', 'Araras', 281, 'pac'),
+(75, 'Carlos Medeiros', '34567129840', 'carlosmedeiros@gmail.com', '1943824010', 'M', '1966-06-16', 80.50, 'O+', '', '', '', '13601000', 'Rua do Idoso, 100', 'Araras', 281, 'pac'),
+(76, 'Carlos Medeiros', '98765432100', 'carlosmedeiros@gmail.com', '1943824010', 'M', '1966-06-16', 80.50, 'O+', '', '', '', '13601000', 'Rua do Idoso, 100', 'Araras', 281, 'pac'),
+(77, 'Carlos Medeiros', '66024540099', 'carlosmedeiros@gmail.com', '1943824010', 'M', '1966-06-16', 80.50, 'O+', '', '', '', '13601000', 'Rua do Idoso, 100', 'Araras', 281, 'pac'),
+(78, 'Arthur', '51322325820', 'arthur@mail.com', '19953586485', 'M', '2004-07-04', 50.00, 'A+', 'Nenhum', 'Nenhuma', 'Nenhuma', '13602024', 'Rua das Primaveras, Jardim São Nicolau, Araras - SP', 'Araras', 180, '$2y$10$xSQIhmM6aLFovy/V9Sp9x.ylxeUP9r4noXe9NDl6q.JyoElZXr/sG'),
+(79, 'Lucas', '55858451870', 'lucas@gmail.com', '12358924962', 'M', '2007-08-05', 80.00, 'O-', 'Pal Mole', 'Nenhuma', 'Nenhuma', '13602024', 'Rua das Primaveras, Jardim São Nicolau, Araras - SP', 'Araras', 180, '$2y$10$hlqhcQhzePL97izM2uMWauHINnmvKaMyNbRcz5x/bYPPkxH4LQHaO');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `vacina`
+-- Estrutura para tabela `vacina`
 --
 
 CREATE TABLE `vacina` (
@@ -917,10 +920,10 @@ CREATE TABLE `vacina` (
   `idade_reco` varchar(20) DEFAULT NULL,
   `estoque` int(11) NOT NULL,
   `sus` tinyint(1) NOT NULL DEFAULT 1
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `vacina`
+-- Despejando dados para a tabela `vacina`
 --
 
 INSERT INTO `vacina` (`id_vaci`, `nome_vaci`, `fabri_vaci`, `lote_vaci`, `via_adimicao`, `n_dose`, `intervalo_dose`, `idade_reco`, `estoque`, `sus`) VALUES
@@ -948,14 +951,14 @@ INSERT INTO `vacina` (`id_vaci`, `nome_vaci`, `fabri_vaci`, `lote_vaci`, `via_ad
 (58, 'Raiva (pré-exposição)', 'Bio-Manguinhos', 'RAIVA2025', 'Intramuscular', 1, 0, 'A qualquer momento', 10000, 0),
 (59, 'Vacinas de viajantes (tifóide, encefalite, etc.)', '—', '—', 'Variável', 1, 0, 'A qualquer momento', 10000, 0),
 (63, 'Meningocócica C (conjugada)', 'Fiocruz', 'MENCC2025', 'Intramuscular', 2, 2, '3 meses', 10000, 1),
-(64, 'dT', 'Fiocruz', 'DT2025F', 'Intramuscular', 10, 120, '7 anos', 10000, 1);
+(64, 'dT', 'Fiocruz', 'DT2025F', 'Intramuscular', 10, 120, '7 anos', 9999, 1);
 
 --
--- Indexes for dumped tables
+-- Índices para tabelas despejadas
 --
 
 --
--- Indexes for table `aplicacao`
+-- Índices de tabela `aplicacao`
 --
 ALTER TABLE `aplicacao`
   ADD PRIMARY KEY (`id_aplica`),
@@ -965,7 +968,7 @@ ALTER TABLE `aplicacao`
   ADD KEY `id_vaci` (`id_vaci`);
 
 --
--- Indexes for table `atestado`
+-- Índices de tabela `atestado`
 --
 ALTER TABLE `atestado`
   ADD PRIMARY KEY (`id_atestado`),
@@ -973,89 +976,89 @@ ALTER TABLE `atestado`
   ADD KEY `id_medico` (`id_medico`);
 
 --
--- Indexes for table `campanha`
+-- Índices de tabela `campanha`
 --
 ALTER TABLE `campanha`
   ADD PRIMARY KEY (`id_campanha`);
 
 --
--- Indexes for table `medico`
+-- Índices de tabela `medico`
 --
 ALTER TABLE `medico`
   ADD PRIMARY KEY (`id_medico`),
   ADD KEY `id_posto` (`id_posto`);
 
 --
--- Indexes for table `posto`
+-- Índices de tabela `posto`
 --
 ALTER TABLE `posto`
   ADD PRIMARY KEY (`id_posto`);
 
 --
--- Indexes for table `usuario`
+-- Índices de tabela `usuario`
 --
 ALTER TABLE `usuario`
   ADD PRIMARY KEY (`id_usuario`),
   ADD UNIQUE KEY `cpf` (`cpf`);
 
 --
--- Indexes for table `vacina`
+-- Índices de tabela `vacina`
 --
 ALTER TABLE `vacina`
   ADD PRIMARY KEY (`id_vaci`);
 
 --
--- AUTO_INCREMENT for dumped tables
+-- AUTO_INCREMENT para tabelas despejadas
 --
 
 --
--- AUTO_INCREMENT for table `aplicacao`
+-- AUTO_INCREMENT de tabela `aplicacao`
 --
 ALTER TABLE `aplicacao`
-  MODIFY `id_aplica` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3263;
+  MODIFY `id_aplica` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3264;
 
 --
--- AUTO_INCREMENT for table `atestado`
+-- AUTO_INCREMENT de tabela `atestado`
 --
 ALTER TABLE `atestado`
-  MODIFY `id_atestado` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=48;
+  MODIFY `id_atestado` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=52;
 
 --
--- AUTO_INCREMENT for table `campanha`
+-- AUTO_INCREMENT de tabela `campanha`
 --
 ALTER TABLE `campanha`
   MODIFY `id_campanha` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
--- AUTO_INCREMENT for table `medico`
+-- AUTO_INCREMENT de tabela `medico`
 --
 ALTER TABLE `medico`
-  MODIFY `id_medico` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+  MODIFY `id_medico` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
--- AUTO_INCREMENT for table `posto`
+-- AUTO_INCREMENT de tabela `posto`
 --
 ALTER TABLE `posto`
   MODIFY `id_posto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
--- AUTO_INCREMENT for table `usuario`
+-- AUTO_INCREMENT de tabela `usuario`
 --
 ALTER TABLE `usuario`
-  MODIFY `id_usuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=78;
+  MODIFY `id_usuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=80;
 
 --
--- AUTO_INCREMENT for table `vacina`
+-- AUTO_INCREMENT de tabela `vacina`
 --
 ALTER TABLE `vacina`
   MODIFY `id_vaci` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=65;
 
 --
--- Constraints for dumped tables
+-- Restrições para tabelas despejadas
 --
 
 --
--- Constraints for table `aplicacao`
+-- Restrições para tabelas `aplicacao`
 --
 ALTER TABLE `aplicacao`
   ADD CONSTRAINT `aplicacao_ibfk_1` FOREIGN KEY (`id_usuario`) REFERENCES `usuario` (`id_usuario`) ON DELETE CASCADE ON UPDATE CASCADE,
@@ -1064,14 +1067,14 @@ ALTER TABLE `aplicacao`
   ADD CONSTRAINT `aplicacao_ibfk_4` FOREIGN KEY (`id_vaci`) REFERENCES `vacina` (`id_vaci`);
 
 --
--- Constraints for table `atestado`
+-- Restrições para tabelas `atestado`
 --
 ALTER TABLE `atestado`
   ADD CONSTRAINT `atestado_ibfk_1` FOREIGN KEY (`id_paci`) REFERENCES `usuario` (`id_usuario`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `atestado_ibfk_2` FOREIGN KEY (`id_medico`) REFERENCES `medico` (`id_medico`);
 
 --
--- Constraints for table `medico`
+-- Restrições para tabelas `medico`
 --
 ALTER TABLE `medico`
   ADD CONSTRAINT `medico_ibfk_1` FOREIGN KEY (`id_posto`) REFERENCES `posto` (`id_posto`);
