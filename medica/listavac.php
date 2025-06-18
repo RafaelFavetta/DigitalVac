@@ -3,6 +3,24 @@ include('../outros/db_connect.php');
 include('../Recebedados/validacoes.php'); // Include validation functions
 session_start();
 
+// --- MOVA ESTE BLOCO PARA O INÍCIO DO ARQUIVO ---
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['salvar_edicao'])) {
+    $id_vaci = intval($_POST['id_vaci']);
+    $lote_vaci = trim($_POST['lote_vaci']);
+    $estoque = intval($_POST['estoque']);
+    $nome_vacina = isset($_POST['nome_vacina']) ? $_POST['nome_vacina'] : '';
+    if ($id_vaci > 0 && $lote_vaci !== '' && $estoque >= 0) {
+        $sql_update = "UPDATE vacina SET lote_vaci = ?, estoque = ? WHERE id_vaci = ?";
+        $stmt_update = $conn->prepare($sql_update);
+        $stmt_update->bind_param("sii", $lote_vaci, $estoque, $id_vaci);
+        $stmt_update->execute();
+        // Redireciona para evitar reenvio do formulário
+        header("Location: listavac.php?nome_vacina=" . urlencode($nome_vacina));
+        exit();
+    }
+}
+// --- FIM DO BLOCO MOVIDO ---
+
 if (!isset($_SESSION['id_medico'])) {
     header("Location: login.php");
     exit();
@@ -946,20 +964,3 @@ usort($vacinas_opcionais, function($a, $b) {
 </body>
 
 </html>
-
-<?php
-// Processa edição de lote e estoque
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['salvar_edicao'])) {
-    $id_vaci = intval($_POST['id_vaci']);
-    $lote_vaci = trim($_POST['lote_vaci']);
-    $estoque = intval($_POST['estoque']);
-    if ($id_vaci > 0 && $lote_vaci !== '' && $estoque >= 0) {
-        $sql_update = "UPDATE vacina SET lote_vaci = ?, estoque = ? WHERE id_vaci = ?";
-        $stmt_update = $conn->prepare($sql_update);
-        $stmt_update->bind_param("sii", $lote_vaci, $estoque, $id_vaci);
-        $stmt_update->execute();
-        // Redireciona para evitar reenvio do formulário
-        header("Location: listavac.php?nome_vacina=" . urlencode($nome_vacina));
-        exit();
-    }
-}
