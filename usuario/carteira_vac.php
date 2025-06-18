@@ -74,7 +74,7 @@ function renderTabelaCarteiraVac($vacinas)
     ob_start();
     ?>
     <div class="table-responsive">
-        <table class="table table-bordered text-center mx-auto">
+        <table class="table table-bordered text-center mx-auto tabela-vacinas">
             <thead>
                 <tr>
                     <th>Nome da Vacina</th>
@@ -199,6 +199,28 @@ if (
 
         .dropdown-sort {
             min-width: 180px;
+        }
+
+        /* Garante que a tabela mantenha largura fixa */
+        .tabela-vacinas {
+            width: 100%;
+            min-width: 900px; /* ajuste conforme necessário */
+            table-layout: fixed;
+        }
+
+        /* Garante que o campo de pesquisa não altere largura ao focar */
+        #searchInput {
+            width: 500px; /* ajuste conforme necessário */
+            max-width: 100%;
+            transition: none;
+            box-sizing: border-box;
+        }
+
+        /* Remove qualquer alteração de padding/borda ao focar */
+        #searchInput:focus {
+            outline: 2px solid #1976d2;
+            width: 500px;
+            box-sizing: border-box;
         }
 
         @media (max-width: 800px) {
